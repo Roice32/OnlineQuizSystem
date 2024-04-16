@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Contracts\" />
-    <Folder Include="Shared\Seeds\" />
   </ItemGroup>
 
 </Project>

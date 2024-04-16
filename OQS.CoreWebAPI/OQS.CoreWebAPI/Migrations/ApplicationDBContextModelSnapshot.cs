@@ -33,6 +33,9 @@ namespace OQS.CoreWebAPI.Migrations
                         .HasMaxLength(21)
                         .HasColumnType("nvarchar(21)");
 
+                    b.Property<Guid?>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -42,11 +45,37 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("QuizId");
+
                     b.ToTable("Questions");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("QuestionBase");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.Quiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TimeLimitMinutes")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.Entities.SingleChoiceQuestion", b =>
@@ -67,6 +96,18 @@ namespace OQS.CoreWebAPI.Migrations
                         .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("TrueFalseQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.QuestionBase", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.Quiz", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizId");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.Quiz", b =>
+                {
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

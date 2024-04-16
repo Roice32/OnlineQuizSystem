@@ -12,4 +12,5 @@ public class ApplicationDBContext: DbContext
     public DbSet<QuestionBase> Questions { get;set; }
     public DbSet<TrueFalseQuestion> TrueFalseQuestions{get;set;}
     public DbSet<SingleChoiceQuestion> SingleChoiceQuestions{get;set;}
+    public DbSet<Quiz> Quizzes { get; set; }
 }
