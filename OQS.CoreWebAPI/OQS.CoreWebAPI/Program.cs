@@ -29,7 +29,7 @@ if (app.Environment.IsDevelopment())
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-dbContext.SeedQuestions();
+// dbContext.SeedQuestions();
 dbContext.SeedQuizzez();
 
 app.MapCarter();

@@ -22,7 +22,8 @@ public static class SeedQuestionsExtension
         (
             Guid.NewGuid(),
             "What is the capital of France?",
-            0
+            new List<string> { "Paris", "London", "Berlin", "Madrid" },
+            "Paris"
         );
         dbContext.Questions.Add(q1);
         dbContext.Questions.Add(q2);

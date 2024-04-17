@@ -30,8 +30,8 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
 
                     b.Property<Guid?>("QuizId")
                         .HasColumnType("uniqueidentifier");
@@ -78,14 +78,22 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("Quizzes");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.Entities.SingleChoiceQuestion", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ChoiceQuestionBase", b =>
                 {
                     b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
 
-                    b.Property<int>("SingleChoiceAnswer")
-                        .HasColumnType("int");
+                    b.Property<string>("Choices")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("SingleChoiceQuestion");
+                    b.HasDiscriminator().HasValue("ChoiceQuestionBase");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ReviewNeededQuestion", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
+
+                    b.HasDiscriminator().HasValue("ReviewNeededQuestion");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.Entities.TrueFalseQuestion", b =>
@@ -96,6 +104,39 @@ namespace OQS.CoreWebAPI.Migrations
                         .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("TrueFalseQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.WrittenAnswerQuestion", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
+
+                    b.Property<string>("WrittenAcceptedAnswers")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("WrittenAnswerQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.MultipleChoiceQuestion", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ChoiceQuestionBase");
+
+                    b.Property<string>("MultipleChoiceAnswers")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("MultipleChoiceQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.SingleChoiceQuestion", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ChoiceQuestionBase");
+
+                    b.Property<string>("SingleChoiceAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("SingleChoiceQuestion");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.Entities.QuestionBase", b =>

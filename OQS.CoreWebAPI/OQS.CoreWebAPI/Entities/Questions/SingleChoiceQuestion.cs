@@ -1,12 +1,11 @@
 namespace OQS.CoreWebAPI.Entities;
 
-public class SingleChoiceQuestion: QuestionBase
+public class SingleChoiceQuestion:ChoiceQuestionBase
 {
-    public int SingleChoiceAnswer { get; set; }
-    
-    public SingleChoiceQuestion(Guid id, string text, int singleChoiceAnswer): base(id, QuestionType.SingleChoice, text)
+    public string SingleChoiceAnswer { get;set; } = string.Empty;
+    public SingleChoiceQuestion(Guid id, string text, List<string> choices, string singleChoiceAnswer):base(id,text,QuestionType.SingleChoice,choices)
     {
-      SingleChoiceAnswer = singleChoiceAnswer;
+        SingleChoiceAnswer = singleChoiceAnswer;
     }
-    
+   
 }
