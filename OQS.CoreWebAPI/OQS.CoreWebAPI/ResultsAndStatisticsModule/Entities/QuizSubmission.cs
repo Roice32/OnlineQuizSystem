@@ -14,7 +14,7 @@
         {
             this.QuizId = quizId;
             this.TakenBy = takenBy;
-            this.QuestionAnswerPairs = questionAnswerPairs;
+            this.QuestionAnswerPairs.AddRange(questionAnswerPairs);
             this.TimeElapsed = timeElapsed;
         }
     }
