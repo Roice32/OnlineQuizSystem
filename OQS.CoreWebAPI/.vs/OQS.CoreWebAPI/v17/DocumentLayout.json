@@ -3,35 +3,35 @@
   "WorkspaceRootPath": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultbody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultbody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OQS.CoreWebAPI\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\8.0.204\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\takenquizzeshistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\takenquizzeshistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -53,7 +53,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Microsoft.PackageDependencyResolution.targets",
               "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\8.0.204\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
@@ -61,8 +61,7 @@
               "RelativeToolTip": "..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\8.0.204\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
               "ViewState": "AQIAAPsAAAAAAAAAAAAnwAkBAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2024-04-18T10:48:26.039Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-18T10:48:26.039Z"
             },
             {
               "$type": "Document",
@@ -72,7 +71,7 @@
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
               "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
-              "ViewState": "AQIAAAIAAAAAAAAAAAAAwAsAAAAzAAAA",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAACsAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-17T16:51:52.795Z",
               "EditorCaption": ""
@@ -80,6 +79,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACsAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-17T18:40:02.506Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "QuestionResult.cs",
               "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs",
@@ -87,12 +99,11 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-18T09:54:17.009Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-18T09:54:17.009Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "QuizResultBody.cs",
               "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
@@ -100,12 +111,11 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:52:18.431Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-17T16:52:18.431Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 5,
               "Title": "AnswerResult.cs",
               "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
@@ -113,8 +123,7 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAuwAgAAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T15:24:19.343Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-17T15:24:19.343Z"
             },
             {
               "$type": "Document",
@@ -126,12 +135,11 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:51:30.458Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-17T16:51:30.458Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "TakenQuizzesHistory.cs",
               "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs",
@@ -139,21 +147,7 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-18T07:32:12.93Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Program.cs",
-              "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAkAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T18:40:02.506Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-18T07:32:12.93Z"
             }
           ]
         }
