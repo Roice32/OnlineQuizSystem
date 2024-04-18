@@ -6,7 +6,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
     {
         private List<QuizResultHeader> QuizResultHeaders=new();
 
-        public Guid QuizzId { get; set; }
+        public Guid QuizId { get; set; }
         public Guid UserId { get; set; } 
         private List<QuestionResult> QuestionResults { get; set; } = new();
         public void ReviewAnswer(Guid questionId, int finalScore)
@@ -18,7 +18,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             }
             //UpdateInDB();
 
-            QuizResultHeader foundQHR = GetQuizResultHeader(QuizzId, UserId);
+            QuizResultHeader foundQHR = GetQuizResultHeader(QuizId, UserId);
             if (foundQHR != null)
             {
                 foundQHR.UpdateUponAnswerReview(this);
@@ -27,13 +27,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 
         public QuizResultBody(Guid quizzId, Guid userId)
         {
-            QuizzId = quizzId;
+            QuizId = quizzId;
             UserId = userId;
         }
 
-        private QuizResultHeader GetQuizResultHeader(Guid quizId, Guid userId)
+        private QuizResultHeader GetQuizResultHeader(Guid QuizId, Guid UserId)
         {
-            return QuizResultHeaders.FirstOrDefault(q => q.quizID == QuizzId && q.userID == UserId);
+            return QuizResultHeaders.FirstOrDefault(q => q.QuizId == QuizId && q.UserId == UserId);
         }
     }
 

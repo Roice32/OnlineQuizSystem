@@ -2,7 +2,6 @@
 {
     public class QuestionResult
     {
-        private object questionFromDd;
 
         public Guid QuestionId { get; set; }
         public List<Object> SubmittedAnswers { get; set; } = new();
@@ -12,7 +11,7 @@
         private QuestionResult(Guid questionId, List<object> submittedAnswers)
         {
             QuestionId = questionId;
-            SubmittedAnswers = submittedAnswers;
+            SubmittedAnswers.AddRange(SubmittedAnswers);
         }
 
         public void UpdateScore(int finalScore)
@@ -23,23 +22,17 @@
                 AnswersType[0] = AnswerResult.Wrong;
                 return;
             }
-            questionFromDd = GetQuestionFromDB(QuestionId);
+            //QuestionBase questionFromDd = ceva;
             if (Score == questionFromDd.AllocatedPoints)
             {
                 AnswersType[0] = AnswerResult.Correct;
-                return;
             }
             else
             {
                 AnswersType[0] = AnswerResult.PartiallyCorrect;
-                return;
             }
 
         }
 
-        private QuestionResult GetQuestionFromDB(Guid questionId)
-        {
-            // return cevaaaaa;
-        }
     }
 }
