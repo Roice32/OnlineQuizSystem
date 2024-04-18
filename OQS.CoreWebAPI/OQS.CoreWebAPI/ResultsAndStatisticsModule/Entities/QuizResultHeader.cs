@@ -5,12 +5,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuizResultHeader
     {
-        public Guid QuizID { get; } = Guid.NewGuid();
-        public Guid UserID { get; } = Guid.NewGuid();
+        public Guid QuizID { get; }
+        public Guid UserID { get; }
         public DateTime SubmittedAt { get; private set; }
-        public int CompletionTime { get;  } = 0;
-        public int Score { get; private set; } = 0;
-        private bool ReviewPending { get; set; } = false;
+        public int CompletionTime { get; }
+        public int Score { get; private set; }
+        private bool ReviewPending { get; set; }
 
 
         public QuizResultHeader(Guid quizID, Guid userID, int completionTime)
