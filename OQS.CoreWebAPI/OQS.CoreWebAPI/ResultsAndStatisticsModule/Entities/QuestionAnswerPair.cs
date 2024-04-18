@@ -9,7 +9,7 @@
         public QuestionAnswerPair (Guid questionId, List<System.Object> answer)
         {
             this.QuestionId = questionId;
-            this.Answer = answer;
+            this.Answer.AddRange(answer);
         }      
     }
 }
