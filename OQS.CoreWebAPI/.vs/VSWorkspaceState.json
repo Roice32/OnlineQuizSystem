@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\OQS.CoreWebAPI",
+    "\\OQS.CoreWebAPI\\ResultsAndStatisticsModule",
+    "\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities"
+  ],
+  "SelectedNode": "\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
+  "PreviewInSolutionExplorer": false
+}
