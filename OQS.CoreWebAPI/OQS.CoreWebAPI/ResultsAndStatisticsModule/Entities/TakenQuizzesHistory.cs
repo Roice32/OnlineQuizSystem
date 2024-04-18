@@ -8,10 +8,10 @@
         public TakenQuizzesHistory(Guid userId)
         {
             UserId = userId;
-            QuizResultHeaders = FetchQuizResultHeaders(UserId);
+            QuizResultHeaders = FetchQuizResultHeaders();
         }
 
-        private List<QuizResultHeader> FetchQuizResultHeaders(Guid userId)
+        private List<QuizResultHeader> FetchQuizResultHeaders()
         {
             // Database fetching logic here
             // PLACEHOLDER

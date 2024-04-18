@@ -10,10 +10,10 @@
         {
             UserID = userID;
             QuizId = quizId;
-            QuizResultHeaders = FetchQuizResultHeaders(UserID, QuizId);
+            QuizResultHeaders = FetchQuizResultHeaders();
         }
 
-        private List<QuizResultHeader> FetchQuizResultHeaders(Guid userID, Guid quizId)
+        private List<QuizResultHeader> FetchQuizResultHeaders()
         {
             // Database fetching logic here
             // PLACEHOLDER
