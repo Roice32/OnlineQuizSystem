@@ -3,24 +3,28 @@
   "WorkspaceRootPath": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultbody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultbody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\takenquizzeshistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\takenquizzeshistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,17 +34,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 246,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
+              "Title": "TakenQuizzesHistory.cs",
+              "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs",
+              "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\TakenQuizzesHistory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-18T10:51:23.054Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "QuestionResult.cs",
               "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs",
               "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs",
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionResult.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAfAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACsAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-18T07:42:40.007Z",
               "EditorCaption": ""
@@ -53,20 +70,20 @@
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
               "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAfAAAA",
+              "ViewState": "AQIAABYAAAAAAAAAAAAkwBwAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-17T16:52:18.431Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "QuizResultHeader.cs",
               "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
               "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-17T16:51:52.795Z",
               "EditorCaption": ""
@@ -86,13 +103,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "AnswerResult.cs",
               "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
               "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
               "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAABAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-17T15:24:19.343Z",
               "EditorCaption": ""
