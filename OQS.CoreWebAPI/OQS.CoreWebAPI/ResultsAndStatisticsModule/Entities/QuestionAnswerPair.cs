@@ -2,14 +2,13 @@
 {
     public class QuestionAnswerPair
     {
-        private Guid QuestionId{ get; set; }
-
-        private List<object> Answer { get; set; } = new();
-
+        public Guid QuestionId { get; set; }
+        public List<object> Answer { get; set; } = new();
+        
         public QuestionAnswerPair(Guid questionId, List<object> answer)
         {
-            this.QuestionId = questionId;
-            this.Answer.AddRange(answer);
+            QuestionId = questionId;
+            Answer.AddRange(answer);
         }      
     }
 }

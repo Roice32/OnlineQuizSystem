@@ -2,20 +2,17 @@
 {
     public class QuizSubmission
     {
-        private Guid QuizId { get; set; } 
-
-        private Guid TakenBy { get; set; }
-
-        private List<QuestionAnswerPair> QuestionAnswerPairs { get; set; } = new();
-
-        private int TimeElapsed { get; set; } = 0;
+        public Guid QuizId { get; set; } 
+        public Guid TakenBy { get; set; }
+        public List<QuestionAnswerPair> QuestionAnswerPairs { get; set; } = new();
+        public int TimeElapsed { get; set; }
 
         public QuizSubmission(Guid quizId, Guid takenBy, List<QuestionAnswerPair> questionAnswerPairs, int timeElapsed)
         {
-            this.QuizId = quizId;
-            this.TakenBy = takenBy;
-            this.QuestionAnswerPairs.AddRange(questionAnswerPairs);
-            this.TimeElapsed = timeElapsed;
+            QuizId = quizId;
+            TakenBy = takenBy;
+            QuestionAnswerPairs.AddRange(questionAnswerPairs);
+            TimeElapsed = timeElapsed;
         }
     }
 }

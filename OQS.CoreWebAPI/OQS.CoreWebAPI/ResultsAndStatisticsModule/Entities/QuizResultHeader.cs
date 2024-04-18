@@ -5,26 +5,23 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuizResultHeader
     {
-        public Guid QuizID { get; }
-        public Guid UserID { get; }
-        public DateTime SubmittedAt { get; private set; }
+        public Guid QuizId { get; }
+        public Guid UserId { get; }
+        public DateTime SubmittedAt { get; set; }
         public int CompletionTime { get; }
-        public int Score { get; private set; }
-        private bool ReviewPending { get; set; }
-
+        public int Score { get; set; }
+        public bool ReviewPending { get; set; }
 
         public QuizResultHeader(Guid quizID, Guid userID, int completionTime)
         {
-            this.QuizID = quizID;
-            this.UserID = userID;
-            this.CompletionTime = completionTime;
+            QuizId = quizID;
+            UserId = userID;
+            CompletionTime = completionTime;
             SubmittedAt = DateTime.Now;
         }
-
-
         public void UpdateUponAnswerReview(QuizResultBody updatedBody)
         {
-            if (updatedBody.QuizzId != this.QuizID || updatedBody.UserId != this.UserID)
+            if (updatedBody.QuizId != QuizId || updatedBody.UserId != UserId)
             {
                 throw new ArgumentException("The quiz result body does not match the quiz result header");
             }
@@ -35,9 +32,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
                 newScore += question.Score;
             }
 
-            this.Score = newScore;
+            Score = newScore;
 
-            bool hasPendingQuestions = true; // updatedBody.QuestionResults.Any(q => q.AnswerTypes.Any(a => a == AnswerResult.Pending));
+            bool hasPendingQuestions = updatedBody.QuestionResults.Any(q => q.AnswersTypes.Any(a => a == AnswerResult.Pending));
 
             ReviewPending = hasPendingQuestions;
          
@@ -45,5 +42,4 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
         
         }
     }
-
 }

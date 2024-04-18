@@ -1,14 +1,13 @@
-using Microsoft.EntityFrameworkCore.Update.Internal;
+﻿using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuizResultBody
     {
-        private List<QuizResultHeader> QuizResultHeaders=new();
-
         public Guid QuizId { get; set; }
         public Guid UserId { get; set; } 
-        private List<QuestionResult> QuestionResults { get; set; } = new();
+        public List<QuestionResult> QuestionResults { get; set; } = new();
+
         public void ReviewAnswer(Guid questionId, int finalScore)
         {
             var questionResult = QuestionResults.FirstOrDefault(q => q.QuestionId == questionId);
@@ -33,7 +32,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 
         private QuizResultHeader GetQuizResultHeader(Guid QuizId, Guid UserId)
         {
-            return QuizResultHeaders.FirstOrDefault(q => q.QuizId == QuizId && q.UserId == UserId);
+            // PLACEHOLDER
+            List<QuizResultHeader> quizResultHeaders = new();
+            return quizResultHeaders.FirstOrDefault(q => q.QuizId == QuizId && q.UserId == UserId);
+        }
+
+        public void AddQuestionResult(QuestionResult questionResult)
+        {
+            QuestionResults.Add(questionResult);
         }
     }
 
