@@ -70,10 +70,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 
         private static QuizResultHeader BuildQuizResultHeader(QuizSubmission toBeChecked, QuizResultBody resultBody)
         {
-            /*QuizResultHeader resultHeader = new QuizResultHeader();
-            resultHeader.QuizID = toBeChecked.QuizID;
-            resultHeader.UserId = toBeChecked.TakenBy;
-            resultHeader.SubmittedAt = DateTime.Now;
+            /*QuizResultHeader resultHeader = new QuizResultHeader(toBeChecked.QuizId,
+                toBeChecked.TakenBy, toBeChecked.TimeElapsed);
             int totalScore = 0;
             foreach (var questionResult in resultBody.QuestionResults)
             {
