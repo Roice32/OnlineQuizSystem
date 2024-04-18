@@ -23,6 +23,7 @@
                 return;
             }
             //QuestionBase questionFromDd = ceva;
+
             if (Score == questionFromDd.AllocatedPoints)
             {
                 AnswersType[0] = AnswerResult.Correct;
