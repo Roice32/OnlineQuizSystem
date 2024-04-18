@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\alex\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\answerresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\alex\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultbody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultbody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\alex\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizresultheader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\alex\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\quizchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\alex\\documents\\github\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\resultsandstatisticsmodule\\entities\\questionchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,58 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 246,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "QuizResultBody.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
-              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultBody.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Title": "QuestionChecker.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionChecker.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionChecker.cs",
+              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionChecker.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuestionChecker.cs",
+              "ViewState": "AQIAADsAAAAAAAAAAAAIwEoAAAAoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:52:18.431Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "QuizResultHeader.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
-              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizResultHeader.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:51:52.795Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "QuizChecker.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
-              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T16:51:30.458Z",
+              "WhenOpened": "2024-04-18T10:26:58.266Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AnswerResult.cs",
-              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
-              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\AnswerResult.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAABAAAA",
+              "Title": "QuizChecker.cs",
+              "DocumentMoniker": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
+              "ToolTip": "C:\\Users\\Alex\\Documents\\GitHub\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\QuizChecker.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-17T15:24:19.343Z",
+              "WhenOpened": "2024-04-18T10:00:44.648Z",
               "EditorCaption": ""
             },
             {
