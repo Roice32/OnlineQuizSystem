@@ -2,20 +2,20 @@
 {
     public class QuizSubmission
     {
-        private Guid quizId { get; set; } 
+        private Guid QuizId { get; set; } 
 
-        private Guid takenBy { get; set; }
+        private Guid TakenBy { get; set; }
 
-        private List<QuestionAnswerPair> answers { get; set; } = new();
+        private List<QuestionAnswerPair> QuestionAnswerPairs { get; set; } = new();
 
-        private int timeElapsed { get; set; } = 0;
+        private int TimeElapsed { get; set; } = 0;
 
-        public QuizSubmission(Guid quizId, Guid takenBy, List<QuestionAnswerPair> answers, int timeElapsed)
+        public QuizSubmission(Guid quizId, Guid takenBy, List<QuestionAnswerPair> questionAnswerPairs, int timeElapsed)
         {
-            this.quizId = quizId;
-            this.takenBy = takenBy;
-            this.answers = answers;
-            this.timeElapsed = timeElapsed;
+            this.QuizId = quizId;
+            this.TakenBy = takenBy;
+            this.QuestionAnswerPairs = questionAnswerPairs;
+            this.TimeElapsed = timeElapsed;
         }
     }
 }
