@@ -4,9 +4,9 @@
     {
         private Guid QuestionId{ get; set; }
 
-        private List<System.Object> Answer { get; set; }
+        private List<object> Answer { get; set; } = new();
 
-        public QuestionAnswerPair (Guid questionId, List<System.Object> answer)
+        public QuestionAnswerPair(Guid questionId, List<object> answer)
         {
             this.QuestionId = questionId;
             this.Answer.AddRange(answer);

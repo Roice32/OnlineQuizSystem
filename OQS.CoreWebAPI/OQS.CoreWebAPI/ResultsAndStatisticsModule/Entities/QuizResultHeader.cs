@@ -37,9 +37,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 
             this.Score = newScore;
 
-            bool hasPendingQuestions = updatedBody.QuestionResults.Any(q => q.AnswerTypes.Any(a => a == AnswerResult.Pending));
+            bool hasPendingQuestions = true; // updatedBody.QuestionResults.Any(q => q.AnswerTypes.Any(a => a == AnswerResult.Pending));
 
-            reviewPending = hasPendingQuestions;
+            ReviewPending = hasPendingQuestions;
          
             //update in DB
         
