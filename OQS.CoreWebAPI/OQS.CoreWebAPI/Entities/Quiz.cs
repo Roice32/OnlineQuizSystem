@@ -9,4 +9,6 @@ public class Quiz
     public int TimeLimitMinutes { get; set; }
     public DateTime CreatedAt { get; set; }
     
+     
+    
 }

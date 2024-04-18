@@ -29,8 +29,9 @@ if (app.Environment.IsDevelopment())
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-// dbContext.SeedQuestions();
+
 dbContext.SeedQuizzez();
+dbContext.SeedUsers();
 
 app.MapCarter();
 app.UseHttpsRedirection();

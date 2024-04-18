@@ -78,6 +78,25 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("Quizzes");
                 });
 
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("OQS.CoreWebAPI.Entities.ChoiceQuestionBase", b =>
                 {
                     b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
