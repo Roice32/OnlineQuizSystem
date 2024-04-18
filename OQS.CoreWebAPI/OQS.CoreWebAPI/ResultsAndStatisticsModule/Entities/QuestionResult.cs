@@ -31,7 +31,6 @@
             {
                 AnswersType[0] = AnswerResult.PartiallyCorrect;
             }
-
         }
 
     }
