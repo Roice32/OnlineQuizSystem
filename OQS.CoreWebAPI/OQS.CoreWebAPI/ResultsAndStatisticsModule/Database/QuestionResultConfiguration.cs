@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.ResultTypes;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database
 {

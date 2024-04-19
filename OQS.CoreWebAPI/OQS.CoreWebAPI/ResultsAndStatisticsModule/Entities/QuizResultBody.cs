@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Update.Internal;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.ResultTypes;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
