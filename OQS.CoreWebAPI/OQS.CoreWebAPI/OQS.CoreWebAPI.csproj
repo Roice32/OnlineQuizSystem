@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ResultsAndStatisticsModule\Temp\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Shared\" />
   </ItemGroup>
 
 </Project>

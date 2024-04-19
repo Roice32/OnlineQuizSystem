@@ -1,39 +1,39 @@
-﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+
+namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuestionResult
     {
-
+        public Guid UserId { get; set; }
         public Guid QuestionId { get; set; }
-        public List<Object> SubmittedAnswers { get; set; } = new();
-        public List<AnswerResult> AnswersType { get; set; } = new();
+        public List<string> SubmittedAnswers { get; set; } = new();
+        public List<AnswerResult> AnswersTypes { get; set; } = new();
         public int Score { get; set; }
 
-        private QuestionResult(Guid questionId, List<object> submittedAnswers)
+        public QuestionResult(Guid userId, Guid questionId, List<string> submittedAnswers)
         {
+            UserId = userId;
             QuestionId = questionId;
-            SubmittedAnswers.AddRange(SubmittedAnswers);
+            SubmittedAnswers.AddRange(submittedAnswers);
         }
-
         public void UpdateScore(int finalScore)
         {
             Score = finalScore;
             if (Score == 0)
             {
-                AnswersType[0] = AnswerResult.Wrong;
+                AnswersTypes[0] = AnswerResult.Wrong;
                 return;
             }
-            //QuestionBase questionFromDd = ceva;
-
+            // PLACEHOLDER
+            QuestionBase questionFromDd = null;
             if (Score == questionFromDd.AllocatedPoints)
             {
-                AnswersType[0] = AnswerResult.Correct;
+                AnswersTypes[0] = AnswerResult.Correct;
             }
             else
             {
-                AnswersType[0] = AnswerResult.PartiallyCorrect;
+                AnswersTypes[0] = AnswerResult.PartiallyCorrect;
             }
-
         }
-
     }
 }
