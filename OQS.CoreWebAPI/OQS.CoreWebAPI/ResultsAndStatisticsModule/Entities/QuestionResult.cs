@@ -4,13 +4,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuestionResult
     {
+        public Guid UserId { get; set; }
         public Guid QuestionId { get; set; }
-        public List<object> SubmittedAnswers { get; set; } = new();
+        public List<string> SubmittedAnswers { get; set; } = new();
         public List<AnswerResult> AnswersTypes { get; set; } = new();
         public int Score { get; set; }
 
-        public QuestionResult(Guid questionId, List<object> submittedAnswers)
+        public QuestionResult(Guid userId, Guid questionId, List<string> submittedAnswers)
         {
+            UserId = userId;
             QuestionId = questionId;
             SubmittedAnswers.AddRange(submittedAnswers);
         }

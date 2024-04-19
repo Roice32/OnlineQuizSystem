@@ -23,15 +23,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             foreach (var QAPair in toBeChecked.QuestionAnswerPairs)
             {
                 QuestionBase questionFromDb = questionsFromDb.Find(q => q.Id == QAPair.QuestionId);
-                resultBody.AddQuestionResult(CheckQuestion(QAPair, questionFromDb));
+                resultBody.AddQuestionResult(CheckQuestion(toBeChecked, QAPair, questionFromDb));
             }
 
             return resultBody;
         }
 
-        private static QuestionResult CheckQuestion(QuestionAnswerPair QAPair, QuestionBase questionFromDb)
+        private static QuestionResult CheckQuestion(QuizSubmission toBeChecked, QuestionAnswerPair QAPair, QuestionBase questionFromDb)
         {
-            QuestionResult questionResult = new QuestionResult(QAPair.QuestionId, QAPair.Answer);
+            QuestionResult questionResult = new QuestionResult(toBeChecked.TakenBy, QAPair.QuestionId, QAPair.Answer);
 
             questionResult.AnswersTypes
                 .AddRange(QuestionChecker
