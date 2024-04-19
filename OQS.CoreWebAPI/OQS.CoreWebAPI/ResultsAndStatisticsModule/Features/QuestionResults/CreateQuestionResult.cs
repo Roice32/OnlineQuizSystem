@@ -51,7 +51,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features.QuestionResults
                     return Result.Failure<Guid>(new Error("CreateQuestionResult.Validator", validationResult.ToString()));
                 }
 
-                var questionResult = new QuestionResult(request.UserId, request.QuestionId, request.SubmittedAnswers);
+                var questionResult = new QuestionResultBase(request.UserId, request.QuestionId, request.SubmittedAnswers);
                 // PLACEHOLDER
                 questionResult.AnswersTypes.AddRange(request.AnswersTypes);
                 questionResult.Score = request.Score;

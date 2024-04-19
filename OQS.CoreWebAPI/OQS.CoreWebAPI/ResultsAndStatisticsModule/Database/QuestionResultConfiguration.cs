@@ -5,9 +5,9 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database
 {
-    public class QuestionResultConfiguration : IEntityTypeConfiguration<QuestionResult>
+    public class QuestionResultConfiguration : IEntityTypeConfiguration<QuestionResultBase>
     {
-        public void Configure(EntityTypeBuilder<QuestionResult> builder)
+        public void Configure(EntityTypeBuilder<QuestionResultBase> builder)
         {
             builder.Property(qr => qr.SubmittedAnswers).HasConversion
                 (

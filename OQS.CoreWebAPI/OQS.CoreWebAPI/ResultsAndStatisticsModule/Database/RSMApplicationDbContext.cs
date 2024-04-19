@@ -10,11 +10,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database
 
         //public DbSet<QuizResultHeader> QuizResultHeaders { get; set; }
         //public DbSet<QuizResultBody> QuizResultBodies { get; set; }
-        public DbSet<QuestionResult> QuestionResults { get; set; }
+        public DbSet<QuestionResultBase> QuestionResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<QuestionResult>().HasKey(qr => new { qr.UserId, qr.QuestionId });
+            modelBuilder.Entity<QuestionResultBase>().HasKey(qr => new { qr.UserId, qr.QuestionId });
         }
     }
 }
