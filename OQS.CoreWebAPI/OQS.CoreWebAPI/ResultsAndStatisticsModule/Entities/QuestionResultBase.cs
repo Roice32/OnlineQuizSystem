@@ -2,7 +2,7 @@
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
-    public class QuestionResult
+    public class QuestionResultBase
     {
         public Guid UserId { get; set; }
         public Guid QuestionId { get; set; }
@@ -10,7 +10,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
         public List<AnswerResult> AnswersTypes { get; set; } = new();
         public int Score { get; set; }
 
-        public QuestionResult(Guid userId, Guid questionId, List<string> submittedAnswers)
+        public QuestionResultBase(Guid userId, Guid questionId, List<string> submittedAnswers)
         {
             UserId = userId;
             QuestionId = questionId;
