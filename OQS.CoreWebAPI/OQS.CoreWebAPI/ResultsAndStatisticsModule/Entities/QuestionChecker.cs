@@ -4,7 +4,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public abstract class QuestionChecker
     {
-        public static List<AnswerResult> CheckQuestion(List<object> submittedAnswers,
+        public static List<AnswerResult> CheckQuestion(List<string> submittedAnswers,
             QuestionBase questionFromDb)
         {
             List<AnswerResult> answersType = new();
@@ -29,7 +29,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             return answersType;
         }
 
-        private static AnswerResult CheckTrueFalseQuestion(List<object> submittedAnswers,
+        private static AnswerResult CheckTrueFalseQuestion(List<string> submittedAnswers,
                        QuestionBase questionFromDb)
         {
             if (((TrueFalseQuestion)questionFromDb).TrueFalseAnswer == Convert.ToBoolean(submittedAnswers[0]))
@@ -37,7 +37,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             return AnswerResult.Wrong;
         }
 
-        private static List<AnswerResult> CheckMultipleChoiceQuestion(List<object> submittedAnswers,
+        private static List<AnswerResult> CheckMultipleChoiceQuestion(List<string> submittedAnswers,
                                   QuestionBase questionFromDb)
         {
             List<AnswerResult> answersType = new();
@@ -51,7 +51,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             return answersType;
         }
 
-        private static AnswerResult CheckSingleChoiceQuestion(List<Object> submittedAnswers,
+        private static AnswerResult CheckSingleChoiceQuestion(List<string> submittedAnswers,
                                   QuestionBase questionFromDb)
         {
             if (((SingleChoiceQuestion)questionFromDb).SingleChoiceAnswer == Convert.ToInt32(submittedAnswers[0]))
@@ -59,7 +59,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             return AnswerResult.Wrong;
         }
 
-        private static AnswerResult CheckWrittenAnswerQuestion(List<Object> submittedAnswers,
+        private static AnswerResult CheckWrittenAnswerQuestion(List<string> submittedAnswers,
                                              QuestionBase questionFromDb)
         {
             if (((WrittenAnswerQuestion)questionFromDb).WrittenAcceptedAnswers.Contains(Convert.ToString(submittedAnswers[0])))
@@ -67,7 +67,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             return AnswerResult.Wrong;
         }
 
-        private static AnswerResult CheckReviewNeededQuestion(List<Object> submittedAnswers,
+        private static AnswerResult CheckReviewNeededQuestion(List<string> submittedAnswers,
                                                         QuestionBase questionFromDB)
         {
             // Later on, implement asking an LLM for a temporary review.
