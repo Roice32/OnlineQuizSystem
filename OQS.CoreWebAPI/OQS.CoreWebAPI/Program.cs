@@ -16,6 +16,8 @@ builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assemb
 builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
 
+builder.Services.AddCors(p=>p.AddPolicy("corspolicy",b=>b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
 var app = builder.Build();
 
 
@@ -25,6 +27,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.ApplyMigrations();
 }
+
+app.UseCors("corspolicy");
 
 
 using var scope = app.Services.CreateScope();
