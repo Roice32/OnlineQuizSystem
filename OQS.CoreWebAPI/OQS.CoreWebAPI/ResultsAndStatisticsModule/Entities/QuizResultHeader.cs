@@ -1,5 +1,5 @@
-﻿
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
@@ -9,7 +9,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
         public Guid UserId { get; }
         public DateTime SubmittedAt { get; set; }
         public int CompletionTime { get; }
-        public float Score { get; set; }
+        public int Score { get; set; }
         public bool ReviewPending { get; set; }
 
         public QuizResultHeader(Guid quizID, Guid userID, int completionTime)
@@ -26,7 +26,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
                 throw new ArgumentException("The quiz result body does not match the quiz result header");
             }
 
-            float newScore = 0;
+            int newScore = 0;
             foreach (var question in updatedBody.QuestionResults)
             {
                 newScore += question.Score;
@@ -34,9 +34,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 
             Score = newScore;
 
-            bool hasPendingQuestions = updatedBody.QuestionResults
-                .Any(q => q is ReviewNeededQuestionResult && 
-                    (((ReviewNeededQuestionResult)q).ReviewNeededResult == AnswerResult.Pending));
+            bool hasPendingQuestions = updatedBody.QuestionResults.Any(q => q.AnswersTypes.Any(a => a == AnswerResult.Pending));
 
             ReviewPending = hasPendingQuestions;
          
