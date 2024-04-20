@@ -1,4 +1,4 @@
-﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairClasses
+﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs
 {
     public abstract class QuestionAnswerPairBase
     {

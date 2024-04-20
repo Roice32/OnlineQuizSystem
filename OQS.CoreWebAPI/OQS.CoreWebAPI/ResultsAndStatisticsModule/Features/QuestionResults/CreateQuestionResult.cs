@@ -5,6 +5,7 @@ using MediatR;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Features.QuestionResults;
 using OQS.CoreWebAPI.Shared;
 
@@ -51,10 +52,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features.QuestionResults
                     return Result.Failure<Guid>(new Error("CreateQuestionResult.Validator", validationResult.ToString()));
                 }
 
-                var questionResult = new QuestionResultBase(request.UserId, request.QuestionId, request.SubmittedAnswers);
+                //var questionResult = new QuestionResultBase(request.UserId, request.QuestionId, request.SubmittedAnswers);
                 // PLACEHOLDER
-                questionResult.AnswersTypes.AddRange(request.AnswersTypes);
-                questionResult.Score = request.Score;
+                QuestionResultBase questionResult = null;
 
                 DbContext.QuestionResults.Add(questionResult);
                 await DbContext.SaveChangesAsync(cancellationToken);

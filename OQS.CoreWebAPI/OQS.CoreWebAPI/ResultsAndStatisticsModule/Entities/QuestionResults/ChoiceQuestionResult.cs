@@ -1,4 +1,4 @@
-﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.ResultTypes
+﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
 {
     public abstract class ChoiceQuestionResult:QuestionResultBase
     {
