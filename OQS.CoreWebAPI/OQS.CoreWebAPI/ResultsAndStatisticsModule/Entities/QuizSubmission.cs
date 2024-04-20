@@ -1,4 +1,6 @@
-﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
+
+namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuizSubmission
     {
