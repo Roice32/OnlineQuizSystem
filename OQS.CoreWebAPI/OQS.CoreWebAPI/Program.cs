@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +11,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDBContext>(db=>db.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
-var assembly=typeof(Program).Assembly;
+
+// check if platform is linux
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+{
+    builder.Services.AddDbContext<ApplicationDBContext>(db =>
+        db.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseLinux")));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDBContext>(db =>
+        db.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+}
+
+var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
@@ -38,5 +51,3 @@ app.UseHttpsRedirection();
 
 
 app.Run();
-
-
