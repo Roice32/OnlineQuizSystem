@@ -9,8 +9,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database
         public RSMApplicationDbContext(DbContextOptions<RSMApplicationDbContext> options) : 
             base(options) {}
 
-            // Andra:
-        //public DbSet<QuizResultHeader> QuizResultHeaders { get; set; }
+        public DbSet<QuizResultHeader> QuizResultHeaders { get; set; }
 
             // Casiana:
         //public DbSet<QuizResultBody> QuizResultBodies { get; set; }
