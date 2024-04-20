@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Update.Internal;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.ResultTypes;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
@@ -14,7 +13,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             var questionResult = QuestionResults.FirstOrDefault(q => q.QuestionId == questionId);
             if (questionResult != null)
             {
-                questionResult.UpdateScore(finalScore);
+                ((ReviewNeededQuestionResult)questionResult).UpdateScore(finalScore);
             }
             //UpdateInDB();
 

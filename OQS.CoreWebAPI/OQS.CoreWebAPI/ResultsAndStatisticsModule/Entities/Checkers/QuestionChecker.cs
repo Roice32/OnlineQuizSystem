@@ -1,4 +1,5 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairClasses;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
