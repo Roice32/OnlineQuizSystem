@@ -6,15 +6,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.ResultTypes
     {
         public Guid UserId { get; set; }
         public Guid QuestionId { get; set; }
-       
         public float Score { get; set; }
 
-        
-        protected QuestionResultBase(Guid userId, Guid questionId)
+        protected QuestionResultBase(Guid userId, Guid questionId, float score)
         {
             UserId = userId;
             QuestionId = questionId;
+            Score = score;
         }
-
     }
 }

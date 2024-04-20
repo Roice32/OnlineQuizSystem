@@ -4,12 +4,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.ResultTypes
 {
     public class ReviewNeededQuestionResult: QuestionResultBase
     {
+        public string ReviewNeededAnswer { get; set; }
         public AnswerResult ReviewNeededResult { get; set; }
 
-        public string ReviewNeeded { get; set; }
-        public ReviewNeededQuestionResult(Guid userId, Guid questionId,string reviewNeeded, AnswerResult reviewNeededResult) : base(userId, questionId)
+        public ReviewNeededQuestionResult(Guid userId, Guid questionId, float score, string reviewNeeded, AnswerResult reviewNeededResult):
+            base(userId, questionId, score)
         {
-            ReviewNeeded = reviewNeeded;
+            ReviewNeededAnswer = reviewNeeded;
             ReviewNeededResult = reviewNeededResult;
         }
 

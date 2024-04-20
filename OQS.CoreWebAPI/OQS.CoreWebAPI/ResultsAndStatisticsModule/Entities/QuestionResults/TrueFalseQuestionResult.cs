@@ -3,12 +3,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.ResultTypes
 {
     public class TrueFalseQuestionResult : QuestionResultBase
     {
-        public bool TrueFalsePickedAnswer { get; set; }
         public AnswerResult TrueFalseAnswerResult { get; set; }
 
-        public TrueFalseQuestionResult(Guid userId, Guid questionId, bool trueFalsePickedAnswer, AnswerResult trueFalseAnswerResult) : base(userId, questionId)
+        public TrueFalseQuestionResult(Guid userId, Guid questionId, float score, AnswerResult trueFalseAnswerResult):
+            base(userId, questionId, score)
         {
-            TrueFalsePickedAnswer = trueFalsePickedAnswer;
             TrueFalseAnswerResult = trueFalseAnswerResult;
         }
     }
