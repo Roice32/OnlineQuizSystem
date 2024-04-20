@@ -7,7 +7,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
     {
         public Guid QuizId { get; set; }
         public Guid UserId { get; set; } 
-        public List<QuestionResult> QuestionResults { get; set; } = new();
+        public List<QuestionResultBase> QuestionResults { get; set; } = new();
 
         public void ReviewAnswer(Guid questionId, int finalScore)
         {
@@ -38,7 +38,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             return quizResultHeaders.FirstOrDefault(q => q.QuizId == QuizId && q.UserId == UserId);
         }
 
-        public void AddQuestionResult(QuestionResult questionResult)
+        public void AddQuestionResult(QuestionResultBase questionResult)
         {
             QuestionResults.Add(questionResult);
         }
