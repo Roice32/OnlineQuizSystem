@@ -1,4 +1,5 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
@@ -32,11 +33,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         {
             QuizResultHeader resultHeader = new QuizResultHeader(toBeChecked.QuizId,
                 toBeChecked.TakenBy, toBeChecked.TimeElapsed);
-            int totalScore = 0;
+            float totalScore = 0;
             foreach (var questionResult in resultBody.QuestionResults)
             {
                 totalScore += questionResult.Score;
-                if (questionResult.AnswersTypes.Contains(AnswerResult.Pending))
+                if (questionResult is ReviewNeededQuestionResult &&
+                    ((ReviewNeededQuestionResult)questionResult).ReviewNeededResult == AnswerResult.Pending)
                     resultHeader.ReviewPending = true;
             }
             resultHeader.Score = totalScore;
