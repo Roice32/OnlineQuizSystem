@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore.Update.Internal;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
@@ -6,14 +6,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
     {
         public Guid QuizId { get; set; }
         public Guid UserId { get; set; } 
-        public List<QuestionResult> QuestionResults { get; set; } = new();
+        public List<QuestionResultBase> QuestionResults { get; set; } = new();
 
         public void ReviewAnswer(Guid questionId, int finalScore)
         {
             var questionResult = QuestionResults.FirstOrDefault(q => q.QuestionId == questionId);
             if (questionResult != null)
             {
-                questionResult.UpdateScore(finalScore);
+                ((ReviewNeededQuestionResult)questionResult).UpdateScore(finalScore);
             }
             //UpdateInDB();
 
@@ -37,7 +37,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             return quizResultHeaders.FirstOrDefault(q => q.QuizId == QuizId && q.UserId == UserId);
         }
 
-        public void AddQuestionResult(QuestionResult questionResult)
+        public void AddQuestionResult(QuestionResultBase questionResult)
         {
             QuestionResults.Add(questionResult);
         }
