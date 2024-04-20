@@ -1,4 +1,4 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairClasses;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
