@@ -20,11 +20,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         }
         private static QuizResultBody BuildQuizResultBody(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb)
         {
-            QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId, toBeChecked.TakenBy);
+            QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
+                toBeChecked.TakenBy,
+                toBeChecked.QuestionAnswerPairs.Select(qaPair => qaPair.QuestionId).ToList());
             foreach (var qaPair in toBeChecked.QuestionAnswerPairs)
             {
                 QuestionBase questionFromDb = questionsFromDb.Find(q => q.Id == qaPair.QuestionId);
-                resultBody.AddQuestionResult(QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, questionFromDb));
+                // Insert in QuestionResults Table:
+                    // (QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, questionFromDb));
             }
 
             return resultBody;
@@ -34,11 +37,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             QuizResultHeader resultHeader = new QuizResultHeader(toBeChecked.QuizId,
                 toBeChecked.TakenBy, toBeChecked.TimeElapsed);
             float totalScore = 0;
-            foreach (var questionResult in resultBody.QuestionResults)
+            foreach (var questionResult in resultBody.QuestionIds)
             {
-                totalScore += questionResult.Score;
+                // PLACEHOLDER
+                // Fetch result from DB
+                QuestionResultBase questionResultBase = null;
+                totalScore += questionResultBase.Score;
                 if (questionResult is ReviewNeededQuestionResult &&
-                    ((ReviewNeededQuestionResult)questionResult).ReviewNeededResult == AnswerResult.Pending)
+                    ((ReviewNeededQuestionResult)questionResultBase).ReviewNeededResult == AnswerResult.Pending)
                     resultHeader.ReviewPending = true;
             }
             resultHeader.Score = totalScore;

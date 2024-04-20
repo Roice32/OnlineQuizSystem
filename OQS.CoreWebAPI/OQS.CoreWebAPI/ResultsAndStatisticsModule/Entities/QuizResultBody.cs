@@ -5,16 +5,26 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
     public class QuizResultBody
     {
         public Guid QuizId { get; set; }
-        public Guid UserId { get; set; } 
-        public List<QuestionResultBase> QuestionResults { get; set; } = new();
+        public Guid UserId { get; set; }
+        public List<Guid> QuestionIds { get; set; } = new();
 
-        public void ReviewAnswer(Guid questionId, int finalScore)
+        public QuizResultBody(Guid quizzId, Guid userId, List<Guid> questionIds)
         {
-            var questionResult = QuestionResults.FirstOrDefault(q => q.QuestionId == questionId);
-            if (questionResult != null)
+            QuizId = quizzId;
+            UserId = userId;
+            QuestionIds.AddRange(questionIds);
+        }
+
+        public void ReviewAnswer(Guid questionId, float finalScore)
+        {
+            // implementation for searching in DB
+            QuestionResultBase questionResult = null;
+
+            if (questionResult == null)
             {
-                ((ReviewNeededQuestionResult)questionResult).UpdateScore(finalScore);
+                return;
             }
+            ((ReviewNeededQuestionResult)questionResult).UpdateScore(finalScore);
             //UpdateInDB();
 
             QuizResultHeader foundQHR = GetQuizResultHeader(QuizId, UserId);
@@ -24,22 +34,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             }
         }
 
-        public QuizResultBody(Guid quizzId, Guid userId)
-        {
-            QuizId = quizzId;
-            UserId = userId;
-        }
-
         private QuizResultHeader GetQuizResultHeader(Guid QuizId, Guid UserId)
         {
             // PLACEHOLDER
             List<QuizResultHeader> quizResultHeaders = new();
             return quizResultHeaders.FirstOrDefault(q => q.QuizId == QuizId && q.UserId == UserId);
-        }
-
-        public void AddQuestionResult(QuestionResultBase questionResult)
-        {
-            QuestionResults.Add(questionResult);
         }
     }
 

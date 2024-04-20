@@ -13,22 +13,22 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             switch (questionFromDb.Type)
             {
                 case QuestionType.TrueFalse:
-                    //return CheckTrueFalseQuestion(userId, qaPair, questionFromDb);
+                    return CheckTrueFalseQuestion(userId, qaPair, questionFromDb);
                 case QuestionType.MultipleChoice:
-                    //return CheckMultipleChoiceQuestion(userId, qaPair, questionFromDb);
+                    return CheckMultipleChoiceQuestion(userId, qaPair, questionFromDb);
                 case QuestionType.SingleChoice:
-                    //return CheckSingleChoiceQuestion(userId, qaPair, questionFromDb);
+                    return CheckSingleChoiceQuestion(userId, qaPair, questionFromDb);
                 case QuestionType.WrittenAnswer:
-                    //return CheckWrittenAnswerQuestion(userId, qaPair, questionFromDb);
+                    return CheckWrittenAnswerQuestion(userId, qaPair, questionFromDb);
                 default:
-                    //return CheckReviewNeededQuestion(userId, qaPair, questionFromDb);
+                    return CheckReviewNeededQuestion(userId, qaPair, questionFromDb);
                     break;
             }
             // PLACEHOLDER
             return null;
         }
 
-        /*private static TrueFalseQuestionResult CheckTrueFalseQuestion(Guid userId,
+        private static TrueFalseQuestionResult CheckTrueFalseQuestion(Guid userId,
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
@@ -42,9 +42,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 qaPair.QuestionId,
                 0,
                 AnswerResult.Wrong);
-        }*/
+        }
 
-        /*private static MultipleChoiceQuestionResult CheckMultipleChoiceQuestion(Guid userId,
+        private static ChoiceQuestionResult CheckMultipleChoiceQuestion(Guid userId,
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
@@ -80,13 +80,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         float scorePercentage = Math.Max(0, correctCount - wrongCount) /
             ((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Count;
 
-        return new MultipleChoiceQuestionResult(userId,
+        return new ChoiceQuestionResult(userId,
             qaPair.QuestionId,
             questionFromDb.AllocatedPoints * scorePercentage,
             allChoicesResults);
-        }*/
+        }
 
-        /*private static SingleChoiceQuestionResult CheckSingleChoiceQuestion(Guid userId,
+        private static ChoiceQuestionResult CheckSingleChoiceQuestion(Guid userId,
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
@@ -116,13 +116,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     }
                 }
             }
-            return new SingleChoiceQuestionResult(userId,
+            return new ChoiceQuestionResult(userId,
                 qaPair.QuestionId,
                 questionFromDb.AllocatedPoints,
                 allChoicesResults);
-        }*/
+        }
 
-        /*private static WrittenAnswerQuestionResult CheckWrittenAnswerQuestion(Guid userId,
+        private static WrittenAnswerQuestionResult CheckWrittenAnswerQuestion(Guid userId,
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
@@ -138,9 +138,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 0,
                 ((WrittenQAPair)qaPair).WrittenAnswer,
                 AnswerResult.Wrong);
-        }*/
+        }
 
-        /*private static ReviewNeededQuestionResult CheckReviewNeededQuestion(Guid userId,
+        private static ReviewNeededQuestionResult CheckReviewNeededQuestion(Guid userId,
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
@@ -148,7 +148,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             return new ReviewNeededQuestionResult(userId,
                 qaPair.QuestionId,
                 0,
+                ((WrittenQAPair)qaPair).WrittenAnswer,
                 AnswerResult.Pending);
-        }*/
+        }
     }
 }

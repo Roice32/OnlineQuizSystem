@@ -28,6 +28,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="ResultsAndStatisticsModule\Contracts\" />
+    <Folder Include="ResultsAndStatisticsModule\Features\QuestionResults\" />
     <Folder Include="Shared\" />
   </ItemGroup>
 

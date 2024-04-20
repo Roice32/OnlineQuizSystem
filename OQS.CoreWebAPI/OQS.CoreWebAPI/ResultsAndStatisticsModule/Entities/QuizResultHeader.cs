@@ -27,19 +27,18 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             }
 
             float newScore = 0;
-            foreach (var question in updatedBody.QuestionResults)
+            ReviewPending = false;
+            foreach (var question in updatedBody.QuestionIds)
             {
-                newScore += question.Score;
+                // PLACEHOLDER
+                // Fetch QuestionResult from DB
+                QuestionResultBase questionResult = null;
+                newScore += questionResult.Score;
+                if (questionResult is ReviewNeededQuestionResult &&
+                    ((ReviewNeededQuestionResult)questionResult).ReviewNeededResult == AnswerResult.Pending)
+                    ReviewPending = true;
             }
-
             Score = newScore;
-
-            bool hasPendingQuestions = updatedBody.QuestionResults
-                .Any(q => q is ReviewNeededQuestionResult && 
-                    (((ReviewNeededQuestionResult)q).ReviewNeededResult == AnswerResult.Pending));
-
-            ReviewPending = hasPendingQuestions;
-         
             //update in DB
         
         }

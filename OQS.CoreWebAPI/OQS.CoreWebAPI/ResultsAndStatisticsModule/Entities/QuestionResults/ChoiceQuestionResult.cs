@@ -1,6 +1,6 @@
 ﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
 {
-    public abstract class ChoiceQuestionResult:QuestionResultBase
+    public class ChoiceQuestionResult: QuestionResultBase
     {
         public Dictionary<string, AnswerResult> ChoicesResults { get; set; }
         public ChoiceQuestionResult(Guid userId, Guid questionId, float score, Dictionary<string, AnswerResult> choicesResults):
