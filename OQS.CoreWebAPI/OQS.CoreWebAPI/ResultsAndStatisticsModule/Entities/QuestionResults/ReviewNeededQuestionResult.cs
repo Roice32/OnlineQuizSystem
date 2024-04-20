@@ -14,7 +14,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
             ReviewNeededResult = reviewNeededResult;
         }
 
-        public void UpdateScore(int finalScore)
+        public void UpdateScore(float finalScore)
         {
             Score = finalScore;
             if (Score == 0)
