@@ -18,4 +18,5 @@ public class ApplicationDBContext: DbContext
     public DbSet<ReviewNeededQuestion> ReviewNeededQuestions { get; set; }
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 }
