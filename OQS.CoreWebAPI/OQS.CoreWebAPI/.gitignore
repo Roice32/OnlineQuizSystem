@@ -4,5 +4,5 @@ obj
 ./**/obj
 ./**/bin
 
-../.idea
-../.vs
+../.idea/*
+../.vs/*
