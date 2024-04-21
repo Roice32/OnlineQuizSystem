@@ -1,5 +1,6 @@
 using Carter;
 using FluentValidation;
+using Mapster;
 using OQS.CoreWebAPI.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,17 +12,22 @@ namespace OQS.CoreWebAPI.Features.Tags
 {
     public static class UpdateTag
     {
+        public class BodyUpdateTag : IRequest<Result<TagResponse>>
+        {
+             public string Name { get; set; } = string.Empty;
+        }
+        
         public class Command : IRequest<Result<TagResponse>>
         {
             public Guid Id { get; set; }
-            public string Name { get; set; } = string.Empty;
+            public BodyUpdateTag Body { get; set; } = new BodyUpdateTag();
         }
 
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Body.Name).NotEmpty();
             }
         }
 
@@ -61,7 +67,7 @@ namespace OQS.CoreWebAPI.Features.Tags
 
                 try
                 {
-                    tag.Name = request.Name;
+                    tag.Name = request.Body.Name;
                     context.Tags.Update(tag);
                     await context.SaveChangesAsync(cancellationToken);
                 }
@@ -89,14 +95,23 @@ public class UpdateTagEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPatch("api/tags/{id}", async(Guid id, UpdateTag.Command command, ISender sender) =>
+        app.MapPatch("api/tags/{id}", async(Guid id, UpdateTagRequest request, ISender sender) =>
         {
-            command.Id = id;
+            var bodyUpdateTag = request.Adapt<UpdateTag.BodyUpdateTag>();
+            
+            var command = new UpdateTag.Command
+            {
+                Id = id,
+                Body = bodyUpdateTag
+            };
+            
             var result = await sender.Send(command);
+            
             if (result.IsFailure)
             {
                 return Results.NotFound(result.Error);
             }
+            
             return Results.Ok(result.Value);
         });
     }
