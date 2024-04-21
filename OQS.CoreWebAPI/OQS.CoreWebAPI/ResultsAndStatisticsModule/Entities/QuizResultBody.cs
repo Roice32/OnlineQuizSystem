@@ -8,9 +8,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
         public Guid UserId { get; set; }
         public List<Guid> QuestionIds { get; set; } = new();
 
-        public QuizResultBody(Guid quizzId, Guid userId, List<Guid> questionIds)
+        public QuizResultBody(Guid quizId, Guid userId, List<Guid> questionIds)
         {
-            QuizId = quizzId;
+            QuizId = quizId;
             UserId = userId;
             QuestionIds.AddRange(questionIds);
         }

@@ -2,11 +2,13 @@
 {
     public class ChoiceQuestionResult: QuestionResultBase
     {
-        public Dictionary<string, AnswerResult> ChoicesResults { get; set; }
-        public ChoiceQuestionResult(Guid userId, Guid questionId, float score, Dictionary<string, AnswerResult> choicesResults):
-            base(userId, questionId, score)
+        public string PseudoDictionaryChoicesResults { get; set; }
+        public ChoiceQuestionResult(Guid userId,
+            Guid questionId,
+            float score,
+            string pseudoDictionaryChoicesResults):base(userId, questionId, score)
         {
-            ChoicesResults = choicesResults;
+            PseudoDictionaryChoicesResults = pseudoDictionaryChoicesResults;
         }
     }
 }

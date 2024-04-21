@@ -7,10 +7,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
         public string ReviewNeededAnswer { get; set; }
         public AnswerResult ReviewNeededResult { get; set; }
 
-        public ReviewNeededQuestionResult(Guid userId, Guid questionId, float score, string reviewNeeded, AnswerResult reviewNeededResult):
+        public ReviewNeededQuestionResult(Guid userId, Guid questionId, float score, string reviewNeededAnswer, AnswerResult reviewNeededResult):
             base(userId, questionId, score)
         {
-            ReviewNeededAnswer = reviewNeeded;
+            ReviewNeededAnswer = reviewNeededAnswer;
             ReviewNeededResult = reviewNeededResult;
         }
 
