@@ -6,6 +6,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
     {
         public string ReviewNeededAnswer { get; set; }
         public AnswerResult ReviewNeededResult { get; set; }
+        public object AnswersResults { get; internal set; }
 
         public ReviewNeededQuestionResult(Guid userId, Guid questionId, float score, string reviewNeeded, AnswerResult reviewNeededResult):
             base(userId, questionId, score)
