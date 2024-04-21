@@ -1,4 +1,5 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
+﻿using Newtonsoft.Json;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
@@ -80,10 +81,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         float scorePercentage = Math.Max(0, correctCount - wrongCount) /
             ((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Count;
 
+        string pseudoDictionaryChoicesResults = JsonConvert.SerializeObject(allChoicesResults);
         return new ChoiceQuestionResult(userId,
             qaPair.QuestionId,
             questionFromDb.AllocatedPoints * scorePercentage,
-            allChoicesResults);
+            pseudoDictionaryChoicesResults);
         }
 
         private static ChoiceQuestionResult CheckSingleChoiceQuestion(Guid userId,
@@ -116,10 +118,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     }
                 }
             }
+
+            string pseudoDictionaryChoicesResults = JsonConvert.SerializeObject(allChoicesResults);
             return new ChoiceQuestionResult(userId,
                 qaPair.QuestionId,
                 questionFromDb.AllocatedPoints,
-                allChoicesResults);
+                pseudoDictionaryChoicesResults);
         }
 
         private static WrittenAnswerQuestionResult CheckWrittenAnswerQuestion(Guid userId,
