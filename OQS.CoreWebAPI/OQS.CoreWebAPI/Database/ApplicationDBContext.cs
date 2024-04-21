@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Entities.ActiveQuiz;
 
 namespace OQS.CoreWebAPI.Database;
 
@@ -18,4 +19,6 @@ public class ApplicationDBContext: DbContext
     public DbSet<ReviewNeededQuestion> ReviewNeededQuestions { get; set; }
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<ActiveQuiz> ActiveQuizzes { get; set; }
+
 }

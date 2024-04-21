@@ -22,6 +22,30 @@ namespace OQS.CoreWebAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ActiveQuiz.ActiveQuiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ActiveQuizzes");
+                });
+
             modelBuilder.Entity("OQS.CoreWebAPI.Entities.QuestionBase", b =>
                 {
                     b.Property<Guid>("Id")
@@ -156,6 +180,25 @@ namespace OQS.CoreWebAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("SingleChoiceQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ActiveQuiz.ActiveQuiz", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.Quiz", "Quiz")
+                        .WithMany()
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.Entities.QuestionBase", b =>
