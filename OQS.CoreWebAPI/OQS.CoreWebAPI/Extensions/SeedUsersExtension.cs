@@ -11,10 +11,11 @@ public static class SeedUsersExtension
         {
             return;
         }
+
         var user = new User
         {
-            Id =Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"),
-            UserName = "user",
+            Id = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"),
+            Name = "user",
             Email = "user@email.com"
         };
         dbContext.Users.Add(user);
