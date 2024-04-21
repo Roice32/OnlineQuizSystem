@@ -36,6 +36,7 @@ var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>()
 
 dbContext.SeedQuizzez();
 dbContext.SeedUsers();
+dbContext.SeedActiveQuizzes();
 
 app.MapCarter();
 app.UseHttpsRedirection();
