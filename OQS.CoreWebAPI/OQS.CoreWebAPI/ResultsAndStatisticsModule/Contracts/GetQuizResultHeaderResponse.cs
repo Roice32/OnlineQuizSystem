@@ -8,9 +8,7 @@
         public int CompletionTime { get; set; }
         public float Score { get; set; }
         public bool ReviewPending { get; set; }
-        // PLACEHOLDER
-        string UserName { get; set; }
-        // PLACEHOLDER
-        string QuizName { get; set; }
+        public string UserName { get; set; }
+        public string QuizName { get; set; }
     }
 }
