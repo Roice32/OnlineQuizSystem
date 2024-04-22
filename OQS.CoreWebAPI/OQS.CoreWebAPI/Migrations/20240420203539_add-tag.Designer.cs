@@ -12,8 +12,8 @@ using OQS.CoreWebAPI.Database;
 namespace OQS.CoreWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240420201818_add_tag")]
-    partial class add_tag
+    [Migration("20240420203539_add-tag")]
+    partial class addtag
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
