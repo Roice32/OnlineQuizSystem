@@ -16,7 +16,11 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         {
             public string Name { get; set; } = string.Empty;
             public string Description { get; set; }
-            //  public Guid CreatorId { get; set; }
+
+            public string ImageUrl { get; set; }
+
+            public string  Language { get; set; }
+            public Guid CreatorId { get; set; }
             public int TimeLimitMinutes { get; set; }
         }
 
@@ -25,8 +29,12 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             public Validator()
             {
                 RuleFor(x => x.Name).NotEmpty();
-             //   RuleFor(x => x.CreatorId).NotEmpty();
-               RuleFor(x=>x.TimeLimitMinutes).NotEmpty();
+
+                RuleFor(x=>x.Language).NotEmpty();
+             
+                RuleFor(x => x.CreatorId).NotEmpty();
+
+                RuleFor(x=>x.TimeLimitMinutes).NotEmpty();
             }
         }
 
@@ -55,7 +63,9 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                     Id = Guid.NewGuid(),
                     Name = request.Name,
                     Description = request.Description,
-                  //  CreatorId=request.CreatorId,
+                    ImageUrl = request.ImageUrl,
+                    Language = request.Language,
+                    CreatorId=request.CreatorId,
                     TimeLimitMinutes = request.TimeLimitMinutes,
                     CreatedAt = DateTime.UtcNow
                 };
