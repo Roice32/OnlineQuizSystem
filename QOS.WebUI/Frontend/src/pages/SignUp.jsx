@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
-import './App.css';
+import './SignUp.css';
 import axios from 'axios';
-import FormInput from './components/FormInput';
+import FormInput from '../components/FormInput';
 
-function App() {
+function SignUp() {
     const [userValues, setUserValues] = useState({
         firstName: "",
         lastName: "",
@@ -116,4 +116,4 @@ function App() {
 
 
 
-export default App;
+export default SignUp;

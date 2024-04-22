@@ -42,18 +42,18 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
             return (1, "User created successfully!");
         }
 
-        public async Task<(int, string)> Login(LoginModel role)
+        public async Task<(int, string)> Login(LoginModel model)
         {
-            var user = await userManager.FindByNameAsync(role.Username!);
+            var user = await userManager.FindByNameAsync(model.Username!);
             if (user == null)
                 return (0, "User doesn't exists.");
-            if (!await userManager.CheckPasswordAsync(user, role.Password!))
+            if (!await userManager.CheckPasswordAsync(user, model.Password!))
                 return (0, "Invalid user or password.");
 
             var userRoles = await userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, user.UserName!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
@@ -63,7 +63,7 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
             }
 
             string token = GenerateToken(authClaims);
-            return (1, "Esti logat acum. Bravo!");
+            return (1, "User logged out successfully!");
         }
 
         private string GenerateToken(IEnumerable<Claim> claims)

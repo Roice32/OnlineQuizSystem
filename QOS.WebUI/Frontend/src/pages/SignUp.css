@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  min-height: 85vh;
   background: radial-gradient(circle at 100% 100%,#6a8e8f 4%, rgba(56, 87, 30, 0) 40%),
   radial-gradient(circle at 6.504% 88.037%, #879693 0%, rgba(187, 201, 170, 0) 50%),
   radial-gradient(circle at 6.165% 12.617%, #879693 0%, rgba(135, 152, 106, 0) 83%),
