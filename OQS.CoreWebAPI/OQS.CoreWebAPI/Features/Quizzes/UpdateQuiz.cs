@@ -1,5 +1,6 @@
 ﻿using Carter;
 using FluentValidation;
+using Mapster;
 using OQS.CoreWebAPI.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,17 +12,28 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 {
     public static class UpdateQuiz
     {
-     /*   public class Command : IRequest<Result<QuizResponse>>
+        public class BodyUpdateQuiz : IRequest<Result<QuizResponse>>
+        {
+            public string Name { get; set; } = string.Empty;
+            public string Description { get; set; }
+
+            public string ImageUrl { get; set; }
+
+            public string Language { get; set; }
+            public int TimeLimitMinutes { get; set; }
+        }
+
+        public class Command : IRequest<Result<QuizResponse>>
         {
             public Guid Id { get; set; }
-            public string Name { get; set; } = string.Empty;
+            public BodyUpdateQuiz Body { get; set; } = new BodyUpdateQuiz();
         }
 
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
-                RuleFor(x => x.Name).NotEmpty();
+              //  RuleFor(x => x.Body.Name).NotEmpty();
             }
         }
 
@@ -55,13 +67,23 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<QuizResponse>(
                         new Error(
-                            "UpdateQuiz.NotFound", "Quiz not found"
+                            "UpdateTag.NotFound", "Tag not found"
                         ));
                 }
 
                 try
                 {
-                    quiz.Name = request.Name;
+                    if(request.Body.Name !=  string.Empty) 
+                             quiz.Name = request.Body.Name;
+                    if(request.Body.Description != string.Empty)
+                            quiz.Description= request.Body.Description;
+                    if (request.Body.ImageUrl != string.Empty)
+                        quiz.ImageUrl= request.Body.ImageUrl;
+                    if (request.Body.Language != string.Empty)
+                        quiz.Language= request.Body.Language;
+                    if (request.Body.TimeLimitMinutes != 0)
+                        quiz.TimeLimitMinutes= request.Body.TimeLimitMinutes;
+
                     context.Quizzes.Update(quiz);
                     await context.SaveChangesAsync(cancellationToken);
                 }
@@ -80,20 +102,28 @@ namespace OQS.CoreWebAPI.Features.Quizzes
     }
 }
 
-// create and enpoint for updating a quiz with patch
 public class UpdateQuizEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPatch("api/quizzes/{id}", async (Guid id, UpdateQuiz.Command command, ISender sender) =>
+        app.MapPatch("api/quizzes/{id}", async (Guid id, UpdateQuizRequest request, ISender sender) =>
         {
-            command.Id = id;
+            var bodyUpdateQuiz = request.Adapt<UpdateQuiz.BodyUpdateQuiz>();
+
+            var command = new UpdateQuiz.Command
+            {
+                Id = id,
+                Body = bodyUpdateQuiz
+            };
+
             var result = await sender.Send(command);
+
             if (result.IsFailure)
             {
                 return Results.NotFound(result.Error);
             }
+
             return Results.Ok(result.Value);
-        });*/
+        });
     }
 }
