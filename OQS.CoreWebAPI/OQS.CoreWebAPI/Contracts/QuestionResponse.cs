@@ -17,6 +17,14 @@ public class QuestionResponse
         if (question is ChoiceQuestionBase choiceQuestion)
         {
             choices = choiceQuestion.Choices;
+            Random rng = new Random();
+            int n = choices.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (choices[k], choices[n]) = (choices[n], choices[k]);
+            }
         }
     }
 
