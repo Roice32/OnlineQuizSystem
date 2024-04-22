@@ -1,5 +1,6 @@
 ﻿
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
@@ -39,8 +40,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
                     ReviewPending = true;
             }
             Score = newScore;
-            //update in DB
-        
+            //stocare
+            //StoreQuizResultHeader.StoreResultHeader(this WebApplication, this);
         }
     }
 }
