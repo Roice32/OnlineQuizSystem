@@ -1,17 +1,32 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 {
-    public class FetchQuizResultBodyExtension
+    public static class FetchQuizResultBodyExtension
     {
-        // Command: UserId, QuizId  
+        public static GetQuizResultBodyResponse FetchQuizResultBody(this WebApplication application, QuizResultBody quizResultBody)
+        {
+            using var scope = application.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
 
-        // nu are Validator!!!
+            var storedQuizResultBody = context.QuizResultBodies.Find(quizResultBody.UserId, quizResultBody.QuizId);
 
-        // Handler: bla bla bla pana la Task
-        // iei din Db QuizResultBody-yl stocat = qrb
-        // pentru fiecare question id pui intr-o lista QuestionBase-ul asociat (din Db de la frunza) = lista 1
-        // pentru fiecare { userid, questionid (din qrb-ul gasit) } pui intr-o lista QuestionResultBase-ul asociat (din Db de la noi) = lista 2
-        // return new GetQuizResultBodyResponse (lista1, lista2);
+            List<QuestionBase> questionBases = new List<QuestionBase>();
+            List<QuestionResultBase> questionResults = new List<QuestionResultBase>();
+
+            foreach (var questionId in storedQuizResultBody.QuestionIds)
+            {
+                //PLACEHOLDER FOR DB
+
+                var questionResult = context.QuestionResults.Find(storedQuizResultBody.UserId, questionId);
+                questionResults.Add(questionResult);
+            }
+
+            return new GetQuizResultBodyResponse(questionBases, questionResults);
+        }
     }
 }
