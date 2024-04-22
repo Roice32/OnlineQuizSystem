@@ -8,8 +8,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         public static void ApplyMigrations(this WebApplication application)
         {
             using var scope = application.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
-            context.Database.Migrate();
+            var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
+            dbContext.Database.Migrate();
         }
     }
 }

@@ -10,9 +10,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         {
 
             using var scope = application.Services.CreateScope();
-            using (var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>())
+            using (var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>())
             {
-                foreach (var line in context.QuizResultHeaders)
+                foreach (var line in dbContext.QuizResultHeaders)
                 {
                     if (line.UserId == UserId && line.QuizId == QuizId)
                     {

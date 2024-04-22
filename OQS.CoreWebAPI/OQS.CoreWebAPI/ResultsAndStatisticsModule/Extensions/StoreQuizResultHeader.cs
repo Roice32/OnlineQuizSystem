@@ -8,9 +8,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         public static void StoreResultHeader(this WebApplication application, QuizResultHeader quizResultHeader)
         {
             using var scope = application.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
-            context.QuizResultHeaders.Add(quizResultHeader);
-            context.SaveChanges();
+            var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
+            dbContext.QuizResultHeaders.Add(quizResultHeader);
+            dbContext.SaveChanges();
         }
     }
 }

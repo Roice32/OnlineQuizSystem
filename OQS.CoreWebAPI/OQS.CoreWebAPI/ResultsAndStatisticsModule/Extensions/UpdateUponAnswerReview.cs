@@ -9,9 +9,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         public static void UpdateAnswerReview(this WebApplication application, QuizResultHeader quizResultHeader)
         {
             using var scope = application.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
-            context.QuizResultHeaders.Update(quizResultHeader);
-            context.SaveChanges();                          
+            var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
+            dbContext.QuizResultHeaders.Update(quizResultHeader);
+            dbContext.SaveChanges();                          
         }
     }
 }
