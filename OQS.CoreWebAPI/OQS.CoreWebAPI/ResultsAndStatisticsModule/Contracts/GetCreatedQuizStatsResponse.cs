@@ -4,8 +4,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts
 {
     public class GetCreatedQuizStatsResponse
     {
-        public Guid UserID { get; set; }
-        public Guid QuizId { get; set; }
+        public string QuizName { get; set; }
+        public Dictionary<Guid, string> UsersNames { get; set; }
         public List<QuizResultHeader> QuizResultHeaders { get; set; }
     }
 }

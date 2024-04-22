@@ -12,40 +12,76 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public class Query : IRequest<Result<GetTakenQuizzesHistoryResponse>>
         {
-            public Dictionary<Guid, String> QuizzesHistory { get; set; }
-            public List<QuizResultHeader> QuizResultHeaders { get; set; }
-
+            public Guid UserId { get; set; }
         }
 
         internal sealed class Handler : IRequestHandler<Query, Result<GetTakenQuizzesHistoryResponse>>
         {
-            private readonly RSMApplicationDbContext context;
+            private readonly RSMApplicationDbContext dbContext;
+
             public Handler(RSMApplicationDbContext context)
             {
-                this.context = context;
+                this.dbContext = context;
             }
+
             public async Task<Result<GetTakenQuizzesHistoryResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var quizIds = request.QuizzesHistory.Keys.ToList();
+                var quizResultHeaders = await dbContext.QuizResultHeaders
+                    .AsNoTracking()
+                    .Where(quiz => quiz.UserId == request.UserId)
+                    .ToListAsync(cancellationToken);
 
-                var takenQuizzesHistory = await context.QuizResultHeaders.AsNoTracking()
-                    .Where(quiz => quizIds.Contains(quiz.QuizId))
-                    .FirstOrDefaultAsync(cancellationToken);
-                if (takenQuizzesHistory is null)
+                if (quizResultHeaders is null)
                 {
-                    return Result.Failure<GetTakenQuizzesHistoryResponse>(
-                        new Error("GetTakenQuizzesHistory.Null", "Quiz history not found"));
+                    return new GetTakenQuizzesHistoryResponse
+                    {
+                        QuizzesNames = null,
+                        QuizResultHeaders = null
+                    };
+                }
+
+                Dictionary<Guid, string> quizzesNames = new Dictionary<Guid, string>();
+                foreach (var quiz in quizResultHeaders)
+                {
+                    // PLACEHOLDER
+                    string quizName = "PLACEHOLDER"; /* await dbContext.Quizzes
+                        .AsNoTracking()
+                        .Select(q => q.Name)
+                        .FirstOrDefaultAsync(q => q.Id == quiz.QuizId, cancellationToken);*/
+                    quizzesNames.Add(quiz.QuizId, quizName);
                 }
 
                 var takenQuizzesHisoryResponse = new GetTakenQuizzesHistoryResponse
                 {
-                    QuizzesHistory = request.QuizzesHistory,
-                    QuizResultHeaders = request.QuizResultHeaders
+                    QuizzesNames = new Dictionary<Guid, string>(quizzesNames),
+                    QuizResultHeaders = new List<QuizResultHeader>(quizResultHeaders)
                 };
+
                 return takenQuizzesHisoryResponse;
             }
         }
+    }
 
-        
+    public class GetTakenQuizzesHistoryEndPoint : ICarterModule
+    {
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapGet("api/users/takenHistory/{id}", async (Guid userId, ISender sender) =>
+            {
+                var query = new GetTakenQuizzesHistory.Query
+                {
+                    UserId = userId
+                };
+
+                var result = await sender.Send(query);
+
+                if (result.IsFailure)
+                {
+                    return Results.NotFound(result.Error);
+                }
+
+                return Results.Ok(result.Value);
+            });
+        }
     }
 }
