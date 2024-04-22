@@ -4,6 +4,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
 {
     public abstract class QuestionResultBase
     {
+        internal readonly int AllocatedPoints;
+
         public Guid UserId { get; set; }
         public Guid QuestionId { get; set; }
         public float Score { get; set; }
