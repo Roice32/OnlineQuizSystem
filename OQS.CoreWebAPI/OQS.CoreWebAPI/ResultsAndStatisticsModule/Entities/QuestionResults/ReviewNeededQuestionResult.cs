@@ -13,25 +13,5 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
             ReviewNeededAnswer = reviewNeededAnswer;
             ReviewNeededResult = reviewNeededResult;
         }
-
-        public void UpdateScore(float finalScore)
-        {
-            Score = finalScore;
-            if (Score == 0)
-            {
-                ReviewNeededResult = AnswerResult.Wrong;
-                return;
-            }
-            // PLACEHOLDER
-            QuestionBase questionFromDd = null;
-            if (Score == questionFromDd.AllocatedPoints)
-            {
-                ReviewNeededResult = AnswerResult.Correct;
-            }
-            else
-            {
-                ReviewNeededResult = AnswerResult.PartiallyCorrect;
-            }
-        }
     }
 }
