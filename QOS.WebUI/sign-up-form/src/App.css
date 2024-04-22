@@ -47,3 +47,13 @@ button:hover {
   background-color: #879693;
 }
 
+.response{
+  background-color: rgb(240, 53, 53);
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #f7ebe7;
+  border-radius: 10px;
+  border: 2px solid red;
+}
+

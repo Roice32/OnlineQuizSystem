@@ -9,7 +9,7 @@ namespace OQS.CoreWebAPI.Extensions
         {
             using var scope = application.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            dbContext.Database.Migrate();
+           // dbContext.Database.Migrate();
         }
     }
 }

@@ -10,10 +10,10 @@ function App() {
         username: "",
         email: "",
         password: "",
+        passwordConfirm: "",
     });
 
-    const [roleValue, setRoleValue] = useState("");
-
+    const [response, setResponse] = useState(null);
 
     const inputs = [
         {
@@ -43,7 +43,7 @@ function App() {
             placeholder: "e.g. stephen.king",
             errorMessage: "Username should be 3-16 characters and shouldn't include any special character!",
             label: "Username",
-            pattern: "^[A-Za-z0-9](?=.*[0-9])(?=.*[!@#$%^&*]){3,16}$",
+            pattern: "^(?=.*[A-Za-z]{3,})[A-Za-z0-9!@#$%^&*]{3,16}$",
             required: true,
         },
         {
@@ -63,17 +63,17 @@ function App() {
             placeholder: "password",
             errorMessage: "Password should have at least 6 characters and include at least 1 lowercase, 1 uppercase, 1 number and 1 non-aplhabetical character!",
             label: "Password",
-            pattern: '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.><_-])[a-zA-Z0-9!@#$%^&*]{6,}$',
+            pattern: '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*._])[a-zA-Z0-9!@#$%^&*]{6,}$',
             required: true,
         },
         {
             id: 6,
-            name: "confirmPassword",
+            name: "passwordConfirm",
             type: "password",
             placeholder: "confirm password",
             errorMessage: "Password confirmation does not match!",
-            pattern: userValues.password,
             label: "Confirm Password",
+            pattern : userValues.password || "",
             required: true,
         },
        
@@ -88,8 +88,9 @@ function App() {
         console.log(userValues);
         e.preventDefault();
         try {
-            const response = await axios.post('https://localhost:7258/api/Authentication/registration', userValues);
+            const response = await axios.post('https://localhost:7117/api/Authentication/registration', userValues);
             console.log(response);
+            setResponse(response.data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -99,13 +100,20 @@ function App() {
         <div className="App">
             <form onSubmit={handleSubmit}>
                 <h1>Sign Up</h1>
+                {response && (
+                <div className="response">
+                     {response.message}
+                </div>
+            )}
                 {inputs.map((input) => (
-                    <FormInput key={input.id} {...input} value={input.name === 'role' ? roleValue : userValues[input.name]} onChange={onChange}/>
+                    <FormInput key={input.id} {...input} value={userValues[input.name]} onChange={onChange}/>
                 ))}
                 <button>Submit</button>
             </form>
         </div>
     );
 }
+
+
 
 export default App;

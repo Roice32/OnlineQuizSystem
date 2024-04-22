@@ -50,5 +50,13 @@ app.UseAuthorization();
 // Adaugã configurarea pentru CORS aici
 app.UseCors("AllowSpecificOrigin");
 
+
+
+
 app.MapControllers();
+
+var host = app.Services.GetRequiredService<IWebHostEnvironment>();
+var urls = builder.Configuration["Urls"] ?? "http://localhost:5000";
+Console.WriteLine($"Application running at: {urls}");
+
 app.Run();

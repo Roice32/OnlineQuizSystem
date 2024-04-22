@@ -11,15 +11,12 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
     public class AuthService : IAuthService
     {
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private object configuration;
-        private readonly IConfiguration configuration1;
+        private readonly IConfiguration configuration;
 
-        public AuthService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthService(UserManager<User> userManager,  IConfiguration configuration)
         {
             this.userManager = userManager;
-            this.roleManager = roleManager;
-            this.configuration1 = configuration; // Atribuirea obiectului IConfiguration
+            this.configuration = configuration; // Atribuirea obiectului IConfiguration
         }
 
         public async Task<(int, string)> Registration(RegistrationModel model)
@@ -71,12 +68,12 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
 
         private string GenerateToken(IEnumerable<Claim> claims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration1["JWT:Secret"]!));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = configuration1["JWT:ValidIssuer"]!,
-                Audience = configuration1["JWT:ValidAudience"]!,
+                Issuer = configuration["JWT:ValidIssuer"]!,
+                Audience = configuration["JWT:ValidAudience"]!,
                 Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
                 Subject = new ClaimsIdentity(claims)
