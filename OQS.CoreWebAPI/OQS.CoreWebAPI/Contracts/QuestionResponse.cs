@@ -24,18 +24,22 @@ namespace OQS.CoreWebAPI.Contracts
             {
                 Choices = choiceQuestion.Choices;
             }
+
             if (question is TrueFalseQuestion trueFalseQuestion)
             {
                 TrueFalseAnswer = trueFalseQuestion.TrueFalseAnswer;
             }
+
             if (question is MultipleChoiceQuestion multipleChoiceQuestion)
             {
                 MultipleChoiceAnswers = multipleChoiceQuestion.MultipleChoiceAnswers;
             }
+
             if (question is SingleChoiceQuestion singleChoiceQuestion)
             {
                 SingleChoiceAnswer = singleChoiceQuestion.SingleChoiceAnswer;
             }
+
             if (question is WrittenAnswerQuestion writtenAnswerQuestion)
             {
                 WrittenAcceptedAnswers = writtenAnswerQuestion.WrittenAcceptedAnswers;
