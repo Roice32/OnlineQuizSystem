@@ -1,3 +1,4 @@
+using Azure.Core;
 using Carter;
 using MapsterMapper;
 using MediatR;
@@ -65,22 +66,23 @@ public class GetQuizzesEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/quizzes/", async (ISender sender, [FromQuery] QuizzesQueryParams para) =>
-        {
-            var query = new GetQuizzes.Query
+        app.MapGet("api/quizzes/",
+            async (ISender sender, [FromQuery(Name = "offset")] int offset, [FromQuery(Name = "limit")] int limit) =>
             {
-                Offset = para.Offset,
-                Limit = para.Limit,
-            };
+                var query = new GetQuizzes.Query
+                {
+                    Offset = offset,
+                    Limit = limit,
+                };
 
-            var result = await sender.Send(query);
+                var result = await sender.Send(query);
 
-            if (result.IsFailure)
-            {
-                return Results.NotFound(result.Error);
-            }
+                if (result.IsFailure)
+                {
+                    return Results.NotFound(result.Error);
+                }
 
-            return Results.Ok(result.Value);
-        });
+                return Results.Ok(result.Value);
+            });
     }
 }
