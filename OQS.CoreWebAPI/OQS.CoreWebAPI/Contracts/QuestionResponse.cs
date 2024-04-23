@@ -19,5 +19,4 @@ public class QuestionResponse
             choices = choiceQuestion.Choices;
         }
     }
-
 }

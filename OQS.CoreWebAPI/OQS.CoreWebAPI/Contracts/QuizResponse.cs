@@ -18,7 +18,7 @@ public class QuizResponse
         Description = quiz.Description;
         TimeLimitMinutes = quiz.TimeLimitMinutes;
         CreatedAt = quiz.CreatedAt;
-        Questions = quiz.Questions.Select(q => new QuestionResponse(q)).ToList();
+        // Questions = quiz.Questions.Select(q => new QuestionResponse(q)).ToList();
     }
     
 }
