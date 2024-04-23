@@ -5,7 +5,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts
     public class GetCreatedQuizStatsResponse
     {
         public string QuizName { get; set; } = string.Empty;
-        public Dictionary<Guid, string> UsersNames { get; set; } = new();
+        public Dictionary<Guid, string> UserNames { get; set; } = new();
         public List<QuizResultHeader> QuizResultHeaders { get; set; } = new();
     }
 }

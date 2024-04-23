@@ -8,73 +8,69 @@ using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
-    public class GetTakenQuizzesHistory
+    public class GetCreatedQuizStats
     {
-        public class Query : IRequest<Result<GetTakenQuizzesHistoryResponse>>
+        public class Query : IRequest<Result<GetCreatedQuizStatsResponse>>
         {
-            public Guid UserId { get; set; }
+            public Guid QuizId { get; set; }
         }
 
-        internal sealed class Handler : IRequestHandler<Query, Result<GetTakenQuizzesHistoryResponse>>
+        internal sealed class Handler : IRequestHandler<Query, Result<GetCreatedQuizStatsResponse>>
         {
             private readonly RSMApplicationDbContext dbContext;
-
             public Handler(RSMApplicationDbContext context)
             {
                 dbContext = context;
             }
 
-            public async Task<Result<GetTakenQuizzesHistoryResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<GetCreatedQuizStatsResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                     .AsNoTracking()
-                    .Where(quiz => quiz.UserId == request.UserId)
+                    .Where(quiz => quiz.QuizId == request.QuizId)
                     .ToListAsync(cancellationToken);
 
                 if (quizResultHeaders is null)
                 {
-                    return new GetTakenQuizzesHistoryResponse
+                    return new GetCreatedQuizStatsResponse
                     {
-                        QuizNames = null,
+                        QuizName = null,
+                        UserNames = null,
                         QuizResultHeaders = null
                     };
                 }
-
-                Dictionary<Guid, string> quizNames = new();
+                Dictionary<Guid, string> userNames = new();
                 foreach (var quiz in quizResultHeaders)
                 {
                     // PLACEHOLDER
-                    string quizName = "PLACEHOLDER"; /* await dbContext.Quizzes
+                    string userName = "PLACEHOLDER"; /* await dbContext.Users
                         .AsNoTracking()
-                        .Select(q => q.Name)
-                        .FirstOrDefaultAsync(q => q.Id == quiz.QuizId, cancellationToken);*/
-                    quizNames.Add(quiz.QuizId, quizName);
+                        .Select(u => u.UserName)
+                        .FirstOrDefaultAsync(u => u.Id == quiz.UserId, cancellationToken);*/
+                    userNames.Add(quiz.UserId, userName);
                 }
-
-                var takenQuizzesHisoryResponse = new GetTakenQuizzesHistoryResponse
+                var createdQuizStatsResponse = new GetCreatedQuizStatsResponse
                 {
-                    QuizNames = new Dictionary<Guid, string>(quizNames),
-                    QuizResultHeaders = new List<QuizResultHeader>(quizResultHeaders)
+                    UserNames = new(userNames),
+                    QuizResultHeaders = new(quizResultHeaders),
                 };
-
-                return takenQuizzesHisoryResponse;
+                return createdQuizStatsResponse;
             }
         }
     }
-
-    public class GetTakenQuizzesHistoryEndPoint : ICarterModule
+    public class GetCreatedQuizStatsEndPoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/users/{userId}/takenHistory", async (Guid userId, ISender sender) =>
+            app.MapGet("api/users/quizStats/{quizId}", async (Guid quizId, ISender sender) =>
             {
-                var query = new GetTakenQuizzesHistory.Query
+                var query = new GetCreatedQuizStats.Query
                 {
-                    UserId = userId
+                    QuizId = quizId
                 };
 
                 var result = await sender.Send(query);
-                
+
                 if (result.IsFailure)
                 {
                     return Results.NotFound(result.Error);
