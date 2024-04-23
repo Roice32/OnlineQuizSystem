@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 
 const Navbar = () => {
@@ -9,10 +10,10 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { id: 1, text: 'Home' },
-    { id: 2, text: 'Create quiz' },
-    { id: 3, text: 'My quizzes' },
-    { id: 4, text: 'Profile' },
+    { id: 1, text: 'Home', path: '/' },
+    { id: 2, text: 'Create quiz', path: '/create-quiz'},
+    { id: 3, text: 'My quizzes', path: '/my-quizzes'  },
+    { id: 4, text: 'Profile', path: '/profile'},
   ];
 
   return (
@@ -27,7 +28,7 @@ const Navbar = () => {
             key={item.id}
             className='p-4 hover:bg-[#DEAE9F] rounded-xl m-2 cursor-pointer duration-300 hover:text-black whitespace-nowrap'
           >
-            {item.text}
+            <Link to={item.path}>{item.text}</Link>
           </li>
         ))}
       </ul>
@@ -54,7 +55,7 @@ const Navbar = () => {
             key={item.id}
             className='p-4 border-b rounded-xl hover:bg-[#DEAE9F] duration-300 hover:text-black cursor-pointer border-gray-600'
           >
-            {item.text}
+            <Link to={item.path}>{item.text}</Link>
           </li>
         ))}
       </ul>
