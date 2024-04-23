@@ -89,6 +89,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
                 QuestionBase question;
 
+
                 // Create question based on its type
                 switch (request.Type)
                 {
