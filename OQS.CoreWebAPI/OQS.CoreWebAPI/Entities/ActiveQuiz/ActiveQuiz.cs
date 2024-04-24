@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using OQS.CoreWebAPI.Contracts;
 
 namespace OQS.CoreWebAPI.Entities.ActiveQuiz;
 
@@ -9,7 +10,7 @@ public class ActiveQuiz
     public   User User { get; set; }
     public   DateTime StartedAt { get; set; }
     //private  ArrayList<QuestionAnswerPair> response { get; set; } = new();
-   
+    public QuizResponse UserResponses { get; set; }
     public void GetResult() {}
     public void GenerateNakedQuiz() {}
 }   
