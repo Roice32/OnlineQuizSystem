@@ -2,8 +2,6 @@
 using FluentValidation;
 using Mapster;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
