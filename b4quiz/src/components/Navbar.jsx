@@ -13,7 +13,7 @@ const Navbar = () => {
     { id: 1, text: 'Home', path: '/' },
     { id: 2, text: 'Create quiz', path: '/create-quiz'},
     { id: 3, text: 'My quizzes', path: '/my-quizzes'  },
-    { id: 4, text: 'Profile', path: '/profile'},
+    { id: 4, text: 'Tags', path: '/tags'},
   ];
 
   return (
