@@ -14,6 +14,8 @@ const Navbar = () => {
     { id: 2, text: 'Create quiz', path: '/create-quiz'},
     { id: 3, text: 'My quizzes', path: '/my-quizzes'  },
     { id: 4, text: 'Tags', path: '/tags'},
+    { id: 5, text: 'Quiz', path: '/quiz'  },
+    { id: 6, text: 'Profile', path: '/profile'},
   ];
 
   return (

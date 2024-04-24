@@ -5,7 +5,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
+
 import TagsPage from './pages/TagsPage';
+import QuizzesPage from "./pages/QuizzesPage";
+import FormGetId from './pages/QuizGet';
+import ShowInfo from './components/ShowQuizInfo';
+
 
 function App() : JSX.Element {
   return (
@@ -14,8 +19,14 @@ function App() : JSX.Element {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/create-quiz" element={<QuizCreate />} />
+
           <Route path="/my-quizzes" element={<HomePage />} /> 
           <Route path="/tags" element={< TagsPage />} /> 
+          <Route path="/quiz" element={<FormGetId />} />
+          <Route path="/quiz/:id" element={<FormGetId />} />
+          <Route path="/profile" element={<HomePage />} />
+          <Route path="/quizzes" element={<QuizzesPage />} />
+
         </Routes>
       </div>
     </Router>
