@@ -5,8 +5,10 @@ const QuizCreate = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
-    const [language, setLanguage] = useState('Romana'); 
+    const [language, setLanguage] = useState('Romana');
     const [timeLimit, setTimeLimit] = useState(0);
+    const [questions, setQuestions] = useState([{ id: 1, text: '' }]);
+    const [nextId, setNextId] = useState(2);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -25,7 +27,23 @@ const QuizCreate = () => {
     };
 
     const handleTimeLimitChange = (event) => {
-        setTimeLimit(parseInt(event.target.value)); 
+        setTimeLimit(parseInt(event.target.value));
+    };
+
+    const handleQuestionChange = (index, event) => {
+        const newQuestions = [...questions];
+        newQuestions[index].text = event.target.value;
+        setQuestions(newQuestions);
+    };
+
+    const addQuestion = () => {
+        setQuestions([...questions, { id: nextId, text: '' }]);
+        setNextId(nextId + 1);
+    };
+
+    const removeQuestion = (id) => {
+        const updatedQuestions = questions.filter(question => question.id !== id);
+        setQuestions(updatedQuestions);
     };
 
     return (
@@ -84,9 +102,28 @@ const QuizCreate = () => {
                         className="p-2 border border-gray-300 rounded-md"
                     />
                 </div>
+                <div className="mt-4">
+                    {questions.map((question, index) => (
+                        <div key={question.id} className="flex flex-col mt-5">
+                            <label htmlFor={`question-${index + 1}`} className="text-white">Question {index + 1}:</label>
+                            <input
+                                type="text"
+                                id={`question-${index + 1}`}
+                                value={question.text}
+                                onChange={(e) => handleQuestionChange(index, e)}
+                                placeholder={`Question ${index + 1}`}
+                                className="p-2 border border-gray-300 rounded-md"
+                            />
+                            <button onClick={() => removeQuestion(question.id)} className="mt-2 p-2 bg-red-500 text-white rounded-md">Remove Question</button>
+                        </div>
+                    ))}
+                </div>
+                <div className="mt-4">
+                    <button onClick={addQuestion} className="p-2 bg-green-500 text-white rounded-md">Add Question</button>
+                </div>
             </div>
         </div>
-    ); 
+    );
 }
 
 export default QuizCreate;
