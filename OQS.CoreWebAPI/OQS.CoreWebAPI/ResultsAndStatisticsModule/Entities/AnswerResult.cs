@@ -6,6 +6,7 @@
         PartiallyCorrect,
         CorrectNotPicked,
         Wrong,
+        NotAnswered,
         Pending,
         Other
     }

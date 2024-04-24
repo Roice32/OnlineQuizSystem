@@ -11,19 +11,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
             using var scope = application.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
 
-            using var transaction = context.Database.BeginTransaction();
-
-            try
-            {
-                context.QuizResultBodies.Add(quizResultBody);
-                context.SaveChanges();
-                transaction.Commit();
-            }
-            catch
-            {
-                transaction.Rollback();
-                throw;
-            }
+            context.QuizResultBodies.Add(quizResultBody);
+            context.SaveChanges();
         }
     }
 }

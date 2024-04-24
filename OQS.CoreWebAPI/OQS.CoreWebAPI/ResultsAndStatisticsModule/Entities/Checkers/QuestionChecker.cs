@@ -33,6 +33,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
+            if (qaPair is null)
+            {
+                return new TrueFalseQuestionResult(userId,
+                    questionFromDb.Id,
+                    0,
+                    AnswerResult.NotAnswered);
+            }
+
             if (((TrueFalseQuestion)questionFromDb).TrueFalseAnswer ==
                 ((TrueFalseQAPair)qaPair).TrueFalseAnswer)
                 return new TrueFalseQuestionResult(userId,
@@ -49,6 +57,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
+            if (qaPair is null)
+            {
+                return new ChoiceQuestionResult(userId,
+                questionFromDb.Id,
+                0,
+                "");
+            }
+
             Dictionary<string, AnswerResult> allChoicesResults = new();
             foreach (var choice in ((ChoiceQuestionBase)questionFromDb).Choices)
             {
@@ -76,14 +92,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 }
             }
 
-        int correctCount = allChoicesResults.Count(r => r.Value == AnswerResult.Correct);
-        int wrongCount = allChoicesResults.Count(r => r.Value == AnswerResult.Wrong);
-        float scorePercentage = Math.Max(0, correctCount - wrongCount) /
-            ((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Count;
+            int correctCount = allChoicesResults.Count(r => r.Value == AnswerResult.Correct);
+            int wrongCount = allChoicesResults.Count(r => r.Value == AnswerResult.Wrong);
+            float scorePercentage = Math.Max(0, correctCount - wrongCount) /
+                ((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Count;
 
-        string pseudoDictionaryChoicesResults = JsonConvert.SerializeObject(allChoicesResults);
-        return new ChoiceQuestionResult(userId,
-            qaPair.QuestionId,
+            string pseudoDictionaryChoicesResults = JsonConvert.SerializeObject(allChoicesResults);
+            return new ChoiceQuestionResult(userId,
+                qaPair.QuestionId,
             questionFromDb.AllocatedPoints * scorePercentage,
             pseudoDictionaryChoicesResults);
         }
@@ -92,6 +108,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
+            if (qaPair is null)
+            {
+                return new ChoiceQuestionResult(userId,
+                    questionFromDb.Id,
+                    0,
+                    "");
+            }
+
             Dictionary<string, AnswerResult> allChoicesResults = new();
             foreach (var choice in ((ChoiceQuestionBase)questionFromDb).Choices)
             {
@@ -130,6 +154,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
+            if (qaPair is null)
+            {
+                return new WrittenAnswerQuestionResult(userId,
+                    questionFromDb.Id,
+                    0,
+                    "",
+                    AnswerResult.NotAnswered);
+            }
+
             if (((WrittenAnswerQuestion)questionFromDb).WrittenAcceptedAnswers
                 .Contains(((WrittenQAPair)qaPair).WrittenAnswer))
                 return new WrittenAnswerQuestionResult(userId,
@@ -148,6 +181,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
+            if (qaPair is null)
+            {
+                return new ReviewNeededQuestionResult(userId,
+                    questionFromDb.Id,
+                    0,
+                    "",
+                    AnswerResult.Pending);
+            }
+
             // Later on, implement asking an LLM for a temporary review.
             return new ReviewNeededQuestionResult(userId,
                 qaPair.QuestionId,

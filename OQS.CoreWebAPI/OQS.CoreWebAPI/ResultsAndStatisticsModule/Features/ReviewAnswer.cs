@@ -2,33 +2,34 @@
 using FluentValidation;
 using Mapster;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
     public class ReviewAnswer
     {
-       
-        public record Command : IRequest<Result<Guid>>
+        public record Command : IRequest<Result<ReviewAnswerResponse>>
         {
-            public Guid UserId { get; init; }
-            public Guid QuestionId { get; init; }
-            public float FinalScore { get; init; }
+            public Guid UserId { get; set; }
+            public Guid QuizId { get; set; }
+            public Guid QuestionId { get; set; }
+            public float FinalScore { get; set; }
         }
 
-        public class Validator : AbstractValidator<ReviewAnswer.Command>
+        public class Validator : AbstractValidator<Command>
         {
-            private readonly RSMApplicationDbContext _dbContext;
-
-            public Validator(RSMApplicationDbContext dbContext)
+            public Validator()
             {
-                _dbContext = dbContext;
-                QuestionBase questionFromDB = null;
+                int maxPossibleScore = 100; /* dbContext.Questions
+                    .AsNoTracking()
+                    .Select(q => q.AllocatedPoints)
+                    .FirstOrDefault(q => q.Id = questionId);*/
 
                 RuleFor(x => x.UserId)
                     .NotEmpty()
@@ -38,32 +39,19 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     .NotEmpty()
                     .WithMessage("QuestionId is required.");
 
-                RuleFor(x => x)
-                    .MustAsync(ExistInDatabase)
-                    .WithMessage("QuestionResult with the given UserId and QuestionId does not exist in the database.");
+                /*RuleFor(x => x)
+                    .Must(command => dbContext.QuestionResults
+                        .Any(qr => qr.UserId == command.UserId && qr.QuestionId == command.QuestionId))
+                    .WithMessage("QuestionResult with the given UserId and QuestionId does not exist in the database.");*/
 
                 RuleFor(x => x.FinalScore)
-                    .InclusiveBetween(0, questionFromDB.AllocatedPoints)
+                    .InclusiveBetween(0, maxPossibleScore)
                     .WithMessage("FinalScore must be between 0 and the AllocatedPoints of the question.");
-            }
-
-            private async Task<bool> ExistInDatabase(ReviewAnswer.Command command, CancellationToken cancellationToken)
-            {
-                return await _dbContext.QuestionResults
-                    .AnyAsync(qr => qr.UserId == command.UserId && qr.QuestionId == command.QuestionId, cancellationToken);
-            }
-
-            private float GetAllocatedPoints(Guid userId, Guid questionId)
-            {
-                var question = _dbContext.QuestionResults
-                    .FirstOrDefault(qr => qr.UserId == userId && qr.QuestionId == questionId);
-
-                return question?.AllocatedPoints ?? 0;
             }
         }
 
-       
-        public class Handler : IRequestHandler<Command, Result<Guid>>
+
+        public class Handler : IRequestHandler<Command, Result<ReviewAnswerResponse>>
         {
             private readonly RSMApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
@@ -74,37 +62,55 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 this.validator = validator;
             }
 
-            public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<ReviewAnswerResponse>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
-                    return Result.Failure<Guid>(
-                        new Error("CreateArticle.Validator",
+                    return Result.Failure<ReviewAnswerResponse>(
+                        new Error("ReviewAnswer.Validator",
                         validationResult.ToString()));
                 }
 
-                var rar = await dbContext.ReviewNeededQuestionResults.FindAsync(request.QuestionResultId);
-                if (rar == null)
+                UpdateQuestionResultExtension.UpdateQuestionResult
+                    (dbContext, request.UserId, request.QuestionId, request.FinalScore);
+                var updatedQuestionResult = (ReviewNeededQuestionResult) FetchQuestionResultExtension.FetchQuestionResult
+                    (dbContext, request.UserId, request.QuestionId);
+
+                UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReview
+                    (dbContext, request.UserId, request.QuizId);
+                var updatedHeader = new FetchQuizResultHeaderResponse(); /*FetchQuizResultHeaderExtension.FetchQuizResultHeader
+                    (dbContext, request.UserId, request.QuizId);*/
+
+                // PLACEHOLDER
+                // Only to supress 500 status until we get the quzzes database
+                if(updatedHeader is null || updatedQuestionResult is null)
                 {
-                    return Result.Failure<Guid>(
-                        new Error("NotFound",
-                        "ReviewNeededQuestionResult not found."));
+                    return Result.Failure<ReviewAnswerResponse>(
+                        new Error("ReviewAnswer.Handler",
+                            "QuizResultHeader with the given UserId and QuizId does not exist in the database."));
                 }
 
-                rar.UpdateScore();
+                var newReviewNeededQuestionResult = new ReviewNeededQuestionResult
+                    (request.UserId,
+                    request.QuestionId,
+                    request.FinalScore,
+                    updatedQuestionResult.ReviewNeededAnswer,
+                    updatedQuestionResult.ReviewNeededResult);
 
-                dbContext.ReviewNeededQuestionResults.Update(rar);
-                await dbContext.SaveChangesAsync();
+                var newQuizResultHeader = new QuizResultHeader
+                    (updatedHeader.QuizId,
+                    updatedHeader.UserId,
+                    updatedHeader.CompletionTime);
+                newQuizResultHeader.SubmittedAt = updatedHeader.SubmittedAt;
+                newQuizResultHeader.Score = updatedHeader.Score;
+                newQuizResultHeader.ReviewPending = updatedHeader.ReviewPending;
 
-                var updatedHeader = await dbContext.QuizResultHeaders.FindAsync(request.HeaderId);
-                if (updatedHeader == null)
+                return new ReviewAnswerResponse
                 {
-                    return Result.Failure<Guid>(
-                        new Error("NotFound",
-                        "QuizResultHeader not found."));
-                }
-                return new ReviewAnswerResponse(updatedHeader, rar);
+                    UpdatedQuizResultHeader = newQuizResultHeader,
+                    UpdatedQuestionResult = newReviewNeededQuestionResult
+                };
             }
         }
     }
@@ -113,15 +119,24 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            _ = app.MapPut("api/reviewResult", async (QuizResultBody request, ISender sender) =>
+            app.MapPut("api/reviewResult",
+                async (Guid userId, Guid quizId, Guid questionId, float finalScore, ISender sender) =>
             {
-                var command = request.Adapt<ReviewAnswer.Command>();
+                var command = new ReviewAnswer.Command
+                {
+                    UserId = userId,
+                    QuizId = quizId,
+                    QuestionId = questionId,
+                    FinalScore = finalScore
+                };
+
                 var result = await sender.Send(command);
                 if (result.IsFailure)
                 {
                     return Results.BadRequest(result.Error);
                 }
-                return Results.Ok($"/api/reviewResult/{result.Value}");
+
+                return Results.Ok(result.Value);
             });
         }
     }

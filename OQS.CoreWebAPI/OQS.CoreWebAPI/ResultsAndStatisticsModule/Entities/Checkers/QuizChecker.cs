@@ -1,64 +1,68 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+﻿using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
     public abstract class QuizChecker
     {
-        public static void CheckQuiz(QuizSubmission toBeChecked)
+        public static void CheckQuiz(QuizSubmission toBeChecked, RSMApplicationDbContext dbContext)
         {
-            Quiz quizFromDb = FetchQuizFromDB(toBeChecked.QuizId);
-            QuizResultBody resultBody = BuildQuizResultBody(toBeChecked, quizFromDb.Questions);
-            QuizResultHeader resultHeader = BuildQuizResultHeader(toBeChecked, resultBody);
-            StoreQuizResult(resultHeader, resultBody);
+            Quiz quizFromDb = FetchQuizFromDB(toBeChecked.QuizId, dbContext);
+            QuizResultBody resultBody = BuildQuizResultBody(toBeChecked, quizFromDb.Questions, dbContext);
+            QuizResultHeader resultHeader = BuildQuizResultHeader(toBeChecked, resultBody, dbContext);
+            StoreQuizResult(resultHeader, resultBody, dbContext);
         }
-        private static Quiz FetchQuizFromDB(Guid QuizId)
+        private static Quiz FetchQuizFromDB(Guid QuizId, RSMApplicationDbContext dbContext)
         {
-            // fetch quiz from DB
-            // PLACEHOLDER
+            Quiz quizFromDb = null; /*dbContext.Quizzes
+                .AsNoTracking()
+                .FirstOrDefault(q => q.Id == QuizId);*/
             return null;
         }
-        private static QuizResultBody BuildQuizResultBody(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb)
+        private static QuizResultBody BuildQuizResultBody(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, RSMApplicationDbContext dbContext)
         {
             QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
                 toBeChecked.TakenBy,
                 toBeChecked.QuestionAnswerPairs.Select(qaPair => qaPair.QuestionId).ToList());
-            foreach (var qaPair in toBeChecked.QuestionAnswerPairs)
+            foreach (var question in questionsFromDb)
             {
-                QuestionBase questionFromDb = questionsFromDb.Find(q => q.Id == qaPair.QuestionId);
-                // Insert in QuestionResults Table:
-                    // (QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, questionFromDb));
+                QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs
+                    .FirstOrDefault(qaPair => qaPair.QuestionId == question.Id);
+                dbContext.QuestionResults.Add(QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question));
             }
 
+            dbContext.SaveChanges();
             return resultBody;
         }
-        private static QuizResultHeader BuildQuizResultHeader(QuizSubmission toBeChecked, QuizResultBody resultBody)
+        private static QuizResultHeader BuildQuizResultHeader(QuizSubmission toBeChecked,
+            QuizResultBody resultBody,
+            RSMApplicationDbContext dbContext)
         {
             QuizResultHeader resultHeader = new QuizResultHeader(toBeChecked.QuizId,
                 toBeChecked.TakenBy, toBeChecked.TimeElapsed);
-            float totalScore = 0;
-            foreach (var questionResult in resultBody.QuestionIds)
+            resultHeader.Score = 0;
+            foreach (var questionResultId in resultBody.QuestionIds)
             {
-                // PLACEHOLDER
-                // Fetch result from DB
-                QuestionResultBase questionResultBase = null;
-                totalScore += questionResultBase.Score;
-                if (questionResult is ReviewNeededQuestionResult &&
+                QuestionResultBase questionResultBase = dbContext.QuestionResults
+                    .AsNoTracking()
+                    .FirstOrDefault(qr => qr.UserId == toBeChecked.TakenBy && qr.QuestionId == questionResultId);
+                resultHeader.Score += questionResultBase.Score;
+                if (questionResultBase is ReviewNeededQuestionResult &&
                     ((ReviewNeededQuestionResult)questionResultBase).ReviewNeededResult == AnswerResult.Pending)
                     resultHeader.ReviewPending = true;
             }
-            resultHeader.Score = totalScore;
-            return null;
+
+            return resultHeader;
         }
 
-        private static void StoreQuizResult(QuizResultHeader resultHeader, QuizResultBody resultBody)
+        private static void StoreQuizResult(QuizResultHeader resultHeader, QuizResultBody resultBody, RSMApplicationDbContext dbContext)
         {
-            // store quiz result
-        }
-
-        ~QuizChecker()
-        {
-            // clean up
+            dbContext.QuizResultBodies.Add(resultBody);
+            dbContext.QuizResultHeaders.Add(resultHeader);
+            dbContext.SaveChanges();
         }
     }
 }

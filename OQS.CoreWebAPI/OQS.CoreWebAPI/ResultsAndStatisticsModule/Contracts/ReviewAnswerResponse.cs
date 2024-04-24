@@ -7,12 +7,5 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts
     {
         public QuizResultHeader UpdatedQuizResultHeader { get; set; }
         public QuestionResultBase UpdatedQuestionResult { get; set; }
-
-        public ReviewAnswerResponse(QuizResultHeader updatedQuizResultHeader, QuestionResultBase updatedQuestionResult)
-        {
-            UpdatedQuizResultHeader = updatedQuizResultHeader;
-            UpdatedQuestionResult = updatedQuestionResult;
-        }
     }
 }
-
