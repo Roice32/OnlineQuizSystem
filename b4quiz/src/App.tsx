@@ -15,7 +15,7 @@ import ShowInfo from './components/ShowQuizInfo';
 function App() : JSX.Element {
   return (
     <Router>
-      <div className="bg-[#0A2D2E] h-screen">
+      <div className="bg-[#0A2D2E] min-h-screen">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/create-quiz" element={<QuizCreate />} />
