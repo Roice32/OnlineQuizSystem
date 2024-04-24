@@ -16,6 +16,8 @@ builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assemb
 builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
 
+builder.Services.AddCors(p=>p.AddPolicy("corspolicy",b=>b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
 var app = builder.Build();
 
 
@@ -26,12 +28,15 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
+app.UseCors("corspolicy");
+
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
 
 dbContext.SeedQuizzez();
 dbContext.SeedUsers();
+dbContext.SeedActiveQuizzes();
 
 app.MapCarter();
 app.UseHttpsRedirection();
