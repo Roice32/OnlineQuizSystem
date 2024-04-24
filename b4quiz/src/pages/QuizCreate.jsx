@@ -40,24 +40,38 @@ const QuizCreate = () => {
         const newQuestions = [...questions];
         newQuestions[index].type = event.target.value;
         newQuestions[index].options = ['', ''];
-        setQuestions(newQuestions);
-    };
-
-    const handleOptionChange = (questionIndex, optionIndex, event) => {
-        const newQuestions = [...questions]; 
-        const question = newQuestions[questionIndex]; 
     
-        if (question.type === 'multipleChoice') {
-            question.options[optionIndex] = event.target.checked ? event.target.value : '';
-        } else {
-            question.options[optionIndex] = event.target.value;
+        if (newQuestions[index].type === 'multipleChoice') {
+            newQuestions[index].answer = [];
         }
     
         setQuestions(newQuestions);
     };
 
+    const handleOptionChange = (questionIndex, optionIndex, event) => {
+        const newQuestions = [...questions]; // creează o copie a întrebărilor existente
+        const question = newQuestions[questionIndex]; // obține întrebarea curentă
+    
+        // setează opțiunea ca fiind valoarea inputului
+        question.options[optionIndex] = event.target.value;
+    
+        setQuestions(newQuestions); // actualizează starea întrebărilor
+    };
+
     const addQuestion = () => {
-        setQuestions([...questions, { id: nextId, text: '', type: 'trueFalse', options: ['', ''] }]);
+        const newQuestion = { 
+            id: nextId, 
+            text: '', 
+            type: 'trueFalse', 
+            options: ['', ''], 
+            answer: [] // inițializează 'answer' ca un array gol
+        };
+    
+        if (newQuestion.type === 'multipleChoice') {
+            newQuestion.answer = [];
+        }
+    
+        setQuestions([...questions, newQuestion]);
         setNextId(nextId + 1);
     };
 
@@ -77,6 +91,28 @@ const QuizCreate = () => {
         newQuestions[questionIndex].options[optionIndex] = event.target.value;
         setQuestions(newQuestions);
     };
+
+    const handleAnswerChange = (questionIndex, optionIndex, event) => {
+        const newQuestions = [...questions]; // creează o copie a întrebărilor existente
+        const question = newQuestions[questionIndex]; // obține întrebarea curentă
+    
+        if (question.type === 'multipleChoice') {
+            // pentru întrebările de tip 'multipleChoice', adaugă sau elimină indexul opțiunii din răspuns în funcție de starea checkbox-ului
+            if (event.target.checked) {
+                question.answer.push(optionIndex);
+            } else {
+                const answerIndex = question.answer.indexOf(optionIndex);
+                if (answerIndex > -1) {
+                    question.answer.splice(answerIndex, 1);
+                }
+            }
+        } else {
+            // pentru întrebările de tip 'singleChoice', setează răspunsul ca fiind indexul opțiunii selectate
+            question.answer = event.target.checked ? optionIndex : null;
+        }
+    
+        setQuestions(newQuestions); // actualizează starea întrebărilor
+    };
     
 
     const renderInputForQuestionType = (question, index) => {
@@ -95,38 +131,46 @@ const QuizCreate = () => {
                     </div>
                 );
                 case 'singleChoice':
-    return (
-        <div className='flex flex-col gap-1 mt-3'>
-            {['option1', 'option2', 'option3', 'option4'].map((option, optionIndex) => (
-                <label className='text-white' key={optionIndex}>
-                    <input 
-                        type="radio" 
-                        name={`singleChoice${index}`}
-                        value={option} 
-                        checked={question.options[optionIndex] === option} 
-                        onChange={(e) => handleOptionChange(index, optionIndex, e)} 
-                    />
-                    {option}
-                </label>
-            ))}
-        </div>
-    );
-    case 'multipleChoice':
-        return (
-            <div className='flex flex-col gap-1 mt-3'>
-                {['option1', 'option2', 'option3', 'option4'].map((option, optionIndex) => (
-                    <label className='text-white' key={optionIndex}>
-                        <input 
-                            type="checkbox" 
-                            value={option} 
-                            checked={question.options[optionIndex] === option} 
-                            onChange={(e) => handleOptionChange(index, optionIndex, e)} 
-                        />
-                        {option}
-                    </label>
-                ))}
-            </div>
-        );
+            return (
+                <div className='flex flex-col gap-1 mt-3'>
+                    {question.options.map((option, optionIndex) => (
+                        <div key={optionIndex} className='flex items-center gap-2'>
+                            <input 
+                                type="radio" 
+                                name={`singleChoice${index}`} 
+                                checked={question.answer === option} 
+                                onChange={(e) => handleAnswerChange(index, option, e)} 
+                            />
+                            <input 
+                                type="text" 
+                                value={option} 
+                                onChange={(e) => handleOptionChange(index, optionIndex, e)} 
+                                className="p-2 border border-gray-300 rounded-md"
+                            />
+                        </div>
+                    ))}
+                </div>
+            );
+            case 'multipleChoice':
+                return (
+                    <div className='flex flex-col gap-1 mt-3'>
+                        {question.options.map((option, optionIndex) => (
+                            <div key={optionIndex} className='flex items-center gap-2'>
+                                <input 
+                                    type="checkbox" 
+                                    checked={question.answer.includes(optionIndex)} 
+                                    onChange={(e) => handleAnswerChange(index, optionIndex, e)} 
+                                />
+                                <input 
+                                    type="text" 
+                                    value={option} 
+                                    onChange={(e) => handleOptionChange(index, optionIndex, e)} 
+                                    className="p-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                );
             case 'writtenAnswer':
                 return (
                     <input className="p-2 border border-gray-300 rounded-md mt-2" type="text" value={question.options[0]} onChange={(e) => handleOptionChange(index, 0, e)} />
