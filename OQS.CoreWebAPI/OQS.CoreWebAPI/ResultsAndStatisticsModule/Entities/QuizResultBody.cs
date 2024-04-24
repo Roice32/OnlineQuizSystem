@@ -14,32 +14,5 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
             UserId = userId;
             QuestionIds.AddRange(questionIds);
         }
-
-        public void ReviewAnswer(Guid questionId, float finalScore)
-        {
-            // implementation for searching in DB
-            QuestionResultBase questionResult = null;
-
-            if (questionResult == null)
-            {
-                return;
-            }
-            ((ReviewNeededQuestionResult)questionResult).UpdateScore(finalScore);
-            //UpdateInDB();
-
-            QuizResultHeader foundQHR = GetQuizResultHeader(QuizId, UserId);
-            if (foundQHR != null)
-            {
-                foundQHR.UpdateUponAnswerReview(this);
-            }
-        }
-
-        private QuizResultHeader GetQuizResultHeader(Guid QuizId, Guid UserId)
-        {
-            // PLACEHOLDER
-            List<QuizResultHeader> quizResultHeaders = new();
-            return quizResultHeaders.FirstOrDefault(q => q.QuizId == QuizId && q.UserId == UserId);
-        }
     }
-
 }

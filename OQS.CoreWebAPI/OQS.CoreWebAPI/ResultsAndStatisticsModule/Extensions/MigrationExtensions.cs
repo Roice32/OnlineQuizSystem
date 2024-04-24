@@ -3,7 +3,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 {
-    public static class MigrationExternsions
+    public static class MigrationExtensions
     {
         public static void ApplyMigrations(this WebApplication application)
         {
