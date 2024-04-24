@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ResultsAndStatisticsModule\Features\QuestionResults\**" />
+    <Content Remove="ResultsAndStatisticsModule\Features\QuestionResults\**" />
+    <EmbeddedResource Remove="ResultsAndStatisticsModule\Features\QuestionResults\**" />
+    <None Remove="ResultsAndStatisticsModule\Features\QuestionResults\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Carter" Version="8.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
@@ -28,8 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="ResultsAndStatisticsModule\Contracts\" />
-    <Folder Include="ResultsAndStatisticsModule\Features\QuestionResults\" />
     <Folder Include="Shared\" />
   </ItemGroup>
 
