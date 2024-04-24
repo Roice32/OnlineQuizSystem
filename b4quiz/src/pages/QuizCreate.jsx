@@ -95,7 +95,7 @@ const QuizCreate = () => {
                     break;
                 case 'multipleChoice':
                     questionData.type = 1;
-                    questionData.multipleChoiceAnswers = question.answer;
+                    questionData.multipleChoiceAnswers = Object.values(question.answer).map(index => question.options[index]);
                     break;
                 case 'singleChoice':
                     questionData.type = 2;
