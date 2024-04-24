@@ -86,10 +86,12 @@ const QuizCreate = () => {
                 writtenAcceptedAnswers: null,
             };
 
+            console.log(question);
+
             switch (question.type) {
                 case 'trueFalse':
                     questionData.type = 0;
-                    questionData.trueFalseAnswer = question.answer;
+                    questionData.trueFalseAnswer = question.options[0] === 'true';
                     break;
                 case 'multipleChoice':
                     questionData.type = 1;
@@ -101,7 +103,7 @@ const QuizCreate = () => {
                     break;
                 case 'writtenAnswer':
                     questionData.type = 3;
-                    questionData.writtenAcceptedAnswers = question.answer;
+                    questionData.writtenAcceptedAnswers = [question.options[0]];
                     break;
                 default:
                     break;
