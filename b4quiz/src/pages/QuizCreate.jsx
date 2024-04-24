@@ -7,7 +7,7 @@ const QuizCreate = () => {
     const [image, setImage] = useState('');
     const [language, setLanguage] = useState('Romana');
     const [timeLimit, setTimeLimit] = useState(0);
-    const [questions, setQuestions] = useState([{ id: 1, text: '' }]);
+    const [questions, setQuestions] = useState([{ id: 1, text: '', type: 'trueFalse', options: ['', ''] }]);
     const [nextId, setNextId] = useState(2);
 
     const handleNameChange = (event) => {
@@ -36,14 +36,104 @@ const QuizCreate = () => {
         setQuestions(newQuestions);
     };
 
+    const handleQuestionTypeChange = (index, event) => {
+        const newQuestions = [...questions];
+        newQuestions[index].type = event.target.value;
+        newQuestions[index].options = ['', ''];
+        setQuestions(newQuestions);
+    };
+
+    const handleOptionChange = (questionIndex, optionIndex, event) => {
+        const newQuestions = [...questions]; 
+        const question = newQuestions[questionIndex]; 
+    
+        if (question.type === 'multipleChoice') {
+            question.options[optionIndex] = event.target.checked ? event.target.value : '';
+        } else {
+            question.options[optionIndex] = event.target.value;
+        }
+    
+        setQuestions(newQuestions);
+    };
+
     const addQuestion = () => {
-        setQuestions([...questions, { id: nextId, text: '' }]);
+        setQuestions([...questions, { id: nextId, text: '', type: 'trueFalse', options: ['', ''] }]);
         setNextId(nextId + 1);
     };
 
     const removeQuestion = (id) => {
         const updatedQuestions = questions.filter(question => question.id !== id);
         setQuestions(updatedQuestions);
+    };
+
+    const handleCheckboxChange = (questionIndex, optionIndex) => {
+        const newQuestions = [...questions];
+        newQuestions[questionIndex].options[optionIndex] = !newQuestions[questionIndex].options[optionIndex];
+        setQuestions(newQuestions);
+    };
+
+    const handleOptionTextChange = (questionIndex, optionIndex, event) => {
+        const newQuestions = [...questions];
+        newQuestions[questionIndex].options[optionIndex] = event.target.value;
+        setQuestions(newQuestions);
+    };
+    
+
+    const renderInputForQuestionType = (question, index) => {
+        switch (question.type) {
+            case 'trueFalse':
+                return (
+                    <div className='flex flex-col gap-1 mt-3'>
+                        <label className='text-white'>
+                            <input type="radio" value="true" checked={question.options[0] === 'true'} onChange={(e) => handleOptionChange(index, 0, e)} />
+                            True
+                        </label>
+                        <label className='text-white'>
+                            <input type="radio" value="false" checked={question.options[0] === 'false'} onChange={(e) => handleOptionChange(index, 0, e)} />
+                            False
+                        </label>
+                    </div>
+                );
+                case 'singleChoice':
+    return (
+        <div className='flex flex-col gap-1 mt-3'>
+            {['option1', 'option2', 'option3', 'option4'].map((option, optionIndex) => (
+                <label className='text-white' key={optionIndex}>
+                    <input 
+                        type="radio" 
+                        name={`singleChoice${index}`}
+                        value={option} 
+                        checked={question.options[optionIndex] === option} 
+                        onChange={(e) => handleOptionChange(index, optionIndex, e)} 
+                    />
+                    {option}
+                </label>
+            ))}
+        </div>
+    );
+    case 'multipleChoice':
+        return (
+            <div className='flex flex-col gap-1 mt-3'>
+                {['option1', 'option2', 'option3', 'option4'].map((option, optionIndex) => (
+                    <label className='text-white' key={optionIndex}>
+                        <input 
+                            type="checkbox" 
+                            value={option} 
+                            checked={question.options[optionIndex] === option} 
+                            onChange={(e) => handleOptionChange(index, optionIndex, e)} 
+                        />
+                        {option}
+                    </label>
+                ))}
+            </div>
+        );
+            case 'writtenAnswer':
+                return (
+                    <input className="p-2 border border-gray-300 rounded-md mt-2" type="text" value={question.options[0]} onChange={(e) => handleOptionChange(index, 0, e)} />
+                );
+            default:
+                return null;
+        }
     };
 
     return (
@@ -114,6 +204,13 @@ const QuizCreate = () => {
                                 placeholder={`Question ${index + 1}`}
                                 className="p-2 border border-gray-300 rounded-md"
                             />
+                            <select value={question.type} onChange={(e) => handleQuestionTypeChange(index, e)} className="mt-2 p-2 border border-gray-300 rounded-md">
+                                <option value="trueFalse">True/False</option>
+                                <option value="singleChoice">Single Choice</option>
+                                <option value="multipleChoice">Multiple Choice</option>
+                                <option value="writtenAnswer">Written Answer</option>
+                            </select>
+                            {renderInputForQuestionType(question, index)}
                             <button onClick={() => removeQuestion(question.id)} className="mt-2 p-2 bg-red-500 text-white rounded-md">Remove Question</button>
                         </div>
                     ))}
