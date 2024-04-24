@@ -10,5 +10,9 @@ public class Answer
 {
     public Guid QuestionId { get; set; }
     public QuestionType Type { get; set; } 
-    public string Value { get; set; }
+    public bool? TrueFalseAnswer { get; set; }
+    public string[]? MultipleChoiceAnswers { get; set; }
+    public string? SingleChoiceAnswer { get; set; }
+    public string? WriteAnswer { get; set; }
+    public string? ReviewNeeded { get; set; }
 }
