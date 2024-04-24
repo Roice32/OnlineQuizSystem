@@ -4,9 +4,9 @@ import Navbar from '../components/Navbar';
 const QuizCreate = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [image, setImage] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     const [language, setLanguage] = useState('Romana');
-    const [timeLimit, setTimeLimit] = useState(0);
+    const [timeLimitMinutes, setTimeLimitMinutes] = useState(0);
     const [questions, setQuestions] = useState([{ id: 1, text: '', type: 'trueFalse', options: ['', ''] }]);
     const [nextId, setNextId] = useState(2);
 
@@ -19,7 +19,7 @@ const QuizCreate = () => {
     };
 
     const handleImageChange = (event) => {
-        setImage(event.target.value);
+        setImageUrl(event.target.value);
     };
 
     const handleLanguageChange = (event) => {
@@ -27,7 +27,7 @@ const QuizCreate = () => {
     };
 
     const handleTimeLimitChange = (event) => {
-        setTimeLimit(parseInt(event.target.value));
+        setTimeLimitMinutes(parseInt(event.target.value));
     };
 
     const handleQuestionChange = (index, event) => {
@@ -46,6 +46,33 @@ const QuizCreate = () => {
         }
     
         setQuestions(newQuestions);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+    
+        const quiz = {
+            name,
+            description,
+            imageUrl,
+            language,
+            creatorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            timeLimitMinutes,
+        };
+    
+        const response = await fetch('http://localhost:5276/api/quizzes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(quiz),
+        });
+    
+        if (response.ok) {
+            console.log('Quiz submitted successfully');
+        } else {
+            console.error('Error submitting quiz');
+        }
     };
 
     const handleOptionChange = (questionIndex, optionIndex, event) => {
@@ -183,7 +210,7 @@ const QuizCreate = () => {
     return (
         <div>
             <Navbar />
-            <div className='flex flex-col items-center'>
+            <form onSubmit={handleSubmit} className='flex flex-col items-center'>
                 <h1 className='text-[#DEAE9F] text-4xl font-bold mt-6 mb-6'>Create Quiz</h1>
                 <div className="mt-4 flex flex-col mt-5">
                     <label htmlFor="name" className="text-white">Name:</label>
@@ -208,11 +235,11 @@ const QuizCreate = () => {
                     />
                 </div>
                 <div className="mt-4 flex flex-col mt-5">
-                    <label htmlFor="image" className="text-white">Image URL:</label>
+                    <label htmlFor="imageUrl" className="text-white">Image URL:</label>
                     <input
                         type="text"
-                        id="image"
-                        value={image}
+                        id="imageUrl"
+                        value={imageUrl}
                         onChange={handleImageChange}
                         placeholder="Image URL"
                         className="p-2 border border-gray-300 rounded-md"
@@ -226,11 +253,11 @@ const QuizCreate = () => {
                     </select>
                 </div>
                 <div className="mt-4 flex flex-col mt-5">
-                    <label htmlFor="timeLimit" className="text-white">Time Limit (in minutes):</label>
+                    <label htmlFor="timeLimitMinutes" className="text-white">Time Limit (in minutes):</label>
                     <input
                         type="number"
-                        id="timeLimit"
-                        value={timeLimit}
+                        id="timeLimitMinutes"
+                        value={timeLimitMinutes}
                         onChange={handleTimeLimitChange}
                         placeholder="Time Limit (in minutes)"
                         className="p-2 border border-gray-300 rounded-md"
@@ -262,7 +289,8 @@ const QuizCreate = () => {
                 <div className="mt-4">
                     <button onClick={addQuestion} className="p-2 bg-green-500 text-white rounded-md">Add Question</button>
                 </div>
-            </div>
+                <button type="submit" className="p-2 bg-blue-500 text-white rounded-md mt-4">Submit</button>
+            </form>
         </div>
     );
 }
