@@ -69,7 +69,58 @@ const QuizCreate = () => {
         });
     
         if (response.ok) {
-            console.log('Quiz submitted successfully');
+            const createdQuiz = await response.json();
+            console.log(createdQuiz);
+            const quizId = createdQuiz.split('/').pop();
+            console.log(quizId);
+
+        for (const question of questions) {
+            const questionData = {
+                quizId,
+                text: question.text,
+                type: null,
+                choices: question.options,
+                trueFalseAnswer: null,
+                multipleChoiceAnswers: null,
+                singleChoiceAnswer: null,
+                writtenAcceptedAnswers: null,
+            };
+
+            switch (question.type) {
+                case 'trueFalse':
+                    questionData.type = 0;
+                    questionData.trueFalseAnswer = question.answer;
+                    break;
+                case 'multipleChoice':
+                    questionData.type = 1;
+                    questionData.multipleChoiceAnswers = question.answer;
+                    break;
+                case 'singleChoice':
+                    questionData.type = 2;
+                    questionData.singleChoiceAnswer = question.answer;
+                    break;
+                case 'writtenAnswer':
+                    questionData.type = 3;
+                    questionData.writtenAcceptedAnswers = question.answer;
+                    break;
+                default:
+                    break;
+            }
+
+            const questionResponse = await fetch(`http://localhost:5276/api/quizzes/${quizId}/questions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(questionData),
+            });
+
+            if (!questionResponse.ok) {
+                console.error('Error submitting question');
+            }
+        }
+
+        console.log('Quiz and questions submitted successfully');
         } else {
             console.error('Error submitting quiz');
         }
@@ -85,7 +136,8 @@ const QuizCreate = () => {
         setQuestions(newQuestions); // actualizează starea întrebărilor
     };
 
-    const addQuestion = () => {
+    const addQuestion = (event) => {
+        event.preventDefault();
         const newQuestion = { 
             id: nextId, 
             text: '', 
