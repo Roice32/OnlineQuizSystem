@@ -7,7 +7,7 @@ using OQS.CoreWebAPI.Entities;
 using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Quizzes;
-public class SubmiResponse : ICarterModule
+public class SubmitResponse : ICarterModule
 {
     private List<SubmitResponseRequest> result = new List<SubmitResponseRequest>();
     public void AddRoutes(IEndpointRouteBuilder app)

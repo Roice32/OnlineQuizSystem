@@ -4,12 +4,15 @@ public class ActiveQuizResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    
+    public int TimeLimitMinutes { get; set; }
     public List<QuestionResponse> Questions { get; set; } = new();  
     
     public ActiveQuizResponse(Entities.ActiveQuiz.ActiveQuiz activeQuiz)
     {
         Id = activeQuiz.Id;
         Name = activeQuiz.Quiz.Name;
+        TimeLimitMinutes = activeQuiz.Quiz.TimeLimitMinutes;
         Questions = activeQuiz.Quiz.Questions.Select(q => new QuestionResponse(q)).ToList();
         Random rng = new Random();
         int n = Questions.Count;
