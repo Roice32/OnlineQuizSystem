@@ -74,7 +74,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
                 UpdateQuestionResultExtension.UpdateQuestionResult
                     (dbContext, request.UserId, request.QuestionId, request.FinalScore);
-                var updatedQuestionResult = (ReviewNeededQuestionResult) FetchQuestionResultExtension.FetchQuestionResult
+                var updatedQuestionResult = FetchQuestionResultExtension.FetchQuestionResult
                     (dbContext, request.UserId, request.QuestionId);
 
                 UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReview
@@ -95,8 +95,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     (request.UserId,
                     request.QuestionId,
                     request.FinalScore,
-                    updatedQuestionResult.ReviewNeededAnswer,
-                    updatedQuestionResult.ReviewNeededResult);
+                    ((ReviewNeededQuestionResult)updatedQuestionResult.Value).ReviewNeededAnswer,
+                    ((ReviewNeededQuestionResult)updatedQuestionResult.Value).ReviewNeededResult);
 
                 var newQuizResultHeader = new QuizResultHeader
                     (updatedHeader.QuizId,

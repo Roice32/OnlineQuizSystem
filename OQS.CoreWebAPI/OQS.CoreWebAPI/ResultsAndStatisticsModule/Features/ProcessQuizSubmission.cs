@@ -11,7 +11,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
     public class ProcessQuizSubmission
     {
-        public record Command : IRequest<Result<bool>>
+        public record Command : IRequest<Result>
         {
             public Guid QuizId { get; set; }
             public Guid TakenBy { get; set; }
@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<bool>>
+        public class Handler : IRequestHandler<Command, Result>
         {
             private readonly RSMApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
@@ -52,12 +52,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 this.validator = validator;
             }
 
-            public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
-                    return Result.Failure<bool>(
+                    return Result.Failure(
                         new Error("ProcessQuizSubmission.Validator",
                         validationResult.ToString()));
                 }
@@ -68,7 +68,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         request.TimeElapsed),
                     dbContext);
                 
-                return true;
+                return Result.Success();
             }
         }
     }
@@ -94,7 +94,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     return Results.BadRequest(result.Error);
                 }
 
-                return Results.Ok(result.Value);
+                return Results.Ok(result);
             });
         }
     }

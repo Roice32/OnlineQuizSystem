@@ -33,21 +33,21 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
             public async Task<Result<GetQuizResultResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                FetchQuizResultHeaderResponse quizResultHeader = 
+                var quizResultHeader = 
                     FetchQuizResultHeaderExtension.FetchQuizResultHeader(dbContext, request.QuizId, request.UserId);
 
-                FetchQuizResultBodyResponse quizResultBody = 
+                var quizResultBody = 
                     FetchQuizResultBodyExtension.FetchQuizResultBody(dbContext, request.QuizId, request.UserId);
 
-                if (quizResultHeader is null || quizResultBody is null)
+                if (quizResultHeader.IsFailure || quizResultBody.IsFailure)
                     return Result.Failure<GetQuizResultResponse>(
                         new Error("GetQuizResult.Handler",
                         "Quiz header and/or body returned null value"));
 
                 return new GetQuizResultResponse
                 {
-                    QuizResultHeader = quizResultHeader,
-                    QuizResultBody = quizResultBody
+                    QuizResultHeader = quizResultHeader.Value,
+                    QuizResultBody = quizResultBody.Value
                 };
             }
         }
