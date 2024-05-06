@@ -3,19 +3,20 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 {
     public static class FetchQuizResultBodyExtension
     {
-        public static FetchQuizResultBodyResponse FetchQuizResultBody(this WebApplication application, Guid quizId, Guid userId)
+        public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(this WebApplication application, Guid quizId, Guid userId)
         {
             using var scope = application.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
             return FetchQuizResultBody(context, quizId, userId);
         }
 
-        public static FetchQuizResultBodyResponse FetchQuizResultBody(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
+        public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
         {
             List<Guid> questionIds = dbContext.QuizResultBodies
                 .AsNoTracking()
@@ -37,7 +38,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 
             if(questions == null || questionResults == null)
             {
-                return null;
+                return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 
             return new FetchQuizResultBodyResponse
