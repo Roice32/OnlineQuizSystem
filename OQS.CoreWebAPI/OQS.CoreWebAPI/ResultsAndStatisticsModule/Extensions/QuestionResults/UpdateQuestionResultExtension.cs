@@ -11,8 +11,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
         {
             using var scope = application.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
-            UpdateQuestionResult(dbContext, userId, questionId, score);
-            return Result.Success();
+            return UpdateQuestionResult(dbContext, userId, questionId, score);
         }
 
         public static Result UpdateQuestionResult(RSMApplicationDbContext dbContext, Guid userId, Guid questionId, float score)
