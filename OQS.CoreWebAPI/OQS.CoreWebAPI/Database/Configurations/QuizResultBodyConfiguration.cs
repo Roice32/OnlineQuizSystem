@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 
-namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database.Configurations
+namespace OQS.CoreWebAPI.Database.Configurations
 {
     public class QuizResultBodyConfiguration : IEntityTypeConfiguration<QuizResultBody>
     {

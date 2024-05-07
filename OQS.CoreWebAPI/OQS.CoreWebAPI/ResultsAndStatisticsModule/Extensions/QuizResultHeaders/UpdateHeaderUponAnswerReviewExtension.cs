@@ -1,4 +1,4 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+﻿using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
@@ -11,11 +11,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders
         public static Result UpdateHeaderUponAnswerReview(this WebApplication application, Guid userId, Guid quizId)
         {
             using var scope = application.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
             return UpdateHeaderUponAnswerReview(dbContext, userId, quizId);
         }
 
-        public static Result UpdateHeaderUponAnswerReview(RSMApplicationDbContext dbContext, Guid userId, Guid quizId)
+        public static Result UpdateHeaderUponAnswerReview(ApplicationDBContext dbContext, Guid userId, Guid quizId)
         {
             var quizResultHeader = dbContext.QuizResultHeaders
                 .FirstOrDefault(qrh => qrh.UserId == userId && qrh.QuizId == quizId);

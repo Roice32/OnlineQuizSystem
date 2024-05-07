@@ -1,4 +1,4 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+﻿using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
@@ -12,11 +12,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(this WebApplication application, Guid quizId, Guid userId)
         {
             using var scope = application.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
             return FetchQuizResultBody(context, quizId, userId);
         }
 
-        public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
+        public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(ApplicationDBContext dbContext, Guid quizId, Guid userId)
         {
             List<Guid> questionIds = dbContext.QuizResultBodies
                 .AsNoTracking()

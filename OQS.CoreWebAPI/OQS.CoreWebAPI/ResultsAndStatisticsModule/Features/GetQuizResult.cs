@@ -6,7 +6,7 @@ using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
@@ -24,9 +24,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         public class Handler : IRequestHandler<Query, Result<GetQuizResultResponse>>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDBContext dbContext;
 
-            public Handler(RSMApplicationDbContext context)
+            public Handler(ApplicationDBContext context)
             {
                 dbContext = context;
             }

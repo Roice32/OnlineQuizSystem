@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 
 #nullable disable
 
 namespace OQS.CoreWebAPI.Migrations
 {
-    [DbContext(typeof(RSMApplicationDbContext))]
+    [DbContext(typeof(ApplicationDBContext))]
     [Migration("20240421121839_RSMDbMigrate")]
     partial class RSMDbMigrate
     {

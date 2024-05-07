@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.Shared;
 
@@ -17,9 +17,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         internal sealed class Handler : IRequestHandler<Query, Result<GetTakenQuizzesHistoryResponse>>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDBContext dbContext;
 
-            public Handler(RSMApplicationDbContext context)
+            public Handler(ApplicationDBContext context)
             {
                 dbContext = context;
             }

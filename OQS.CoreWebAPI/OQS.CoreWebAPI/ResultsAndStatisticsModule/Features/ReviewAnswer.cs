@@ -3,7 +3,7 @@ using FluentValidation;
 using Mapster;
 using MediatR;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
@@ -53,10 +53,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         public class Handler : IRequestHandler<Command, Result<ReviewAnswerResponse>>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDBContext dbContext;
             private readonly IValidator<Command> validator;
 
-            public Handler(RSMApplicationDbContext dbContext, IValidator<Command> validator)
+            public Handler(ApplicationDBContext dbContext, IValidator<Command> validator)
             {
                 this.dbContext = dbContext;
                 this.validator = validator;
