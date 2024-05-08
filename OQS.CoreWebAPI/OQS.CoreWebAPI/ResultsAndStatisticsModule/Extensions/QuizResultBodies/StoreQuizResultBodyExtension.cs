@@ -7,15 +7,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 {
     public static class StoreQuizResultBodyExtension
     {
-        public static Result StoreQuizResultBody(this WebApplication application, QuizResultBody quizResultBody)
+        public static async Task StoreQuizResultBodyAsync(this WebApplication application, QuizResultBody quizResultBody)
         {
             using var scope = application.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            context.QuizResultBodies.Add(quizResultBody);
-            context.SaveChanges();
-
-            return Result.Success();
+            await context.QuizResultBodies.AddAsync(quizResultBody);
         }
     }
 }

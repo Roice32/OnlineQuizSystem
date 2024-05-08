@@ -50,7 +50,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         
             public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
-                dbContext = dbContext;
+                dbContext = context;
                 this.validator = validator;
             }
 
@@ -64,7 +64,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         validationResult.ToString()));
                 }
 
-                QuizChecker.CheckQuiz(new QuizSubmission(request.QuizId,
+                await QuizChecker.CheckQuizAsync(new QuizSubmission(request.QuizId,
                         request.TakenBy,
                         request.QuestionAnswerPairs,
                         request.TimeElapsed),

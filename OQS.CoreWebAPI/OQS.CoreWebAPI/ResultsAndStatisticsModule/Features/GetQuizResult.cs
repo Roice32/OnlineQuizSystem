@@ -34,10 +34,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             public async Task<Result<GetQuizResultResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var quizResultHeader = 
-                    FetchQuizResultHeaderExtension.FetchQuizResultHeader(dbContext, request.QuizId, request.UserId);
+                    await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, request.QuizId, request.UserId);
 
                 var quizResultBody = 
-                    FetchQuizResultBodyExtension.FetchQuizResultBody(dbContext, request.QuizId, request.UserId);
+                    await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, request.QuizId, request.UserId);
 
                 if (quizResultHeader.IsFailure || quizResultBody.IsFailure)
                     return Result.Failure<GetQuizResultResponse>(
