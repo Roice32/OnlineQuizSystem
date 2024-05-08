@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.Shared;
 
@@ -11,11 +11,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         public static Result<FetchQuizResultHeaderResponse> FetchQuizResultHeader(this WebApplication application, Guid QuizId, Guid UserId)
         {
             using var scope = application.Services.CreateScope();
-            using (var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>())
+            using (var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             return FetchQuizResultHeader(dbContext, QuizId, UserId);
         }
 
-        public static Result<FetchQuizResultHeaderResponse> FetchQuizResultHeader(RSMApplicationDbContext dbContext, Guid QuizId, Guid UserId)
+        public static Result<FetchQuizResultHeaderResponse> FetchQuizResultHeader(ApplicationDbContext dbContext, Guid QuizId, Guid UserId)
         {
             var quizResultHeader = dbContext.QuizResultHeaders
                 .AsNoTracking()

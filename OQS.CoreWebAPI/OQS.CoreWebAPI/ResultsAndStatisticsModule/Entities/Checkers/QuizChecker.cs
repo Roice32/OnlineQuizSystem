@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
@@ -8,21 +8,21 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
     public abstract class QuizChecker
     {
-        public static void CheckQuiz(QuizSubmission toBeChecked, RSMApplicationDbContext dbContext)
+        public static void CheckQuiz(QuizSubmission toBeChecked, ApplicationDbContext dbContext)
         {
             Quiz quizFromDb = FetchQuizFromDB(toBeChecked.QuizId, dbContext);
             QuizResultBody resultBody = BuildQuizResultBody(toBeChecked, quizFromDb.Questions, dbContext);
             QuizResultHeader resultHeader = BuildQuizResultHeader(toBeChecked, resultBody, dbContext);
             StoreQuizResult(resultHeader, resultBody, dbContext);
         }
-        private static Quiz FetchQuizFromDB(Guid QuizId, RSMApplicationDbContext dbContext)
+        private static Quiz FetchQuizFromDB(Guid QuizId, ApplicationDbContext dbContext)
         {
             Quiz quizFromDb = null; /*dbContext.Quizzes
                 .AsNoTracking()
                 .FirstOrDefault(q => q.Id == QuizId);*/
             return null;
         }
-        private static QuizResultBody BuildQuizResultBody(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, RSMApplicationDbContext dbContext)
+        private static QuizResultBody BuildQuizResultBody(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
         {
             QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
                 toBeChecked.TakenBy,
@@ -39,7 +39,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         }
         private static QuizResultHeader BuildQuizResultHeader(QuizSubmission toBeChecked,
             QuizResultBody resultBody,
-            RSMApplicationDbContext dbContext)
+            ApplicationDbContext dbContext)
         {
             QuizResultHeader resultHeader = new QuizResultHeader(toBeChecked.QuizId,
                 toBeChecked.TakenBy, toBeChecked.TimeElapsed);
@@ -58,7 +58,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             return resultHeader;
         }
 
-        private static void StoreQuizResult(QuizResultHeader resultHeader, QuizResultBody resultBody, RSMApplicationDbContext dbContext)
+        private static void StoreQuizResult(QuizResultHeader resultHeader, QuizResultBody resultBody, ApplicationDbContext dbContext)
         {
             dbContext.QuizResultBodies.Add(resultBody);
             dbContext.QuizResultHeaders.Add(resultHeader);

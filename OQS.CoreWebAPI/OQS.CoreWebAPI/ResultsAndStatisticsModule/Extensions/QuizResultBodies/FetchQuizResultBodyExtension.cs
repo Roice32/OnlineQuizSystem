@@ -1,9 +1,9 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.Shared;
+using OQS.CoreWebAPI.Database;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 {
@@ -12,11 +12,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(this WebApplication application, Guid quizId, Guid userId)
         {
             using var scope = application.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             return FetchQuizResultBody(context, quizId, userId);
         }
 
-        public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
+        public static Result<FetchQuizResultBodyResponse> FetchQuizResultBody(ApplicationDbContext dbContext, Guid quizId, Guid userId)
         {
             List<Guid> questionIds = dbContext.QuizResultBodies
                 .AsNoTracking()

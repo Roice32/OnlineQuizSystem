@@ -1,7 +1,7 @@
 ﻿using Carter;
 using FluentValidation;
 using MediatR;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
@@ -43,10 +43,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         public class Handler : IRequestHandler<Command, Result>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
         
-            public Handler(RSMApplicationDbContext context, IValidator<Command> validator)
+            public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
                 dbContext = dbContext;
                 this.validator = validator;
