@@ -6,6 +6,8 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
@@ -62,9 +64,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         validationResult.ToString()));
                 }
 
-                QuizChecker.CheckQuiz(new QuizSubmission(request.QuizId, 
-                        request.TakenBy, 
-                        request.QuestionAnswerPairs, 
+                QuizChecker.CheckQuiz(new QuizSubmission(request.QuizId,
+                        request.TakenBy,
+                        request.QuestionAnswerPairs,
                         request.TimeElapsed),
                     dbContext);
                 
@@ -77,15 +79,21 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/processQuizSubmission",
-                async (QuizSubmission quizSubmission, ISender sender) =>
+            app.MapPost("api/processQuizSubmission/",
+                async (Guid quizId,
+                    Guid takenBy,
+                    string questionAnswerPairsJSON,
+                    int timeElapsed,
+                    ISender sender) =>
             {
+                var questionAnswerPairs = JsonConvert.DeserializeObject<List<QuestionAnswerPairBase>>(questionAnswerPairsJSON);
+
                 var command = new ProcessQuizSubmission.Command
                 {
-                    QuizId = quizSubmission.QuizId,
-                    TakenBy = quizSubmission.TakenBy,
-                    QuestionAnswerPairs = quizSubmission.QuestionAnswerPairs,
-                    TimeElapsed = quizSubmission.TimeElapsed
+                    QuizId = quizId,
+                    TakenBy = takenBy,
+                    QuestionAnswerPairs = questionAnswerPairs,
+                    TimeElapsed = timeElapsed
                 };
 
                 var result = await sender.Send(command);
@@ -94,7 +102,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     return Results.BadRequest(result.Error);
                 }
 
-                return Results.Ok(result);
+                return Results.Ok(result.IsSuccess);
             });
         }
     }
