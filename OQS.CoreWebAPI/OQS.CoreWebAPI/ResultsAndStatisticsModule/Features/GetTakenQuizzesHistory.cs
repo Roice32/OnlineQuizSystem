@@ -1,8 +1,8 @@
 ﻿using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.Shared;
 
@@ -17,9 +17,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         internal sealed class Handler : IRequestHandler<Query, Result<GetTakenQuizzesHistoryResponse>>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDbContext dbContext;
 
-            public Handler(RSMApplicationDbContext context)
+            public Handler(ApplicationDbContext context)
             {
                 dbContext = context;
             }
@@ -66,7 +66,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/users/{userId}/takenHistory", async (Guid userId, ISender sender) =>
+            app.MapGet("api/quizResults/getTakenQuizzesHistory/{userId}", async (Guid userId, ISender sender) =>
             {
                 var query = new GetTakenQuizzesHistory.Query
                 {

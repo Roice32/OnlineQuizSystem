@@ -1,16 +1,9 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Shared;
-using System.Threading;
 using Carter;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
+using OQS.CoreWebAPI.Database;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
@@ -24,30 +17,30 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         public class Handler : IRequestHandler<Query, Result<GetQuizResultResponse>>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDbContext dbContext;
 
-            public Handler(RSMApplicationDbContext context)
+            public Handler(ApplicationDbContext context)
             {
                 dbContext = context;
             }
 
             public async Task<Result<GetQuizResultResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                FetchQuizResultHeaderResponse quizResultHeader = 
-                    FetchQuizResultHeaderExtension.FetchQuizResultHeader(dbContext, request.QuizId, request.UserId);
+                var quizResultHeader = 
+                    await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, request.QuizId, request.UserId);
 
-                FetchQuizResultBodyResponse quizResultBody = 
-                    FetchQuizResultBodyExtension.FetchQuizResultBody(dbContext, request.QuizId, request.UserId);
+                var quizResultBody = 
+                    await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, request.QuizId, request.UserId);
 
-                if (quizResultHeader is null || quizResultBody is null)
+                if (quizResultHeader.IsFailure || quizResultBody.IsFailure)
                     return Result.Failure<GetQuizResultResponse>(
                         new Error("GetQuizResult.Handler",
                         "Quiz header and/or body returned null value"));
 
                 return new GetQuizResultResponse
                 {
-                    QuizResultHeader = quizResultHeader,
-                    QuizResultBody = quizResultBody
+                    QuizResultHeader = quizResultHeader.Value,
+                    QuizResultBody = quizResultBody.Value
                 };
             }
         }
@@ -57,7 +50,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/users/{userId}/quizResults/{quizId}", async (Guid quizId, Guid userId, ISender sender) =>
+            app.MapGet("/api/quizResults/getQuizResult/{userId}/{quizId}", async (Guid userId, Guid quizId, ISender sender) =>
             {
                 var query = new GetQuizResult.Query
                 {

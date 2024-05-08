@@ -1,17 +1,18 @@
 ﻿using Carter;
 using FluentValidation;
 using MediatR;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
+using Newtonsoft.Json;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
     public class ProcessQuizSubmission
     {
-        public record Command : IRequest<Result<bool>>
+        public record Command : IRequest<Result>
         {
             public Guid QuizId { get; set; }
             public Guid TakenBy { get; set; }
@@ -41,34 +42,34 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<bool>>
+        public class Handler : IRequestHandler<Command, Result>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
         
-            public Handler(RSMApplicationDbContext context, IValidator<Command> validator)
+            public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
-                dbContext = dbContext;
+                dbContext = context;
                 this.validator = validator;
             }
 
-            public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
-                    return Result.Failure<bool>(
+                    return Result.Failure(
                         new Error("ProcessQuizSubmission.Validator",
                         validationResult.ToString()));
                 }
 
-                QuizChecker.CheckQuiz(new QuizSubmission(request.QuizId, 
-                        request.TakenBy, 
-                        request.QuestionAnswerPairs, 
+                await QuizChecker.CheckQuizAsync(new QuizSubmission(request.QuizId,
+                        request.TakenBy,
+                        request.QuestionAnswerPairs,
                         request.TimeElapsed),
                     dbContext);
                 
-                return true;
+                return Result.Success();
             }
         }
     }
@@ -77,15 +78,21 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/processQuizSubmission",
-                async (QuizSubmission quizSubmission, ISender sender) =>
+            app.MapPost("api/quizResults/processQuizSubmission",
+                async (Guid quizId,
+                    Guid takenBy,
+                    string questionAnswerPairsJSON,
+                    int timeElapsed,
+                    ISender sender) =>
             {
+                var questionAnswerPairs = JsonConvert.DeserializeObject<List<QuestionAnswerPairBase>>(questionAnswerPairsJSON);
+
                 var command = new ProcessQuizSubmission.Command
                 {
-                    QuizId = quizSubmission.QuizId,
-                    TakenBy = quizSubmission.TakenBy,
-                    QuestionAnswerPairs = quizSubmission.QuestionAnswerPairs,
-                    TimeElapsed = quizSubmission.TimeElapsed
+                    QuizId = quizId,
+                    TakenBy = takenBy,
+                    QuestionAnswerPairs = questionAnswerPairs,
+                    TimeElapsed = timeElapsed
                 };
 
                 var result = await sender.Send(command);
@@ -94,7 +101,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     return Results.BadRequest(result.Error);
                 }
 
-                return Results.Ok(result.Value);
+                return Results.Ok(result.IsSuccess);
             });
         }
     }

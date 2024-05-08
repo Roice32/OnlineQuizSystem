@@ -1,13 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
-namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database
+namespace OQS.CoreWebAPI.Database
 {
-    public class RSMApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public RSMApplicationDbContext(DbContextOptions<RSMApplicationDbContext> options) : 
-            base(options) {}
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
+            base(options)
+        { }
+
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<QuestionBase> Questions { get; set; }
+        public DbSet<ChoiceQuestionBase> ChoiceQuestions { get; set; }
+        public DbSet<TrueFalseQuestion> TrueFalseQuestions { get; set; }
+        public DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
+        public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
+        public DbSet<WrittenAnswerQuestion> WrittenAnswerQuestions { get; set; }
+        public DbSet<ReviewNeededQuestion> ReviewNeededQuestions { get; set; }
 
         public DbSet<QuizResultHeader> QuizResultHeaders { get; set; }
 
@@ -22,7 +37,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<QuizResultHeader>().HasKey(qrh => new { qrh.UserId, qrh.QuizId });
-            modelBuilder.Entity<QuizResultBody>().HasKey(qrb => new { qrb.UserId, qrb.QuizId});
+            modelBuilder.Entity<QuizResultBody>().HasKey(qrb => new { qrb.UserId, qrb.QuizId });
             modelBuilder.Entity<QuestionResultBase>().HasKey(qr => new { qr.UserId, qr.QuestionId });
         }
     }
