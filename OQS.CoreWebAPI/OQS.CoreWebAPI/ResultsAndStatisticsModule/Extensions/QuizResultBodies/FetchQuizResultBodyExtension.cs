@@ -1,27 +1,28 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.Shared;
+using OQS.CoreWebAPI.Database;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 {
     public static class FetchQuizResultBodyExtension
     {
-        public static FetchQuizResultBodyResponse FetchQuizResultBody(this WebApplication application, Guid quizId, Guid userId)
+        public static async Task<Result<FetchQuizResultBodyResponse>> FetchQuizResultBodyAsync(this WebApplication application, Guid quizId, Guid userId)
         {
             using var scope = application.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
-            return FetchQuizResultBody(context, quizId, userId);
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            return await FetchQuizResultBodyAsync(context, quizId, userId);
         }
 
-        public static FetchQuizResultBodyResponse FetchQuizResultBody(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
+        public static async Task<Result<FetchQuizResultBodyResponse>> FetchQuizResultBodyAsync(ApplicationDbContext dbContext, Guid quizId, Guid userId)
         {
-            List<Guid> questionIds = dbContext.QuizResultBodies
+            List<Guid> questionIds = await dbContext.QuizResultBodies
                 .AsNoTracking()
                 .Where(q => q.QuizId == quizId && q.UserId == userId)
                 .Select(q => q.QuestionIds)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             // PLACEHOLDER
             // Until we get questions database.
@@ -30,14 +31,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
                 .Where(q => questionIds.Contains(q.Id))
                 .ToList();*/
 
-            List<QuestionResultBase> questionResults = dbContext.QuestionResults
+            List<QuestionResultBase> questionResults = await dbContext.QuestionResults
                 .AsNoTracking()
                 .Where(q => questionIds.Contains(q.QuestionId) && q.UserId == userId)
-                .ToList();
+                .ToListAsync();
 
             if(questions == null || questionResults == null)
             {
-                return null;
+                return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 
             return new FetchQuizResultBodyResponse

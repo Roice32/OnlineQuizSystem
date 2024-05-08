@@ -1,7 +1,4 @@
-﻿
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
-
-namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
+﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuizResultHeader
     {

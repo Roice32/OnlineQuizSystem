@@ -1,5 +1,4 @@
-﻿
-namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
+﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
 {
     public class TrueFalseQuestionResult : QuestionResultBase
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
@@ -8,21 +8,22 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
     public abstract class QuizChecker
     {
-        public static void CheckQuiz(QuizSubmission toBeChecked, RSMApplicationDbContext dbContext)
+        public static async Task CheckQuizAsync(QuizSubmission toBeChecked, ApplicationDbContext dbContext)
         {
-            Quiz quizFromDb = FetchQuizFromDB(toBeChecked.QuizId, dbContext);
-            QuizResultBody resultBody = BuildQuizResultBody(toBeChecked, quizFromDb.Questions, dbContext);
+            Quiz quizFromDb = await FetchQuizFromDbAsync(toBeChecked.QuizId, dbContext);
+            QuizResultBody resultBody = await BuildQuizResultBodyAsync(toBeChecked, quizFromDb.Questions, dbContext);
             QuizResultHeader resultHeader = BuildQuizResultHeader(toBeChecked, resultBody, dbContext);
-            StoreQuizResult(resultHeader, resultBody, dbContext);
+            await StoreQuizResultAsync(resultHeader, resultBody, dbContext);
         }
-        private static Quiz FetchQuizFromDB(Guid QuizId, RSMApplicationDbContext dbContext)
+        private static async Task<Quiz> FetchQuizFromDbAsync(Guid QuizId, ApplicationDbContext dbContext)
         {
-            Quiz quizFromDb = null; /*dbContext.Quizzes
+            Quiz quizFromDb = null; /* await dbContext
+                .Quizzes
                 .AsNoTracking()
-                .FirstOrDefault(q => q.Id == QuizId);*/
+                .FirstOrDefaultAsync(q => q.Id == QuizId);*/
             return null;
         }
-        private static QuizResultBody BuildQuizResultBody(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, RSMApplicationDbContext dbContext)
+        private static async Task<QuizResultBody> BuildQuizResultBodyAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
         {
             QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
                 toBeChecked.TakenBy,
@@ -31,15 +32,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             {
                 QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs
                     .FirstOrDefault(qaPair => qaPair.QuestionId == question.Id);
-                dbContext.QuestionResults.Add(QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question));
+                await dbContext.QuestionResults.AddAsync(QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question));
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return resultBody;
         }
         private static QuizResultHeader BuildQuizResultHeader(QuizSubmission toBeChecked,
             QuizResultBody resultBody,
-            RSMApplicationDbContext dbContext)
+            ApplicationDbContext dbContext)
         {
             QuizResultHeader resultHeader = new QuizResultHeader(toBeChecked.QuizId,
                 toBeChecked.TakenBy, toBeChecked.TimeElapsed);
@@ -58,11 +59,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             return resultHeader;
         }
 
-        private static void StoreQuizResult(QuizResultHeader resultHeader, QuizResultBody resultBody, RSMApplicationDbContext dbContext)
+        private static async Task StoreQuizResultAsync(QuizResultHeader resultHeader, QuizResultBody resultBody, ApplicationDbContext dbContext)
         {
-            dbContext.QuizResultBodies.Add(resultBody);
-            dbContext.QuizResultHeaders.Add(resultHeader);
-            dbContext.SaveChanges();
+            await dbContext.QuizResultBodies.AddAsync(resultBody);
+            await dbContext.QuizResultHeaders.AddAsync(resultHeader);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

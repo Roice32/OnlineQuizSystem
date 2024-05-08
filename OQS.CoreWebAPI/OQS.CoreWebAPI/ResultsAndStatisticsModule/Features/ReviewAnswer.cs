@@ -1,11 +1,11 @@
 ﻿using Carter;
 using FluentValidation;
-using Mapster;
 using MediatR;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders;
 using OQS.CoreWebAPI.Shared;
@@ -53,10 +53,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         public class Handler : IRequestHandler<Command, Result<ReviewAnswerResponse>>
         {
-            private readonly RSMApplicationDbContext dbContext;
+            private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
 
-            public Handler(RSMApplicationDbContext dbContext, IValidator<Command> validator)
+            public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
             {
                 this.dbContext = dbContext;
                 this.validator = validator;
@@ -72,15 +72,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         validationResult.ToString()));
                 }
 
-                UpdateQuestionResultExtension.UpdateQuestionResult
+                await UpdateQuestionResultExtension.UpdateQuestionResultAsync
                     (dbContext, request.UserId, request.QuestionId, request.FinalScore);
-                var updatedQuestionResult = (ReviewNeededQuestionResult) FetchQuestionResultExtension.FetchQuestionResult
+                var updatedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync
                     (dbContext, request.UserId, request.QuestionId);
 
-                UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReview
+                await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync
                     (dbContext, request.UserId, request.QuizId);
-                var updatedHeader = new FetchQuizResultHeaderResponse(); /*FetchQuizResultHeaderExtension.FetchQuizResultHeader
-                    (dbContext, request.UserId, request.QuizId);*/
+                var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync
+                    (dbContext, request.UserId, request.QuizId);
 
                 // PLACEHOLDER
                 // Only to supress 500 status until we get the quzzes database
@@ -95,16 +95,16 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     (request.UserId,
                     request.QuestionId,
                     request.FinalScore,
-                    updatedQuestionResult.ReviewNeededAnswer,
-                    updatedQuestionResult.ReviewNeededResult);
+                    ((ReviewNeededQuestionResult)updatedQuestionResult).ReviewNeededAnswer,
+                    ((ReviewNeededQuestionResult)updatedQuestionResult).ReviewNeededResult);
 
                 var newQuizResultHeader = new QuizResultHeader
-                    (updatedHeader.QuizId,
-                    updatedHeader.UserId,
-                    updatedHeader.CompletionTime);
-                newQuizResultHeader.SubmittedAt = updatedHeader.SubmittedAt;
-                newQuizResultHeader.Score = updatedHeader.Score;
-                newQuizResultHeader.ReviewPending = updatedHeader.ReviewPending;
+                    (updatedHeader.Value.QuizId,
+                    updatedHeader.Value.UserId,
+                    updatedHeader.Value.CompletionTime);
+                newQuizResultHeader.SubmittedAt = updatedHeader.Value.SubmittedAt;
+                newQuizResultHeader.Score = updatedHeader.Value.Score;
+                newQuizResultHeader.ReviewPending = updatedHeader.Value.ReviewPending;
 
                 return new ReviewAnswerResponse
                 {
@@ -119,7 +119,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("api/reviewResult",
+            app.MapPut("api/quizResults/reviewResult",
                 async (Guid userId, Guid quizId, Guid questionId, float finalScore, ISender sender) =>
             {
                 var command = new ReviewAnswer.Command
