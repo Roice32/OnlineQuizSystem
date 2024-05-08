@@ -120,7 +120,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("api/reviewResult",
+            app.MapPut("api/quizResults/reviewResult",
                 async (Guid userId, Guid quizId, Guid questionId, float finalScore, ISender sender) =>
             {
                 var command = new ReviewAnswer.Command

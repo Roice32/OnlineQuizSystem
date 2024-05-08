@@ -66,7 +66,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/users/{userId}/takenHistory", async (Guid userId, ISender sender) =>
+            app.MapGet("api/quizResults/getTakenQuizzesHistory/{userId}", async (Guid userId, ISender sender) =>
             {
                 var query = new GetTakenQuizzesHistory.Query
                 {

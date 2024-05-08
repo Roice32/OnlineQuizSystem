@@ -62,7 +62,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/users/quizStats/{quizId}", async (Guid quizId, ISender sender) =>
+            app.MapGet("api/quizResults/getCreatedQuizStats/{quizId}", async (Guid quizId, ISender sender) =>
             {
                 var query = new GetCreatedQuizStats.Query
                 {

@@ -79,7 +79,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/processQuizSubmission/",
+            app.MapPost("api/quizResults/processQuizSubmission",
                 async (Guid quizId,
                     Guid takenBy,
                     string questionAnswerPairsJSON,
