@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.Shared;
+﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.Database;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions

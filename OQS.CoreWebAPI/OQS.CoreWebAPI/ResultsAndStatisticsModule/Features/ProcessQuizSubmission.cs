@@ -7,7 +7,6 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
 using Newtonsoft.Json;
-using System.Reflection;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {

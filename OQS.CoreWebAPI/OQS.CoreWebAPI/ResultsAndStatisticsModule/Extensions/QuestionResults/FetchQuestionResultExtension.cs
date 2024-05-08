@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
-using OQS.CoreWebAPI.Shared;
-
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
 {

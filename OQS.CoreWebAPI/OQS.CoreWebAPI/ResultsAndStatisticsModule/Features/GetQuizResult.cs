@@ -1,14 +1,7 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Shared;
-using System.Threading;
 using Carter;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
 using OQS.CoreWebAPI.Database;
 

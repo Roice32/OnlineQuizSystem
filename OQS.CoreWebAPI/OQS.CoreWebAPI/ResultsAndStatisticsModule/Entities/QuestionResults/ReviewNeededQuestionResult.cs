@@ -1,6 +1,4 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
-
-namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
+﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults
 {
     public class ReviewNeededQuestionResult: QuestionResultBase
     {

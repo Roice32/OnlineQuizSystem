@@ -2,7 +2,6 @@
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders

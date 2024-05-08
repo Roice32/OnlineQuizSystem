@@ -1,6 +1,5 @@
 ﻿using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders
 {

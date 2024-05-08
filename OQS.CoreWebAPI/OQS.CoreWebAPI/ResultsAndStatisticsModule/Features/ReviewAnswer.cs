@@ -1,6 +1,5 @@
 ﻿using Carter;
 using FluentValidation;
-using Mapster;
 using MediatR;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
