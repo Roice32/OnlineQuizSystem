@@ -6,6 +6,8 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
@@ -17,6 +19,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             public Guid TakenBy { get; set; }
             public List<QuestionAnswerPairBase> QuestionAnswerPairs { get; set; }
             public int TimeElapsed { get; set; }
+
         }
 
         public class Validator : AbstractValidator<Command>
@@ -45,7 +48,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         {
             private readonly RSMApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
-        
+
             public Handler(RSMApplicationDbContext context, IValidator<Command> validator)
             {
                 dbContext = dbContext;
@@ -62,12 +65,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         validationResult.ToString()));
                 }
 
-                QuizChecker.CheckQuiz(new QuizSubmission(request.QuizId, 
-                        request.TakenBy, 
-                        request.QuestionAnswerPairs, 
+                QuizChecker.CheckQuiz(new QuizSubmission(request.QuizId,
+                        request.TakenBy,
+                        request.QuestionAnswerPairs,
                         request.TimeElapsed),
                     dbContext);
-                
+
                 return true;
             }
         }
@@ -77,25 +80,27 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/processQuizSubmission",
-                async (QuizSubmission quizSubmission, ISender sender) =>
-            {
-                var command = new ProcessQuizSubmission.Command
-                {
-                    QuizId = quizSubmission.QuizId,
-                    TakenBy = quizSubmission.TakenBy,
-                    QuestionAnswerPairs = quizSubmission.QuestionAnswerPairs,
-                    TimeElapsed = quizSubmission.TimeElapsed
-                };
+            app.MapPost("api/processQuizSubmission/",
+            async (Guid QuizId, Guid TakenBy, string QuestionAnswerPairs, int TimeElapsed, ISender sender) =>
+        {
+          var questionAnswerPairs = JsonConvert.DeserializeObject<List<QuestionAnswerPairBase>>(QuestionAnswerPairs);
 
-                var result = await sender.Send(command);
-                if (result.IsFailure)
-                {
-                    return Results.BadRequest(result.Error);
-                }
+          var command = new ProcessQuizSubmission.Command
+          {
+              QuizId = QuizId,
+              TakenBy = TakenBy,
+              QuestionAnswerPairs = questionAnswerPairs,
+              TimeElapsed = TimeElapsed
+          };
 
-                return Results.Ok(result.Value);
-            });
+          var result = await sender.Send(command);
+          if (result.IsFailure)
+          {
+              return Results.BadRequest(result.Error);
+          }
+
+          return Results.Ok(result.Value);
+      });
         }
     }
 }
