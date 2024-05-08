@@ -3,37 +3,38 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 {
     public static class FetchQuizResultBodyExtension
     {
-        public static FetchQuizResultBodyResponse FetchQuizResultBody(this WebApplication application, Guid quizId, Guid userId)
+        public static async Task<FetchQuizResultBodyResponse> FetchQuizResultBodyAsync(this WebApplication application, Guid quizId, Guid userId)
         {
             using var scope = application.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
-            return FetchQuizResultBody(context, quizId, userId);
+            return await FetchQuizResultBodyAsync(context, quizId, userId);
         }
 
-        public static FetchQuizResultBodyResponse FetchQuizResultBody(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
+        public static async Task<FetchQuizResultBodyResponse> FetchQuizResultBodyAsync(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
         {
-            List<Guid> questionIds = dbContext.QuizResultBodies
+            List<Guid> questionIds = await dbContext.QuizResultBodies
                 .AsNoTracking()
                 .Where(q => q.QuizId == quizId && q.UserId == userId)
                 .Select(q => q.QuestionIds)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             // PLACEHOLDER
             // Until we get questions database.
             List<QuestionBase> questions = null; /*dbContext.Questions
                 .AsNoTracking()
                 .Where(q => questionIds.Contains(q.Id))
-                .ToList();*/
+                .ToListAsync();*/
 
-            List<QuestionResultBase> questionResults = dbContext.QuestionResults
+            List<QuestionResultBase> questionResults = await dbContext.QuestionResults
                 .AsNoTracking()
                 .Where(q => questionIds.Contains(q.QuestionId) && q.UserId == userId)
-                .ToList();
+                .ToListAsync();
 
             if(questions == null || questionResults == null)
             {
@@ -46,5 +47,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
                 QuestionResults = questionResults
             };
         }
+
+        internal static FetchQuizResultBodyResponse FetchQuizResultBody(RSMApplicationDbContext dbContext, Guid quizId, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

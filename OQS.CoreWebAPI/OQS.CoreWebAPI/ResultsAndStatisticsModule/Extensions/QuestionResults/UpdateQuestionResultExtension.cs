@@ -1,4 +1,5 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
+﻿using System.Threading.Tasks;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 
@@ -6,16 +7,16 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
 {
     public static class UpdateQuestionResultExtension
     {
-        public static void UpdateQuestionResult(this WebApplication application, Guid userId, Guid questionId, float score)
+        public static async Task UpdateQuestionResultAsync(this WebApplication application, Guid userId, Guid questionId, float score)
         {
             using var scope = application.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<RSMApplicationDbContext>();
-            UpdateQuestionResult(dbContext, userId, questionId, score);
+            await UpdateQuestionResultAsync(dbContext, userId, questionId, score);
         }
 
-        public static void UpdateQuestionResult(RSMApplicationDbContext dbContext, Guid userId, Guid questionId, float score)
+        public static async Task UpdateQuestionResultAsync(RSMApplicationDbContext dbContext, Guid userId, Guid questionId, float score)
         {
-            var uncastedQuestionResult = FetchQuestionResultExtension.FetchQuestionResult(dbContext, userId, questionId);
+            var uncastedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId);
             var questionResult = uncastedQuestionResult as ReviewNeededQuestionResult;
 
             // PLACEHOLDER
@@ -33,10 +34,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
             else
             {
                 // PLACEHOLDER
-                int maxPossibleScore = 100; /* dbContext.Questions
+                int maxPossibleScore = 100; /* await dbContext.Questions
                 .AsNoTracking()
                 .Select(q => q.AllocatedPoints)
-                .FirstOrDefault(q => q.Id = questionId);*/
+                .FirstOrDefaultAsync(q => q.Id = questionId);*/
                 if (score == maxPossibleScore)
                 {
                     questionResult.ReviewNeededResult = AnswerResult.Correct;
@@ -48,7 +49,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
             }
 
             dbContext.QuestionResults.Update(questionResult);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
     }
 }

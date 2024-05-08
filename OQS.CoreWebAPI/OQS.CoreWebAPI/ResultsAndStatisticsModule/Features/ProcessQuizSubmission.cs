@@ -45,10 +45,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         {
             private readonly RSMApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
-        
+
             public Handler(RSMApplicationDbContext context, IValidator<Command> validator)
             {
-                dbContext = dbContext;
+                dbContext = context;
                 this.validator = validator;
             }
 
@@ -62,12 +62,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         validationResult.ToString()));
                 }
 
-                QuizChecker.CheckQuiz(new QuizSubmission(request.QuizId, 
-                        request.TakenBy, 
-                        request.QuestionAnswerPairs, 
+                await QuizChecker.CheckQuizAsync(new QuizSubmission(request.QuizId,
+                        request.TakenBy,
+                        request.QuestionAnswerPairs,
                         request.TimeElapsed),
                     dbContext);
-                
+
                 return true;
             }
         }

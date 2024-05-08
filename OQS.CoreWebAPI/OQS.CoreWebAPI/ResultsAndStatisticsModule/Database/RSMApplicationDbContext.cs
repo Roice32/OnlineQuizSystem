@@ -18,6 +18,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Database
         public DbSet<ChoiceQuestionResult> ChoiceQuestionResults { get; set; }
         public DbSet<WrittenAnswerQuestionResult> WrittenAnswerQuestionResults { get; set; }
         public DbSet<ReviewNeededQuestionResult> ReviewNeededQuestionResults { get; set; }
+        public object Users { get; internal set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

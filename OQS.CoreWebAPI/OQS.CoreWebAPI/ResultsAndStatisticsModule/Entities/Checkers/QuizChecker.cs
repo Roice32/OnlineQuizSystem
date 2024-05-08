@@ -8,21 +8,23 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
     public abstract class QuizChecker
     {
-        public static void CheckQuiz(QuizSubmission toBeChecked, RSMApplicationDbContext dbContext)
+        public static async Task CheckQuizAsync(QuizSubmission toBeChecked, RSMApplicationDbContext dbContext)
         {
-            Quiz quizFromDb = FetchQuizFromDB(toBeChecked.QuizId, dbContext);
-            QuizResultBody resultBody = BuildQuizResultBody(toBeChecked, quizFromDb.Questions, dbContext);
+            Quiz quizFromDb = await FetchQuizFromDBAsync(toBeChecked.QuizId, dbContext);
+            QuizResultBody resultBody = await BuildQuizResultBodyAsync(toBeChecked, quizFromDb.Questions, dbContext);
             QuizResultHeader resultHeader = BuildQuizResultHeader(toBeChecked, resultBody, dbContext);
-            StoreQuizResult(resultHeader, resultBody, dbContext);
+            await StoreQuizResultAsync(resultHeader, resultBody, dbContext);
         }
-        private static Quiz FetchQuizFromDB(Guid QuizId, RSMApplicationDbContext dbContext)
+
+        private static async Task<Quiz> FetchQuizFromDBAsync(Guid QuizId, RSMApplicationDbContext dbContext)
         {
-            Quiz quizFromDb = null; /*dbContext.Quizzes
-                .AsNoTracking()
-                .FirstOrDefault(q => q.Id == QuizId);*/
+            Quiz quizFromDb = null; /* await dbContext.Quizzes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(q => q.Id == QuizId);*/
             return null;
         }
-        private static QuizResultBody BuildQuizResultBody(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, RSMApplicationDbContext dbContext)
+
+        private static async Task<QuizResultBody> BuildQuizResultBodyAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, RSMApplicationDbContext dbContext)
         {
             QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
                 toBeChecked.TakenBy,
@@ -30,13 +32,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             foreach (var question in questionsFromDb)
             {
                 QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs
-                    .FirstOrDefault(qaPair => qaPair.QuestionId == question.Id);
-                dbContext.QuestionResults.Add(QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question));
+                .FirstOrDefault(qaPair => qaPair.QuestionId == question.Id);
+                await dbContext.QuestionResults.AddAsync(QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question));
             }
-
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return resultBody;
         }
+
         private static QuizResultHeader BuildQuizResultHeader(QuizSubmission toBeChecked,
             QuizResultBody resultBody,
             RSMApplicationDbContext dbContext)
@@ -54,15 +56,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     ((ReviewNeededQuestionResult)questionResultBase).ReviewNeededResult == AnswerResult.Pending)
                     resultHeader.ReviewPending = true;
             }
-
             return resultHeader;
         }
 
-        private static void StoreQuizResult(QuizResultHeader resultHeader, QuizResultBody resultBody, RSMApplicationDbContext dbContext)
+        private static async Task StoreQuizResultAsync(QuizResultHeader resultHeader, QuizResultBody resultBody, RSMApplicationDbContext dbContext)
         {
-            dbContext.QuizResultBodies.Add(resultBody);
-            dbContext.QuizResultHeaders.Add(resultHeader);
-            dbContext.SaveChanges();
+            await dbContext.QuizResultBodies.AddAsync(resultBody);
+            await dbContext.QuizResultHeaders.AddAsync(resultHeader);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

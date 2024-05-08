@@ -39,16 +39,16 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         QuizResultHeaders = null
                     };
                 }
-                Dictionary<Guid, string> userNames = new();
-                foreach (var quiz in quizResultHeaders)
+                
+                var userNames = new Dictionary<Guid, string>();
+                /*foreach (var quiz in quizResultHeaders)
                 {
-                    // PLACEHOLDER
-                    string userName = "PLACEHOLDER"; /* await dbContext.Users
+                    string userName = await dbContext.Users
                         .AsNoTracking()
                         .Select(u => u.UserName)
-                        .FirstOrDefaultAsync(u => u.Id == quiz.UserId, cancellationToken);*/
+                        .FirstOrDefaultAsync(u => u.Id == quiz.UserId, cancellationToken);
                     userNames.Add(quiz.UserId, userName);
-                }
+                }*/
                 var createdQuizStatsResponse = new GetCreatedQuizStatsResponse
                 {
                     UserNames = new(userNames),

@@ -1,15 +1,8 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Shared;
-using System.Threading;
 using Carter;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Database;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
@@ -22,35 +15,35 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             public Guid UserId { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<GetQuizResultResponse>>
+       public class Handler : IRequestHandler<Query, Result<GetQuizResultResponse>>
+{
+    private readonly RSMApplicationDbContext dbContext;
+
+    public Handler(RSMApplicationDbContext context)
+    {
+        dbContext = context;
+    }
+
+    public async Task<Result<GetQuizResultResponse>> Handle(Query request, CancellationToken cancellationToken)
+    {
+        FetchQuizResultHeaderResponse quizResultHeader = 
+            await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, request.QuizId, request.UserId);
+
+        FetchQuizResultBodyResponse quizResultBody =
+            await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, request.QuizId, request.UserId);
+
+        if (quizResultHeader is null || quizResultBody is null)
+            return Result.Failure<GetQuizResultResponse>(
+                new Error("GetQuizResult.Handler",
+                "Quiz header and/or body returned null value"));
+
+        return new GetQuizResultResponse
         {
-            private readonly RSMApplicationDbContext dbContext;
-
-            public Handler(RSMApplicationDbContext context)
-            {
-                dbContext = context;
-            }
-
-            public async Task<Result<GetQuizResultResponse>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                FetchQuizResultHeaderResponse quizResultHeader = 
-                    FetchQuizResultHeaderExtension.FetchQuizResultHeader(dbContext, request.QuizId, request.UserId);
-
-                FetchQuizResultBodyResponse quizResultBody = 
-                    FetchQuizResultBodyExtension.FetchQuizResultBody(dbContext, request.QuizId, request.UserId);
-
-                if (quizResultHeader is null || quizResultBody is null)
-                    return Result.Failure<GetQuizResultResponse>(
-                        new Error("GetQuizResult.Handler",
-                        "Quiz header and/or body returned null value"));
-
-                return new GetQuizResultResponse
-                {
-                    QuizResultHeader = quizResultHeader,
-                    QuizResultBody = quizResultBody
-                };
-            }
-        }
+            QuizResultHeader = quizResultHeader,
+            QuizResultBody = quizResultBody
+        };
+    }
+}
     }
 
     public class GetQuizResultHeaderResponse : ICarterModule
