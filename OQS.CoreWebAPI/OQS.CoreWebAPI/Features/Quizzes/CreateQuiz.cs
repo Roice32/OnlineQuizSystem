@@ -19,7 +19,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
             public string ImageUrl { get; set; }
 
-            public string  Language { get; set; }
+            public string Language { get; set; }
             public Guid CreatorId { get; set; }
             public int TimeLimitMinutes { get; set; }
         }
@@ -30,11 +30,11 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             {
                 RuleFor(x => x.Name).NotEmpty();
 
-                RuleFor(x=>x.Language).NotEmpty();
-             
+                RuleFor(x => x.Language).NotEmpty();
+
                 RuleFor(x => x.CreatorId).NotEmpty();
 
-                RuleFor(x=>x.TimeLimitMinutes).NotEmpty();
+                RuleFor(x => x.TimeLimitMinutes).NotEmpty();
             }
         }
 
@@ -56,8 +56,9 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<Guid>(
                         new Error("CreateQuiz.Validator",
-                        validationResult.ToString()));
+                            validationResult.ToString()));
                 }
+
                 var quiz = new Quiz
                 {
                     Id = Guid.NewGuid(),
@@ -65,7 +66,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                     Description = request.Description,
                     ImageUrl = request.ImageUrl,
                     Language = request.Language,
-                    CreatorId=request.CreatorId,
+                    CreatorId = request.CreatorId,
                     TimeLimitMinutes = request.TimeLimitMinutes,
                     CreatedAt = DateTime.UtcNow
                 };
@@ -83,7 +84,7 @@ public class CreateQuizEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-         app.MapPost("api/quizzes", async (CreateQuizRequest request, ISender sender) =>
+        app.MapPost("api/quizzes", async (CreateQuizRequest request, ISender sender) =>
         {
             var command = request.Adapt<CreateQuiz.Command>();
             var result = await sender.Send(command);
@@ -91,6 +92,7 @@ public class CreateQuizEndPoint : ICarterModule
             {
                 return Results.BadRequest(result.Error);
             }
+
             return Results.Ok($"/api/quizzes/{result.Value}");
         });
     }
