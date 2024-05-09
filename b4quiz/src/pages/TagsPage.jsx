@@ -9,7 +9,7 @@ const TagsPage = () => {
     useEffect(() => {
         const fetchTags = async () => {
             try {
-                const response = await fetch('https://localhost:7117/api/tags');    
+                const response = await fetch('http://localhost:5276/api/tags');
                 if (!response.ok) {
                     throw new Error('Failed to fetch tags');
                 }
@@ -25,7 +25,7 @@ const TagsPage = () => {
 
     const handleUpdate = async (tagId) => {
         try {
-            const response = await fetch(`https://localhost:7117/api/tags/${tagId}`, {
+            const response = await fetch(`http://localhost:5276/api/tags/${tagId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ const TagsPage = () => {
 
     const handleDelete = async (tagId) => {
         try {
-            const response = await fetch(`https://localhost:7117/api/tags/${tagId}`, {
+            const response = await fetch(`http://localhost:5276/api/tags/${tagId}`, {
                 method: 'DELETE'
             });
 
@@ -68,7 +68,7 @@ const TagsPage = () => {
 
     const handleCreate = async () => {
         try {
-            const response = await fetch('https://localhost:7117/api/tags', {
+            const response = await fetch('http://localhost:5276/api/tags', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
