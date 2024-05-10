@@ -10,8 +10,8 @@ namespace OQS.CoreWebAPI.Features.Quizzes;
 public class GetActiveQuizById
 {
     public record Query(Guid ActiveQuizId) : IRequest<Result<ActiveQuizResponse>>;
-    
-    internal sealed class Handler : IRequestHandler<Query, Result<ActiveQuizResponse>>
+
+    public sealed class Handler : IRequestHandler<Query, Result<ActiveQuizResponse>>
     {
         private readonly ApplicationDBContext _context;
         

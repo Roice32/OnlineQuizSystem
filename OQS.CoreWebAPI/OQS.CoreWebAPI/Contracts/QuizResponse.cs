@@ -9,7 +9,7 @@ public class QuizResponse
     public string? Description { get; set; }
     public int TimeLimitMinutes { get; set; }
     public DateTime CreatedAt { get; set; }
-    public List<QuestionResponse> Questions { get; set; } = new();
+   
     
     public QuizResponse(Quiz quiz)
     {
@@ -18,7 +18,6 @@ public class QuizResponse
         Description = quiz.Description;
         TimeLimitMinutes = quiz.TimeLimitMinutes;
         CreatedAt = quiz.CreatedAt;
-        Questions = quiz.Questions.Select(q => new QuestionResponse(q)).ToList();
-    }
+        }
     
 }

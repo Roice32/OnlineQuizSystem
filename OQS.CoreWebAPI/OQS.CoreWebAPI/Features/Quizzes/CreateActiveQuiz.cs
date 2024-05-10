@@ -62,13 +62,7 @@ public class CreateActiveQuizEndPoint : ICarterModule
         {
             var quizCreation = new CreateActiveQuiz.QuizCreation(request.quizId, request.takenBy);
             var result = await sender.Send(quizCreation);
-            
-            if (result.IsFailure)
-            {
-                return Result.Failure(result.Error);
-            }
-            
-            return Result.Success(result.Value.Id);
+            return result;
         });
     }
 }   
