@@ -1,4 +1,5 @@
-﻿using OQS.CoreWebAPI.Database;
+﻿using FluentAssertions;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 
@@ -14,11 +15,11 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         public static void TempSeedQuestionResultsForTestingIfItWorks(ApplicationDbContext dbContext)
         {
-            ReviewNeededQuestionResult reviewNeededQuestionResult = new ReviewNeededQuestionResult(
+            QuestionResultBase reviewNeededQuestionResult = new ReviewNeededQuestionResult(
                 userId: Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 questionId: Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 score: 0.5f,
-                reviewNeededAnswer: "Some anwswer that needs reviewing.",
+                reviewNeededAnswer: "Some answer that needs reviewing.",
                 reviewNeededResult: AnswerResult.Correct);
             dbContext.QuestionResults.Add(reviewNeededQuestionResult);
             dbContext.SaveChanges();

@@ -19,9 +19,9 @@ namespace OQS.CoreWebAPI.Tests
         [Fact]
         public void DependencyTest()
         {
-            Assert.NotEqual(AnswerResult.Correct, AnswerResult.Pending);
+            AnswerResult.Correct.Should().NotBe(AnswerResult.Pending);
         }
-
+        
         [Fact]
         public async Task InMemoryDatabaseTest()
         {
@@ -34,6 +34,7 @@ namespace OQS.CoreWebAPI.Tests
                     Guid.Parse("00000000-0000-0000-0000-000000000001"))
                 as ReviewNeededQuestionResult;
 
+            supposedReviewNeededQuestionResult.Should().NotBeNull();
             supposedReviewNeededQuestionResult.ReviewNeededAnswer.Should().Be("Some answer that needs reviewing.");
         }
     }
