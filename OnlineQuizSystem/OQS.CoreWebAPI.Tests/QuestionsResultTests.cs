@@ -111,6 +111,35 @@ namespace OQS.CoreWebAPI.Tests
         }
 
         [Fact]
+        public async Task When_StoreQuestionResultIsCalled_Then_DatabaseEntryIsCreated()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var userId = Guid.Parse("00000000-0000-0000-0001-000000000001");
+            var questionId = Guid.Parse("00000000-0000-0000-0003-000000000006");
+            var questionResult = new TrueFalseQuestionResult
+            (
+                userId: userId,
+                questionId: questionId,
+                score: 0,
+                trueFalseAnswerResult: AnswerResult.Wrong
+            );
+
+            // Act
+            await StoreQuestionResultExtension.StoreQuestionResultAsync(dbContext, questionResult);
+            var result = await FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<TrueFalseQuestionResult>();
+            ((TrueFalseQuestionResult)result).TrueFalseAnswerResult.Should().Be(AnswerResult.Wrong);
+            result.Score.Should().Be(0);
+
+        }
+
+        [Fact]
         public void Given_IdsPairForNonexistentResult_When_UpdateQuestionResultIsCalled_Then_NullValueErrorIsReturned()
         {
             // Arrange
