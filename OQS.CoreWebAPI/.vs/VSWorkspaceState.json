@@ -5,6 +5,6 @@
     "\\OQS.CoreWebAPI\\Feautures",
     "\\OQS.CoreWebAPI\\Feautures\\Authentication"
   ],
-  "SelectedNode": "\\OQS.CoreWebAPI.sln",
+  "SelectedNode": "\\OQS.CoreWebAPI\\Feautures\\Authentication\\AuthService.cs",
   "PreviewInSolutionExplorer": false
 }

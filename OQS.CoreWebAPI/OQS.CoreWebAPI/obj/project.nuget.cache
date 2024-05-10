@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Dgj0mfPggKWiOiqpe9RxOFDh6WeaMFcplHAs7D0rSAXq9zroxxT9ZaX22Kvt/boiFDYc9tYJ+losxM1Vf1b4Og==",
+  "dgSpecHash": "ZEidnkqfx2M4K3GXTVXyeMslpulV5PLnA5cc5Pj0aRQnGuKwNkbggXaKsEn35QSJposaqDMt6M4NnaN6RhAY6Q==",
   "success": true,
   "projectFilePath": "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,12 @@
     "C:\\Users\\ivrem\\.nuget\\packages\\azure.identity\\1.10.4\\azure.identity.1.10.4.nupkg.sha512",
     "C:\\Users\\ivrem\\.nuget\\packages\\azure.security.keyvault.certificates\\4.5.1\\azure.security.keyvault.certificates.4.5.1.nupkg.sha512",
     "C:\\Users\\ivrem\\.nuget\\packages\\azure.security.keyvault.secrets\\4.5.0\\azure.security.keyvault.secrets.4.5.0.nupkg.sha512",
+    "C:\\Users\\ivrem\\.nuget\\packages\\carter\\8.0.0\\carter.8.0.0.nupkg.sha512",
+    "C:\\Users\\ivrem\\.nuget\\packages\\fluentvalidation\\11.9.1\\fluentvalidation.11.9.1.nupkg.sha512",
+    "C:\\Users\\ivrem\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.9.1\\fluentvalidation.dependencyinjectionextensions.11.9.1.nupkg.sha512",
     "C:\\Users\\ivrem\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\ivrem\\.nuget\\packages\\mapster\\7.4.0\\mapster.7.4.0.nupkg.sha512",
+    "C:\\Users\\ivrem\\.nuget\\packages\\mapster.core\\1.2.1\\mapster.core.1.2.1.nupkg.sha512",
     "C:\\Users\\ivrem\\.nuget\\packages\\mediatr\\12.2.0\\mediatr.12.2.0.nupkg.sha512",
     "C:\\Users\\ivrem\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
     "C:\\Users\\ivrem\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.0\\microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",

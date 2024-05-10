@@ -158,3 +158,8 @@ D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\obj\Debug\net8.0\refint\OQS.Co
 D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\obj\Debug\net8.0\OQS.CoreWebAPI.pdb
 D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\obj\Debug\net8.0\OQS.CoreWebAPI.genruntimeconfig.cache
 D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\obj\Debug\net8.0\ref\OQS.CoreWebAPI.dll
+D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\Carter.dll
+D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\FluentValidation.dll
+D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
+D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\Mapster.dll
+D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\Mapster.Core.dll

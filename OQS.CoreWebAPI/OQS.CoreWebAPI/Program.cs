@@ -7,7 +7,7 @@ using OQS.CoreWebAPI.Feautures.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adaugã serviciile la container.
+// Adaug? serviciile la container.
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
@@ -19,7 +19,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Adaugã configurarea pentru CORS
+// Adaug? configurarea pentru CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -36,7 +36,7 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Injecta
 
 var app = builder.Build();
 
-// Configureazã pipeline-ul de cereri HTTP.
+// Configureaz? pipeline-ul de cereri HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -47,7 +47,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
-// Adaugã configurarea pentru CORS aici
+// Adaug? configurarea pentru CORS aici
 app.UseCors("AllowSpecificOrigin");
 
 

@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,11 +13,13 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
     {
         private readonly UserManager<User> userManager;
         private readonly IConfiguration configuration;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AuthService(UserManager<User> userManager,  IConfiguration configuration)
+        public AuthService(UserManager<User> userManager,  IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
-            this.configuration = configuration; // Atribuirea obiectului IConfiguration
+            this.configuration = configuration;
+            this.roleManager = roleManager;
         }
 
         public async Task<(int, string)> Registration(RegistrationModel model)
@@ -37,7 +40,8 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
             if (!createUserResult.Succeeded)
                 return (0, "User creation failed! Please check user details and try again.");
 
-
+            if (await roleManager.RoleExistsAsync(UserRole.User))
+                await userManager.AddToRoleAsync(user, UserRole.User);
 
             return (1, "User created successfully!");
         }
@@ -63,7 +67,8 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
             }
 
             string token = GenerateToken(authClaims);
-            return (1, "User logged out successfully!");
+
+            return (1,token); // aici ar trebui returnat tokenul
         }
 
         private string GenerateToken(IEnumerable<Claim> claims)
