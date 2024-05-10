@@ -1,4 +1,5 @@
-﻿using OQS.CoreWebAPI.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.Shared;
@@ -17,13 +18,24 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
         public static async Task<Result> UpdateQuestionResultAsync(ApplicationDbContext dbContext, Guid userId, Guid questionId, float score)
         {
             var uncastedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId);
-            var questionResult = uncastedQuestionResult as ReviewNeededQuestionResult;
-
-            // PLACEHOLDER
-            // Only for testing API till we get quizzes database.
-            if(questionResult is null)
+            if (uncastedQuestionResult is null)
             {
                 return Result.Failure(Error.NullValue);
+            }
+
+            if (uncastedQuestionResult is not ReviewNeededQuestionResult)
+            {
+                return Result.Failure(Error.InvalidType);
+            }
+            var questionResult = uncastedQuestionResult as ReviewNeededQuestionResult;
+            var questionFromDb = await dbContext
+                .Questions
+                .AsNoTracking()
+                .FirstOrDefaultAsync(q => q.Id == questionId);
+
+            if(score < 0 || score > questionFromDb.AllocatedPoints)
+            {
+                return Result.Failure(Error.OutOfBoundsValue);
             }
 
             questionResult.Score = score;
@@ -33,13 +45,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
             }
             else
             {
-                // PLACEHOLDER
-                int maxPossibleScore = 100; /* await dbContext
-                .Questions
-                .AsNoTracking()
-                .Select(q => q.AllocatedPoints)
-                .FirstOrDefaultAsync(q => q.Id = questionId);*/
-                if (score == maxPossibleScore)
+                if (score == questionFromDb.AllocatedPoints)
                 {
                     questionResult.ReviewNeededResult = AnswerResult.Correct;
                 }
