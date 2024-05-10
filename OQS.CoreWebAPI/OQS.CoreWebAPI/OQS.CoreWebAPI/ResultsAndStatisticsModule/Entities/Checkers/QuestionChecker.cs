@@ -23,10 +23,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     return CheckWrittenAnswerQuestion(userId, qaPair, questionFromDb);
                 default:
                     return CheckReviewNeededQuestion(userId, qaPair, questionFromDb);
-                    break;
             }
-            // PLACEHOLDER
-            return null;
         }
 
         private static TrueFalseQuestionResult CheckTrueFalseQuestion(Guid userId,
@@ -62,10 +59,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 return new ChoiceQuestionResult(userId,
                 questionFromDb.Id,
                 0,
-                "");
+                JsonConvert.SerializeObject(new Dictionary<string, AnswerResult>()));
             }
 
             Dictionary<string, AnswerResult> allChoicesResults = new();
+            int correctCount = 0;
+            int wrongCount = 0;
+            int notPickedCount = 0;
             foreach (var choice in ((ChoiceQuestionBase)questionFromDb).Choices)
             {
                 if(((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Contains(choice))
@@ -73,10 +73,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     if (((MultipleChoiceQAPair)qaPair).MultipleChoiceAnswers.Contains(choice))
                     {
                         allChoicesResults.Add(choice, AnswerResult.Correct);
+                        correctCount++;
                     }
                     else
                     {
                         allChoicesResults.Add(choice, AnswerResult.CorrectNotPicked);
+                        notPickedCount++;
                     }
                 }
                 else
@@ -84,6 +86,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     if (((MultipleChoiceQAPair)qaPair).MultipleChoiceAnswers.Contains(choice))
                     {
                         allChoicesResults.Add(choice, AnswerResult.Wrong);
+                        wrongCount++;
                     }
                     else
                     {
@@ -92,10 +95,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 }
             }
 
-            int correctCount = allChoicesResults.Count(r => r.Value == AnswerResult.Correct);
-            int wrongCount = allChoicesResults.Count(r => r.Value == AnswerResult.Wrong);
-            float scorePercentage = Math.Max(0, correctCount - wrongCount) /
-                ((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Count;
+            float scorePercentage = 1f * Math.Max(0, correctCount - wrongCount) / 
+                (correctCount + notPickedCount);
 
             string pseudoDictionaryChoicesResults = JsonConvert.SerializeObject(allChoicesResults);
             return new ChoiceQuestionResult(userId,
@@ -113,7 +114,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 return new ChoiceQuestionResult(userId,
                     questionFromDb.Id,
                     0,
-                    "");
+                    JsonConvert.SerializeObject(new Dictionary<string, AnswerResult>()));
             }
 
             Dictionary<string, AnswerResult> allChoicesResults = new();
@@ -146,7 +147,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             string pseudoDictionaryChoicesResults = JsonConvert.SerializeObject(allChoicesResults);
             return new ChoiceQuestionResult(userId,
                 qaPair.QuestionId,
-                questionFromDb.AllocatedPoints,
+                allChoicesResults.ContainsValue(AnswerResult.Correct) ?
+                    questionFromDb.AllocatedPoints :
+                    0,
                 pseudoDictionaryChoicesResults);
         }
 
