@@ -3,7 +3,6 @@ using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
-using System.Security.Policy;
 
 namespace OQS.CoreWebAPI.Tests.SetUp
 {
