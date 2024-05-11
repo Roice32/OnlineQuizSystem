@@ -24,22 +24,20 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
                 .Select(q => q.QuestionIds)
                 .FirstOrDefaultAsync();
 
-            // PLACEHOLDER
-            // Until we get questions database.
-            List<QuestionBase> questions = null; /*dbContext.Questions
+            if (questionIds == null)
+            {
+                return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
+            }
+
+            List<QuestionBase> questions = dbContext.Questions
                 .AsNoTracking()
                 .Where(q => questionIds.Contains(q.Id))
-                .ToList();*/
+                .ToList();
 
             List<QuestionResultBase> questionResults = await dbContext.QuestionResults
                 .AsNoTracking()
                 .Where(q => questionIds.Contains(q.QuestionId) && q.UserId == userId)
                 .ToListAsync();
-
-            if(questions == null || questionResults == null)
-            {
-                return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
-            }
 
             return new FetchQuizResultBodyResponse
             {
