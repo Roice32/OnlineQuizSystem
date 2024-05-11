@@ -11,19 +11,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             QuestionAnswerPairBase qaPair,
             QuestionBase questionFromDb)
         {
-            switch (questionFromDb.Type)
+            return questionFromDb.Type switch
             {
-                case QuestionType.TrueFalse:
-                    return CheckTrueFalseQuestion(userId, qaPair, questionFromDb);
-                case QuestionType.MultipleChoice:
-                    return CheckMultipleChoiceQuestion(userId, qaPair, questionFromDb);
-                case QuestionType.SingleChoice:
-                    return CheckSingleChoiceQuestion(userId, qaPair, questionFromDb);
-                case QuestionType.WrittenAnswer:
-                    return CheckWrittenAnswerQuestion(userId, qaPair, questionFromDb);
-                default:
-                    return CheckReviewNeededQuestion(userId, qaPair, questionFromDb);
-            }
+                QuestionType.TrueFalse => CheckTrueFalseQuestion(userId, qaPair, questionFromDb),
+                QuestionType.MultipleChoice => CheckMultipleChoiceQuestion(userId, qaPair, questionFromDb),
+                QuestionType.SingleChoice => CheckSingleChoiceQuestion(userId, qaPair, questionFromDb),
+                QuestionType.WrittenAnswer => CheckWrittenAnswerQuestion(userId, qaPair, questionFromDb),
+                _ => CheckReviewNeededQuestion(userId, qaPair, questionFromDb),
+            };
         }
 
         private static TrueFalseQuestionResult CheckTrueFalseQuestion(Guid userId,

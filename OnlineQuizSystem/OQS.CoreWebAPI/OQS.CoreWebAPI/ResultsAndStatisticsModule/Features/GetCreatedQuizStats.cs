@@ -24,6 +24,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
             public async Task<Result<GetCreatedQuizStatsResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var requestedQuiz = await dbContext.Quizzes
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(quiz => quiz.Id == request.QuizId, cancellationToken);
+
+                if(requestedQuiz is null)
+                {
+                    return Result.Failure<GetCreatedQuizStatsResponse>(Error.NullValue);
+                }
+
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                     .AsNoTracking()
                     .Where(quiz => quiz.QuizId == request.QuizId)
@@ -33,23 +42,26 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 {
                     return new GetCreatedQuizStatsResponse
                     {
-                        QuizName = null,
-                        UserNames = null,
-                        QuizResultHeaders = null
+                        QuizName = requestedQuiz.Name,
+                        UserNames = [],
+                        QuizResultHeaders = []
                     };
                 }
+
                 Dictionary<Guid, string> userNames = new();
                 foreach (var quiz in quizResultHeaders)
                 {
-                    // PLACEHOLDER
-                    string userName = "PLACEHOLDER"; /* await dbContext.Users
+                    string userName = await dbContext.Users
                         .AsNoTracking()
-                        .Select(u => u.UserName)
-                        .FirstOrDefaultAsync(u => u.Id == quiz.UserId, cancellationToken);*/
+                        .Where(user => user.Id == quiz.UserId)
+                        .Select(user => user.Name)
+                        .FirstOrDefaultAsync(cancellationToken);
                     userNames.Add(quiz.UserId, userName);
                 }
+
                 var createdQuizStatsResponse = new GetCreatedQuizStatsResponse
                 {
+                    QuizName = requestedQuiz.Name,
                     UserNames = new(userNames),
                     QuizResultHeaders = new(quizResultHeaders),
                 };

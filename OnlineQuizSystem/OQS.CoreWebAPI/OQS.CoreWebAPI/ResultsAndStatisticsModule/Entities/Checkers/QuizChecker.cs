@@ -2,43 +2,53 @@
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
     public abstract class QuizChecker
     {
-        public static async Task CheckQuizAsync(QuizSubmission toBeChecked, ApplicationDbContext dbContext)
+        public static async Task<Result> CheckQuizAsync(QuizSubmission toBeChecked, ApplicationDbContext dbContext)
         {
-            Quiz quizFromDb = await FetchQuizFromDbAsync(toBeChecked.QuizId, dbContext);
-            QuizResultBody resultBody = await BuildQuizResultBodyAsync(toBeChecked, quizFromDb.Questions, dbContext);
-            QuizResultHeader resultHeader = BuildQuizResultHeader(toBeChecked, resultBody, dbContext);
-            await StoreQuizResultAsync(resultHeader, resultBody, dbContext);
-        }
-        private static async Task<Quiz> FetchQuizFromDbAsync(Guid QuizId, ApplicationDbContext dbContext)
-        {
-            Quiz quizFromDb = null; /* await dbContext
-                .Quizzes
+            bool quizAlreadyTaken = await dbContext.QuizResultHeaders
+                .AnyAsync(qrh => qrh.QuizId == toBeChecked.QuizId && qrh.UserId == toBeChecked.TakenBy);
+            if(quizAlreadyTaken)
+            {
+                return Result.Failure(Error.DuplicateEntity);
+            }
+
+            Quiz quizFromDb = await dbContext.Quizzes
                 .AsNoTracking()
-                .FirstOrDefaultAsync(q => q.Id == QuizId);*/
-            return null;
+                .FirstOrDefaultAsync(q => q.Id == toBeChecked.QuizId);
+            if (quizFromDb is null)
+            {
+                return Result.Failure(Error.NullValue);
+            }
+
+            QuizResultBody resultBody = await BuildQuizResultBodyAsync(toBeChecked, quizFromDb.Questions, dbContext);
+            QuizResultHeader resultHeader = await BuildQuizResultHeaderAsync(toBeChecked, resultBody, dbContext);
+            return await StoreQuizResultAsync(resultHeader, resultBody, dbContext);
         }
+
         private static async Task<QuizResultBody> BuildQuizResultBodyAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
         {
             QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
                 toBeChecked.TakenBy,
-                toBeChecked.QuestionAnswerPairs.Select(qaPair => qaPair.QuestionId).ToList());
+                new List<Guid>(questionsFromDb.Select(qfdb => qfdb.Id)));
             foreach (var question in questionsFromDb)
             {
                 QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs
                     .FirstOrDefault(qaPair => qaPair.QuestionId == question.Id);
-                await dbContext.QuestionResults.AddAsync(QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question));
+                QuestionResultBase questionResult = QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question);
+                await StoreQuestionResultExtension.StoreQuestionResultAsync(dbContext, questionResult);
             }
 
-            await dbContext.SaveChangesAsync();
             return resultBody;
         }
-        private static QuizResultHeader BuildQuizResultHeader(QuizSubmission toBeChecked,
+
+        private static async Task<QuizResultHeader> BuildQuizResultHeaderAsync(QuizSubmission toBeChecked,
             QuizResultBody resultBody,
             ApplicationDbContext dbContext)
         {
@@ -59,11 +69,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             return resultHeader;
         }
 
-        private static async Task StoreQuizResultAsync(QuizResultHeader resultHeader, QuizResultBody resultBody, ApplicationDbContext dbContext)
+        private static async Task<Result> StoreQuizResultAsync(QuizResultHeader resultHeader, QuizResultBody resultBody, ApplicationDbContext dbContext)
         {
             await dbContext.QuizResultBodies.AddAsync(resultBody);
             await dbContext.QuizResultHeaders.AddAsync(resultHeader);
             await dbContext.SaveChangesAsync();
+            return Result.Success();
         }
     }
 }
