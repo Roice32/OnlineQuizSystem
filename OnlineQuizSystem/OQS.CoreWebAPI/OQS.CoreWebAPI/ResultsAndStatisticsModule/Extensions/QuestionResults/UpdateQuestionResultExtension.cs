@@ -27,6 +27,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
             {
                 return Result.Failure(Error.InvalidType);
             }
+
             var questionResult = uncastedQuestionResult as ReviewNeededQuestionResult;
             var questionFromDb = await dbContext
                 .Questions
@@ -36,6 +37,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
             if(score < 0 || score > questionFromDb.AllocatedPoints)
             {
                 return Result.Failure(Error.OutOfBoundsValue);
+            }
+
+            if(questionResult.ReviewNeededResult != AnswerResult.Pending)
+            {
+                return Result.Failure(Error.ConditionNotMet);
             }
 
             questionResult.Score = score;

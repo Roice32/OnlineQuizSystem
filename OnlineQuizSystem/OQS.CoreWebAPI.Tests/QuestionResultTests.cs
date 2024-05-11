@@ -188,7 +188,7 @@ namespace OQS.CoreWebAPI.Tests
         }
 
         [Fact]
-        public void Given_ValidParameters_When_UpdateQuestionResultIsCalled_Then_ResultIsUpdatedInDatabase()
+        public void Given_IdsPairForResultAlreadyReviewed_When_UpdateQuestionResultIsCalled_Then_ConditionNotMetIsReturned()
         {
             // Arrange
             using var scope = Application.Services.CreateScope();
@@ -197,27 +197,69 @@ namespace OQS.CoreWebAPI.Tests
             var userId = Guid.Parse("00000000-0000-0000-0001-000000000001");
             var questionId = Guid.Parse("00000000-0000-0000-0003-000000000005");
 
+            // Act
+            var result = UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 2).Result;
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(Error.ConditionNotMet);
+        }
+
+        [Fact]
+        public void Given_ZeroScore_When_UpdateQuestionResultIsCalled_Then_WrongAnswerIsStoredInDatabase()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var userId = Guid.Parse("00000000-0000-0000-0001-000000000003");
+            var questionId = Guid.Parse("00000000-0000-0000-0003-000000000008");
+
             // Act & Assert
-            var result1 = UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 0).Result;
-            result1.Should().BeEquivalentTo(Result.Success());
-            var updatedResult1 = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId).Result;
-            updatedResult1.Should().NotBeNull();
-            updatedResult1.Should().BeOfType<ReviewNeededQuestionResult>();
-            ((ReviewNeededQuestionResult)updatedResult1).ReviewNeededResult.Should().Be(AnswerResult.Wrong);
+            var result = UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 0).Result;
+            result.IsSuccess.Should().BeTrue();
+            var updatedResult = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId).Result;
+            updatedResult.Should().NotBeNull();
+            updatedResult.Should().BeOfType<ReviewNeededQuestionResult>();
+            ((ReviewNeededQuestionResult)updatedResult).ReviewNeededResult.Should().Be(AnswerResult.Wrong);
+        }
 
-            var result2 = UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 1).Result;
-            result2.Should().BeEquivalentTo(Result.Success());
-            var updatedResult2 = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId).Result;
-            updatedResult2.Should().NotBeNull();
-            updatedResult2.Should().BeOfType<ReviewNeededQuestionResult>();
-            ((ReviewNeededQuestionResult)updatedResult2).ReviewNeededResult.Should().Be(AnswerResult.PartiallyCorrect);
+        [Fact]
+        public void Given_PartialScore_When_UpdateQuestionResultIsCalled_Then_PartiallyCorrectAnswerIsStoredInDatabase()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            var result3 = UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 6).Result;
-            result3.Should().BeEquivalentTo(Result.Success());
-            var updatedResult3 = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId).Result;
-            updatedResult3.Should().NotBeNull();
-            updatedResult3.Should().BeOfType<ReviewNeededQuestionResult>();
-            ((ReviewNeededQuestionResult)updatedResult3).ReviewNeededResult.Should().Be(AnswerResult.Correct);
+            var userId = Guid.Parse("00000000-0000-0000-0001-000000000003");
+            var questionId = Guid.Parse("00000000-0000-0000-0003-000000000008");
+
+            // Act & Assert
+            var result = UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 1).Result;
+            result.IsSuccess.Should().BeTrue();
+            var updatedResult = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId).Result;
+            updatedResult.Should().NotBeNull();
+            updatedResult.Should().BeOfType<ReviewNeededQuestionResult>();
+            ((ReviewNeededQuestionResult)updatedResult).ReviewNeededResult.Should().Be(AnswerResult.PartiallyCorrect);
+        }
+
+        [Fact]
+        public void Given_MaxScore_When_UpdateQuestionResultIsCalled_Then_CorrectAnswerIsStoredInDatabase()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var userId = Guid.Parse("00000000-0000-0000-0001-000000000003");
+            var questionId = Guid.Parse("00000000-0000-0000-0003-000000000008");
+
+            // Act & Assert
+            var result = UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 5).Result;
+            result.IsSuccess.Should().BeTrue();
+            var updatedResult = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId).Result;
+            updatedResult.Should().NotBeNull();
+            updatedResult.Should().BeOfType<ReviewNeededQuestionResult>();
+            ((ReviewNeededQuestionResult)updatedResult).ReviewNeededResult.Should().Be(AnswerResult.Correct);
         }
     }
 }

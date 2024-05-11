@@ -9,7 +9,13 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders
         {
             using var scope = application.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            dbContext.QuizResultHeaders.AddAsync(quizResultHeader);
+            await StoreQuizResultHeaderAsync(dbContext, quizResultHeader);
+        }
+
+        public static async Task StoreQuizResultHeaderAsync(ApplicationDbContext dbContext, QuizResultHeader quizResultHeader)
+        {
+            await dbContext.QuizResultHeaders.AddAsync(quizResultHeader);
+            await dbContext.SaveChangesAsync();
         }
     }
 }
