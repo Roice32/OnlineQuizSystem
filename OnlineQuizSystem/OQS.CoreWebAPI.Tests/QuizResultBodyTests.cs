@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultBodies;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System;
 using System.Collections.Generic;
@@ -26,11 +28,11 @@ namespace OQS.CoreWebAPI.Tests
             var quizId = Guid.Parse("00000000-0000-0000-0002-000000000003");
 
             // Act
-            var result = (await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, quizId, userId)).Value;
+            var result = (await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, quizId, userId));
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType<FetchQuizResultBodyResponse>();
+            result.IsSuccess.Should().BeTrue(); //  BeOfType<FetchQuizResultBodyResponse>();
 
             List<Guid> questionIds = await dbContext.QuizResultBodies
                 .AsNoTracking()
@@ -38,7 +40,8 @@ namespace OQS.CoreWebAPI.Tests
                 .Select(q => q.QuestionIds)
                 .FirstOrDefaultAsync();
 
-            questionIds.Should().NotBeNull();   
+            questionIds.Should().NotBeNull();  
+            questionIds.Count.Should().Be(2);
             questionIds.Should().Contain(
                 new List<Guid>
                 {
@@ -48,7 +51,7 @@ namespace OQS.CoreWebAPI.Tests
                   });
         }
 
-        [Fact]
+        [Fact] 
         public void Given_IdsPairForNonexistentQuizResultBody_When_FetchQuizResultBodyIsCalled_Then_NullValueIsReturned()
         {
             // Arrange
@@ -61,6 +64,49 @@ namespace OQS.CoreWebAPI.Tests
             // Act
             var result = FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, quizId, userId).Result;
             result.IsFailure.Should().BeTrue();
-        } 
+        }
+
+        [Fact]
+        public async Task When_StoreQuizResultBodyIsCalled_Then_DatabaseEntryIsCreatedAsync()
+        {
+            // Arrange
+
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var userId = Guid.Parse("00000000-0000-0000-0001-000000000002");
+            var quizId = Guid.Parse("00000000-0000-0000-0002-000000000002");
+
+            var body = new QuizResultBody
+            (
+                    quizId: quizId,
+                    userId: userId,
+                    questionIds: new List<Guid>
+                    {
+                    Guid.Parse("00000000-0000-0000-0003-000000000007"),
+                    Guid.Parse("00000000-0000-0000-0003-000000000008")
+                }
+           );
+
+            // Act
+            await StoreQuizResultBodyExtension.StoreQuizResultBodyAsync(dbContext, body);
+
+            // Assert
+            var storedBody = await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, quizId, userId);
+            storedBody.IsSuccess.Should().BeTrue();
+
+            List<Guid> questionIds = await dbContext.QuizResultBodies
+                .AsNoTracking()
+                .Where(q => q.UserId == userId && q.QuizId == quizId)
+                .Select(q => q.QuestionIds)
+                .FirstOrDefaultAsync();
+            questionIds.Should().Contain(
+                               new List<Guid>
+                               {
+                    Guid.Parse("00000000-0000-0000-0003-000000000007"),
+                    Guid.Parse("00000000-0000-0000-0003-000000000008")
+                });
+
+        }
     }
 }
