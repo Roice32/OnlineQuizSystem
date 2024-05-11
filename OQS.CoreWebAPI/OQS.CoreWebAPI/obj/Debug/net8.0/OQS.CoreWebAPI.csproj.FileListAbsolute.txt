@@ -163,3 +163,5 @@ D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\FluentValidat
 D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
 D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\Mapster.dll
 D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\Mapster.Core.dll
+D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\SendGrid.dll
+D:\Repos\OnlineQuiz\OQS.CoreWebAPI\OQS.CoreWebAPI\bin\Debug\net8.0\StarkbankEcdsa.dll

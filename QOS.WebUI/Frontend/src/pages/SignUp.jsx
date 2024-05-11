@@ -88,7 +88,7 @@ function SignUp() {
         console.log(userValues);
         e.preventDefault();
         try {
-            const response = await axios.post('https://localhost:7117/api/authentication/registration', userValues);
+            const response = await axios.post('https://localhost:7117/api/registration', userValues);
             console.log(response);
             setResponse(response.data);
         } catch (error) {

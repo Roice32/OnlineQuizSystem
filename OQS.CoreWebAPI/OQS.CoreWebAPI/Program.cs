@@ -1,5 +1,8 @@
+﻿using Carter;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Extensions;
@@ -7,9 +10,7 @@ using OQS.CoreWebAPI.Feautures.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adaug? serviciile la container.
-builder.Services.AddControllers();
-builder.Services.AddHttpContextAccessor();
+// Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -17,9 +18,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Adaug? configurarea pentru CORS
+var assembly = typeof(Program).Assembly;
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
+builder.Services.AddValidatorsFromAssembly(assembly);
+builder.Services.AddCarter();
+
+// Pentru trimiterea email-urilor
+builder.Services.AddTransient<IEmailSender, EmailService>();
+
+
+// Add configuration for CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -31,12 +40,10 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Injectarea IConfiguration
-
 
 var app = builder.Build();
 
-// Configureaz? pipeline-ul de cereri HTTP.
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -44,16 +51,14 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
+app.MapCarter();
 app.UseHttpsRedirection();
-app.UseAuthorization();
 
-// Adaug? configurarea pentru CORS aici
+// Add configuration for CORS here
 app.UseCors("AllowSpecificOrigin");
 
+// Replace the ASP.NET Core routing with Carter's routing
 
-
-
-app.MapControllers();
 
 var host = app.Services.GetRequiredService<IWebHostEnvironment>();
 var urls = builder.Configuration["Urls"] ?? "http://localhost:5000";

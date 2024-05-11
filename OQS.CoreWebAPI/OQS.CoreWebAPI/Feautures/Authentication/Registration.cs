@@ -5,13 +5,14 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Feautures.Authentication;
 using OQS.CoreWebAPI.Shared;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Feautures.Authentication
 {
-    public class Register
+    public class Registration
     {
         public record Command : IRequest<Result<Guid>>
         {
@@ -22,8 +23,8 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
             public string Password { get; set; }
         }
 
-        public class  Validator : AbstractValidator<Command>
-        { 
+        public class Validator : AbstractValidator<Command>
+        {
             public Validator()
             {
                 RuleFor(x => x.Username).NotEmpty();
@@ -39,12 +40,14 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
             private readonly UserManager<User> userManager;
             private readonly RoleManager<IdentityRole> roleManager;
             private readonly IValidator<Command> validator;
+            private readonly IEmailSender emailService;
 
-            public Handler(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IValidator<Command> validator)
+            public Handler(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IValidator<Command> validator, IEmailSender emailService)
             {
                 this.userManager = userManager;
                 this.roleManager = roleManager;
                 this.validator = validator;
+                this.emailService = emailService;
             }
 
             public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
@@ -84,39 +87,39 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
                     await userManager.AddToRoleAsync(user, UserRole.User);
                 }
 
+            //    await emailService.SendEmailAsync(request.Email, "Welcome to OQS", "Welcome to OQS");
+
                 return Result.Success(Guid.Parse(user.Id));
             }
         }
 
-        public class RegistrationEndPoind : ICarterModule
-        {
-            public void AddRoutes(IEndpointRouteBuilder app)
-            {
-                _ = app.MapPost("api/registration", async (RegistrationModel model, ISender sender) =>
-                {
-                    var command = new Register.Command
-                    {
-                        Username = model.Username,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Email = model.Email,
-                        Password = model.Password
-                    };
-
-                   
-                    var result = await sender.Send(command);
-                    if (result.IsSuccess)
-                    {
-                        return Results.Ok(new { message = result.Value });
-                    }
-                    else
-                    {
-                        return Results.BadRequest(new { error = result.Error });
-                    }
-                });
-            }
-        }
     }
+}
+public class RegistrationEndPoind : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        _ = app.MapPost("api/registration", async (RegistrationModel model, ISender sender) =>
+        {
+            var command = new Registration.Command
+            {
+                Username = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Password = model.Password
+            };
 
-    
+
+            var result = await sender.Send(command);
+            if (result.IsSuccess)
+            {
+                return Results.Ok(new { message = "User created successfully!" });
+            }
+            else
+            {
+                return Results.Ok(new { message = result.Error.Message });
+            }
+        });
+    }
 }

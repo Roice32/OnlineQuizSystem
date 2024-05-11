@@ -43,7 +43,7 @@ function SignIn() {
 
     try {
         const response = await axios.post(
-            'https://localhost:7117/api/Authentication/login',
+            'https://localhost:7117/api/authentication',
             { username, password }
         );
 
