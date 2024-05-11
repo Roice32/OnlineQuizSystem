@@ -29,4 +29,20 @@
     <PackageReference Include="xunit" Version="2.8.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
+
 </Project>
