@@ -62,7 +62,8 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Description = "Description1",
                     Questions = new(questions[..5]),
                     TimeLimitMinutes = 20,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
                 },
                 new Quiz
                 {
@@ -71,7 +72,8 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Description = "Description2",
                     Questions = new(questions.Slice(5, 1)),
                     TimeLimitMinutes = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000001")
                 },
                 new Quiz
                 {
@@ -80,7 +82,8 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Description = "Description3",
                     Questions = new(questions.Slice(6, 2)),
                     TimeLimitMinutes = 10,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
                 }
             };
 

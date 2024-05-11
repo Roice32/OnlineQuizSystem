@@ -17,11 +17,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         }
         private static async Task<Quiz> FetchQuizFromDbAsync(Guid QuizId, ApplicationDbContext dbContext)
         {
-            Quiz quizFromDb = null; /* await dbContext
+            Quiz quizFromDb = await dbContext
                 .Quizzes
                 .AsNoTracking()
-                .FirstOrDefaultAsync(q => q.Id == QuizId);*/
-            return null;
+                .FirstOrDefaultAsync(q => q.Id == QuizId);
+            return quizFromDb;
         }
         private static async Task<QuizResultBody> BuildQuizResultBodyAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
         {

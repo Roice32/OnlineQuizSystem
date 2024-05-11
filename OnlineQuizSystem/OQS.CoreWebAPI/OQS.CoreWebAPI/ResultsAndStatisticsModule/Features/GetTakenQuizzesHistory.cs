@@ -43,11 +43,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 Dictionary<Guid, string> quizNames = new();
                 foreach (var quiz in quizResultHeaders)
                 {
-                    // PLACEHOLDER
-                    string quizName = "PLACEHOLDER"; /* await dbContext.Quizzes
+                    string quizName = await dbContext.Quizzes
                         .AsNoTracking()
+                        .Where(q => q.Id == quiz.QuizId)
                         .Select(q => q.Name)
-                        .FirstOrDefaultAsync(q => q.Id == quiz.QuizId, cancellationToken);*/
+                        .FirstOrDefaultAsync(cancellationToken);
                     quizNames.Add(quiz.QuizId, quizName);
                 }
 
