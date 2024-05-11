@@ -9,5 +9,6 @@
         public int TimeLimitMinutes { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        public Guid CreatorId { get; set; }
     }
 }
