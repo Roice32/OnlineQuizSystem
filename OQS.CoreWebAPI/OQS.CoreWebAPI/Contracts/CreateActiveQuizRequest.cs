@@ -4,7 +4,7 @@ namespace OQS.CoreWebAPI.Contracts;
 
 public class CreateActiveQuizRequest
 {
-    public   Guid quizId { get; set; }
-    public   Guid takenBy { get; set; }
+    public   Guid QuizId { get; set; }
+    public   Guid TakenBy { get; set; }
     
 }
