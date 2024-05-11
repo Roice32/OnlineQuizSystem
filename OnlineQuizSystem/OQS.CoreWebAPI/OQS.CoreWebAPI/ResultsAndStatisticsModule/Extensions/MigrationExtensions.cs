@@ -9,7 +9,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         {
             using var scope = application.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            context.Database.Migrate();
+            if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                context.Database.Migrate();
+            }
         }
     }
 }
