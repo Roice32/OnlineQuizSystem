@@ -1,9 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultBodies;
 using OQS.CoreWebAPI.Tests.SetUp;
@@ -95,11 +98,8 @@ namespace OQS.CoreWebAPI.Tests
             var storedBody = await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, quizId, userId);
             storedBody.IsSuccess.Should().BeTrue();
 
-            List<Guid> questionIds = await dbContext.QuizResultBodies
-                .AsNoTracking()
-                .Where(q => q.UserId == userId && q.QuizId == quizId)
-                .Select(q => q.QuestionIds)
-                .FirstOrDefaultAsync();
+            List<Guid> questionIds = storedBody.Value.Questions
+                .Select(questionIds => questionIds.Id).ToList();
             questionIds.Should().Contain(
                                new List<Guid>
                                {
@@ -108,5 +108,6 @@ namespace OQS.CoreWebAPI.Tests
                 });
 
         }
+
     }
 }

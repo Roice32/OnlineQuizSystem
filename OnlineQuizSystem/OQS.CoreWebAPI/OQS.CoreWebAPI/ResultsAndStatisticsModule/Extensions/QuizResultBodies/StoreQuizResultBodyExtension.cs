@@ -18,11 +18,5 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultBodies
             await dbContext.QuizResultBodies.AddAsync(quizResultBody);
             await dbContext.SaveChangesAsync();
         }
-
-        /*private static async Task StoreQuizResultBodyAsync(ApplicationDbContext dbContext, QuizResultBody quizResultBody)
-        {
-            await dbContext.QuizResultBodies.AddAsync(quizResultBody);
-            await dbContext.SaveChangesAsync();
-        }*/
     }
 }
