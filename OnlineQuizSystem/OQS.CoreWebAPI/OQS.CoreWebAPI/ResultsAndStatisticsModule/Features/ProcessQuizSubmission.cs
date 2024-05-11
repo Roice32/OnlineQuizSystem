@@ -7,6 +7,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
 using Newtonsoft.Json;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
@@ -36,9 +37,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     .NotEmpty()
                     .WithMessage("QuestionAnswerPairs is required.");
 
-                RuleFor(x => x.TimeElapsed)
+            /*    RuleFor(x => x.TimeElapsed)
                     .NotEmpty()
-                    .WithMessage("TimeElapsed is required.");
+                    .WithMessage("TimeElapsed is required.");*/ 
             }
         }
 
