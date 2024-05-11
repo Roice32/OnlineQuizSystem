@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿ using MediatR;
 using OQS.CoreWebAPI.Shared;
 using Carter;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
