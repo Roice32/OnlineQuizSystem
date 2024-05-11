@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from './pages/SignIn';
 import AfterLogin from './pages/AfterLogin';
 import Register from './pages/SignUp';
+import SignUpConfirmation from './pages/SignUpConfirmation';
 
 const App = () => {
     return (
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/register" element={<Register/>} />
         <Route path="/" element={<Register />} />
         <Route path="/afterLogin" element = {<AfterLogin/>} />
+        <Route path="/sign_up_confirmation" element = {<SignUpConfirmation/>} />
       </Routes>
     </BrowserRouter>
     );

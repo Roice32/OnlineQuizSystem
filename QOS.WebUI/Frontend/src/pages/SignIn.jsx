@@ -11,7 +11,7 @@ function SignIn() {
         username: "",
         password: "",
     });
-    const history = useNavigate();
+    const navigate = useNavigate();
     const [response, setResponse] = useState(null);
 
     const inputs = [
@@ -47,14 +47,11 @@ function SignIn() {
             { username, password }
         );
 
-        console.log(response);
-        console.log(response.data);
-        console.log(response.data.message);
         setResponse(response.data);
 
-        if (response.data.status == 1) {
-            localStorage.setItem('jwt', response.data.token);
-            history('/afterLogin');
+        if (response.data.token != null) {
+            localStorage.setItem('authToken', response.data.token);
+            navigate('/afterLogin');
         }
         
     } catch (error) {
@@ -63,8 +60,6 @@ function SignIn() {
 };
 
     const onChange = (e) => {setValues({ ...values, [e.target.name]: e.target.value})};
-
-    console.log(values);
 
     return ( <div className="App">
         <form onSubmit={handleLogin}>

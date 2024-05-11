@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import './SignUp.css';
 import axios from 'axios';
 import FormInput from '../components/FormInput';
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
     const [userValues, setUserValues] = useState({
@@ -12,7 +13,7 @@ function SignUp() {
         password: "",
         passwordConfirm: "",
     });
-
+    const navigate = useNavigate();
     const [response, setResponse] = useState(null);
 
     const inputs = [
@@ -91,6 +92,10 @@ function SignUp() {
             const response = await axios.post('https://localhost:7117/api/registration', userValues);
             console.log(response);
             setResponse(response.data);
+            if(response.data.message === "User created successfully!"){
+                navigate('/sign_up_confirmation');
+            }
+
         } catch (error) {
             console.error('Error:', error);
         }
