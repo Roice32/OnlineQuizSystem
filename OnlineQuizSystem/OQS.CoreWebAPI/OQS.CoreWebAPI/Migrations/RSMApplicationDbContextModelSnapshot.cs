@@ -40,7 +40,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("UserId", "QuestionId");
 
-                    b.ToTable("QuestionResults");
+                    b.ToTable("QuestionResults", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("QuestionResultBase");
 
@@ -61,7 +61,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("UserId", "QuizId");
 
-                    b.ToTable("QuizResultBodies");
+                    b.ToTable("QuizResultBodies", (string)null);
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultHeader", b =>
@@ -86,7 +86,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("UserId", "QuizId");
 
-                    b.ToTable("QuizResultHeaders");
+                    b.ToTable("QuizResultHeaders", (string)null);
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase", b =>
@@ -117,7 +117,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("QuestionBase");
 
@@ -148,7 +148,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quizzes");
+                    b.ToTable("Quizzes", (string)null);
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Tag", b =>
@@ -166,7 +166,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.User", b =>
@@ -191,7 +191,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.ChoiceQuestionResult", b =>
