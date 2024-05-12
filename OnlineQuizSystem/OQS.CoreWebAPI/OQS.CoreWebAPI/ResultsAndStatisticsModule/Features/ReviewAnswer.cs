@@ -1,6 +1,7 @@
 ﻿using Carter;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
@@ -26,27 +27,17 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         {
             public Validator()
             {
-                int maxPossibleScore = 100; /* dbContext.Questions
-                    .AsNoTracking()
-                    .Select(q => q.AllocatedPoints)
-                    .FirstOrDefault(q => q.Id = questionId);*/
-
                 RuleFor(x => x.UserId)
                     .NotEmpty()
                     .WithMessage("UserId is required.");
 
+                RuleFor(x => x.QuizId)
+                    .NotEmpty()
+                    .WithMessage("QuizId is required.");
+
                 RuleFor(x => x.QuestionId)
                     .NotEmpty()
                     .WithMessage("QuestionId is required.");
-
-                /*RuleFor(x => x)
-                    .Must(command => dbContext.QuestionResults
-                        .Any(qr => qr.UserId == command.UserId && qr.QuestionId == command.QuestionId))
-                    .WithMessage("QuestionResult with the given UserId and QuestionId does not exist in the database.");*/
-
-                RuleFor(x => x.FinalScore)
-                    .InclusiveBetween(0, maxPossibleScore)
-                    .WithMessage("FinalScore must be between 0 and the AllocatedPoints of the question.");
             }
         }
 
@@ -69,34 +60,47 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 {
                     return Result.Failure<ReviewAnswerResponse>(
                         new Error("ReviewAnswer.Validator",
-                        validationResult.ToString()));
+                            validationResult.ToString()));
                 }
 
-                await UpdateQuestionResultExtension.UpdateQuestionResultAsync
+                var quizAndQuestionMatch = (await dbContext
+                    .Quizzes
+                    .Where(quiz => quiz.Id == request.QuizId)
+                    .SelectMany(quiz => quiz.Questions)
+                    .ToListAsync(cancellationToken))
+                    .Any(question => question.Id == request.QuestionId);
+
+                if(!quizAndQuestionMatch)
+                {
+                    return Result.Failure<ReviewAnswerResponse>(
+                        new Error("ReviewAnswer.QuizAndQuestionMisMatch",
+                            "QuizId and QuestionId correspondence does not exist."));
+                }
+
+                var updateResultStatus = await UpdateQuestionResultExtension.UpdateQuestionResultAsync
                     (dbContext, request.UserId, request.QuestionId, request.FinalScore);
+
+                if (updateResultStatus.IsFailure)
+                {
+                    return Result.Failure<ReviewAnswerResponse>(
+                        new Error("ReviewAnswer.UpdateResult",
+                            updateResultStatus.Error.Message));
+                }
+
                 var updatedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync
-                    (dbContext, request.UserId, request.QuestionId);
+                    (dbContext, request.UserId, request.QuestionId) as ReviewNeededQuestionResult;
 
                 await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync
                     (dbContext, request.UserId, request.QuizId);
                 var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync
-                    (dbContext, request.UserId, request.QuizId);
-
-                // PLACEHOLDER
-                // Only to supress 500 status until we get the quzzes database
-                if(updatedHeader is null || updatedQuestionResult is null)
-                {
-                    return Result.Failure<ReviewAnswerResponse>(
-                        new Error("ReviewAnswer.Handler",
-                            "QuizResultHeader with the given UserId and QuizId does not exist in the database."));
-                }
+                    (dbContext, request.QuizId, request.UserId);
 
                 var newReviewNeededQuestionResult = new ReviewNeededQuestionResult
                     (request.UserId,
                     request.QuestionId,
                     request.FinalScore,
-                    ((ReviewNeededQuestionResult)updatedQuestionResult).ReviewNeededAnswer,
-                    ((ReviewNeededQuestionResult)updatedQuestionResult).ReviewNeededResult);
+                    updatedQuestionResult.ReviewNeededAnswer,
+                    updatedQuestionResult.ReviewNeededResult);
 
                 var newQuizResultHeader = new QuizResultHeader
                     (updatedHeader.Value.QuizId,
