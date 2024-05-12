@@ -1,7 +1,12 @@
+using System.Net;
+using Newtonsoft.Json;
+using OQS.CoreWebAPI.Entities.ActiveQuiz;
+
 namespace OQS.CoreWebAPI.Shared;
 
 public class Result
 {
+    public Result(){}
     protected internal Result(bool isSuccess, Error error)
     {
         if (isSuccess && error != Error.None)

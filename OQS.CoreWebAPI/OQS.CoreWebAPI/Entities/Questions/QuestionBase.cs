@@ -11,6 +11,4 @@ public abstract class QuestionBase
         Type = type;
         Text = text;
     }
-    
-   
 }

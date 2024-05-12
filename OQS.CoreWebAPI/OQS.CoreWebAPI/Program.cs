@@ -20,19 +20,23 @@ builder.Services.AddCors(p=>p.AddPolicy("corspolicy",b=>b.AllowAnyOrigin().Allow
 
 var app = builder.Build();
 
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.ApplyMigrations();
+    if (dbContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+    {
+        app.ApplyMigrations();
+    }
 }
 
 app.UseCors("corspolicy");
 
 
-using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+
 
 dbContext.SeedQuizzez();
 dbContext.SeedUsers();
@@ -43,5 +47,5 @@ app.UseHttpsRedirection();
 
 
 app.Run();
-
+public partial class Program { };
 
