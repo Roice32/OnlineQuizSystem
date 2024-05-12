@@ -88,19 +88,19 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 }
 
                 var updatedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync
-                    (dbContext, request.UserId, request.QuestionId);
+                    (dbContext, request.UserId, request.QuestionId) as ReviewNeededQuestionResult;
 
                 await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync
                     (dbContext, request.UserId, request.QuizId);
                 var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync
-                    (dbContext, request.UserId, request.QuizId);
+                    (dbContext, request.QuizId, request.UserId);
 
                 var newReviewNeededQuestionResult = new ReviewNeededQuestionResult
                     (request.UserId,
                     request.QuestionId,
                     request.FinalScore,
-                    ((ReviewNeededQuestionResult)updatedQuestionResult).ReviewNeededAnswer,
-                    ((ReviewNeededQuestionResult)updatedQuestionResult).ReviewNeededResult);
+                    updatedQuestionResult.ReviewNeededAnswer,
+                    updatedQuestionResult.ReviewNeededResult);
 
                 var newQuizResultHeader = new QuizResultHeader
                     (updatedHeader.Value.QuizId,
