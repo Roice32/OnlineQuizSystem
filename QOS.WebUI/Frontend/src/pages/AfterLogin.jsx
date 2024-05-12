@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-function TokenPage() {
-  // Definim un state pentru a stoca token-ul JWT
-  const [authToken, setAuthToken] = useState('');
+function UserNamePage() {
+    const [username, setUsername] = useState('');
 
-  // Folosim useEffect pentru a extrage token-ul din localStorage la încărcarea paginii
-  useEffect(() => {
-    // Extragem token-ul JWT din localStorage
-    const token = localStorage.getItem('authToken');
-    // Setăm token-ul în state
-    setAuthToken(token);
-  }, []); // [] pentru a rula efectul doar la încărcarea paginii
+    useEffect(() => {
+        async function fetchUsername() {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await axios.post('https://localhost:7117/api/username', null, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setUsername(response.data);
+            } catch (error) {
+                console.error('Failed to fetch username:', error);
+            }
+        }
 
-  return (
-    <div>
-      <h1>Token JWT</h1>
-      <div>
-        <p>Token-ul JWT salvat în localStorage este:</p>
-        <pre>{authToken}</pre>
-      </div>
-    </div>
-  );
+        fetchUsername();
+    }, []);
+
+    return (
+        <div>
+            <h1>User Name Page</h1>
+            <p>Hello, {username || 'stranger'}</p>
+        </div>
+    );
 }
 
-export default TokenPage;
+export default UserNamePage;
