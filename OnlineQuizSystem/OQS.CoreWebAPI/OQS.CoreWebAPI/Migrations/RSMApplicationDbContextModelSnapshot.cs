@@ -133,6 +133,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+                        
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
