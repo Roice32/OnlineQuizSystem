@@ -16,14 +16,18 @@ public class CreateActiveQuiz
    
         private readonly ApplicationDBContext _context;
 
+        public CreateActiveQuiz(ApplicationDBContext context)
+        {
+            _context = context;
+        }
+
         public class QuizCreationValidator : AbstractValidator<QuizCreation>
         {
-            private readonly IServiceScopeFactory _serviceScopeFactory;
-
+           // private readonly ApplicationDBContext _dbContext;
+           private readonly IServiceScopeFactory _serviceScopeFactory;
             public QuizCreationValidator(IServiceScopeFactory serviceScopeFactory)
             {
                 _serviceScopeFactory = serviceScopeFactory;
-
                 RuleFor(x => x.QuizId)
                     .MustAsync(QuizExists)
                     .WithMessage("Invalid Quiz Id");
@@ -52,16 +56,24 @@ public class CreateActiveQuiz
     internal sealed class Handler : IRequestHandler<QuizCreation, Result<ActiveQuiz>>
     {
         private readonly ApplicationDBContext _context;
+        private readonly QuizCreationValidator _validator;
         
-        
-        public Handler(ApplicationDBContext context)
+        public Handler(ApplicationDBContext context,QuizCreationValidator validator)
         {
             _context = context;
-     
+            _validator = validator;
         }
         
         public async Task<Result<ActiveQuiz>> Handle(QuizCreation request, CancellationToken cancellationToken)
         {
+            var validationResult = _validator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                return Result.Failure<ActiveQuiz>(
+                    new Error(400, 
+                        validationResult.ToString()));
+            }
+
             var quiz = await _context.Quizzes.FindAsync(request.QuizId);
             var user = await _context.Users.FindAsync(request.TakenBy);
     
@@ -76,7 +88,7 @@ public class CreateActiveQuiz
             _context.ActiveQuizzes.Add(activeQuiz);
             await _context.SaveChangesAsync();
 
-            return Result.Success<ActiveQuiz>(activeQuiz);
+            return Result.Success(activeQuiz);
         }
         
     }

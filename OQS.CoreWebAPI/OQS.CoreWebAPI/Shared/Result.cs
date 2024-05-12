@@ -1,3 +1,6 @@
+using System.Net;
+using OQS.CoreWebAPI.Entities.ActiveQuiz;
+
 namespace OQS.CoreWebAPI.Shared;
 
 public class Result
