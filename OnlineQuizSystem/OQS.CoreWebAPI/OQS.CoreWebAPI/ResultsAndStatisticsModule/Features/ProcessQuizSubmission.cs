@@ -7,6 +7,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
@@ -63,16 +64,58 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         validationResult.ToString()));
                 }
 
-                await QuizChecker.CheckQuizAsync(new QuizSubmission(request.QuizId,
-                        request.TakenBy,
-                        request.QuestionAnswerPairs,
-                        request.TimeElapsed),
-                    dbContext);
+                var quizCheckerResult = await QuizChecker
+                    .CheckQuizAsync(new QuizSubmission(request.QuizId,
+                            request.TakenBy,
+                            request.QuestionAnswerPairs,
+                            request.TimeElapsed),
+                        dbContext);
+
+                if (quizCheckerResult.IsFailure)
+                {
+                    return Result.Failure(quizCheckerResult.Error);
+                }
                 
                 return Result.Success();
             }
         }
     }
+
+    public class QAPairConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(QuestionAnswerPairBase);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject jo = JObject.Load(reader);
+            if (jo["TrueFalseAnswer"] != null)
+            {
+                return jo.ToObject<TrueFalseQAPair>();
+            }
+            else if (jo["SingleChoiceAnswer"] != null)
+            {
+                return jo.ToObject<SingleChoiceQAPair>();
+            }
+            else if (jo["MultipleChoiceAnswers"] != null)
+            {
+                return jo.ToObject<MultipleChoiceQAPair>();
+            }
+            else if (jo["WrittenAnswer"] != null)
+            {
+                return jo.ToObject<WrittenQAPair>();
+            }
+            return null;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 
     public class ProcessQuizSubmissionEndPoint : ICarterModule
     {
@@ -85,7 +128,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     int timeElapsed,
                     ISender sender) =>
             {
-                var questionAnswerPairs = JsonConvert.DeserializeObject<List<QuestionAnswerPairBase>>(questionAnswerPairsJSON);
+                var questionAnswerPairs = JsonConvert.DeserializeObject
+                    <List<QuestionAnswerPairBase>>(questionAnswerPairsJSON, new QAPairConverter());
+
+                Console.WriteLine(questionAnswerPairs);
 
                 var command = new ProcessQuizSubmission.Command
                 {
