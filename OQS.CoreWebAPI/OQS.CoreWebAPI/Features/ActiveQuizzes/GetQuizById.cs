@@ -1,3 +1,4 @@
+using System.Net;
 using Carter;
 using MapsterMapper;
 using MediatR;
@@ -29,7 +30,7 @@ public static class GetQuizById
                 .FirstOrDefaultAsync(quiz=> quiz.Id.ToString() == request.QuizId, cancellationToken: cancellationToken);
             if (quiz is null)
             {
-                return Result.Failure<QuizResponse>(new Error(404, "Quiz not found"));
+                return Result.Failure<QuizResponse>(new Error(HttpStatusCode.NotFound, "Quiz not found"));
             }
             
             return Result<QuizResponse>.Success(new QuizResponse(quiz));

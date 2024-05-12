@@ -66,11 +66,11 @@ public class CreateActiveQuiz
         
         public async Task<Result<ActiveQuiz>> Handle(QuizCreation request, CancellationToken cancellationToken)
         {
-            var validationResult = _validator.Validate(request);
+            var validationResult = await _validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
                 return Result.Failure<ActiveQuiz>(
-                    new Error(400, 
+                    new Error(HttpStatusCode.BadRequest, 
                         validationResult.ToString()));
             }
 

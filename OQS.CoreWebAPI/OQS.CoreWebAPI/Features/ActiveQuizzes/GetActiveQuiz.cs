@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using System.Net;
+using Carter;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using OQS.CoreWebAPI.Contracts;
@@ -28,7 +29,7 @@ public class GetActiveQuizById
 
             if (activeQuiz == null)
             {
-                return Result.Failure<ActiveQuizResponse>(new Error(404, "Active Quiz not found"));
+                return Result.Failure<ActiveQuizResponse>(new Error(HttpStatusCode.NotFound, "Active Quiz not found"));
             }
 
             var activeQuizResponse = new ActiveQuizResponse(activeQuiz);
