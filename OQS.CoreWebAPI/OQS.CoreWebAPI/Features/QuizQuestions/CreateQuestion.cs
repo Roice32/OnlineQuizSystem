@@ -25,43 +25,57 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             public List<string>? WrittenAcceptedAnswers { get; set; }
         }
 
-        public class Validator : AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<Command>
         {
-            public Validator()
+            public CommandValidator()
             {
-               // RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId is required.");
-                RuleFor(x => x.Text).NotEmpty().WithMessage("Text is required.");
-                RuleFor(x => x.Type).IsInEnum().WithMessage("Invalid question type.");
+                RuleFor(x => x.Text)
+                    .NotEmpty().WithMessage("Text is required.")
+                    .MaximumLength(255).WithMessage("Text must not exceed 255 characters.");
+
+                RuleFor(x => x.Type)
+                    .IsInEnum().WithMessage("Invalid question type.");
+
                 When(x => x.Type == QuestionType.MultipleChoice || x.Type == QuestionType.SingleChoice,
                     () =>
                     {
-                        RuleFor(x => x.Choices).NotNull().WithMessage("Choices are required.");
-                        RuleFor(x => x.Choices).NotEmpty().WithMessage("At least one choice is required.");
+                        RuleFor(x => x.Choices)
+                            .NotNull().WithMessage("Choices are required.")
+                            .Must(choices => choices != null && choices.Count > 0).WithMessage("At least one choice is required.");
                     });
+
                 When(x => x.Type == QuestionType.TrueFalse,
                     () =>
                     {
-                        RuleFor(x => x.TrueFalseAnswer).NotNull().WithMessage("TrueFalseAnswer is required.");
+                        RuleFor(x => x.TrueFalseAnswer)
+                            .NotNull().WithMessage("TrueFalseAnswer is required.");
                     });
+
                 When(x => x.Type == QuestionType.MultipleChoice,
                     () =>
                     {
-                        RuleFor(x => x.MultipleChoiceAnswers).NotNull().WithMessage("MultipleChoiceAnswers are required.");
-                        RuleFor(x => x.MultipleChoiceAnswers).NotEmpty().WithMessage("At least one answer is required.");
+                        RuleFor(x => x.MultipleChoiceAnswers)
+                            .NotNull().WithMessage("MultipleChoiceAnswers are required.")
+                            .Must(answers => answers != null && answers.Count > 0).WithMessage("At least one answer is required.");
                     });
+
                 When(x => x.Type == QuestionType.SingleChoice,
                     () =>
                     {
-                        RuleFor(x => x.SingleChoiceAnswer).NotEmpty().WithMessage("SingleChoiceAnswer is required.");
+                        RuleFor(x => x.SingleChoiceAnswer)
+                            .NotEmpty().WithMessage("SingleChoiceAnswer is required.");
                     });
+
                 When(x => x.Type == QuestionType.WriteAnswer,
                     () =>
                     {
-                        RuleFor(x => x.WrittenAcceptedAnswers).NotNull().WithMessage("WrittenAcceptedAnswers are required.");
-                        RuleFor(x => x.WrittenAcceptedAnswers).NotEmpty().WithMessage("At least one accepted answer is required.");
+                        RuleFor(x => x.WrittenAcceptedAnswers)
+                            .NotNull().WithMessage("WrittenAcceptedAnswers are required.")
+                            .Must(answers => answers != null && answers.Count > 0).WithMessage("At least one accepted answer is required.");
                     });
             }
         }
+
 
         public class Handler : IRequestHandler<Command, Result<Guid>>
         {
