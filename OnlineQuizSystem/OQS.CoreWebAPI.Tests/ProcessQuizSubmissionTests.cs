@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Tests
                 $"questionAnswerPairsJSON=&" +
                 $"timeElapsed={timeElapsed}";
 
-            
+
             var requestUri4 = $"api/quizResults/processQuizSubmission?" +
                 $"quizId={quizId}&" +
                 $"takenBy={takenBy}&" +

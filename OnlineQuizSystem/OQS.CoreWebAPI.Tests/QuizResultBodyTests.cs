@@ -43,7 +43,7 @@ namespace OQS.CoreWebAPI.Tests
                 .Select(q => q.QuestionIds)
                 .FirstOrDefaultAsync();
 
-            questionIds.Should().NotBeNull();  
+            questionIds.Should().NotBeNull();
             questionIds.Count.Should().Be(2);
             questionIds.Should().Contain(
                 [
@@ -53,7 +53,7 @@ namespace OQS.CoreWebAPI.Tests
                 ]);
         }
 
-        [Fact] 
+        [Fact]
         public void Given_IdsPairForNonexistentQuizResultBody_When_FetchQuizResultBodyIsCalled_Then_NullValueIsReturned()
         {
             // Arrange
@@ -107,6 +107,6 @@ namespace OQS.CoreWebAPI.Tests
 
         }
 
-       
+
     }
 }

@@ -80,8 +80,8 @@ namespace OQS.CoreWebAPI.Tests
             result.Score.Should().Be(0);
             ((TrueFalseQuestionResult)result).TrueFalseAnswerResult.Should().Be(AnswerResult.Wrong);
         }
-        
-        [Fact]    
+
+        [Fact]
         public void Given_SingleChoiceQuestionAnsweredCorrectly_When_CheckQuestionIsCalled_Then_QuestionResultIsCorrect()
         {
             // Arrange

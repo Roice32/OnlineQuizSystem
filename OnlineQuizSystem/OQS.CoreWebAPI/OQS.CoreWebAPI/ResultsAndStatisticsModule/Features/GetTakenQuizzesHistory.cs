@@ -83,7 +83,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 };
 
                 var result = await sender.Send(query);
-                
+
                 if (result.IsFailure)
                 {
                     return Results.NotFound(result.Error);

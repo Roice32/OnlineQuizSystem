@@ -20,7 +20,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         private static void SeedUsers(ApplicationDbContext dbContext)
         {
-            var users = new List<User> 
+            var users = new List<User>
             {
                 new User
                 {

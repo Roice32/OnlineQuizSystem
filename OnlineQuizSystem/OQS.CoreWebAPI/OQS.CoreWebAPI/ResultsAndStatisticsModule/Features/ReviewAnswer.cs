@@ -66,10 +66,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 var quizAndQuestionMatch = await dbContext
                     .Questions
                     .AsNoTracking()
-                    .AnyAsync(q => q.QuizId == request.QuizId && 
+                    .AnyAsync(q => q.QuizId == request.QuizId &&
                         q.Id == request.QuestionId);
 
-                if(!quizAndQuestionMatch)
+                if (!quizAndQuestionMatch)
                 {
                     return Result.Failure<ReviewAnswerResponse>(
                         new Error("ReviewAnswer.QuizAndQuestionMisMatch",

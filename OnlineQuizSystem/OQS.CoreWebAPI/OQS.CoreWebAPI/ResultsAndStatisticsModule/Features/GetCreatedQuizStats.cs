@@ -28,7 +28,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     .AsNoTracking()
                     .FirstOrDefaultAsync(quiz => quiz.Id == request.QuizId, cancellationToken);
 
-                if(requestedQuiz is null)
+                if (requestedQuiz is null)
                 {
                     return Result.Failure<GetCreatedQuizStatsResponse>(Error.NullValue);
                 }

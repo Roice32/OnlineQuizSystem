@@ -21,7 +21,7 @@ namespace OQS.CoreWebAPI.Tests
             var quizId = Guid.Parse("00000000-0000-0000-0002-000000000002");
             var questionId = Guid.Parse("00000000-0000-0000-0003-000000000008");
             var finalScore = 1;
-            
+
             var requestUri1 = $"api/quizResults/reviewResult?" +
                 $"userId=&" +
                 $"quizId={quizId}&" +
@@ -66,8 +66,8 @@ namespace OQS.CoreWebAPI.Tests
             var resultString4 = await result4.Content.ReadAsStringAsync();
             resultString4.Should().Contain("Failed to bind parameter \"float finalScore\" from \"\"");
         }
-        
-        [Fact]    
+
+        [Fact]
         public async Task Given_InvalidReviewCommand_When_ReviewAnswerHandlerIsCalled_Then_SpecificErrorIsReturned()
         {
             // Arrange
@@ -151,7 +151,7 @@ namespace OQS.CoreWebAPI.Tests
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             var resultString = await result.Content.ReadAsStringAsync();
             var resultObject = JsonConvert.DeserializeObject<ReviewAnswerResponse>(resultString);
-            
+
             resultObject.UpdatedQuizResultHeader.Should().NotBeNull();
             resultObject.UpdatedQuizResultHeader.Score.Should().Be(1);
             resultObject.UpdatedQuizResultHeader.ReviewPending.Should().BeFalse();

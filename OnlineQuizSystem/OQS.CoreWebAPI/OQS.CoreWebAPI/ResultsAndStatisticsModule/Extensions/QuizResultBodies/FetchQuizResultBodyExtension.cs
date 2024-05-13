@@ -39,7 +39,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
                 .Where(q => questionIds.Contains(q.QuestionId) && q.UserId == userId)
                 .ToListAsync();
 
-            if(questions == null || questionResults == null)
+            if (questions == null || questionResults == null)
             {
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }

@@ -14,7 +14,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         {
             bool quizAlreadyTaken = await dbContext.QuizResultHeaders
                 .AnyAsync(qrh => qrh.QuizId == toBeChecked.QuizId && qrh.UserId == toBeChecked.TakenBy);
-            if(quizAlreadyTaken)
+            if (quizAlreadyTaken)
             {
                 return Result.Failure(Error.DuplicateEntity);
             }

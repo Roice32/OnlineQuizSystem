@@ -97,7 +97,7 @@ namespace OQS.CoreWebAPI.Tests
                 .ToListAsync();
 
             questionResults.Should().HaveCount(5);
-            foreach(var questionResult in questionResults)
+            foreach (var questionResult in questionResults)
             {
                 questionResult.Score.Should().Be(0);
                 if (questionResult is TrueFalseQuestionResult trueFalseQuestionResult)

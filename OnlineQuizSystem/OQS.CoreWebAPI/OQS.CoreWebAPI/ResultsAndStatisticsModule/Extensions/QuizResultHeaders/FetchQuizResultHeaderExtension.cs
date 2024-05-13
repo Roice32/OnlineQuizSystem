@@ -11,7 +11,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         {
             using var scope = application.Services.CreateScope();
             using (var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-            return await FetchQuizResultHeaderAsync(dbContext, QuizId, UserId);
+                return await FetchQuizResultHeaderAsync(dbContext, QuizId, UserId);
         }
 
         public static async Task<Result<FetchQuizResultHeaderResponse>> FetchQuizResultHeaderAsync(ApplicationDbContext dbContext, Guid QuizId, Guid UserId)
@@ -39,7 +39,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
                 .Select(u => u.Name)
                 .FirstOrDefaultAsync();
 
-            
+
             return new FetchQuizResultHeaderResponse
             {
                 QuizId = QuizId,
