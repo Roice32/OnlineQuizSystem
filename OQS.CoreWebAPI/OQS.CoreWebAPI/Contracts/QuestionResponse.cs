@@ -9,6 +9,8 @@ namespace OQS.CoreWebAPI.Contracts
         public Guid Id { get; set; }
         public QuestionType Type { get; set; }
         public string Text { get; set; }
+
+        public Guid QuizId { get; set; }
         public List<string>? Choices { get; set; }
         public bool? TrueFalseAnswer { get; set; }
         public List<string>? MultipleChoiceAnswers { get; set; }
@@ -20,6 +22,7 @@ namespace OQS.CoreWebAPI.Contracts
             Id = question.Id;
             Type = question.Type;
             Text = question.Text;
+            QuizId = question.QuizId;
             if (question is ChoiceQuestionBase choiceQuestion)
             {
                 Choices = choiceQuestion.Choices;

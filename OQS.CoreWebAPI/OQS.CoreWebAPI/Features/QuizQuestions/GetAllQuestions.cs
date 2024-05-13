@@ -30,9 +30,10 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
             public async Task<Result<List<QuestionResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var questions = context.Questions
+                var questions = await context.Questions
+                    .Where(question => question.QuizId == request.QuizId)
                     .Select(question => new QuestionResponse(question))
-                    .ToList();
+                    .ToListAsync();
 
                 return Result.Success<List<QuestionResponse>>(questions);
             }
