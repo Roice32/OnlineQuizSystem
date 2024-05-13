@@ -26,6 +26,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
             public async Task<Result<GetTakenQuizzesHistoryResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var requestedUser = await dbContext.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
+
+                if (requestedUser is null)
+                {
+                    return Result.Failure<GetTakenQuizzesHistoryResponse>(Error.NullValue);
+                }
+
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                     .AsNoTracking()
                     .Where(quiz => quiz.UserId == request.UserId)
@@ -43,11 +52,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 Dictionary<Guid, string> quizNames = new();
                 foreach (var quiz in quizResultHeaders)
                 {
-                    // PLACEHOLDER
-                    string quizName = "PLACEHOLDER"; /* await dbContext.Quizzes
+                    string quizName = await dbContext.Quizzes
                         .AsNoTracking()
+                        .Where(q => q.Id == quiz.QuizId)
                         .Select(q => q.Name)
-                        .FirstOrDefaultAsync(q => q.Id == quiz.QuizId, cancellationToken);*/
+                        .FirstOrDefaultAsync(cancellationToken);
                     quizNames.Add(quiz.QuizId, quizName);
                 }
 
@@ -74,7 +83,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 };
 
                 var result = await sender.Send(query);
-                
+
                 if (result.IsFailure)
                 {
                     return Results.NotFound(result.Error);

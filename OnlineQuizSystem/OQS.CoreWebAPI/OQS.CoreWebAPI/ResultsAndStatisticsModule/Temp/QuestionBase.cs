@@ -6,12 +6,15 @@
         public QuestionType Type { get; set; }
         public string Text { get; set; }
         public int AllocatedPoints { get; set; }
-        protected QuestionBase(Guid id, QuestionType type, string text, int allocatedPoints)
+        public Guid QuizId { get; set; }
+        protected QuestionBase(Guid id, QuestionType type, string text, int allocatedPoints, Guid quizId)
         {
             Id = id;
             Type = type;
             Text = text;
             AllocatedPoints = allocatedPoints;
+            QuizId = quizId;
+
         }
     }
 }

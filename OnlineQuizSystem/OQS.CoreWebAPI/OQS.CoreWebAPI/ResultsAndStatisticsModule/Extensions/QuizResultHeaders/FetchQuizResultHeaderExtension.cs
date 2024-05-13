@@ -11,7 +11,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
         {
             using var scope = application.Services.CreateScope();
             using (var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-            return await FetchQuizResultHeaderAsync(dbContext, QuizId, UserId);
+                return await FetchQuizResultHeaderAsync(dbContext, QuizId, UserId);
         }
 
         public static async Task<Result<FetchQuizResultHeaderResponse>> FetchQuizResultHeaderAsync(ApplicationDbContext dbContext, Guid QuizId, Guid UserId)
@@ -20,22 +20,25 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
                 .AsNoTracking()
                 .FirstOrDefaultAsync(quiz => quiz.QuizId == QuizId && quiz.UserId == UserId);
 
-            // PLACEHOLDER
-            // Until we get Quizzes table in database
-            var quizName = "PLACEHOLDER"; /* await dbContext
+            if (quizResultHeader == null)
+            {
+                return Result.Failure<FetchQuizResultHeaderResponse>(Error.NullValue);
+            }
+
+            var quizName = await dbContext
                 .Quizzes
                 .AsNoTracking()
+                .Where(q => q.Id == QuizId)
                 .Select(q => q.Name)
-                .FirstOrDefaultAsync(q => q.Id == QuizId); */
+                .FirstOrDefaultAsync();
 
-            var userName = "PLACEHOLDER"; /* await dbContext
+            var userName = await dbContext
                 .Users
                 .AsNoTracking()
-                .Select(u => u.UserName)
-                .FirstOrDefaultAsync(u => u.Id == UserId); */
+                .Where(u => u.Id == UserId)
+                .Select(u => u.Name)
+                .FirstOrDefaultAsync();
 
-            if (quizResultHeader == null || quizName == null || userName == null)
-                return Result.Failure<FetchQuizResultHeaderResponse>(Error.NullValue);
 
             return new FetchQuizResultHeaderResponse
             {

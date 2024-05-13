@@ -7,6 +7,8 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using static OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.CustomJsonDeserializer;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
@@ -46,7 +48,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         {
             private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
-        
+
             public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
                 dbContext = context;
@@ -63,12 +65,18 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         validationResult.ToString()));
                 }
 
-                await QuizChecker.CheckQuizAsync(new QuizSubmission(request.QuizId,
-                        request.TakenBy,
-                        request.QuestionAnswerPairs,
-                        request.TimeElapsed),
-                    dbContext);
-                
+                var quizCheckerResult = await QuizChecker
+                    .CheckQuizAsync(new QuizSubmission(request.QuizId,
+                            request.TakenBy,
+                            request.QuestionAnswerPairs,
+                            request.TimeElapsed),
+                        dbContext);
+
+                if (quizCheckerResult.IsFailure)
+                {
+                    return Result.Failure(quizCheckerResult.Error);
+                }
+
                 return Result.Success();
             }
         }
@@ -85,7 +93,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     int timeElapsed,
                     ISender sender) =>
             {
-                var questionAnswerPairs = JsonConvert.DeserializeObject<List<QuestionAnswerPairBase>>(questionAnswerPairsJSON);
+                var questionAnswerPairs = JsonConvert
+                    .DeserializeObject<List<QuestionAnswerPairBase>>(questionAnswerPairsJSON,
+                        new CustomJsonDeserializer());
 
                 var command = new ProcessQuizSubmission.Command
                 {

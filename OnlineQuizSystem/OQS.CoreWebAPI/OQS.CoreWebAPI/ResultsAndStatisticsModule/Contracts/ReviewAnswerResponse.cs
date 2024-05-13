@@ -6,6 +6,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts
     public class ReviewAnswerResponse
     {
         public QuizResultHeader UpdatedQuizResultHeader { get; set; }
-        public QuestionResultBase UpdatedQuestionResult { get; set; }
+        public ReviewNeededQuestionResult UpdatedQuestionResult { get; set; }
     }
 }

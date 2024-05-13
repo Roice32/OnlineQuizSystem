@@ -5,7 +5,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
 namespace OQS.CoreWebAPI.Database.Configurations;
 
-public class MultipleChoiceQuestionConfiguration:IEntityTypeConfiguration<MultipleChoiceQuestion>
+public class MultipleChoiceQuestionConfiguration : IEntityTypeConfiguration<MultipleChoiceQuestion>
 {
     public void Configure(EntityTypeBuilder<MultipleChoiceQuestion> builder)
     {

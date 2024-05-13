@@ -3,7 +3,7 @@
     public class QuizResultHeader
     {
         public Guid QuizId { get; set; }
-        public Guid UserId { get; set;  }
+        public Guid UserId { get; set; }
         public DateTime SubmittedAt { get; set; }
         public int CompletionTime { get; set; }
         public float Score { get; set; }

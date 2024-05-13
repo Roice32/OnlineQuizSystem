@@ -19,6 +19,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders
         {
             var quizResultHeader = await dbContext.QuizResultHeaders
                 .FirstOrDefaultAsync(qrh => qrh.UserId == userId && qrh.QuizId == quizId);
+
+            if (quizResultHeader is null)
+            {
+                return Result.Failure(Error.NullValue);
+            }
+
             var questionIds = await dbContext.QuizResultBodies
                 .Where(qrb => qrb.UserId == userId && qrb.QuizId == quizId)
                 .Select(qrb => qrb.QuestionIds)
@@ -27,12 +33,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders
                 .Where(qr => questionIds.Contains(qr.QuestionId) && qr.UserId == userId)
                 .ToListAsync();
 
-            // PLACEHOLDER
-            // Only for testing API till we get quizzes database.
-            if(quizResultHeader is null || questionIds is null || questionResults is null)
-            {
-                return Result.Failure(Error.NullValue);
-            }
 
             quizResultHeader.Score = 0;
             quizResultHeader.ReviewPending = false;

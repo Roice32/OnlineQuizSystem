@@ -5,17 +5,10 @@
         public Guid UserId { get; set; }
         public List<QuizResultHeader> QuizResultHeaders { get; set; }
 
-        public TakenQuizzesHistory(Guid userId)
+        public TakenQuizzesHistory(Guid userId, List<QuizResultHeader> quizResultHeaders)
         {
             UserId = userId;
-            QuizResultHeaders = FetchQuizResultHeaders();
-        }
-
-        private List<QuizResultHeader> FetchQuizResultHeaders()
-        {
-            // Database fetching logic here
-            // PLACEHOLDER
-            return new List<QuizResultHeader>();
+            QuizResultHeaders = quizResultHeaders;
         }
     }
 }

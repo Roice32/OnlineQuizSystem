@@ -31,3 +31,5 @@ app.MapCarter();
 app.UseHttpsRedirection();
 
 app.Run();
+
+public partial class Program { }
