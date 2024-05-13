@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.Tags;
 using OQS.CoreWebAPI.Shared;
+using FluentValidation;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {
@@ -13,6 +14,16 @@ namespace OQS.CoreWebAPI.Features.Tags
         public class Query : IRequest<Result<TagResponse>>
         {
             public Guid Id { get; set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Query>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Id)
+                    .NotEmpty().WithMessage("Id is required.")
+                    .NotEqual(Guid.Empty).WithMessage("Id cannot be empty.");
+            }
         }
 
         internal sealed class Handler : IRequestHandler<Query, Result<TagResponse>>

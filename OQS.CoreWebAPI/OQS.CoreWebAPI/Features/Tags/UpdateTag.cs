@@ -23,6 +23,19 @@ namespace OQS.CoreWebAPI.Features.Tags
             public BodyUpdateTag Body { get; set; } = new BodyUpdateTag();
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+
+                RuleFor(x => x.Body.Name)
+                    .NotEmpty().WithMessage("Name is required.")
+                    .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
+            }
+        }
+
+
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
