@@ -46,7 +46,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         }
     }
 
-    public class GetQuizResultHeaderResponse : ICarterModule
+    public class GetQuizResultEndPoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
@@ -69,5 +69,4 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             });
         }
     }
-
 }
