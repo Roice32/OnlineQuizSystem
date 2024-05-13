@@ -12,14 +12,14 @@ const Navbar = () => {
   const navItems = [
     { id: 1, text: 'Home', path: '/' },
     { id: 2, text: 'Create quiz', path: '/create-quiz'},
-    { id: 3, text: 'My quizzes', path: '/my-quizzes'  },
+    { id: 3, text: 'My quizzes', path: '/quizzes'  },
     { id: 4, text: 'Tags', path: '/tags'},
     { id: 5, text: 'Quiz', path: '/quiz'  },
     { id: 6, text: 'Profile', path: '/profile'},
   ];
 
   return (
-    <div className='bg-[#0A2D2E] flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-white'>
+    <div className='bg-[#0A2D2E] w-full flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-white'>
       {/* Logo */}
       <h1 className='w-full text-3xl font-bold text-[#DEAE9F]'>B4QUIZ</h1>
 

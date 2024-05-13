@@ -7,7 +7,7 @@ function ShowInfo({ quizID }) {
     useEffect(() => {
         if (!quizID) return;
 
-        fetch(`https://localhost:7117/api/quizzes/${quizID}`)
+        fetch(`http://localhost:5276/api/quizzes/${quizID}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Quiz ID not found");
