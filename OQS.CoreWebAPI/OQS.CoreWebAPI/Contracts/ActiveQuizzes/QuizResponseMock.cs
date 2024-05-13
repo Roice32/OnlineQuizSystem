@@ -2,7 +2,7 @@ using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Contracts;
 
-public class QuizResponse
+public class QuizResponseMock
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -11,7 +11,7 @@ public class QuizResponse
     public DateTime CreatedAt { get; set; }
    
     
-    public QuizResponse(Quiz quiz)
+    public QuizResponseMock(Quiz quiz)
     {
         Id = quiz.Id;
         Name = quiz.Name;

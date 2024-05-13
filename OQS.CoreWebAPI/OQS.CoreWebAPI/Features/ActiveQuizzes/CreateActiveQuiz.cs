@@ -70,7 +70,7 @@ public class CreateActiveQuiz
             if (!validationResult.IsValid)
             {
                 return Result.Failure<ActiveQuiz>(
-                    new Error(HttpStatusCode.BadRequest, 
+                    new Error("CreateActiveQuiz.BadRequest", 
                         validationResult.ToString()));
             }
 

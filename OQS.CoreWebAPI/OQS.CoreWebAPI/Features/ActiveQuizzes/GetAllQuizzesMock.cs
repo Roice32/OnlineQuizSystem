@@ -10,12 +10,12 @@ using OQS.CoreWebAPI.Shared;
 namespace OQS.CoreWebAPI.Features.Quizzes;
 
 
-    public static class GetAllQuizzes
+    public static class GetAllQuizzesMock
     {
-        public record Query : IRequest<Result<List<QuizResponse>>>;
+        public record Query : IRequest<Result<List<QuizResponseMock>>>;
         
         
-        internal sealed class Handler: IRequestHandler<Query, Result<List<QuizResponse>>>
+        internal sealed class Handler: IRequestHandler<Query, Result<List<QuizResponseMock>>>
         {
             private readonly ApplicationDBContext context;
 
@@ -24,13 +24,13 @@ namespace OQS.CoreWebAPI.Features.Quizzes;
                 this.context = context;
             }
 
-            public async Task<Result<List<QuizResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<QuizResponseMock>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var quizResponses = context.Quizzes
                     .Include(quiz => quiz.Questions)
-                    .Select(quiz => new QuizResponse(quiz))
+                    .Select(quiz => new QuizResponseMock(quiz))
                     .ToList();
-                return Result.Success<List<QuizResponse>>(quizResponses);
+                return Result.Success<List<QuizResponseMock>>(quizResponses);
             }
         }
        
@@ -42,7 +42,7 @@ public class GetAllQuizzesEndpoint : ICarterModule
     {
         app.MapGet("api/quizzes", async (ISender sender) =>
         {
-            var query = new GetAllQuizzes.Query();
+            var query = new GetAllQuizzesMock.Query();
             return await sender.Send(query);
         });
     }

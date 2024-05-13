@@ -2,14 +2,14 @@ using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Contracts;
 
-public class QuestionResponse
+public class NakedQuestionResponse
 {
     public Guid Id { get; set; }
     public QuestionType Type { get; set; }
     public string Text { get; set; } 
     public List<string>? choices { get; set; }
 
-    public QuestionResponse(QuestionBase question)
+    public NakedQuestionResponse(QuestionBase question)
     {
         Id = question.Id;
         Type = question.Type;

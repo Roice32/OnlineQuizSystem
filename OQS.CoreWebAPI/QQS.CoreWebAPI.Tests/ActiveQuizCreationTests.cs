@@ -51,7 +51,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
         
         var result = await response.Content.ReadFromJsonAsync<Result<Guid>>();
         Assert.True(result.IsFailure);
-        Assert.Equal(HttpStatusCode.BadRequest, result.Error.Code); 
+        Assert.Equal("CreateActiveQuiz.BadRequest", result.Error.Code); 
         Assert.Equal("Invalid Quiz Id", result.Error.Message);
     }
 
@@ -70,7 +70,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
    
         var result = await response.Content.ReadFromJsonAsync<Result<Guid>>();
         Assert.True(result.IsFailure);
-        Assert.Equal(HttpStatusCode.BadRequest, result.Error.Code); 
+        Assert.Equal("CreateActiveQuiz.BadRequest", result.Error.Code); 
         Assert.Equal("Invalid User Id", result.Error.Message);
     }
 }
