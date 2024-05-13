@@ -3,9 +3,11 @@
     "",
     "\\OQS.CoreWebAPI",
     "\\OQS.CoreWebAPI\\OQS.CoreWebAPI",
+    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures",
+    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile",
     "\\QOS.WebUI",
     "\\QOS.WebUI\\Frontend"
   ],
-  "SelectedNode": "\\QOS.WebUI\\Frontend\\src",
+  "SelectedNode": "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile\\UserName.cs",
   "PreviewInSolutionExplorer": false
 }
