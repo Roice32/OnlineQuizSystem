@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj": {}
+    "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj": {}
   },
   "projects": {
-    "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj": {
+    "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj",
         "projectName": "OQS.CoreWebAPI",
-        "projectPath": "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj",
-        "packagesPath": "C:\\Users\\ivrem\\.nuget\\packages\\",
-        "outputPath": "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\obj\\",
+        "projectPath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj",
+        "packagesPath": "C:\\Users\\Cpirlac\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ivrem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Cpirlac\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -125,7 +125,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

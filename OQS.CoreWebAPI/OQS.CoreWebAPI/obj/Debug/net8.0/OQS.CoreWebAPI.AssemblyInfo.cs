@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OQS.CoreWebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8310dd72664c879647613b1292ee5707ede9f1d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1d63d31f2249c0ca4b6c66aad920211c7288cc1")]
 [assembly: System.Reflection.AssemblyProductAttribute("OQS.CoreWebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OQS.CoreWebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
