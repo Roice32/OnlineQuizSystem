@@ -27,7 +27,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 return Result.Failure(Error.NullValue);
             }
 
-            QuizResultBody resultBody = await BuildQuizResultBodyAsync(toBeChecked, quizFromDb.Questions, dbContext);
+            var questions = await dbContext.Questions
+                .AsNoTracking()
+                .Where(q => q.QuizId == toBeChecked.QuizId)
+                .ToListAsync();
+
+            QuizResultBody resultBody = await BuildQuizResultBodyAsync(toBeChecked, questions, dbContext);
             QuizResultHeader resultHeader = await BuildQuizResultHeaderAsync(toBeChecked, resultBody, dbContext);
             return await StoreQuizResultAsync(resultHeader, resultBody, dbContext);
         }

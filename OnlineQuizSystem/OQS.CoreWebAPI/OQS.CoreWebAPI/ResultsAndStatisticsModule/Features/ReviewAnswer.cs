@@ -63,12 +63,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                             validationResult.ToString()));
                 }
 
-                var quizAndQuestionMatch = (await dbContext
-                    .Quizzes
-                    .Where(quiz => quiz.Id == request.QuizId)
-                    .SelectMany(quiz => quiz.Questions)
-                    .ToListAsync(cancellationToken))
-                    .Any(question => question.Id == request.QuestionId);
+                var quizAndQuestionMatch = await dbContext
+                    .Questions
+                    .AsNoTracking()
+                    .AnyAsync(q => q.QuizId == request.QuizId && 
+                        q.Id == request.QuestionId);
 
                 if(!quizAndQuestionMatch)
                 {

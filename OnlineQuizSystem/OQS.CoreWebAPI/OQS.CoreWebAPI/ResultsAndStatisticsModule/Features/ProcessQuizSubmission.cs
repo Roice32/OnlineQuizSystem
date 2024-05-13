@@ -131,8 +131,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 var questionAnswerPairs = JsonConvert.DeserializeObject
                     <List<QuestionAnswerPairBase>>(questionAnswerPairsJSON, new QAPairConverter());
 
-                Console.WriteLine(questionAnswerPairs);
-
                 var command = new ProcessQuizSubmission.Command
                 {
                     QuizId = quizId,
