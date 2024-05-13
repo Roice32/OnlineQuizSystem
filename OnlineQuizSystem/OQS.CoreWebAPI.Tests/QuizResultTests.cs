@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
 
@@ -37,8 +38,9 @@ namespace OQS.CoreWebAPI.Tests
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             var resultString = await result.Content.ReadAsStringAsync();
-            // Deserialization fails because QuestionBase is abstract
-            var resultObject = JsonConvert.DeserializeObject<GetQuizResultResponse>(resultString);
+            var resultObject = JsonConvert
+                .DeserializeObject<GetQuizResultResponse>(resultString,
+                    new CustomJsonDeserializer());
 
             resultObject.QuizResultHeader.QuizId.Should().Be(quizId);
             resultObject.QuizResultHeader.UserId.Should().Be(userId);

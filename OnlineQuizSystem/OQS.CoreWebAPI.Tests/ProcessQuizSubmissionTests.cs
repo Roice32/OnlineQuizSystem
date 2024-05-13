@@ -14,21 +14,6 @@ namespace OQS.CoreWebAPI.Tests
     public class ProcessQuizSubmissionTests : ApplicationContextForTesting
     {
         [Fact]
-        public async Task what_is_going_on_with_the_questions_table()
-        {
-            using var scope = Application.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            var quizId = Guid.Parse("00000000-0000-0000-0002-000000000002");
-            var questionsForQuiz = await dbContext
-                .Questions
-                .Where(q => q.QuizId == quizId)
-                .ToListAsync();
-
-            questionsForQuiz.Count.Should().Be(1);
-        }
-
-        [Fact]
         public async Task Given_AnyEmptyFieldInCommad_When_ProccesQuizSubmissionHandlerIsCalled_Then_ValidationFails()
         {
             // Arange 
@@ -98,7 +83,7 @@ namespace OQS.CoreWebAPI.Tests
             var takenBy = Guid.Parse("00000000-0000-0000-0001-000000000003");
             List<QuestionAnswerPairBase> questionAnswerPairs =
             [
-                new TrueFalseQAPair(Guid.Parse("00000000-0000-0000-0003-000000000007"), false),
+                new TrueFalseQAPair(Guid.Parse("00000000-0000-0000-0003-000000000006"), false),
             ];
             string questionAnswerPairsJson = JsonConvert.SerializeObject(questionAnswerPairs);
             int timeElapsed = 1;
@@ -120,7 +105,6 @@ namespace OQS.CoreWebAPI.Tests
             resultHeader.Value.QuizId.Should().Be(quizId);
             resultHeader.Value.UserId.Should().Be(takenBy);
             resultHeader.Value.CompletionTime.Should().Be(timeElapsed);
-            // Since Quizzes table does not contain questions, this result cannot update
             resultHeader.Value.Score.Should().Be(2);
         }
     }

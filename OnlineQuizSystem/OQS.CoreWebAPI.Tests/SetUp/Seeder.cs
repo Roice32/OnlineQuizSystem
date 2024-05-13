@@ -12,6 +12,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
         {
             SeedUsers(dbContext);
             SeedQuizzes(dbContext);
+            SeedQuestions(dbContext);
             SeedQuestionResults(dbContext);
             SeedQuizResultBodies(dbContext);
             SeedQuizResultHeaders(dbContext);

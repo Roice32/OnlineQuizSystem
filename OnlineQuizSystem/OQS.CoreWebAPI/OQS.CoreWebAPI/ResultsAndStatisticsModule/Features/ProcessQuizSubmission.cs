@@ -8,6 +8,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.CustomJsonDeserializer;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
@@ -47,7 +48,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         {
             private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
-        
+
             public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
                 dbContext = context;
@@ -75,47 +76,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 {
                     return Result.Failure(quizCheckerResult.Error);
                 }
-                
+
                 return Result.Success();
             }
         }
     }
-
-    public class QAPairConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(QuestionAnswerPairBase);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject jo = JObject.Load(reader);
-            if (jo["TrueFalseAnswer"] != null)
-            {
-                return jo.ToObject<TrueFalseQAPair>();
-            }
-            else if (jo["SingleChoiceAnswer"] != null)
-            {
-                return jo.ToObject<SingleChoiceQAPair>();
-            }
-            else if (jo["MultipleChoiceAnswers"] != null)
-            {
-                return jo.ToObject<MultipleChoiceQAPair>();
-            }
-            else if (jo["WrittenAnswer"] != null)
-            {
-                return jo.ToObject<WrittenQAPair>();
-            }
-            return null;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 
     public class ProcessQuizSubmissionEndPoint : ICarterModule
     {
@@ -128,8 +93,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     int timeElapsed,
                     ISender sender) =>
             {
-                var questionAnswerPairs = JsonConvert.DeserializeObject
-                    <List<QuestionAnswerPairBase>>(questionAnswerPairsJSON, new QAPairConverter());
+                var questionAnswerPairs = JsonConvert
+                    .DeserializeObject<List<QuestionAnswerPairBase>>(questionAnswerPairsJSON,
+                        new CustomJsonDeserializer());
 
                 var command = new ProcessQuizSubmission.Command
                 {

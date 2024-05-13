@@ -185,7 +185,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     questionFromDb.Id,
                     0,
                     "",
-                    AnswerResult.Pending);
+                    AnswerResult.NotAnswered);
             }
 
             // Later on, implement asking an LLM for a temporary review.
