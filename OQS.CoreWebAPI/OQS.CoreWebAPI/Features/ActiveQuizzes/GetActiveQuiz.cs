@@ -29,7 +29,7 @@ public class GetActiveQuizById
 
             if (activeQuiz == null)
             {
-                return Result.Failure<ActiveQuizResponse>(new Error(HttpStatusCode.NotFound, "Active Quiz not found"));
+                return Result.Failure<ActiveQuizResponse>(new Error("GetActiveQuiz.ActiveQuizNotFound", "Active Quiz not found"));
             }
 
             var activeQuizResponse = new ActiveQuizResponse(activeQuiz);

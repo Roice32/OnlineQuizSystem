@@ -16,7 +16,7 @@ public class SubmitResponse : ICarterModule
         app.MapPost("api/active-quiz/{activeQuizId}", async (SubmitResponseRequest request) =>
         {
             if (request == null)
-                return Result.Failure(new Error(HttpStatusCode.BadRequest, "Invalid request format."));
+                return Result.Failure(new Error("SubmitActiveQuiz.BadRequest", "Invalid request format."));
             var data = new SubmitResponseRequest { ActiveQuizId = request.ActiveQuizId, Answers = request.Answers };
             result.Add(data);
             return Result.Success("Submission successful.");
