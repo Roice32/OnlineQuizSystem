@@ -9,6 +9,8 @@ using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.QuizQuestions;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Entities;
+using System;
+using System.Collections.Generic;
 
 namespace OQS.CoreWebAPI.Features.QuizQuestions
 {
@@ -36,7 +38,52 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
         {
             public Validator()
             {
-              
+               RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Id is required.");
+
+        RuleFor(x => x.QuizId)
+            .NotEmpty().WithMessage("QuizId is required.");
+
+        RuleFor(x => x.Body)
+            .NotNull().WithMessage("Body is required.")
+            .DependentRules(() =>
+            {
+                RuleFor(x => x.Body.Text)
+                    .NotEmpty().WithMessage("Text is required.");
+
+                RuleFor(x => x.Body.Type)
+                    .NotEmpty().WithMessage("Type is required.");
+
+                When(x => x.Body.Choices != null, () =>
+                {
+                    RuleFor(x => x.Body.Choices)
+                        .NotEmpty().WithMessage("Choices are required.");
+                });
+
+                When(x => x.Body.MultipleChoiceAnswers != null, () =>
+                {
+                    RuleFor(x => x.Body.MultipleChoiceAnswers)
+                        .NotEmpty().WithMessage("MultipleChoiceAnswers are required.");
+                });
+
+                When(x => x.Body.SingleChoiceAnswer != null, () =>
+                {
+                    RuleFor(x => x.Body.SingleChoiceAnswer)
+                        .NotEmpty().WithMessage("SingleChoiceAnswer is required.");
+                });
+
+                When(x => x.Body.TrueFalseAnswer != null, () =>
+                {
+                    RuleFor(x => x.Body.TrueFalseAnswer)
+                        .NotEmpty().WithMessage("TrueFalseAnswer is required.");
+                });
+
+                When(x => x.Body.WrittenAcceptedAnswers != null, () =>
+                {
+                    RuleFor(x => x.Body.WrittenAcceptedAnswers)
+                        .NotEmpty().WithMessage("WrittenAcceptedAnswers are required.");
+                });
+            });
             }
         }
 
