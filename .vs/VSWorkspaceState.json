@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\OQS.CoreWebAPI"
+    "\\OQS.CoreWebAPI",
+    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI",
+    "\\QOS.WebUI",
+    "\\QOS.WebUI\\Frontend"
   ],
+  "SelectedNode": "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures",
   "PreviewInSolutionExplorer": false
 }
