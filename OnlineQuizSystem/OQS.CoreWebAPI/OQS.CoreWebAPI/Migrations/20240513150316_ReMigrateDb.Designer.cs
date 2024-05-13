@@ -12,8 +12,8 @@ using OQS.CoreWebAPI.Database;
 namespace OQS.CoreWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240513144119_Orphan-Questions-Fix-Migration")]
-    partial class OrphanQuestionsFixMigration
+    [Migration("20240513150316_ReMigrateDb")]
+    partial class ReMigrateDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

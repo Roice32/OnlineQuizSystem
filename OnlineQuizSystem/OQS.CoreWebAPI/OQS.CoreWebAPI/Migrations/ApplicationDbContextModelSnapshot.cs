@@ -11,7 +11,7 @@ using OQS.CoreWebAPI.Database;
 namespace OQS.CoreWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class RSMApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
