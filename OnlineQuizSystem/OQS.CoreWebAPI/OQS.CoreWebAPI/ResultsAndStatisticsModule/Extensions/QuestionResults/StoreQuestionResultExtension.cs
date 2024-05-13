@@ -1,4 +1,5 @@
-﻿using OQS.CoreWebAPI.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
@@ -14,8 +15,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
 
         public static async Task StoreQuestionResultAsync(ApplicationDbContext dbContext, QuestionResultBase questionResult)
         {
+            int count = await dbContext.QuestionResults.CountAsync();
             await dbContext.QuestionResults.AddAsync(questionResult);
             await dbContext.SaveChangesAsync();
+            int newCount = await dbContext.QuestionResults.CountAsync();
         }
     }
 }

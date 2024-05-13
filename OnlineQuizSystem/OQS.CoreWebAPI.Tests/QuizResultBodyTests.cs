@@ -35,7 +35,7 @@ namespace OQS.CoreWebAPI.Tests
 
             // Assert
             result.Should().NotBeNull();
-            result.IsSuccess.Should().BeTrue(); //  BeOfType<FetchQuizResultBodyResponse>();
+            result.IsSuccess.Should().BeTrue();
 
             List<Guid> questionIds = await dbContext.QuizResultBodies
                 .AsNoTracking()
@@ -43,18 +43,17 @@ namespace OQS.CoreWebAPI.Tests
                 .Select(q => q.QuestionIds)
                 .FirstOrDefaultAsync();
 
-            questionIds.Should().NotBeNull();  
+            questionIds.Should().NotBeNull();
             questionIds.Count.Should().Be(2);
             questionIds.Should().Contain(
-                new List<Guid>
-                {
+                [
                     Guid.Parse("00000000-0000-0000-0003-000000000007"),
                     Guid.Parse("00000000-0000-0000-0003-000000000008")
 
-                  });
+                ]);
         }
 
-        [Fact] 
+        [Fact]
         public void Given_IdsPairForNonexistentQuizResultBody_When_FetchQuizResultBodyIsCalled_Then_NullValueIsReturned()
         {
             // Arrange
@@ -101,14 +100,13 @@ namespace OQS.CoreWebAPI.Tests
             List<Guid> questionIds = storedBody.Value.Questions
                 .Select(questionIds => questionIds.Id).ToList();
             questionIds.Should().Contain(
-                               new List<Guid>
-                               {
+                [
                     Guid.Parse("00000000-0000-0000-0003-000000000007"),
                     Guid.Parse("00000000-0000-0000-0003-000000000008")
-                });
+                ]);
 
         }
 
-       
+
     }
 }

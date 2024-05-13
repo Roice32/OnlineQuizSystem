@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
@@ -40,7 +41,7 @@ namespace OQS.CoreWebAPI.Tests
                 $"questionAnswerPairsJSON=&" +
                 $"timeElapsed={timeElapsed}";
 
-            
+
             var requestUri4 = $"api/quizResults/processQuizSubmission?" +
                 $"quizId={quizId}&" +
                 $"takenBy={takenBy}&" +
@@ -82,7 +83,7 @@ namespace OQS.CoreWebAPI.Tests
             var takenBy = Guid.Parse("00000000-0000-0000-0001-000000000003");
             List<QuestionAnswerPairBase> questionAnswerPairs =
             [
-                new TrueFalseQAPair(Guid.Parse("00000000-0000-0000-0003-000000000007"), false),
+                new TrueFalseQAPair(Guid.Parse("00000000-0000-0000-0003-000000000006"), false),
             ];
             string questionAnswerPairsJson = JsonConvert.SerializeObject(questionAnswerPairs);
             int timeElapsed = 1;
@@ -104,8 +105,7 @@ namespace OQS.CoreWebAPI.Tests
             resultHeader.Value.QuizId.Should().Be(quizId);
             resultHeader.Value.UserId.Should().Be(takenBy);
             resultHeader.Value.CompletionTime.Should().Be(timeElapsed);
-            // Since Quizzes table does not contain questions, this result cannot update
-            //resultHeader.Value.Score.Should().Be(2);
+            resultHeader.Value.Score.Should().Be(2);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             int notPickedCount = 0;
             foreach (var choice in ((ChoiceQuestionBase)questionFromDb).Choices)
             {
-                if(((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Contains(choice))
+                if (((MultipleChoiceQuestion)questionFromDb).MultipleChoiceAnswers.Contains(choice))
                 {
                     if (((MultipleChoiceQAPair)qaPair).MultipleChoiceAnswers.Contains(choice))
                     {
@@ -90,7 +90,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 }
             }
 
-            float scorePercentage = 1f * Math.Max(0, correctCount - wrongCount) / 
+            float scorePercentage = 1f * Math.Max(0, correctCount - wrongCount) /
                 (correctCount + notPickedCount);
 
             string pseudoDictionaryChoicesResults = JsonConvert.SerializeObject(allChoicesResults);
@@ -185,7 +185,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     questionFromDb.Id,
                     0,
                     "",
-                    AnswerResult.Pending);
+                    AnswerResult.NotAnswered);
             }
 
             // Later on, implement asking an LLM for a temporary review.

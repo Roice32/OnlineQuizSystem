@@ -12,6 +12,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
         {
             SeedUsers(dbContext);
             SeedQuizzes(dbContext);
+            SeedQuestions(dbContext);
             SeedQuestionResults(dbContext);
             SeedQuizResultBodies(dbContext);
             SeedQuizResultHeaders(dbContext);
@@ -19,7 +20,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         private static void SeedUsers(ApplicationDbContext dbContext)
         {
-            var users = new List<User> 
+            var users = new List<User>
             {
                 new User
                 {
@@ -50,8 +51,6 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         private static void SeedQuizzes(ApplicationDbContext dbContext)
         {
-            var questions = SeedQuestions(dbContext);
-
             var quizzes = new List<Quiz>
             {
                 new Quiz
@@ -59,7 +58,6 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Id = Guid.Parse("00000000-0000-0000-0002-000000000001"),
                     Name = "Quiz1",
                     Description = "Description1",
-                    Questions = new(questions[..5]),
                     TimeLimitMinutes = 20,
                     CreatedAt = DateTime.Now,
                     CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
@@ -69,7 +67,6 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Id = Guid.Parse("00000000-0000-0000-0002-000000000002"),
                     Name = "Quiz2",
                     Description = "Description2",
-                    Questions = new(questions.Slice(5, 1)),
                     TimeLimitMinutes = 2,
                     CreatedAt = DateTime.Now,
                     CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000001")
@@ -79,7 +76,6 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Id = Guid.Parse("00000000-0000-0000-0002-000000000003"),
                     Name = "Quiz3",
                     Description = "Description3",
-                    Questions = new(questions.Slice(6, 2)),
                     TimeLimitMinutes = 10,
                     CreatedAt = DateTime.Now,
                     CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
@@ -90,7 +86,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             dbContext.SaveChanges();
         }
 
-        private static List<QuestionBase> SeedQuestions(ApplicationDbContext dbContext)
+        private static void SeedQuestions(ApplicationDbContext dbContext)
         {
             var questions = new List<QuestionBase>
             {
@@ -99,7 +95,8 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     id: Guid.Parse("00000000-0000-0000-0003-000000000001"),
                     text: "TrueFalseQuestion1",
                     trueFalseAnswer: true,
-                    allocatedPoints: 2
+                    allocatedPoints: 2,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
                 ),
                 new SingleChoiceQuestion
                 (
@@ -107,7 +104,8 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     text: "SingleChoiceQuestion1",
                     choices: new List<string> { "Option1", "Option2", "Option3" },
                     singleChoiceAnswer: "Option2",
-                    allocatedPoints: 3
+                    allocatedPoints: 3,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
                 ),
                 new MultipleChoiceQuestion
                 (
@@ -115,20 +113,23 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     text: "MultipleChoiceQuestion1",
                     choices: new List<string> { "Option1", "Option2", "Option3", "Option4" },
                     multipleChoiceAnswers: new List<string> { "Option2", "Option4" },
-                    allocatedPoints: 4
+                    allocatedPoints: 4,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
                 ),
                 new WrittenAnswerQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000004"),
                     text: "WrittenAnswerQuestion1",
                     writtenAcceptedAnswers: new List<string> { "AcceptedAnswer1", "AcceptedAnswer2" },
-                    allocatedPoints: 5
+                    allocatedPoints: 5,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
                 ),
                 new ReviewNeededQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000005"),
                     text: "ReviewNeededQuestion1",
-                    allocatedPoints: 6
+                    allocatedPoints: 6,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
                 ),
 
                 new TrueFalseQuestion
@@ -136,26 +137,28 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     id: Guid.Parse("00000000-0000-0000-0003-000000000006"),
                     text: "TrueFalseQuestion2",
                     trueFalseAnswer: false,
-                    allocatedPoints: 2
+                    allocatedPoints: 2,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000002")
                 ),
 
                 new ReviewNeededQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000007"),
                     text: "ReviewNeededQuestion2",
-                    allocatedPoints: 5
+                    allocatedPoints: 5,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000003")
                 ),
                 new ReviewNeededQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000008"),
                     text: "ReviewNeededQuestion3",
-                    allocatedPoints: 5
+                    allocatedPoints: 5,
+                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000003")
                 ),
             };
 
             dbContext.Questions.AddRange(questions);
             dbContext.SaveChanges();
-            return questions;
         }
 
         private static void SeedQuestionResults(ApplicationDbContext dbContext)

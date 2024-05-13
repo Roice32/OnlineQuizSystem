@@ -5,7 +5,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
 namespace OQS.CoreWebAPI.Database.Configurations;
 
-public class ChoiceQuestionBaseConfiguration:IEntityTypeConfiguration<ChoiceQuestionBase>
+public class ChoiceQuestionBaseConfiguration : IEntityTypeConfiguration<ChoiceQuestionBase>
 {
     public void Configure(EntityTypeBuilder<ChoiceQuestionBase> builder)
     {

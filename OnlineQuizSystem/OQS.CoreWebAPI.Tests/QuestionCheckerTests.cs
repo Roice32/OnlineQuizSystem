@@ -80,8 +80,8 @@ namespace OQS.CoreWebAPI.Tests
             result.Score.Should().Be(0);
             ((TrueFalseQuestionResult)result).TrueFalseAnswerResult.Should().Be(AnswerResult.Wrong);
         }
-        
-        [Fact]    
+
+        [Fact]
         public void Given_SingleChoiceQuestionAnsweredCorrectly_When_CheckQuestionIsCalled_Then_QuestionResultIsCorrect()
         {
             // Arrange
@@ -286,18 +286,24 @@ namespace OQS.CoreWebAPI.Tests
 
             var userId = Guid.Parse("00000000-0000-0000-0001-000000000001");
             var questionId = Guid.Parse("00000000-0000-0000-0003-000000000005");
+            var qaPair = new WrittenQAPair(questionId, "Answer1");
 
             var questionFromDb = dbContext
                 .Questions
                 .FirstOrDefault(q => q.Id == questionId);
 
             // Act
-            var result = QuestionChecker.CheckQuestion(userId, null, questionFromDb);
+            var result1 = QuestionChecker.CheckQuestion(userId, qaPair, questionFromDb);
+            var result2 = QuestionChecker.CheckQuestion(userId, null, questionFromDb);
 
             // Assert
-            result.Should().BeOfType<ReviewNeededQuestionResult>();
-            result.Score.Should().Be(0);
-            ((ReviewNeededQuestionResult)result).ReviewNeededResult.Should().Be(AnswerResult.Pending);
+            result1.Should().BeOfType<ReviewNeededQuestionResult>();
+            result1.Score.Should().Be(0);
+            ((ReviewNeededQuestionResult)result1).ReviewNeededResult.Should().Be(AnswerResult.Pending);
+
+            result2.Should().BeOfType<ReviewNeededQuestionResult>();
+            result2.Score.Should().Be(0);
+            ((ReviewNeededQuestionResult)result2).ReviewNeededResult.Should().Be(AnswerResult.NotAnswered);
         }
     }
 }

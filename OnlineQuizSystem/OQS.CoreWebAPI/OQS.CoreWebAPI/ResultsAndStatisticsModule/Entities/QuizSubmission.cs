@@ -4,7 +4,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     public class QuizSubmission
     {
-        public Guid QuizId { get; set; } 
+        public Guid QuizId { get; set; }
         public Guid TakenBy { get; set; }
         public List<QuestionAnswerPairBase> QuestionAnswerPairs { get; set; } = new();
         public int TimeElapsed { get; set; }

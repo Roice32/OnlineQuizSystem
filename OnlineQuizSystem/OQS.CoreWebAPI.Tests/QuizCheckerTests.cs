@@ -79,9 +79,8 @@ namespace OQS.CoreWebAPI.Tests
 
             // Act
             var result = await QuizChecker.CheckQuizAsync(quizSubmission, dbContext);
-            var questionIds = await dbContext.Quizzes
-                .Where(q => q.Id == quizId)
-                .SelectMany(q => q.Questions)
+            var questionIds = await dbContext.Questions
+                .Where(q => q.QuizId == quizId)
                 .Select(q => q.Id)
                 .ToListAsync();
 
@@ -96,9 +95,9 @@ namespace OQS.CoreWebAPI.Tests
                 .Where(qr => qr.UserId == userId
                     && questionIds.Contains(qr.QuestionId))
                 .ToListAsync();
-            // Something's wrong with the Quizzes table
-            //questionResults.Should().HaveCount(5);
-            foreach(var questionResult in questionResults)
+
+            questionResults.Should().HaveCount(5);
+            foreach (var questionResult in questionResults)
             {
                 questionResult.Score.Should().Be(0);
                 if (questionResult is TrueFalseQuestionResult trueFalseQuestionResult)

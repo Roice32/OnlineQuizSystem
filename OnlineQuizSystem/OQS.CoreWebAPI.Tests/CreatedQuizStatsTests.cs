@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Tests
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             var resultString = await result.Content.ReadAsStringAsync();
             var resultObject = JsonConvert.DeserializeObject<GetCreatedQuizStatsResponse>(resultString);
-            
+
             resultObject.QuizName.Should().Be("Quiz1");
             resultObject.UserNames.Should().HaveCount(1);
             resultObject.QuizResultHeaders.Should().HaveCount(1);

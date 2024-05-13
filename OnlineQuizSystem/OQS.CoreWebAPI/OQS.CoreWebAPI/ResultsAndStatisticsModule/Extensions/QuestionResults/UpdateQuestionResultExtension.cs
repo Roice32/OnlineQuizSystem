@@ -34,12 +34,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults
                 .AsNoTracking()
                 .FirstOrDefaultAsync(q => q.Id == questionId);
 
-            if(score < 0 || score > questionFromDb.AllocatedPoints)
+            if (score < 0 || score > questionFromDb.AllocatedPoints)
             {
                 return Result.Failure(Error.OutOfBoundsValue);
             }
 
-            if(questionResult.ReviewNeededResult != AnswerResult.Pending)
+            if (questionResult.ReviewNeededResult != AnswerResult.Pending)
             {
                 return Result.Failure(Error.ConditionNotMet);
             }

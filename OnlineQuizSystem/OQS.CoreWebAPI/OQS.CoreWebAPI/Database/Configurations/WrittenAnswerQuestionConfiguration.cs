@@ -5,7 +5,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 
 namespace OQS.CoreWebAPI.Database.Configurations;
 
-public class WrittenAnswerQuestionConfiguration:IEntityTypeConfiguration<WrittenAnswerQuestion>
+public class WrittenAnswerQuestionConfiguration : IEntityTypeConfiguration<WrittenAnswerQuestion>
 {
     public void Configure(EntityTypeBuilder<WrittenAnswerQuestion> builder)
     {

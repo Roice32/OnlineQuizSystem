@@ -11,7 +11,7 @@ using OQS.CoreWebAPI.Database;
 namespace OQS.CoreWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class RSMApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -40,7 +40,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("UserId", "QuestionId");
 
-                    b.ToTable("QuestionResults", (string)null);
+                    b.ToTable("QuestionResults");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("QuestionResultBase");
 
@@ -61,7 +61,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("UserId", "QuizId");
 
-                    b.ToTable("QuizResultBodies", (string)null);
+                    b.ToTable("QuizResultBodies");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultHeader", b =>
@@ -86,7 +86,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("UserId", "QuizId");
 
-                    b.ToTable("QuizResultHeaders", (string)null);
+                    b.ToTable("QuizResultHeaders");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase", b =>
@@ -103,7 +103,7 @@ namespace OQS.CoreWebAPI.Migrations
                         .HasMaxLength(34)
                         .HasColumnType("nvarchar(34)");
 
-                    b.Property<Guid?>("QuizId")
+                    b.Property<Guid>("QuizId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
@@ -115,9 +115,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("QuestionBase");
 
@@ -135,7 +133,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
-                        
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -148,7 +146,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quizzes", (string)null);
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Tag", b =>
@@ -166,7 +164,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.User", b =>
@@ -191,7 +189,7 @@ namespace OQS.CoreWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.ChoiceQuestionResult", b =>
@@ -302,18 +300,6 @@ namespace OQS.CoreWebAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("SingleChoiceQuestion");
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase", b =>
-                {
-                    b.HasOne("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Quiz", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("QuizId");
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Quiz", b =>
-                {
-                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

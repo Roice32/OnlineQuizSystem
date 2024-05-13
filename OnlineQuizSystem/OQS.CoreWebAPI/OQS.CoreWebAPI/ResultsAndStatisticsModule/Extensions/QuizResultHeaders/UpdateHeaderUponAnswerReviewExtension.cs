@@ -19,8 +19,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders
         {
             var quizResultHeader = await dbContext.QuizResultHeaders
                 .FirstOrDefaultAsync(qrh => qrh.UserId == userId && qrh.QuizId == quizId);
-            
-            if(quizResultHeader is null)
+
+            if (quizResultHeader is null)
             {
                 return Result.Failure(Error.NullValue);
             }

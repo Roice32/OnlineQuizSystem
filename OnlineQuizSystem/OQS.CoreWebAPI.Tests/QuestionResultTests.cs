@@ -10,7 +10,7 @@ using OQS.CoreWebAPI.Tests.SetUp;
 
 namespace OQS.CoreWebAPI.Tests
 {
-    public class QuestionResultTests: ApplicationContextForTesting
+    public class QuestionResultTests : ApplicationContextForTesting
     {
         [Fact]
         public async Task Given_ValidIdsPair_When_FetchQuestionResultIsCalled_Then_CorrespondingResultIsReturnedAsync()
@@ -28,7 +28,7 @@ namespace OQS.CoreWebAPI.Tests
             // Assert
             result.Should().NotBeNull();
             result.Should().BeOfType<ReviewNeededQuestionResult>();
-            
+
             var reviewNeededResult = result as ReviewNeededQuestionResult;
             reviewNeededResult.UserId.Should().Be(userId);
             reviewNeededResult.QuestionId.Should().Be(questionId);
@@ -83,11 +83,11 @@ namespace OQS.CoreWebAPI.Tests
                     {"Option2", AnswerResult.Correct},
                     {"Option3", AnswerResult.Other}
                 });
-            
+
             var result3 = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId3).Result;
             result1.Should().NotBeNull();
             result3.Should().BeOfType<ChoiceQuestionResult>();
-            var deserializedDictionary2 = 
+            var deserializedDictionary2 =
                 JsonConvert.DeserializeObject<Dictionary<string, AnswerResult>>(
                     ((ChoiceQuestionResult)result3).PseudoDictionaryChoicesResults);
             deserializedDictionary2.Should()
@@ -103,7 +103,7 @@ namespace OQS.CoreWebAPI.Tests
             result4.Should().NotBeNull();
             result4.Should().BeOfType<WrittenAnswerQuestionResult>();
             ((WrittenAnswerQuestionResult)result4).WrittenAnswerResult.Should().Be(AnswerResult.Correct);
-            
+
             var result5 = FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId5).Result;
             result5.Should().NotBeNull();
             result5.Should().BeOfType<ReviewNeededQuestionResult>();
