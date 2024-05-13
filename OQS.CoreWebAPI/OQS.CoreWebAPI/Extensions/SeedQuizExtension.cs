@@ -7,7 +7,7 @@ public static class SeedQuizExtension
 {
     public static void SeedQuizzez(this ApplicationDBContext dbContext)
     {
-        if(dbContext.Quizzes.Any())
+       /* if(dbContext.Quizzes.Any())
         {
             return;
         }
@@ -24,6 +24,6 @@ public static class SeedQuizExtension
         quiz.Questions.Add(new WrittenAnswerQuestion(Guid.Parse("42358960-93cd-4045-a17f-7e23006b37f1"), "Question 4", ["A", "B", "C", "D"]));
         quiz.Questions.Add(new ReviewNeededQuestion(Guid.Parse("4c9b58cf-62e9-4cff-9c57-4775e6a3312a"), "Question 5"));
         dbContext.Quizzes.Add(quiz);
-        dbContext.SaveChanges();
+        dbContext.SaveChanges();*/
     }
 }
