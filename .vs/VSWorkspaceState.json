@@ -6,6 +6,6 @@
     "\\QOS.WebUI",
     "\\QOS.WebUI\\Frontend"
   ],
-  "SelectedNode": "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures",
+  "SelectedNode": "\\QOS.WebUI\\Frontend\\src",
   "PreviewInSolutionExplorer": false
 }
