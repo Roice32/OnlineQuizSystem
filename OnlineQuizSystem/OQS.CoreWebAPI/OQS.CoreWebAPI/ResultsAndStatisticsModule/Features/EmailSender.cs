@@ -85,7 +85,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 try
                 {
                     var message = new MimeMessage();
-                    message.From.Add(MailboxAddress.Parse(_smtpSettings.SenderEmail));
+                    message.From.Add(MailboxAddress.Parse("echipafacultate@yahoo.com"));
                     message.To.Add(MailboxAddress.Parse(request.RecipientEmail));
                     message.Subject = "Quiz Score";
                     message.Body = new TextPart(MimeKit.Text.TextFormat.Plain)
@@ -94,10 +94,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     };
 
                     using var smtp = new SmtpClient();
-                    await smtp.ConnectAsync(_smtpSettings.Server, _smtpSettings.Port, SecureSocketOptions.Auto);
-                    await smtp.AuthenticateAsync(_smtpSettings.UserName, _smtpSettings.Password);
-                    await smtp.SendAsync(message);
-                    await smtp.DisconnectAsync(true);
+                    smtp.Connect("smtp.mail.yahoo.com", 587, false);
+                    smtp.Authenticate("echipafacultate@yahoo.com", "onhqcvgwqodblrtv");
+                    smtp.Send(message);
+                    smtp.Disconnect(true);
 
                     return Result.Success(new SendEmailResponse { Message = "Email Sent Successfully" });
                 }
