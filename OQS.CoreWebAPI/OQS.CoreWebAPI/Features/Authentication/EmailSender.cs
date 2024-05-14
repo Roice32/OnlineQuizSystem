@@ -20,7 +20,8 @@ public class EmailSender : IEmailSender
         var mailMessage = new MailMessage(mail, email, subject, message)
         {
             BodyEncoding = Encoding.UTF8,
-            SubjectEncoding = Encoding.UTF8
+            SubjectEncoding = Encoding.UTF8,
+            IsBodyHtml = true
         };
 
         return client.SendMailAsync(mailMessage);
