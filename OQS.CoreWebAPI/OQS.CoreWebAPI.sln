@@ -3,7 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OQS.CoreWebAPI", "OQS.CoreWebAPI\OQS.CoreWebAPI.csproj", "{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OQS.CoreWebAPI", "OQS.CoreWebAPI\OQS.CoreWebAPI.csproj", "{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D2BB6A2D-91C8-48F9-BD06-CC9A1BF16477}"
+	ProjectSection(SolutionItems) = preProject
+		AuthenticationTest.cs = AuthenticationTest.cs
+		RegistrationTest.cs = RegistrationTest.cs
+		UnitTest1.cs = UnitTest1.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QOS.CoreWebAPI.Features.Tests", "QOS.CoreWebAPI.Features.Tests\QOS.CoreWebAPI.Features.Tests.csproj", "{E70F9F5B-5B9C-478C-9B9B-0D66397CF164}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +24,16 @@ Global
 		{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70F9F5B-5B9C-478C-9B9B-0D66397CF164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70F9F5B-5B9C-478C-9B9B-0D66397CF164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70F9F5B-5B9C-478C-9B9B-0D66397CF164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70F9F5B-5B9C-478C-9B9B-0D66397CF164}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E70F9F5B-5B9C-478C-9B9B-0D66397CF164} = {D2BB6A2D-91C8-48F9-BD06-CC9A1BF16477}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5C624E3-F095-417E-856F-04A7164A2CE8}

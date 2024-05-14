@@ -3,6 +3,7 @@ import './SignUp.css';
 import FormInput from '../components/FormInput';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function SignIn() {
@@ -72,6 +73,7 @@ function SignIn() {
             {inputs.map((input) => (
                 <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange}/>
             ))}
+              <Link  className = "forgot-password-link" to="/forgot-password">Forgot Password?</Link>
             <button>Submit</button>
         </form>
     </div>);

@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Extensions;
-using OQS.CoreWebAPI.Feautures.Authentication;
+using OQS.CoreWebAPI.Features.Authentication;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddCarter();
 
 // Pentru trimiterea email-urilor
-builder.Services.AddTransient<IEmailSender, EmailService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 // Add configuration for CORS
