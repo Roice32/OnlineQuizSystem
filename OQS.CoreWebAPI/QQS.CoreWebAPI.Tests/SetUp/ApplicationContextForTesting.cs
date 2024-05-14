@@ -34,9 +34,9 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
                         db.Database.EnsureDeleted();
                         db.Database.EnsureCreated();
-                        db.SeedQuestions();
-                        db.SeedQuizzez();
                         db.SeedUsers();
+                        db.SeedQuizzez();
+                        db.SeedActiveQuizzes();
                     }
                 });
             });
