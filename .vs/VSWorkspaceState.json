@@ -5,6 +5,6 @@
     "\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests",
     "\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\obj"
   ],
-  "SelectedNode": "\\OnlineQuizSystem.sln",
+  "SelectedNode": "\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\RegistrationTest.cs",
   "PreviewInSolutionExplorer": false
 }

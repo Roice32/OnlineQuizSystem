@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OQS.CoreWebAPI.Features.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4c61242a27641b046e6f6e4eab1a6ab69f1afb6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b78bfb8519fb7c28654e5fd587ce21820968ab73")]
 [assembly: System.Reflection.AssemblyProductAttribute("OQS.CoreWebAPI.Features.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OQS.CoreWebAPI.Features.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
