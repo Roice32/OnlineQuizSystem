@@ -1,8 +1,9 @@
-﻿using Carter;
+﻿﻿using Carter;
 using FluentValidation;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json.Linq;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
@@ -19,6 +20,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
         {
             public string Token { get; set; }
             public string NewPassword { get; set; }
+            public string Username { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -26,6 +28,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
             public Validator()
             {
                 RuleFor(x => x.NewPassword).NotEmpty();
+                RuleFor(x => x.Username).NotEmpty();
             }
         }
 
@@ -51,17 +54,27 @@ namespace OQS.CoreWebAPI.Features.Authentication
                         new Error("ResetPassword.Validator", validationResult.ToString()));
                 }
 
-                var decodedToken = HttpUtility.UrlDecode(request.Token);
-                var user = await userManager.FindByIdAsync(decodedToken);
+
+                var decodedToken1 = HttpUtility.UrlDecode(request.Token);
+                var decodedToken = decodedToken1.Replace(" ", "+"); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+                var user = await userManager.FindByNameAsync(request.Username!);
 
                 if (user == null)
                 {
                     return Result.Failure<String>(
-                                               new Error("ResetPassword.Handler", "User doesn't exists."));
+                        new Error("ResetPassword.Handler", "User doesn't exists."));
                 }
-
-                //var token = await userManager.GeneratePasswordResetTokenAsync(user);
-                var result = await userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+                else
+                {
+                    var response = userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, UserManager<User>.ResetPasswordTokenPurpose, decodedToken);
+                    if (response.Result == false)
+                    {
+                        return Result.Failure<String>(
+                            new Error("ResetPassword.Handler", $"Invalid token. Token: {decodedToken}"));
+                    }
+                }
+                
+                var result = await userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
 
                 if (!result.Succeeded)
                 {
@@ -79,12 +92,13 @@ public class ResetPasswordEndPoind : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        _ = app.MapPost("api/resetPasssword/{token}", async (ResetPasswordModel model, ISender sender, string token) =>
+        _ = app.MapPost("api/resetPassword/{token}", async (ResetPasswordModel model, ISender sender, string token) =>
         {
             var command = new ResetPassword.Command
             {
                 Token = token,
-                NewPassword = model.newPassword
+                NewPassword = model.newPassword,
+                Username = model.Username
             };
 
 
