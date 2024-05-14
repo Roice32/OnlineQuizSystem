@@ -1,7 +1,11 @@
 ﻿using Newtonsoft.Json;
+using OpenAI_API;
+using OpenAI_API.Completions;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
@@ -188,12 +192,73 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                     AnswerResult.NotAnswered);
             }
 
-            // Later on, implement asking an LLM for a temporary review.
-            return new ReviewNeededQuestionResult(userId,
-                qaPair.QuestionId,
-                0,
-                ((WrittenQAPair)qaPair).WrittenAnswer,
-                AnswerResult.Pending);
+            ReviewNeededQuestionResult questionResult =
+                new ReviewNeededQuestionResult(userId,
+                    qaPair.QuestionId,
+                    0,
+                    ((WrittenQAPair)qaPair).WrittenAnswer,
+                    AnswerResult.Pending);
+
+            Result<AskLLMForReviewResponse> askLLMForReviewResponse =
+                AskLLMForReviewAsync((ReviewNeededQuestion)questionFromDb,
+                    ((WrittenQAPair)qaPair).WrittenAnswer).GetAwaiter().GetResult();
+        
+            if (askLLMForReviewResponse.IsSuccess)
+            {
+                questionResult.LLMReview = askLLMForReviewResponse.Value.Review;
+                questionResult.Score = askLLMForReviewResponse.Value.Grade;
+            }
+
+            return questionResult;
+        }
+
+        private static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
+        {
+            var openAI = new OpenAIAPI("sk-proj-QSvrIDvvcYVwtOOcjMi8T3BlbkFJPqlYoGxnr47RgxH4DEKH");
+            CompletionRequest completionRequest = new()
+            {
+                Model = "gpt-3.5-turbo",
+                MaxTokens = 100,
+                Temperature = 0.5f,
+                TopP = 1,
+                Prompt = "Question: " + question.Text +
+                    "\nAnswer: " + answer +
+                    "\nMax Possible Score: " + question.AllocatedPoints +
+                    "\nReturn review & grade as JSON."
+            };
+
+            CompletionResult completionResponse = null;
+            try
+            {
+                completionResponse = await openAI
+                    .Completions
+                    .CreateCompletionAsync(completionRequest);
+            }
+            catch (HttpRequestException e)
+            {
+                return Result.Failure<AskLLMForReviewResponse>(
+                    new Error("AskLLMForReview.Error",
+                        e.Message));
+            }
+
+            if (completionResponse is null)
+            {
+                return Result.Failure<AskLLMForReviewResponse>(
+                    new Error("AskLLMForReview.Error",
+                        "OpenAI API did not respond."));
+            }
+
+            AskLLMForReviewResponse askLLMForReviewResponse = JsonConvert
+                .DeserializeObject<AskLLMForReviewResponse>(completionResponse.Completions[0].Text);
+
+            if (askLLMForReviewResponse is null)
+            {
+                return Result.Failure<AskLLMForReviewResponse>(
+                    new Error("AskLLMForReview.Error",
+                        "OpenAI API did not return a valid response."));
+            }
+
+            return askLLMForReviewResponse;
         }
     }
 }
