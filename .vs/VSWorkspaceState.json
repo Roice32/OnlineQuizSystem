@@ -2,12 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\OQS.CoreWebAPI",
-    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI",
-    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures",
-    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile",
-    "\\QOS.WebUI",
-    "\\QOS.WebUI\\Frontend"
+    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests",
+    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\obj"
   ],
-  "SelectedNode": "\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile\\UserName.cs",
+  "SelectedNode": "\\OnlineQuizSystem.sln",
   "PreviewInSolutionExplorer": false
 }
