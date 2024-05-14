@@ -34,6 +34,13 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         {
             public Validator()
             {
+                RuleFor(x => x.Text)
+                     .NotEmpty().WithMessage("Text is required.")
+                     .MaximumLength(255).WithMessage("Text must not exceed 255 characters.");
+
+                RuleFor(x => x.Type)
+                    .IsInEnum().WithMessage("Invalid question type.");
+    
                 RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId is required.");
                 RuleFor(x => x.Text).NotEmpty().WithMessage("Text is required.");
                 RuleFor(x => x.Type).IsInEnum().WithMessage("Invalid question type.");
