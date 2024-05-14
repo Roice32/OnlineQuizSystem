@@ -202,7 +202,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             Result<AskLLMForReviewResponse> askLLMForReviewResponse =
                 AskLLMForReviewAsync((ReviewNeededQuestion)questionFromDb,
                     ((WrittenQAPair)qaPair).WrittenAnswer).GetAwaiter().GetResult();
-        
+
             if (askLLMForReviewResponse.IsSuccess)
             {
                 questionResult.LLMReview = askLLMForReviewResponse.Value.Review;

@@ -2,6 +2,7 @@
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
+    // Marked for deletion in next Sprint Iteration
     public class QuizResultBody
     {
         public Guid QuizId { get; set; }
