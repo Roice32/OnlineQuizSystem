@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Carter;
+﻿using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
@@ -11,7 +10,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes;
 
 public class GetActiveQuizById
 {
-    public record Query(Guid ActiveQuizId, String userIdCookie) : IRequest<Result<ActiveQuizResponse>>;
+    public record Query(Guid ActiveQuizId, String UserIdCookie) : IRequest<Result<ActiveQuizResponse>>;
     
     private readonly ApplicationDBContext _context;
     
@@ -28,7 +27,7 @@ public class GetActiveQuizById
     {
         _serviceScopeFactory = serviceScopeFactory;
         
-        RuleFor(x => x.userIdCookie)
+        RuleFor(x => x.UserIdCookie)
             .NotEmpty().WithMessage("User ID cookie cannot be empty")
             .MustAsync(async (userIdCookie, cancellation) =>
             {
@@ -55,10 +54,10 @@ public class GetActiveQuizById
                 return await dbContext.ActiveQuizzes.AnyAsync(aq => aq.Id == query.ActiveQuizId, cancellation);
             }).WithMessage("Invalid Active Quiz Id");
         
-        RuleFor(x => new{x.ActiveQuizId, x.userIdCookie})
+        RuleFor(x => new{x.ActiveQuizId, userIdCookie = x.UserIdCookie})
             .MustAsync(async (query, _, cancellation) =>
             {
-                if (!Guid.TryParse(query.userIdCookie, out var userId))
+                if (!Guid.TryParse(query.UserIdCookie, out var userId))
                 {
                     return false;
                 }
@@ -92,7 +91,7 @@ public class GetActiveQuizById
             var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validatorResult.IsValid)
             {
-                return Result.Failure<ActiveQuizResponse>(new Error(HttpStatusCode.BadRequest, validatorResult.ToString()));
+                return Result.Failure<ActiveQuizResponse>(new Error("GetActiveQuiz.BadRequest", validatorResult.ToString()));
             }
 
             var activeQuiz = await _context.ActiveQuizzes
@@ -102,7 +101,7 @@ public class GetActiveQuizById
 
             if (activeQuiz == null)
             {
-                return Result.Failure<ActiveQuizResponse>(new Error(HttpStatusCode.NotFound, "Active Quiz not found for this user"));
+                return Result.Failure<ActiveQuizResponse>(new Error("GetActiveQuiz.NotFound", "Active Quiz not found for this user"));
             }
 
             var activeQuizResponse = new ActiveQuizResponse(activeQuiz);
@@ -132,7 +131,7 @@ public class ActiveQuizEndpoints : ICarterModule
                 return result;
             }
 
-            return Result.Failure<ActiveQuizResponse>(new Error(HttpStatusCode.BadRequest, "User ID not found in the cookie"));
+            return Result.Failure<ActiveQuizResponse>(new Error("GetActiveQuiz.BadRequest", "User ID not found in the cookie"));
             
         });
     }

@@ -49,7 +49,7 @@ namespace QQS.CoreWebAPI.Tests
             
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal(HttpStatusCode.BadRequest, result.Error.Code); 
+            Assert.Equal("GetActiveQuiz.BadRequest", result.Error.Code); 
             Assert.Equal("Invalid Active Quiz Id\r\nUser is not associated with the given active quiz ID", result.Error.Message);
         }
         
@@ -72,7 +72,7 @@ namespace QQS.CoreWebAPI.Tests
             
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal(HttpStatusCode.BadRequest, result.Error.Code); 
+            Assert.Equal("GetActiveQuiz.BadRequest", result.Error.Code); 
             Assert.Equal("Invalid User ID\r\nUser is not associated with the given active quiz ID", result.Error.Message);
         }
         
@@ -93,7 +93,7 @@ namespace QQS.CoreWebAPI.Tests
             
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal(HttpStatusCode.BadRequest, result.Error.Code); 
+            Assert.Equal("GetActiveQuiz.BadRequest", result.Error.Code); 
             Assert.Equal("User ID not found in the cookie", result.Error.Message);
         }
         
