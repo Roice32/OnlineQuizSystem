@@ -18,7 +18,7 @@ public static class SeedUsersExtension
             Name = "user",
             Type = UserType.Member,
             CreatedAt = DateTime.Now,
-            Email = "user@email.com"
+            //Email = "user@email.com"
         };
         dbContext.Users.Add(user);
         dbContext.SaveChanges();

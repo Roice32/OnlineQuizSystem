@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace OQS.CoreWebAPI.Entities;
 
 public abstract class QuestionBase
@@ -6,11 +8,21 @@ public abstract class QuestionBase
     public QuestionType Type { get; set; }
     public string Text { get; set; } 
     public Guid QuizId { get; set; }
-    protected QuestionBase(Guid id, QuestionType type, string text)
+    public int AlocatedPoints { get; set; }
+
+    public int TimeLimit { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+protected QuestionBase(Guid id, QuestionType type, string text, Guid QuizId, int AlocatedPoints, int TimeLimit)
     {
-        Id = id;
-        Type = type;
-        Text = text;
+        this.Id = id;
+        this.Type = type;
+        this.Text = text;
+        this.QuizId = QuizId;
+        this.AlocatedPoints = AlocatedPoints;
+        this.TimeLimit = TimeLimit;
+
     }
     
    
