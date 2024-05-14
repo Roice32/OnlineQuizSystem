@@ -18,6 +18,11 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             public Guid QuizId { get; set; }
             public string Text { get; set; } = string.Empty;
             public QuestionType Type { get; set; }
+
+            public int AlocatedPoints { get; set; }
+
+            public int TimeLimit { get; set; }
+
             public List<string>? Choices { get; set; }
             public bool? TrueFalseAnswer { get; set; }
             public List<string>? MultipleChoiceAnswers { get; set; }
@@ -29,7 +34,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         {
             public Validator()
             {
-               // RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId is required.");
+                RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId is required.");
                 RuleFor(x => x.Text).NotEmpty().WithMessage("Text is required.");
                 RuleFor(x => x.Type).IsInEnum().WithMessage("Invalid question type.");
                 When(x => x.Type == QuestionType.MultipleChoice || x.Type == QuestionType.SingleChoice,
@@ -94,23 +99,23 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 switch (request.Type)
                 {
                     case QuestionType.TrueFalse:
-                        question = new TrueFalseQuestion(Guid.NewGuid(), request.Text, request.TrueFalseAnswer ?? false);
+                        question = new TrueFalseQuestion(Guid.NewGuid(), request.Text, request.QuizId, request.TimeLimit, request.AlocatedPoints, request.TrueFalseAnswer ?? false);
                        // _dbContext.TrueFalseQuestions.Add((TrueFalseQuestion)question);
                         break;
                     case QuestionType.MultipleChoice:
-                        question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Text, request.Choices ?? new List<string>(), request.MultipleChoiceAnswers ?? new List<string>());
+                        question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Text,request.QuizId, request.TimeLimit, request.AlocatedPoints, request.Choices ?? new List<string>(), request.MultipleChoiceAnswers ?? new List<string>());
                       //  _dbContext.MultipleChoiceQuestions.Add((MultipleChoiceQuestion)question);
                         break;
                     case QuestionType.SingleChoice:
-                        question = new SingleChoiceQuestion(Guid.NewGuid(), request.Text, request.Choices ?? new List<string>(), request.SingleChoiceAnswer ?? string.Empty);
+                        question = new SingleChoiceQuestion(Guid.NewGuid(), request.Text, request.QuizId, request.TimeLimit, request.AlocatedPoints, request.Choices ?? new List<string>(), request.SingleChoiceAnswer ?? string.Empty);
                        // _dbContext.SingleChoiceQuestions.Add((SingleChoiceQuestion)question);
                         break;
                     case QuestionType.WriteAnswer:
-                        question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Text, request.WrittenAcceptedAnswers ?? new List<string>());
+                        question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Text, request.QuizId, request.TimeLimit, request.AlocatedPoints, request.WrittenAcceptedAnswers ?? new List<string>());
                        // _dbContext.WrittenAnswerQuestions.Add((WrittenAnswerQuestion)question);
                         break;
                     case QuestionType.ReviewNeeded:
-                        question = new ReviewNeededQuestion(Guid.NewGuid(), request.Text);
+                        question = new ReviewNeededQuestion(Guid.NewGuid(), request.Text, request.QuizId, request.TimeLimit, request.AlocatedPoints);
                        // _dbContext.ReviewNeededQuestions.Add((ReviewNeededQuestion)question);
                         break;
                     default:
