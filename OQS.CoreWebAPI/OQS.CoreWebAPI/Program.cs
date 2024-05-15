@@ -31,7 +31,16 @@ builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assemb
 builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
 
-builder.Services.AddCors(p=>p.AddPolicy("corspolicy",b=>b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -48,7 +57,7 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseCors("corspolicy");
+app.UseCors("AllowSpecificOrigin");
 
 
 
