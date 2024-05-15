@@ -7,7 +7,7 @@ public static class SeedQuestionsExtension
 {
     public static void SeedQuestions(this ApplicationDBContext dbContext)
     {
-        if (dbContext.Questions.Any())
+       /* if (dbContext.Questions.Any())
         {
             return;
         }
@@ -27,6 +27,6 @@ public static class SeedQuestionsExtension
         );
         dbContext.Questions.Add(q1);
         dbContext.Questions.Add(q2);
-        dbContext.SaveChanges();
+        dbContext.SaveChanges();*/
     }
 }

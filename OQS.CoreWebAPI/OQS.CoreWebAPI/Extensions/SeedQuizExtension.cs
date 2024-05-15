@@ -16,8 +16,11 @@ public static class SeedQuizExtension
             Id = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13b"),
             Name = "Quiz 1",
             TimeLimitMinutes = 10,
-            CreatedAt = DateTime.Now
-        };
+            CreatedAt = DateTime.Now,
+            Description = "This is a quiz for testing purposes",
+            ImageUrl = "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            Language = "en",
+            };
         quiz.Questions.Add(new TrueFalseQuestion(Guid.Parse("d96829f1-b234-4d6b-94b1-4f09bc403112"), "Question 1", true));
         quiz.Questions.Add(new SingleChoiceQuestion(Guid.Parse("ce66bc07-7002-4d39-82cf-4ea8389a60f7"), "Question 2", ["a", "b", "c", "d"],"a"));
         quiz.Questions.Add(new MultipleChoiceQuestion(Guid.Parse("80116c0e-b841-4dd4-b778-1f094510b8de"), "Question 3", ["a", "b", "c", "d"], ["a", "b"]));

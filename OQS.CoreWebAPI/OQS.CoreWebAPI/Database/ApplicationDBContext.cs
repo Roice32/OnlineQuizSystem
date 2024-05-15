@@ -21,4 +21,5 @@ public class ApplicationDBContext: DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<ActiveQuiz> ActiveQuizzes { get; set; }
 
+    public DbSet<Tag> Tags { get; set; }
 }
