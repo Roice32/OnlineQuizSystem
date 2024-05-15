@@ -1,11 +1,16 @@
 ﻿using Newtonsoft.Json;
 using OpenAI_API;
+using OpenAI_API.Chat;
+using OpenAI_API.Models;
 using OpenAI_API.Completions;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.Shared;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
@@ -214,25 +219,30 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 
         private static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
-            var openAI = new OpenAIAPI("sk-proj-QSvrIDvvcYVwtOOcjMi8T3BlbkFJPqlYoGxnr47RgxH4DEKH");
-            CompletionRequest completionRequest = new()
+            var openAI = new OpenAIAPI("gAAAAABmRJeBwgFv5d3OU8_tXune3uBUNs8yCyQVONF1qp6atA5Ms-UAHpT4jxMYZvtEcPE64m9sN-XrTUlP8RtXFgUA0Q6XISKLXcaN67CFt1v_kNtoUrSkXknfLJ1FFfsCsPfkwdcn");
+            var chatRequest = new ChatRequest
             {
-                Model = "gpt-3.5-turbo",
+                Model = Model.ChatGPTTurbo, // Use the appropriate model identifier for gpt-3.5-turbo
+                Messages = new[]
+                {
+                    new ChatMessage(ChatMessageRole.System, "You are a helpful assistant."),
+                    new ChatMessage(ChatMessageRole.User, "Question: " + question.Text +
+                        "\nAnswer: " + answer +
+                        "\nMax Possible Score: " + question.AllocatedPoints +
+                        "\nReturn review & grade as JSON.")
+                },
                 MaxTokens = 100,
                 Temperature = 0.5f,
-                TopP = 1,
-                Prompt = "Question: " + question.Text +
-                    "\nAnswer: " + answer +
-                    "\nMax Possible Score: " + question.AllocatedPoints +
-                    "\nReturn review & grade as JSON."
+                TopP = 1
             };
 
-            CompletionResult completionResponse = null;
+
+            ChatResult chatResponse = null;
             try
             {
-                completionResponse = await openAI
-                    .Completions
-                    .CreateCompletionAsync(completionRequest);
+                chatResponse = await openAI
+                    .Chat
+                    .CreateChatCompletionAsync(chatRequest);
             }
             catch (HttpRequestException e)
             {
@@ -241,7 +251,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                         e.Message));
             }
 
-            if (completionResponse is null)
+            if (chatResponse is null)
             {
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
@@ -249,7 +259,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             }
 
             AskLLMForReviewResponse askLLMForReviewResponse = JsonConvert
-                .DeserializeObject<AskLLMForReviewResponse>(completionResponse.Completions[0].Text);
+                .DeserializeObject<AskLLMForReviewResponse>(chatResponse.Choices[0].Message.Content);
 
             if (askLLMForReviewResponse is null)
             {
