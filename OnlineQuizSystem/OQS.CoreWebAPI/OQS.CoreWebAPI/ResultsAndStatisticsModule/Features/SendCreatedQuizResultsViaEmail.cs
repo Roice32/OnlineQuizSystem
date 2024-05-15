@@ -83,7 +83,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
                 if (quizResultHeaders is null || quizResultHeaders.Count == 0)
                 {
-                    return Result.Failure<SentQuizDetailsEmail>(Error.NullValue);
+                    return Result.Failure(Error.NullValue);
                 }
 
 
