@@ -1,0 +1,112 @@
+
+  .edit-profile {
+    display: flex;
+    flex-direction: row;
+    background-color: #deae9f;
+  }
+
+  .page{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 25px;
+    color: #0a2d2e;
+  }
+
+  .page-info{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile {
+    min-width: 700px;
+    min-height: 150px;
+    background-color: #efd7cf;
+    border-radius: 10px;
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  
+  .profile-picture {
+    margin-right: 20px;
+  }
+  
+  .profile-info {
+    flex-grow: 1;
+  }
+  
+  .name-field,
+  .username-field,
+  .email-field,
+  .password-field {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .name-field label,
+  .username-field label,
+  .email-field label,
+  .password-field label {
+    display: inline-block;
+    width: 30%;
+    text-align: right;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    color: #436e6f;
+    font-size: 30px;
+  }
+  
+  .name-field input,
+  .username-field input,
+  .email-field input,
+  .password-field input {
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #deae9f;
+  }
+  
+  .profile-picture input[type="file"] {
+    margin-top: 10px;
+    display: block;
+  }
+  
+  .profile-picture input[type="file"]::-webkit-file-upload-button {
+    padding: 10px;
+    background-color: #6a8e8f;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .profile-picture input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #436e6f;
+  }
+  
+  .buttons{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-right: 30px;
+    padding: 20px;
+  }
+
+  .button {
+    margin: 10px
+  } 

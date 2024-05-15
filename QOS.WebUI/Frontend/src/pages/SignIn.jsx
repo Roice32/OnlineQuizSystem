@@ -47,8 +47,9 @@ function SignIn() {
             'https://localhost:7117/api/authentication',
             { username, password }
         );
-
+        console.log(response.data.token);
         setResponse(response.data);
+
 
         if (response.data.token != null) {
             localStorage.setItem('authToken', response.data.token);
@@ -73,7 +74,7 @@ function SignIn() {
             {inputs.map((input) => (
                 <FormInput key={input.id} {...input} value={values[input.name]} onChange={onChange}/>
             ))}
-              <Link  className = "forgot-password-link" to="/forgot-password">Forgot Password?</Link>
+              <Link  className = "forgot-password-link" to="/forgot_password">Forgot Password?</Link>
             <button>Submit</button>
         </form>
     </div>);

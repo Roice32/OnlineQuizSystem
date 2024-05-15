@@ -11,7 +11,7 @@
 
 .content{
     display: flex;
-    width: 500px;
-    height: 500px;
+    width: auto;
+    height: 100px;
     background-color: aqua;
 }

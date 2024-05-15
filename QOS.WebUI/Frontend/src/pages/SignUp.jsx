@@ -86,11 +86,9 @@ function SignUp() {
     };
 
     const handleSubmit = async (e) => {
-        console.log(userValues);
         e.preventDefault();
         try {
             const response = await axios.post('https://localhost:7117/api/registration', userValues);
-            console.log(response);
             setResponse(response.data);
             if(response.data.message === "User created successfully!"){
                 navigate('/sign_up_confirmation');

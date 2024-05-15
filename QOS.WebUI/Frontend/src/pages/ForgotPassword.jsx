@@ -45,15 +45,14 @@ function ForgotPassword() {
 
     try {
         const response = await axios.post(
-            'https://localhost:7117/api/forgot-password',
+            'https://localhost:7117/api/forgot_password',
             { username, email }
         );
 
         setResponse(response.data);
-        console.log(response.data);
 
         if (response.data.message != null) {
-            navigate('/waiting-to-reset-password');
+            navigate('/waiting_to_reset_password');
         }
         
     } catch (error) {

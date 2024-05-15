@@ -62,7 +62,6 @@ const ResetPassword = () => {
 
         try {
             const response = await axios.post(`https://localhost:7117/api/resetPassword/${encodeURIComponent(token)}`, { newPassword, username});
-            console.log(response.data.message);
 
             if(response.data.message === "Password reset successfully!!"){
                 navigate('/login');

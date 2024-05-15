@@ -68,7 +68,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
                 var userRoles = await userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName!),
+                    new Claim(ClaimTypes.Name, user.Id!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 

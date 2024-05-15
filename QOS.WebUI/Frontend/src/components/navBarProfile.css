@@ -20,7 +20,8 @@
 
 .nav-item:hover {
     background-color: #555; /* Stil pentru hover */
-    border-radius: 15px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .profile-item
@@ -39,11 +40,12 @@
 .nav-link{
     text-decoration: none;
     color: #efd7cf;
-    font-size: 30px;
+    font-size: 20px;
 }
 
-.nav-item-logout{
-    padding: 10px;
-    cursor: pointer;
-    display: flex;
+button .nav-linl{
+    color :#6b2c60;
+    text-decoration: none;
+    color: #efd7cf;
+    font-size: 20px;
 }
