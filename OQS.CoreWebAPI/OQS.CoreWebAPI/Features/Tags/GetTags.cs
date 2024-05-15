@@ -19,7 +19,7 @@ namespace OQS.CoreWebAPI.Features.Tags
     {
         public class Query : IRequest<Result<List<TagResponse>>>
         {
-            public int Limit { get; set; } = 10;
+            public int Limit { get; set; } = 12;
             public int Offset { get; set; } = 0;
         }
 
@@ -43,7 +43,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (tags == null || !tags.Any())
                 {
                     return Result.Failure<List<TagResponse>>(
-                        new Error("GetTags.Empty", "No tags found"));
+                        new Error(400, "No tags found"));
                 }
 
                 var tagResponses = tags.Select(tag => new TagResponse
@@ -62,7 +62,7 @@ namespace OQS.CoreWebAPI.Features.Tags
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/tags", async (ISender sender, int limit = 10, int offset = 0) =>
+            app.MapGet("api/tags", async (ISender sender, int limit = 12, int offset = 0) =>
             {
                 var query = new GetTags.Query
                 {

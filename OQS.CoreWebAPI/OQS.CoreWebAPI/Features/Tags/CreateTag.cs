@@ -45,7 +45,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (!validationResult.IsValid)
                 {
                     return Result.Failure<Guid>(
-                        new Error("CreateTag.Validator", 
+                        new Error(400, 
                         validationResult.ToString()));
                 }
                 var tag = new Tag

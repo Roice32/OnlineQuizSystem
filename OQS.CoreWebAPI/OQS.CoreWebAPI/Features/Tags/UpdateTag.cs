@@ -62,7 +62,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 {
                     return Result.Failure<TagResponse>(
                         new Error(
-                            "UpdateTag.Validator", "validation failed"
+                            100, "validation failed"
                         ));
                 }
 
@@ -74,7 +74,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 {
                     return Result.Failure<TagResponse>(
                         new Error(
-                            "UpdateTag.NotFound", "Tag not found"
+                            100, "Tag not found"
                         ));
                 }
 
@@ -88,7 +88,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 {
                     return Result.Failure<TagResponse>(
                         new Error(
-                            "UpdateTag.UpdateTag", ex.Message
+                            100, ex.Message
                         ));
                 }
 

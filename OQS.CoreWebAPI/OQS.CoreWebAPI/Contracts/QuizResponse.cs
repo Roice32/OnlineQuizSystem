@@ -11,7 +11,7 @@ public class QuizResponse
     public string ImageUrl { get; set; }
     public int TimeLimitMinutes { get; set; }
     public DateTime CreatedAt { get; set; }
-    public List<QuestionResponse> Questions { get; set; } = new();
+   
     
     public QuizResponse(Quiz quiz)
     {

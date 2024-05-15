@@ -14,13 +14,18 @@ public static class SeedUsersExtension
 
         var user = new User
         {
-            Id = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"),
+            // Id = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"),
+            Id = Guid.NewGuid(),
             Name = "user",
             Type = UserType.Member,
             CreatedAt = DateTime.Now,
             Email = "user@email.com"
         };
-        dbContext.Users.Add(user);
-        dbContext.SaveChanges();
+
+        if (!dbContext.Users.Any(u => u.Id == user.Id))
+        {
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+        }
     }
 }

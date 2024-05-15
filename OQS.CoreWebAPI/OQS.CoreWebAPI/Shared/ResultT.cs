@@ -7,6 +7,6 @@ public class Result<T> : Result
         => _value = value;
         
 
-    public T Value => IsSuccess ? _value! : throw new InvalidOperationException();
+    public T Value => IsSuccess ? _value! : default;
     public static implicit operator Result<T>(T? value) => Create(value);
 }
