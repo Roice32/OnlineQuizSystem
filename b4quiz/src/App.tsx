@@ -1,15 +1,16 @@
-import "./App.css";
-import React from "react";
-import QuizCreate from "./pages/QuizCreate";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import './App.css'
+import React from 'react'
+import QuizCreate from './pages/QuizCreate'
+import QuizCreateFoo from './pages/QuizCreateFoo'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import Navbar from "./components/Navbar";
-import HomePage from "./pages/HomePage";
+import Navbar from './components/Navbar'
+import HomePage from './pages/HomePage'
 
-import TagsPage from "./pages/TagsPage";
-import QuizzesPage from "./pages/QuizzesPage";
-import FormGetId from "./pages/QuizGet";
-import ShowInfo from "./components/ShowQuizInfo";
+import TagsPage from './pages/TagsPage'
+import QuizzesPage from './pages/QuizzesPage'
+import FormGetId from './pages/QuizGet'
+import ShowInfo from './components/ShowQuizInfo'
 
 function App(): JSX.Element {
   return (
@@ -24,6 +25,7 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/create-quiz" element={<QuizCreate />} />
+          <Route path="/create-foo" element={<QuizCreateFoo />} />
 
           <Route path="/my-quizzes" element={<HomePage />} />
           <Route path="/tags" element={<TagsPage />} />
@@ -34,7 +36,7 @@ function App(): JSX.Element {
         </Routes>
       </div>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App
