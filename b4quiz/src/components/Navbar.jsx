@@ -19,7 +19,7 @@ const Navbar = () => {
   ];
 
   return (
-    <div className='bg-[#0A2D2E] w-full flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-[#efd7cf]'>
+    <div className='bg-[#0A2D2E] w-full flex justify-between items-center h-24 mx-w-screen text-[#f7ebe7]'>
       {/* Logo */}
       <h1 className='w-full text-3xl font-bold text-[#DEAE9F]'>B4QUIZ</h1>
 
@@ -28,7 +28,7 @@ const Navbar = () => {
         {navItems.map(item => (
           <li
             key={item.id}
-            className='p-4 hover:bg-[#DEAE9F] rounded-xl m-2 cursor-pointer duration-300 hover:text-[#1c4e4f] whitespace-nowrap'
+            className='p-4 hover:bg-[#DEAE9F] rounded-xl m-2 cursor-pointer duration-300 hover:text-black whitespace-nowrap'
           >
             <Link to={item.path}>{item.text}</Link>
           </li>
