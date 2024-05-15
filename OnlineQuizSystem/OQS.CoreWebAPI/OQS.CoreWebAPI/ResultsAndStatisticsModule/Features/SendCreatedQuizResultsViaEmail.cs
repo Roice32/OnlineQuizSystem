@@ -22,7 +22,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
     public class SendCreatedQuizResultsViaEmail
     {
-        public class Command : IRequest<Result<SentQuizDetailsEmail>>
+        public class Command : IRequest<Result>
         {
             public string RecipientEmail { get; set; }
             public Guid QuizId { get; set; }
@@ -52,7 +52,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         .WithMessage("EndDate is required.");
             }
         }
-        public class Handler : IRequestHandler<Command, Result<SentQuizDetailsEmail>>
+        public class Handler : IRequestHandler<Command, Result>
         {
             private readonly SmtpSettings _smtpSettings;
             private readonly ApplicationDbContext dbContext;
@@ -65,12 +65,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 this.validator = validator;
             }
 
-            public async Task<Result<SentQuizDetailsEmail>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
-                    return Result.Failure<SentQuizDetailsEmail>(
+                    return Result.Failure(
                         new Error("SendCreatedQuizResultsViaEmail.Validator",
                             validationResult.ToString()));
                 }
@@ -115,12 +115,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     smtp.Send(message);
                     smtp.Disconnect(true);
 
-                    return Result.Success(new SentQuizDetailsEmail { Message = "Email Sent Successfully" });
+                    return Result.Success("Email Sent Successfully");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Exception occurred while sending email: {ex}");
-                    return Result.Failure<SentQuizDetailsEmail>(new Error("EmailSenderError", ex.Message));
+                    return Result.Failure<string>(new Error("EmailSenderError", ex.Message));
                 }
             }
         }
@@ -144,7 +144,7 @@ public class QuizModule : ICarterModule
             {
                 return Results.BadRequest(result.Error);
             }
-            return Results.Ok(result.Value);
+            return Results.Ok(result);
         });
     }
 }
