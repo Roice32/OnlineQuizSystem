@@ -10,6 +10,8 @@ import ResetPassword from './pages/ResetPassword';
 import EditProfile from './pages/EditProfile';
 import SignIn from './pages/SignIn';
 import Logout from './pages/Logout';
+import VerifyCurrentPassword from './pages/VerifyCurrentPassword';
+import ResetCurrentPasseword from './pages/ResetPasswordFromProfilPage';
 
 const App = () => {
     return (
@@ -26,6 +28,8 @@ const App = () => {
         <Route path="/edit_your_profile" element={<EditProfile/>} />
         <Route path="/profile/:id" element={<Profile/>} />
         <Route path="/logout" element={<Logout/>} />
+        <Route path="/profile/:id/verify_current_password" element={<VerifyCurrentPassword/>} />
+        <Route path="/profile/:id/reset_current_password" element={<ResetCurrentPasseword/>} />
       </Routes>
     </BrowserRouter>
     );

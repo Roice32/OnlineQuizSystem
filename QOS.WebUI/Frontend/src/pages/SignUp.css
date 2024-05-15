@@ -134,6 +134,7 @@ button:hover {
 
 .little-message
 {
+  margin-bottom: 50px;
   width: 300px;
   text-align: center;
 }

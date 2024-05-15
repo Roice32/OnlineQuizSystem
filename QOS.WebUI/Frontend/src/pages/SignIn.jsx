@@ -47,7 +47,6 @@ function SignIn() {
             'https://localhost:7117/api/authentication',
             { username, password }
         );
-        console.log(response.data.token);
         setResponse(response.data);
 
 

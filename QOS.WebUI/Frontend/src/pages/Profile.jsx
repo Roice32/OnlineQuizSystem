@@ -32,6 +32,10 @@ const UserProfile = () => {
     }
   };
 
+  const resetPassword = async () => {
+    navigate(`/profile/${id}/verify_current_password`);
+  }
+
   return (
     <div className="edit-profile">
       <div className="navbar">
@@ -67,7 +71,7 @@ const UserProfile = () => {
           </div>
           <div className = "buttons">
           <button className="button">Edit Profile</button>
-          <button className="button">Reset Password</button>
+          <button className="button" onClick={resetPassword}>Reset Password</button>
           <button className="button" onClick={deleteAccount} >Delete Account</button>
           </div>
         </div>

@@ -10,6 +10,7 @@ const Logout = () => {
         const logout = async () => {
             try {
                 const response = await axios.post(`https://localhost:7117/api/profile/${id}/logout`);
+                localStorage.removeItem('authToken');
                 navigate('/login');
             } catch (error) {
                 console.error('Eroare la logout:', error);
