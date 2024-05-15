@@ -17,7 +17,7 @@ namespace OQS.CoreWebAPI.Tests
             var RecipientEmail = "galatanuemilia14@gmail.com";
             var QuizId = Guid.Parse("00000000-0000-0000-0002-000000000001");
             var UserId = Guid.Parse("00000000-0000-0000-0001-000000000001");
-            var requestUri = $"api/email/send?" +
+            var requestUri = $"api/email/sendQuizResultViaEmail?" +
                 $"recipientEmail={RecipientEmail}&" +
                 $"quizId={QuizId}&" +
                 $"userId={UserId}";
