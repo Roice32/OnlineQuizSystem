@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dHZAnVeOKQ6T+1V5PGHgqgj++QbrL9XaoNeNRMj5THiHmVJN9DMNsGVJg8ZrZ6HozKBuE5X5TBjn/l36M9NO6w==",
+  "dgSpecHash": "+pxw3PKmds2kJACTk0glBqSPdyEMZuYQ/TxLnMqr2IVlRD+T6RPiWioFyJb9RzKlrDKt2wWZ1jTSRBya10S8jw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Features.Tests.csproj",
+  "projectFilePath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Feautures.Authentication.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Cpirlac\\.nuget\\packages\\azure.core\\1.36.0\\azure.core.1.36.0.nupkg.sha512",
     "C:\\Users\\Cpirlac\\.nuget\\packages\\azure.identity\\1.10.4\\azure.identity.1.10.4.nupkg.sha512",

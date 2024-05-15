@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OQS.CoreWebAPI", "OQS.CoreW
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FB2F91A6-E18F-4D23-AF8A-1DCFF8117E3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OQS.CoreWebAPI.Features.Tests", "OQS.CoreWebAPI.Features.Tests\OQS.CoreWebAPI.Features.Tests.csproj", "{49D87151-00EB-48B4-99B1-C7C2FE793547}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OQS.CoreWebAPI.Feautures.Authentication.Tests", "OQS.CoreWebAPI.Features.Tests\OQS.CoreWebAPI.Feautures.Authentication.Tests.csproj", "{49D87151-00EB-48B4-99B1-C7C2FE793547}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OQS.CoreWebAPI.Feautures.ResetPassword.Tests", "OQS.CoreWebAPI.Features.ResetPassword.Tests\OQS.CoreWebAPI.Feautures.ResetPassword.Tests.csproj", "{BD32AE91-A9E5-4E28-B1C2-7725BE578585}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +25,17 @@ Global
 		{49D87151-00EB-48B4-99B1-C7C2FE793547}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49D87151-00EB-48B4-99B1-C7C2FE793547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49D87151-00EB-48B4-99B1-C7C2FE793547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD32AE91-A9E5-4E28-B1C2-7725BE578585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD32AE91-A9E5-4E28-B1C2-7725BE578585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD32AE91-A9E5-4E28-B1C2-7725BE578585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD32AE91-A9E5-4E28-B1C2-7725BE578585}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{49D87151-00EB-48B4-99B1-C7C2FE793547} = {FB2F91A6-E18F-4D23-AF8A-1DCFF8117E3B}
+		{BD32AE91-A9E5-4E28-B1C2-7725BE578585} = {FB2F91A6-E18F-4D23-AF8A-1DCFF8117E3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5C624E3-F095-417E-856F-04A7164A2CE8}

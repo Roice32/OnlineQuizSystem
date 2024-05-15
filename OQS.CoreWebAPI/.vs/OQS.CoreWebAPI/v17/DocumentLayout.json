@@ -3,36 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BD32AE91-A9E5-4E28-B1C2-7725BE578585}|OQS.CoreWebAPI.Features.ResetPassword.Tests\\OQS.CoreWebAPI.Feautures.ResetPassword.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.features.resetpassword.tests\\forgotpasswordtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BD32AE91-A9E5-4E28-B1C2-7725BE578585}|OQS.CoreWebAPI.Features.ResetPassword.Tests\\OQS.CoreWebAPI.Feautures.ResetPassword.Tests.csproj|solutionrelative:oqs.corewebapi.features.resetpassword.tests\\forgotpasswordtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\feautures\\authentication\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\feautures\\authentication\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\feautures\\resetpassword\\resetpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\feautures\\resetpassword\\resetpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\feautures\\authentication\\iemailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\feautures\\authentication\\iemailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\feautures\\resetpassword\\forgotpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\feautures\\resetpassword\\forgotpassword.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49D87151-00EB-48B4-99B1-C7C2FE793547}|OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Features.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.features.tests\\registrationtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49D87151-00EB-48B4-99B1-C7C2FE793547}|OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Features.Tests.csproj|solutionrelative:oqs.corewebapi.features.tests\\registrationtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\database\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\database\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\entities\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\entities\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49D87151-00EB-48B4-99B1-C7C2FE793547}|OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Features.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.features.tests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49D87151-00EB-48B4-99B1-C7C2FE793547}|OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Features.Tests.csproj|solutionrelative:oqs.corewebapi.features.tests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BD32AE91-A9E5-4E28-B1C2-7725BE578585}|OQS.CoreWebAPI.Features.ResetPassword.Tests\\OQS.CoreWebAPI.Feautures.ResetPassword.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.features.resetpassword.tests\\resetpasswordtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BD32AE91-A9E5-4E28-B1C2-7725BE578585}|OQS.CoreWebAPI.Features.ResetPassword.Tests\\OQS.CoreWebAPI.Feautures.ResetPassword.Tests.csproj|solutionrelative:oqs.corewebapi.features.resetpassword.tests\\resetpasswordtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,11 +26,40 @@
       "DocumentGroups": [
         {
           "DockedWidth": 246,
-          "SelectedChildIndex": 13,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ForgotPasswordTest.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.ResetPassword.Tests\\ForgotPasswordTest.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Features.ResetPassword.Tests\\ForgotPasswordTest.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.ResetPassword.Tests\\ForgotPasswordTest.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Features.ResetPassword.Tests\\ForgotPasswordTest.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAB4AAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-15T09:34:43.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ResetPasswordTest.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.ResetPassword.Tests\\ResetPasswordTest.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Features.ResetPassword.Tests\\ResetPasswordTest.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.ResetPassword.Tests\\ResetPasswordTest.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Features.ResetPassword.Tests\\ResetPasswordTest.cs",
+              "ViewState": "AQIAADEAAAAAAAAAAAAAAFgAAABZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-15T08:16:26.11Z"
             },
             {
               "$type": "Bookmark",
@@ -71,111 +84,56 @@
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "dd440dcc-c899-43ab-b05d-e3dfb5d263e3",
+        "Display": 0,
+        "X": 20,
+        "Y": 10,
+        "Width": 1498,
+        "Height": 882,
+        "WindowState": 2
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\appsettings.json",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\appsettings.json",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\appsettings.json",
-              "RelativeToolTip": "OQS.CoreWebAPI\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-05-14T19:16:19.854Z",
-              "EditorCaption": ""
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "EmailService.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\EmailService.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Feautures\\Authentication\\EmailService.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\EmailService.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\Feautures\\Authentication\\EmailService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "ResetPassword.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\ResetPassword\\ResetPassword.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Feautures\\ResetPassword\\ResetPassword.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\ResetPassword\\ResetPassword.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\Feautures\\ResetPassword\\ResetPassword.cs",
+              "ViewState": "AQIAADYAAAAAAAAAAAAEwEwAAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-14T19:12:15.581Z",
+              "WhenOpened": "2024-05-15T08:20:10.977Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "IEmailSender.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\IEmailSender.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Feautures\\Authentication\\IEmailSender.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\IEmailSender.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\Feautures\\Authentication\\IEmailSender.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "ForgotPassword.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\ResetPassword\\ForgotPassword.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Feautures\\ResetPassword\\ForgotPassword.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\ResetPassword\\ForgotPassword.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\Feautures\\ResetPassword\\ForgotPassword.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAAwAoAAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-14T19:12:08.766Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "RegistrationTest.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\RegistrationTest.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Features.Tests\\RegistrationTest.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\RegistrationTest.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI.Features.Tests\\RegistrationTest.cs",
-              "ViewState": "AQIAAD0AAAAAAAAAAAAQwGcAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-13T20:27:25.743Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "UnitTest1.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\UnitTest1.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Features.Tests\\UnitTest1.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\UnitTest1.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI.Features.Tests\\UnitTest1.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-13T20:13:39.484Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Program.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\Program.cs",
-              "ViewState": "AQIAADEAAAAAAAAAAAAmwD8AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-21T10:12:34.316Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Database\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Database\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Database\\ApplicationDbContext.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\Database\\ApplicationDbContext.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAABJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-21T11:36:07.546Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UserRole.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Entities\\UserRole.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Entities\\UserRole.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Entities\\UserRole.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\Entities\\UserRole.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-24T12:33:42.752Z"
+              "WhenOpened": "2024-05-15T09:36:04.415Z"
             }
           ]
         }

@@ -10,7 +10,7 @@ using OQS.CoreWebAPI.Feautures.Authentication;
 using Xunit;
 
 
-namespace OQS.CoreWebAPI.Features.Tests
+namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
 {
     public class AuthenticationTest
     {

@@ -8,7 +8,7 @@ using OQS.CoreWebAPI.Feautures.Authentication;
 using System;
 using System.Threading.Tasks;
 
-namespace OQS.CoreWebAPI.Tests.Feautures.Authentication
+namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
 {
     public class RegistrationTests
     {

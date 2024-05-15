@@ -2,6 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\OQS.CoreWebAPI",
+    "\\OQS.CoreWebAPI\\OQS.CoreWebAPI",
     "\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests",
     "\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\obj"
   ],

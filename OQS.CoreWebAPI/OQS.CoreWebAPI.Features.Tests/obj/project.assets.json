@@ -10108,9 +10108,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Features.Tests.csproj",
-      "projectName": "OQS.CoreWebAPI.Features.Tests",
-      "projectPath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Features.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Feautures.Authentication.Tests.csproj",
+      "projectName": "OQS.CoreWebAPI.Feautures.Authentication.Tests",
+      "projectPath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Feautures.Authentication.Tests.csproj",
       "packagesPath": "C:\\Users\\Cpirlac\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\obj\\",
       "projectStyle": "PackageReference",
