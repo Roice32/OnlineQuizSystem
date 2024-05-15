@@ -22,7 +22,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
     public class SendQuizResultViaEmail {
 
-        public class Command : IRequest<Result<SendEmailResponse>>
+        public class Command : IRequest<Result>
         {
             public string RecipientEmail { get; set; }
             public Guid QuizId { get; set; }
@@ -47,7 +47,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<SendEmailResponse>>
+        public class Handler : IRequestHandler<Command, Result>
         {
             private readonly SmtpSettings _smtpSettings;
             private readonly ApplicationDbContext dbContext;
@@ -66,12 +66,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             }
 
 
-            public async Task<Result<SendEmailResponse>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
-                    return Result.Failure<SendEmailResponse>(
+                    return Result.Failure(
                         new Error("EmailSender.Validator",
                             validationResult.ToString()));
                 }
@@ -80,7 +80,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 var quizResult = await mediator.Send(new GetQuizResult.Query { QuizId = request.QuizId, UserId = request.UserId }, cancellationToken);
                 if (!quizResult.IsSuccess)
                 {
-                    return Result.Failure<SendEmailResponse>(new Error("QuizResultNotFound", "Quiz result not found for the given quiz and user."));
+                    return Result.Failure(new Error("QuizResultNotFound", "Quiz result not found for the given quiz and user."));
                 }
 
                 var emailBody = new StringBuilder($"Quiz: {quizResult.Value.QuizResultHeader.QuizName}\nScore: {quizResult.Value.QuizResultHeader.Score}\n");
@@ -185,7 +185,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Exception occurred while sending email: {ex}");
-                    return Result.Failure<SendEmailResponse>(new Error("EmailSenderError", ex.Message));
+                    return Result.Failure(new Error("EmailSenderError", ex.Message));
                 }
 
 
@@ -217,7 +217,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     return Results.BadRequest(result.Error);
                 }
 
-                return Results.Ok(result.Value);
+                return Results.Ok(result);
             });
         }
     }
