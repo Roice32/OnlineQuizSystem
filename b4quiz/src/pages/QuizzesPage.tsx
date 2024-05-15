@@ -28,7 +28,7 @@ function QuizzesList(props: { quizzes: Quiz[] }) {
     return (
         <ul className="list-none space-y-4">
             {props.quizzes.map((quiz) => (
-                <li key={quiz.id} className="p-4 bg-blue-200 rounded shadow">
+                <li key={quiz.id} className="p-4 bg-[#EEEFEE] rounded shadow">
                     {quiz.name}
                 </li>
             ))}
@@ -52,7 +52,7 @@ function Pagination(props: {
             <button
                 onClick={() => onChangeOffset(Math.max(offset - limit, 0))}
                 disabled={offset === 0}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-[#436e6f] text-[#E6DEDA] rounded hover:bg-[#1c4e4f]"
             >
                 Previous
             </button>
@@ -60,7 +60,7 @@ function Pagination(props: {
             <button
                 onClick={() => onChangeOffset(Math.min(offset + limit, totalRecords - limit))}
                 disabled={offset + limit >= totalRecords}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-[#436e6f] text-[#E6DEDA] rounded hover:bg-[#1c4e4f]"
             >
                 Next
             </button>
@@ -103,10 +103,10 @@ const QuizzesPage = () => {
     if (!data) return <div>No data</div>;
 
     return (
-        <div>
+        <div className="flex flex-col items-center">
             <Navbar />
-            <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg">
-                <h1 className="text-2xl font-bold mb-4">Quizzes</h1>
+            <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg max-w-[500px] mt-11">
+                <h1 className="text-4xl font-bold mb-4 text-[#376060]">Quizzes</h1>
                 <QuizzesList quizzes={data.quizzes} />
                 <Pagination
                     offset={data.pagination.offset}
