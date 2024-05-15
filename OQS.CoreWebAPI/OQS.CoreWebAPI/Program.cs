@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddCarter();
 
 // Pentru trimiterea email-urilor
-builder.Services.AddTransient<IEmailSender, EmailService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 // Add configuration for CORS
