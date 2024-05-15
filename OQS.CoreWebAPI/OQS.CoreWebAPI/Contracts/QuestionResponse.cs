@@ -9,6 +9,11 @@ namespace OQS.CoreWebAPI.Contracts
         public Guid Id { get; set; }
         public QuestionType Type { get; set; }
         public string Text { get; set; }
+
+        public Guid QuizId { get; set; }
+        public int AlocatedPoints { get; set; }
+
+        public int TimeLimit { get; set; }
         public List<string>? Choices { get; set; }
         public bool? TrueFalseAnswer { get; set; }
         public List<string>? MultipleChoiceAnswers { get; set; }
@@ -17,32 +22,35 @@ namespace OQS.CoreWebAPI.Contracts
 
         public QuestionResponse(QuestionBase question)
         {
-            Id = question.Id;
-            Type = question.Type;
-            Text = question.Text;
+            this.Id = question.Id;
+            this.Type = question.Type;
+            this.Text = question.Text;
+            this.QuizId = question.QuizId;
+            this.TimeLimit = question.TimeLimit;
+            this.AlocatedPoints = question.AlocatedPoints;
             if (question is ChoiceQuestionBase choiceQuestion)
             {
-                Choices = choiceQuestion.Choices;
+                this.Choices = choiceQuestion.Choices;
             }
 
             if (question is TrueFalseQuestion trueFalseQuestion)
             {
-                TrueFalseAnswer = trueFalseQuestion.TrueFalseAnswer;
+                this.TrueFalseAnswer = trueFalseQuestion.TrueFalseAnswer;
             }
 
             if (question is MultipleChoiceQuestion multipleChoiceQuestion)
             {
-                MultipleChoiceAnswers = multipleChoiceQuestion.MultipleChoiceAnswers;
+                this.MultipleChoiceAnswers = multipleChoiceQuestion.MultipleChoiceAnswers;
             }
 
             if (question is SingleChoiceQuestion singleChoiceQuestion)
             {
-                SingleChoiceAnswer = singleChoiceQuestion.SingleChoiceAnswer;
+                this.SingleChoiceAnswer = singleChoiceQuestion.SingleChoiceAnswer;
             }
 
             if (question is WrittenAnswerQuestion writtenAnswerQuestion)
             {
-                WrittenAcceptedAnswers = writtenAnswerQuestion.WrittenAcceptedAnswers;
+                this.WrittenAcceptedAnswers = writtenAnswerQuestion.WrittenAcceptedAnswers;
             }
         }
     }

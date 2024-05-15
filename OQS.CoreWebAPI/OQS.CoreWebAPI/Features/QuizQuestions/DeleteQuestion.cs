@@ -10,6 +10,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
+using MediatR;
 
 namespace OQS.CoreWebAPI.Features.QuizQuestions
 {
@@ -20,6 +22,15 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
             public Guid QuizId { get; init; }
             public Guid QuestionId { get; init; }
         }
+
+     public class CommandValidator : AbstractValidator<Command>
+{
+    public CommandValidator()
+    {
+        RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId must be provided.");
+        RuleFor(x => x.QuestionId).NotEmpty().WithMessage("QuestionId must be provided.");
+    }
+}
 
         internal sealed class Handler : IRequestHandler<Command, Result>
         {

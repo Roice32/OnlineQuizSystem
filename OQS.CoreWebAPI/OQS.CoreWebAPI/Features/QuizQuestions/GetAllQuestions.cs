@@ -17,7 +17,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 {
     public static class GetAllQuestions
     {
-        public record Query(Guid QuizId) : IRequest<Result<List<QuestionResponse>>>;
+        public record Query(Guid QuizId, int Limit, int Offset) : IRequest<Result<List<QuestionResponse>>>;
 
         internal sealed class Handler : IRequestHandler<Query, Result<List<QuestionResponse>>>
         {
@@ -30,9 +30,12 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
             public async Task<Result<List<QuestionResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var questions = context.Questions
-                    .Select(question => new QuestionResponse(question))
-                    .ToList();
+                var questions = await context.Questions
+                .Where(question => question.QuizId == request.QuizId)
+                .Skip(request.Offset)
+                .Take(request.Limit)
+                .Select(question => new QuestionResponse(question))
+                .ToListAsync();
 
                 return Result.Success<List<QuestionResponse>>(questions);
             }
@@ -46,7 +49,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
         {
             app.MapGet("api/quizzes/{id}/questions", async (Guid id, ISender sender) =>
             {
-                var query = new GetAllQuestions.Query(id);
+                var query = new GetAllQuestions.Query(id, Limit: 10, Offset: 1);
                 return await sender.Send(query);
             });
         }

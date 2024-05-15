@@ -17,13 +17,16 @@ namespace OQS.CoreWebAPI.Features.Tags
             public string Name { get; set; } = string.Empty;
         }
 
-        public class Validator : AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<Command>
         {
-            public Validator()
+            public CommandValidator()
             {
-                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Name)
+                    .NotEmpty().WithMessage("Name is required.")
+                    .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
             }
         }
+
 
         public class Handler : IRequestHandler<Command, Result<Guid>>
         {

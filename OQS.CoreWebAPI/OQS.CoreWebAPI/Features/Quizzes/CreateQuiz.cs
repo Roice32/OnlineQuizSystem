@@ -26,16 +26,25 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
         public class Validator : AbstractValidator<Command>
         {
-            public Validator()
-            {
-                RuleFor(x => x.Name).NotEmpty();
+                public Validator()
+                {
+                    RuleFor(x => x.Name)
+                        .NotEmpty().WithMessage("Name is required.")
+                        .MinimumLength(3).WithMessage("Game name must have at least 3 characters long.")
+                        .MaximumLength(50).WithMessage("Game name cannot exceed 50 characters.");
 
-                RuleFor(x => x.Language).NotEmpty();
+                    RuleFor(x => x.Language)
+                        .NotEmpty().WithMessage("Language is required.")
+                        .MaximumLength(20).WithMessage("Language cannot exceed 20 characters.");
 
-                RuleFor(x => x.CreatorId).NotEmpty();
+                    RuleFor(x => x.CreatorId)
+                        .NotEmpty().WithMessage("Creator ID is required.");
 
-                RuleFor(x => x.TimeLimitMinutes).NotEmpty();
-            }
+                    RuleFor(x => x.TimeLimitMinutes)
+                        .NotEmpty().WithMessage("Time limit is required.")
+                        .GreaterThan(0).WithMessage("Time limit must be greater than 0.");
+                }
+
         }
 
         public class Handler : IRequestHandler<Command, Result<Guid>>

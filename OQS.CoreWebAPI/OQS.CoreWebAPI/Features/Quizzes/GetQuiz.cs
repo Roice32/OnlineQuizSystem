@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.Quizzes;
 using OQS.CoreWebAPI.Shared;
+using FluentValidation;
 
 namespace OQS.CoreWebAPI.Features.Quizzes
 {
@@ -14,7 +15,15 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         {
             public Guid Id { get; set; }
         }
-
+        public class CommandValidator : AbstractValidator<Query>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Id)
+                    .NotEmpty().WithMessage("Id is required.")
+                    .NotEqual(Guid.Empty).WithMessage("Id cannot be empty.");
+            }
+        }
         internal sealed class Handler : IRequestHandler<Query, Result<QuizResponse>>
         {
             private readonly ApplicationDBContext context;

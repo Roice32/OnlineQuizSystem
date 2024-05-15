@@ -29,13 +29,32 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             public BodyUpdateQuiz Body { get; set; } = new BodyUpdateQuiz();
         }
 
-        public class Validator : AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<Command>
         {
-            public Validator()
+            public CommandValidator()
             {
-              //  RuleFor(x => x.Body.Name).NotEmpty();
+                RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+
+                RuleFor(x => x.Body.Name)
+                    .NotEmpty().WithMessage("Name is required.")
+                    .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
+
+                RuleFor(x => x.Body.Description)
+                    .MaximumLength(500).WithMessage("Description must not exceed 500 characters.");
+
+                RuleFor(x => x.Body.ImageUrl)
+                    .MaximumLength(255).WithMessage("ImageUrl must not exceed 255 characters.");
+
+                RuleFor(x => x.Body.Language)
+                    .NotEmpty().WithMessage("Language is required.")
+                    .MaximumLength(50).WithMessage("Language must not exceed 50 characters.");
+
+                RuleFor(x => x.Body.TimeLimitMinutes)
+                    .NotEmpty().WithMessage("TimeLimitMinutes is required.")
+                    .GreaterThan(0).WithMessage("TimeLimitMinutes must be greater than 0.");
             }
         }
+
 
         internal sealed class Handler : IRequestHandler<Command, Result<QuizResponse>>
         {

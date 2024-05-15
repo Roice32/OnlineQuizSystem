@@ -1,4 +1,5 @@
 ﻿using Carter;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts;
@@ -18,7 +19,15 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         {
             public Guid Id { get; init; }
         }
-
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Id)
+                    .NotEmpty().WithMessage("Id is required.")
+                    .NotEqual(Guid.Empty).WithMessage("Id cannot be empty.");
+            }
+        }
         internal sealed class Handler : IRequestHandler<Command, Result>
         {
             private readonly ApplicationDBContext _dbContext;

@@ -1,4 +1,5 @@
 using Carter;
+using FluentValidation;
 using global::OQS.CoreWebAPI.Database;
 using global::OQS.CoreWebAPI.Shared;
 using MediatR;
@@ -13,6 +14,16 @@ namespace OQS.CoreWebAPI.Features.Tags
         public record Command : IRequest<Result>
         {
             public Guid Id { get; init; }
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Id)
+                    .NotEmpty().WithMessage("Id is required.")
+                    .NotEqual(Guid.Empty).WithMessage("Id cannot be empty.");
+            }
         }
 
         internal sealed class Handler : IRequestHandler<Command, Result>
