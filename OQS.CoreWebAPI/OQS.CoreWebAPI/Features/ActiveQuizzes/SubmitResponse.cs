@@ -1,25 +1,77 @@
-﻿using System.Net;
-using Carter;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+﻿using Carter;
 using OQS.CoreWebAPI.Contracts;
+using OQS.CoreWebAPI.Contracts.CRUD;
+using OQS.CoreWebAPI.Entities.ActiveQuiz;
+using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.Entities;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Quizzes;
-public class SubmitResponse : ICarterModule
-{
-    private List<SubmitResponseRequest> result = new List<SubmitResponseRequest>();
-    public void AddRoutes(IEndpointRouteBuilder app)
+
+public class SubmitResponseRequestValidator : AbstractValidator<SubmitResponseRequest>
     {
-        app.MapPost("api/active-quiz/{activeQuizId}", async (SubmitResponseRequest request) =>
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+
+        public SubmitResponseRequestValidator(IServiceScopeFactory serviceScopeFactory)
         {
-            if (request == null)
-                return Result.Failure(new Error("SubmitActiveQuiz.BadRequest", "Invalid request format."));
-            var data = new SubmitResponseRequest { ActiveQuizId = request.ActiveQuizId, Answers = request.Answers };
-            result.Add(data);
-            return Result.Success("Submission successful.");
-        });
+            _serviceScopeFactory = serviceScopeFactory;
+
+            RuleFor(x => x.UserId)
+                .NotEmpty().WithMessage("User ID is required.");
+
+            RuleFor(x => x.ActiveQuizId)
+                .NotEmpty().WithMessage("Active Quiz ID is required.");
+
+            RuleFor(x => x.Answers)
+                .NotEmpty().WithMessage("Answers are required.");
+
+            RuleFor(x => x)
+                .MustAsync(UserMatchesQuizAsync)
+                .WithMessage("Unauthorized. User does not match the one who started the quiz.");
+        }
+
+        private async Task<bool> UserMatchesQuizAsync(SubmitResponseRequest request, CancellationToken cancellationToken)
+        {
+            if (request == null || request.ActiveQuizId == null)
+            {
+                return false;
+            }
+
+            using var scope = _serviceScopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var activeQuiz = await dbContext.ActiveQuizzes
+                .Include(aq => aq.User)
+                .FirstOrDefaultAsync(aq => aq.Id == request.ActiveQuizId, cancellationToken);
+
+            if (activeQuiz == null || activeQuiz.User == null)
+            {
+                return false;
+            }
+
+            return activeQuiz.User.Id == request.UserId;
+        }
     }
-}
+
+    public class SubmitResponse : ICarterModule
+    {
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapPost("api/active-quiz/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDBContext dbContext, HttpContext httpContext) =>
+            {
+                var validator = new SubmitResponseRequestValidator(httpContext.RequestServices.GetRequiredService<IServiceScopeFactory>());
+                var validationResult = await validator.ValidateAsync(request);
+
+                if (!validationResult.IsValid)
+                {
+                    var errorMessages = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
+                    var error = new Error("BadRequest", errorMessages);
+                    var result = Result.Failure<string>(error);
+                    return Results.BadRequest(result);
+                }
+
+                return Results.Ok("Quiz submitted successfully");
+            });
+        }
+    }

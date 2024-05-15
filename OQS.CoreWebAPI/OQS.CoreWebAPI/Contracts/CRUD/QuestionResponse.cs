@@ -18,7 +18,12 @@ namespace OQS.CoreWebAPI.Contracts.CRUD
         public string? SingleChoiceAnswer { get; set; }
         public List<string>? WrittenAcceptedAnswers { get; set; }
 
-        public QuestionResponse(QuestionBase question)
+        public QuestionResponse()
+        {
+            
+        }
+
+    public QuestionResponse(QuestionBase question)
         {
             Id = question.Id;
             Type = question.Type;
