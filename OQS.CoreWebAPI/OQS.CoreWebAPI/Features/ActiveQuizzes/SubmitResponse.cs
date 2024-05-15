@@ -82,7 +82,7 @@ public class SubmitResponseRequestValidator : AbstractValidator<SubmitResponseRe
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/active-quiz/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDBContext dbContext, HttpContext httpContext) =>
+            app.MapPost("api/active-quizzes/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDBContext dbContext, HttpContext httpContext) =>
             {
                 var validator = new SubmitResponseRequestValidator(httpContext.RequestServices.GetRequiredService<IServiceScopeFactory>());
                 var validationResult = await validator.ValidateAsync(request);
@@ -92,10 +92,10 @@ public class SubmitResponseRequestValidator : AbstractValidator<SubmitResponseRe
                     var errorMessages = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
                     var error = new Error("BadRequest", errorMessages);
                     var result = Result.Failure<string>(error);
-                    return Results.BadRequest(result);
+                    return Result.Failure<string>(error);
                 }
 
-                return Results.Ok("Quiz submitted successfully");
+                return Result.Success<string>("Quiz submitted successfully");
             });
         }
     }

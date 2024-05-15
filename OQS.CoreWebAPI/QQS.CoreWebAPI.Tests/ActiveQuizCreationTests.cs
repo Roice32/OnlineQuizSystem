@@ -28,7 +28,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
         };
 
         
-        var response = await Client.PostAsJsonAsync("api/active-quiz", newQuiz);
+        var response = await Client.PostAsJsonAsync("api/active-quizzes", newQuiz);
 
       
 
@@ -47,7 +47,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
         };
     
         
-        var response = await Client.PostAsJsonAsync("api/active-quiz", newQuiz);
+        var response = await Client.PostAsJsonAsync("api/active-quizzes", newQuiz);
         
         var result = await response.Content.ReadFromJsonAsync<Result<Guid>>();
         Assert.True(result.IsFailure);
@@ -65,7 +65,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
         };
 
 
-        var response = await Client.PostAsJsonAsync("api/active-quiz", newQuiz);
+        var response = await Client.PostAsJsonAsync("api/active-quizzes", newQuiz);
 
    
         var result = await response.Content.ReadFromJsonAsync<Result<Guid>>();

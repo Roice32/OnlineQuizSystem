@@ -99,7 +99,7 @@ public class CreateActiveQuizEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/active-quiz",async(CreateActiveQuizRequest request ,ISender sender) =>
+        app.MapPost("api/active-quizzes",async(CreateActiveQuizRequest request ,ISender sender) =>
         {
             var quizCreation = new CreateActiveQuiz.QuizCreation(request.QuizId, request.TakenBy);
             var result = await sender.Send(quizCreation);

@@ -35,7 +35,7 @@ namespace QQS.CoreWebAPI.Tests
                 }
             };
             
-            var response = await client.PostAsJsonAsync($"api/active-quiz/{activeQuizId}", newResponse);
+            var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
             
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var jsonString = await response.Content.ReadAsStringAsync();
@@ -66,9 +66,9 @@ namespace QQS.CoreWebAPI.Tests
                 }
             };
 
-            var response = await client.PostAsJsonAsync($"api/active-quiz/{activeQuizId}", newResponse);
+            var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
             
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+       
             var result = await response.Content.ReadFromJsonAsync<Result<string>>();
             result.IsSuccess.Should().BeFalse();
             result.Error.Should().NotBeNull();
@@ -97,9 +97,9 @@ namespace QQS.CoreWebAPI.Tests
                 }
             };
 
-            var response = await Client.PostAsJsonAsync($"api/active-quiz/{activeQuizId}", newResponse);
+            var response = await Client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
             
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        
             var result = await response.Content.ReadFromJsonAsync<Result<string>>();
             result.IsSuccess.Should().BeFalse();
             result.Error.Should().NotBeNull();

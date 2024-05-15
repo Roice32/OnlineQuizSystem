@@ -116,7 +116,7 @@ public class ActiveQuizEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/active-quiz/{activeQuizId}", async (Guid activeQuizId, HttpContext context , ISender sender) =>
+        app.MapGet("api/active-quizzes/{activeQuizId}", async (Guid activeQuizId, HttpContext context , ISender sender) =>
         {
             var userIdCookie = context.Request.Cookies["userId"];
             if (userIdCookie != null)

@@ -38,7 +38,7 @@ namespace QQS.CoreWebAPI.Tests
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972451");
             String userId = "5b048913-5df0-429f-a42b-051904672e4d";
             
-            var request = new HttpRequestMessage(HttpMethod.Get, $"api/active-quiz/{activeQuizId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"api/active-quizzes/{activeQuizId}");
             request.Headers.Add("Cookie", $"userId={userId}");
             
             var response = await client.SendAsync(request);
@@ -61,7 +61,7 @@ namespace QQS.CoreWebAPI.Tests
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450");
             String userId = "5b048913-5df0-429f-a42b-051904672e4f";
             
-            var request = new HttpRequestMessage(HttpMethod.Get, $"api/active-quiz/{activeQuizId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"api/active-quizzes/{activeQuizId}");
             request.Headers.Add("Cookie", $"userId={userId}");
             
             var response = await client.SendAsync(request);
@@ -83,7 +83,7 @@ namespace QQS.CoreWebAPI.Tests
             
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450");
             
-            var request = new HttpRequestMessage(HttpMethod.Get, $"api/active-quiz/{activeQuizId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"api/active-quizzes/{activeQuizId}");
             
             var response = await client.SendAsync(request);
             
