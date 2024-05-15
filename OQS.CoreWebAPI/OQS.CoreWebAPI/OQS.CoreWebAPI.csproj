@@ -28,7 +28,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Compile Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Contracts\ActiveQuiz\**" />
   </ItemGroup>
 
 </Project>

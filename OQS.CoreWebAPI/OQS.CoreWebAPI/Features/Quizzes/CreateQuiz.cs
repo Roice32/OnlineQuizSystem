@@ -55,7 +55,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 if (!validationResult.IsValid)
                 {
                     return Result.Failure<Guid>(
-                        new Error("CreateQuiz.Validator",
+                        new Error(400,
                             validationResult.ToString()));
                 }
 

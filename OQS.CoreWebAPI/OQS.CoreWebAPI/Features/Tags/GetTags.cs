@@ -43,7 +43,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (tags == null || !tags.Any())
                 {
                     return Result.Failure<List<TagResponse>>(
-                        new Error("GetTags.Empty", "No tags found"));
+                        new Error(400, "No tags found"));
                 }
 
                 var tagResponses = tags.Select(tag => new TagResponse

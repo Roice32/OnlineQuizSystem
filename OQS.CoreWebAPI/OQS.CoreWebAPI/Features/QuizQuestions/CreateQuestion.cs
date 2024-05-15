@@ -80,12 +80,12 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 if (!validationResult.IsValid)
                 {
                     return Result.Failure<Guid>(
-                        new Error("CreateQuestion.Validator", validationResult.ToString()));
+                        new Error(400, validationResult.ToString()));
                 }
 
                 var quiz = await _dbContext.Quizzes.FindAsync(request.QuizId);
                 if (quiz == null)
-                    return Result.Failure<Guid>(new Error("CreateQuestion.NotFound", "Quiz not found"));
+                    return Result.Failure<Guid>(new Error(404, "Quiz not found"));
 
                 QuestionBase question;
 
@@ -115,7 +115,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                         break;
                     default:
                         return Result.Failure<Guid>(
-                            new Error("CreateQuestion.InvalidType", "Invalid question type"));
+                            new Error(400, "Invalid question type"));
                 }
 
                 quiz.Questions.Add(question);

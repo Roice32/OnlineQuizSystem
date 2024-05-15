@@ -32,7 +32,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (tag is null) 
                 {
                     return Result.Failure<TagResponse>(
-                        new Error("GetTag.Null", "Tag not found"));
+                        new Error(404, "Tag not found"));
                 }
 
                 var tagResponse = new TagResponse

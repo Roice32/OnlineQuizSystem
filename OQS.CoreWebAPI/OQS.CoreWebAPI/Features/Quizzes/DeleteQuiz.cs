@@ -34,7 +34,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
                 if (quiz == null)
                 {
-                    return Result.Failure(new Error("DeleteQuiz.NotFound", "Quiz not found."));
+                    return Result.Failure(new Error(404, "Quiz not found."));
                 }
 
                 _dbContext.Quizzes.Remove(quiz);

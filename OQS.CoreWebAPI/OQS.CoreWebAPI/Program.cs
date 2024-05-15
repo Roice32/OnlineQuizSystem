@@ -45,21 +45,27 @@ var app = builder.Build();
 
 app.UseCors("AllowSpecificOrigin");
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.ApplyMigrations();
-}
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
 
 dbContext.SeedQuizzez();
 dbContext.SeedUsers();
+// dbContext.SeedActiveQuizzes();
 
 app.MapCarter();
 app.UseHttpsRedirection();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    if (dbContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+    {
+        app.ApplyMigrations();
+    }
+}
+
 
 app.Run();
+public partial class Program { };

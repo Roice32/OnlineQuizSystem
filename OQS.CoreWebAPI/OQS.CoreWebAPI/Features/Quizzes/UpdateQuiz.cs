@@ -55,7 +55,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<QuizResponse>(
                         new Error(
-                            "UpdateQuiz.Validator", "validation failed"
+                            400, "validation failed"
                         ));
                 }
 
@@ -67,7 +67,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<QuizResponse>(
                         new Error(
-                            "UpdateTag.NotFound", "Tag not found"
+                            404, "Tag not found"
                         ));
                 }
 
@@ -91,7 +91,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<QuizResponse>(
                         new Error(
-                            "UpdateQuiz.UpdateQuiz", ex.Message
+                            400, ex.Message
                         ));
                 }
 

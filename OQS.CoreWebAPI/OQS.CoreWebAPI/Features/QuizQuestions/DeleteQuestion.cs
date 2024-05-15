@@ -36,14 +36,15 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
                 if (quiz == null)
                 {
-                    return Result.Failure(new Error("DeleteQuiz.NotFound", "Quiz not found."));
+                    return Result.Failure(new Error(404, "Quiz not found."));
                 }
 
-                var question = await _dbContext.Questions.FirstOrDefaultAsync(q => q.Id == request.QuestionId, cancellationToken);
+                var question =
+                    await _dbContext.Questions.FirstOrDefaultAsync(q => q.Id == request.QuestionId, cancellationToken);
 
                 if (question == null)
                 {
-                    return Result.Failure(new Error("DeleteQuiz.NotFound", "Question not found."));
+                    return Result.Failure(new Error(404, "Question not found."));
                 }
 
                 _dbContext.Questions.Remove(question);
@@ -59,17 +60,18 @@ public class DeleteQuestionEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapDelete("api/quizzes/{quiz_id}/questions/{question_id}", async (HttpRequest req, ISender sender, Guid quiz_id, Guid question_id) =>
-        {
-            var command = new DeleteQuestion.Command { QuizId = quiz_id, QuestionId=question_id };
-            var result = await sender.Send(command);
-
-            if (result.IsFailure)
+        app.MapDelete("api/quizzes/{quiz_id}/questions/{question_id}",
+            async (HttpRequest req, ISender sender, Guid quiz_id, Guid question_id) =>
             {
-                return Results.NotFound(result.Error);
-            }
+                var command = new DeleteQuestion.Command { QuizId = quiz_id, QuestionId = question_id };
+                var result = await sender.Send(command);
 
-            return Results.Ok();
-        });
+                if (result.IsFailure)
+                {
+                    return Results.NotFound(result.Error);
+                }
+
+                return Results.Ok();
+            });
     }
 }
