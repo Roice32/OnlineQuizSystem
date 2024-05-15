@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 
 type Quiz = {
     id: string;
@@ -102,16 +103,19 @@ const QuizzesPage = () => {
     if (!data) return <div>No data</div>;
 
     return (
-        <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold mb-4">Quizzes</h1>
-            <QuizzesList quizzes={data.quizzes} />
-            <Pagination
-                offset={data.pagination.offset}
-                limit={data.pagination.limit}
-                totalRecords={data.pagination.totalRecords}
-                onChangeLimit={setLimit}
-                onChangeOffset={setOffset}
-            />
+        <div>
+            <Navbar />
+            <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg">
+                <h1 className="text-2xl font-bold mb-4">Quizzes</h1>
+                <QuizzesList quizzes={data.quizzes} />
+                <Pagination
+                    offset={data.pagination.offset}
+                    limit={data.pagination.limit}
+                    totalRecords={data.pagination.totalRecords}
+                    onChangeLimit={setLimit}
+                    onChangeOffset={setOffset}
+                />
+            </div>
         </div>
     );
 }

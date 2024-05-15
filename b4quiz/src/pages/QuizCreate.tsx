@@ -170,7 +170,7 @@ export default function VerticalLinearStepper() {
                 value={language}
                 label="Language"
                 onChange={handleChangeLanguage}
-                InputLabelProps={{ shrink: true }}
+                inputProps={{ shrink: true }}
                 sx={{ 'margin-bottom': '30px' }}
               >
                 <MenuItem value={'romanian'}>Romanian</MenuItem>
