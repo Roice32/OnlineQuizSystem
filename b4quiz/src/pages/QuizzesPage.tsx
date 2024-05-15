@@ -58,7 +58,7 @@ function Pagination(props: {
             </button>
             <span>Page {Math.floor(offset / limit) + 1} of {totalPages}</span>
             <button
-                onClick={() => onChangeOffset(Math.min(offset + limit, totalRecords - limit))}
+                onClick={() => onChangeOffset(offset + limit)}
                 disabled={offset + limit >= totalRecords}
                 className="px-4 py-2 bg-[#436e6f] text-[#E6DEDA] rounded hover:bg-[#1c4e4f]"
             >
@@ -66,7 +66,10 @@ function Pagination(props: {
             </button>
             <select
                 value={limit}
-                onChange={(e) => onChangeLimit(Number(e.target.value))}
+                onChange={(e) => {
+                    onChangeLimit(Number(e.target.value));
+                    onChangeOffset(0);
+                }}
                 className="px-2 py-1 border rounded"
             >
                 <option value={5}>5</option>
