@@ -8,4 +8,7 @@ public class User
     public UserType Type { get; set; }
     public DateTime CreatedAt { get; set; }
     public string Email { get; set; }
+    
+    public List<UserConnection> Connections { get; set; }
+    
 }
