@@ -2,16 +2,22 @@
 using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Extensions;
+using OQS.CoreWebAPI.Features.LiveQuizzes;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "QQS WEB API v1", Version = "v1" });
+    options.AddSignalRSwaggerGen();
+    
+});
 
 // check if platform is linux
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -65,8 +71,10 @@ app.UseCors("AllowSpecificOrigin");
 dbContext.SeedQuizzez();
 dbContext.SeedUsers();
 dbContext.SeedActiveQuizzes();
+dbContext.SeedLiveQuizzes();
 
 app.MapCarter();
+app.MapHub<LiveQuizzesHub>("/ws/live-quizzes");
 app.UseHttpsRedirection();
 
 

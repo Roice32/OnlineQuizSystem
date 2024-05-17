@@ -35,7 +35,7 @@ namespace QQS.CoreWebAPI.Tests
         {
             var client = Application.CreateClient();
             
-            var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972451");
+            var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972453");
             String userId = "5b048913-5df0-429f-a42b-051904672e4d";
             
             var request = new HttpRequestMessage(HttpMethod.Get, $"api/active-quizzes/{activeQuizId}");

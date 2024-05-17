@@ -34,7 +34,7 @@ public class SubmitResponseRequestValidator : AbstractValidator<SubmitResponseRe
         }
         private async Task<bool> ResponseRespectsDeadline(SubmitResponseRequest request,CancellationToken cancellationToken)
         {
-            if (request == null || request.ActiveQuizId == null)
+            if (request.ActiveQuizId == null)
             {
                 return false;
             }
