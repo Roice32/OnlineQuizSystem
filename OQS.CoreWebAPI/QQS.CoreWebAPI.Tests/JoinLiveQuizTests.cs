@@ -1,55 +1,67 @@
 
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Features.WebSocket;
+using OQS.CoreWebAPI.Features.LiveQuizzes;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
 
 namespace QQS.CoreWebAPI.Tests
 {
-    public class JoinLiveQuizTests : ApplicationContextForTesting
+    public class JoinLiveQuizTests : IClassFixture<WebApplicationFactory<ApplicationContextForTesting>>
     {
+        private readonly WebApplicationFactory<ApplicationContextForTesting> _factory;
         private readonly ApplicationDBContext _context;
 
-        public JoinLiveQuizTests(ApplicationDBContext context)
+        public JoinLiveQuizTests(WebApplicationFactory<ApplicationContextForTesting> factory)
         {
-            _context = context;
+            _factory = factory;
+            _context = factory.Services.GetService<ApplicationDBContext>();
         }
 
         [Fact]
         public async Task JoinRoomTest()
         {
             // Arrange
-            var server = new TestServer(new WebHostBuilder()
-                .UseStartup<Seeder>());
-            var hubContext = server.Host.Services.GetService<IHubContext<QuizRoomHub>>();
-            var client = new HubConnectionBuilder()
-                .WithUrl("http://localhost/quizroomhub", options =>
+            var client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
                 {
-                    options.HttpMessageHandlerFactory = _ => server.CreateHandler();
-                })
+                    services.AddSingleton<IHubContext<LiveQuizzesHub>>();
+                });
+            }).CreateClient();
+
+            var connection = new HubConnectionBuilder()
+                .WithUrl(client.BaseAddress.AbsoluteUri + "/ws/live-quizzes")
                 .Build();
 
-            await client.StartAsync();
+            await connection.StartAsync();
 
             var connectionId = Guid.NewGuid();
+            // Ensure the user and live quiz exist in the database
+            var userId = _context.Users.First().Id; // Use an existing user ID
+            var liveQuizCode = _context.LiveQuizzes.First().Code; // Use an existing live quiz code
 
+            
             // Act
-            await client.InvokeAsync("JoinRoom", new UserConnection
+            await connection.InvokeAsync("JoinRoom", new ConnectionRequest()
             {
-                UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"),
-                ConnectionId = connectionId.ToString()
+                // UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"),
+                // ConnectionId = connectionId.ToString()
+                UserId = userId,
+                Code = liveQuizCode
             });
 
             // Assert
             var userConnection = await _context.UserConnections.FindAsync(connectionId);
             Assert.NotNull(userConnection); // Verifies that the UserConnection was saved in the database
-            Assert.Equal(Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"), userConnection.UserId); // Verifies that the UserId is correct
+            Assert.Equal(userId, userConnection.UserId); // Verifies that the UserId is correct
         }
     }
 }
