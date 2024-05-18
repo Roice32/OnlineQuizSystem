@@ -46,7 +46,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             private readonly IValidator<Command> validator;
             private readonly IMediator mediator;
 
-            public Handler(IOptions<SmtpSettings> smtpSettings, ApplicationDbContext context, IValidator<Command> validator, IMediator mediator)
+            public Handler(IValidator<Command> validator, IMediator mediator)
             {
                 this.validator = validator;
                 this.mediator = mediator;
