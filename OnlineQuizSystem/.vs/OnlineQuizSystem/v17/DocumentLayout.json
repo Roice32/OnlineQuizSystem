@@ -1,0 +1,112 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi.tests\\questioncheckertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|solutionrelative:oqs.corewebapi.tests\\questioncheckertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi.tests\\sendcreatedquizresultsviaemailtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|solutionrelative:oqs.corewebapi.tests\\sendcreatedquizresultsviaemailtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\checkers\\questionchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\entities\\checkers\\questionchecker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi.tests\\quizcheckertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|solutionrelative:oqs.corewebapi.tests\\quizcheckertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\denisa golache\\documents\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\features\\sendquizresultviaemail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\resultsandstatisticsmodule\\features\\sendquizresultviaemail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{57d563b6-44a5-47df-85be-f4199ad6b651}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{57d563b6-44a5-47df-85be-f4199ad6b651}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SendQuizResultViaEmail.cs",
+              "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\SendQuizResultViaEmail.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\SendQuizResultViaEmail.cs",
+              "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\SendQuizResultViaEmail.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\SendQuizResultViaEmail.cs",
+              "ViewState": "AQIAAL8AAAAAAAAAAAAUwNoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T09:41:25.203Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "QuizCheckerTests.cs",
+              "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\QuizCheckerTests.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Tests\\QuizCheckerTests.cs",
+              "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\QuizCheckerTests.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Tests\\QuizCheckerTests.cs",
+              "ViewState": "AQIAAEsAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T09:31:11.351Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "QuestionChecker.cs",
+              "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\Checkers\\QuestionChecker.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\Checkers\\QuestionChecker.cs",
+              "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\Checkers\\QuestionChecker.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Entities\\Checkers\\QuestionChecker.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAL8AAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T09:03:19.71Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "QuestionCheckerTests.cs",
+              "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\QuestionCheckerTests.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Tests\\QuestionCheckerTests.cs",
+              "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\QuestionCheckerTests.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Tests\\QuestionCheckerTests.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T09:02:46.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SendCreatedQuizResultsViaEmailTest.cs",
+              "DocumentMoniker": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\SendCreatedQuizResultsViaEmailTest.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Tests\\SendCreatedQuizResultsViaEmailTest.cs",
+              "ToolTip": "C:\\Users\\Denisa Golache\\Documents\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\SendCreatedQuizResultsViaEmailTest.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Tests\\SendCreatedQuizResultsViaEmailTest.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAmwAwAAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T08:58:25.806Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
