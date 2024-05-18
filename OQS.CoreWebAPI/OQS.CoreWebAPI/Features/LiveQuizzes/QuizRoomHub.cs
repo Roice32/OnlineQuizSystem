@@ -11,22 +11,18 @@ public class QuizRoomHub : Hub
     
     public async Task JoinRoom(UserConnection conn)
     {
-        // Add the connection to the Connection database
-        // This can be done using a service that you inject into this Hub
-        // The service would handle the database operations
-        
       // Create a new Connection entity
     var connection = new UserConnection
     { 
         User = await _context.Users.FindAsync(conn.User),
-        QuizRoomId = Context.ConnectionId
+        ConnectionId = Context.ConnectionId
     };
         // Save the Connection entity in the database
-        _context.Connections.Add(connection);
-        await _context.SaveChangesAsync();
-
+       //_context.Connections.Add(connection);
+        //await _context.SaveChangesAsync();
+        
         // Find the LiveQuiz entity in the database
-        var liveQuiz = await _context.LiveQuizzes.FindAsync(conn.QuizRoomId);
+        var liveQuiz = await _context.LiveQuizzes.FindAsync(conn.ConnectionId);
 
         // Add the connection to the LiveQuiz's connections
         liveQuiz.Connections.Add(connection);
@@ -35,10 +31,10 @@ public class QuizRoomHub : Hub
         await _context.SaveChangesAsync();
 
         // Add the user to the group
-        await Groups.AddToGroupAsync(Context.ConnectionId, conn.QuizRoomId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, conn.ConnectionId);
 
         // Notify the group
-        await Clients.Group(conn.QuizRoomId)
+        await Clients.Group(conn.ConnectionId)
             .SendAsync("ReceiveMessage", "admin", $"{conn.User} has joined the room");
     }
     
