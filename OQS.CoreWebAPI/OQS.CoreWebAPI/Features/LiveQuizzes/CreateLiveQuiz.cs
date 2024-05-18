@@ -93,12 +93,12 @@ public class CreateLiveQuizEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/live-quizzes",async(CreateLiveQuizRequest request ,ISender sender) =>
+        app.MapPost("api/live-quizzes",async(CreateLiveQuizRequest request, ISender sender) =>
         {
             var liveQuizCreation = new CreateLiveQuiz.Query(request.QuizId, request.UserId);
             var result = await sender.Send(liveQuizCreation);
                 
-            return result.IsFailure ? Result.Failure<LiveQuizz>(result.Error) : Result.Success(result.Value);
+            return result.IsFailure ? (Result)Result.Failure<LiveQuizz>(result.Error) : Result.Success(result.Value.Code);
         });
     }
 }
