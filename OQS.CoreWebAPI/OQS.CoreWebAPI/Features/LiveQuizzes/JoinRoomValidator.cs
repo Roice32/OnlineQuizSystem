@@ -9,11 +9,12 @@ using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.LiveQuizzes
-{
+{ 
+    public record ConnectionRequest(Guid UserId, string Code) : IRequest<Result<bool>>;
+
     public class JoinRoomValidator : AbstractValidator<ConnectionRequest>
     {
-        public record ConnectionRequest(Guid UserId, string Code) : IRequest<Result<bool>>;
-
+       
         private readonly ApplicationDBContext _context;
 
         public JoinRoomValidator(ApplicationDBContext context)
@@ -40,7 +41,7 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
         }
     }
 
-    internal sealed class Handler : IRequestHandler<ConnectionRequest, Result<bool>>
+    public sealed class Handler : IRequestHandler<ConnectionRequest, Result<bool>>
         {
             private readonly ApplicationDBContext _context;
             private readonly JoinRoomValidator _validator;
