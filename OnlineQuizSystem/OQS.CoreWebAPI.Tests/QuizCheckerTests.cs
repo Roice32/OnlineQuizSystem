@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
 using OQS.CoreWebAPI.Shared;
@@ -118,6 +119,48 @@ namespace OQS.CoreWebAPI.Tests
                     reviewNeededQuestionResult.ReviewNeededResult.Should().Be(AnswerResult.NotAnswered);
                 }
             }
+        }
+        
+        [Fact]    
+        public async Task Given_AnswerToQuestionNotBelongingToQuiz_When_CheckQuizIsCalled_Then_StrayAnswerIsReturned()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var quizId = Guid.Parse("00000000-0000-0000-0002-000000000001");
+            var userId = Guid.Parse("00000000-0000-0000-0001-000000000002");
+            var quizSubmission = new QuizSubmission
+            (
+                quizId: quizId,
+                takenBy: userId,
+                questionAnswerPairs:
+                [
+                    new TrueFalseQAPair
+                    (
+                        questionId: Guid.Parse("00000000-0000-0000-0003-000000000001"),
+                        answer: true
+                    ),
+                    new SingleChoiceQAPair
+                    (
+                        questionId: Guid.Parse("00000000-0000-0000-0003-000000000002"),
+                        answer: "Choice 1"
+                    ),
+                    new WrittenQAPair
+                    (
+                        questionId: Guid.Parse("00000000-0000-0000-0003-000000000009"),
+                        answer: "Answer"
+                    ),
+                ],
+                timeElapsed: 2
+            );
+
+            // Act
+            var result = await QuizChecker.CheckQuizAsync(quizSubmission, dbContext);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Code.Should().Be("QuizChecker.StrayAnswer");
         }
     }
 }
