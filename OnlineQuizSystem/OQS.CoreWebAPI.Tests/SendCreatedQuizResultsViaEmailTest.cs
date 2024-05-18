@@ -1,5 +1,8 @@
 ﻿using System.Net;
 using FluentAssertions;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Features;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.Tests.SetUp;
 
 
