@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 
@@ -18,13 +19,14 @@ public class QuizRoomHub : Hub
         ConnectionId = Context.ConnectionId
     };
         // Save the Connection entity in the database
-       //_context.Connections.Add(connection);
+        //_context.Connections.Add(connection);
         //await _context.SaveChangesAsync();
         
         // Find the LiveQuiz entity in the database
         var liveQuiz = await _context.LiveQuizzes.FindAsync(conn.ConnectionId);
 
         // Add the connection to the LiveQuiz's connections
+        Debug.Assert(liveQuiz != null, nameof(liveQuiz) + " != null");
         liveQuiz.Connections.Add(connection);
 
         // Save changes in the database
