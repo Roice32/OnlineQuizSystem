@@ -4,7 +4,7 @@
     {
         public Guid QuizId { get; set; }
         public Guid UserId { get; set; }
-        public DateTime SubmittedAt { get; set; }
+        public DateTime SubmittedAtUtc { get; set; }
         public int CompletionTime { get; set; }
         public float Score { get; set; }
         public bool ReviewPending { get; set; }
@@ -14,7 +14,7 @@
             QuizId = quizId;
             UserId = userId;
             CompletionTime = completionTime;
-            SubmittedAt = DateTime.Now;
+            SubmittedAtUtc = DateTime.UtcNow;
         }
     }
 }

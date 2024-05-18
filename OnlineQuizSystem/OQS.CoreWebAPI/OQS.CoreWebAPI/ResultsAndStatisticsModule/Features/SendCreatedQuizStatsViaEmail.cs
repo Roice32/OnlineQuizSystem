@@ -1,33 +1,25 @@
-﻿using MediatR;
+﻿using Carter;
+using FluentValidation;
+using MailKit.Net.Smtp;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using MailKit.Net.Smtp;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Carter;
-using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.Database;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using MailKit.Security;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Features;
-using Microsoft.AspNetCore.SignalR;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
-    public class SendCreatedQuizResultsViaEmail
+    public class SendCreatedQuizStatsViaEmail
     {
         public class Command : IRequest<Result>
         {
             public string RecipientEmail { get; set; }
             public Guid QuizId { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime EndDate { get; set; }
+            public DateTime StartDateLocal { get; set; }
+            public DateTime EndDateLocal { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -43,24 +35,22 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         .WithMessage("QuizId is required.");
 
 
-                RuleFor(x => x.StartDate)
+                RuleFor(x => x.StartDateLocal)
                         .NotEmpty()
                         .WithMessage("StartDate is required.");
 
-                RuleFor(x => x.EndDate)
+                RuleFor(x => x.EndDateLocal)
                         .NotEmpty()
                         .WithMessage("EndDate is required.");
             }
         }
         public class Handler : IRequestHandler<Command, Result>
         {
-            private readonly SmtpSettings _smtpSettings;
             private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
 
-            public Handler(IOptions<SmtpSettings> smtpSettings, ApplicationDbContext context, IValidator<Command> validator)
+            public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
-                _smtpSettings = smtpSettings.Value ?? throw new ArgumentNullException(nameof(smtpSettings));
                 dbContext = context;
                 this.validator = validator;
             }
@@ -75,17 +65,24 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                             validationResult.ToString()));
                 }
 
-                // Get QuizResultHeaders
+                if (request.StartDateLocal > request.EndDateLocal)
+                {
+                    return Result.Failure(new Error("InvalidDates", "Start Date cannot be greater than End Date"));
+                }
+
+                var startDateUtc = request.StartDateLocal.ToUniversalTime();
+                var endDateUtc = request.EndDateLocal.ToUniversalTime();
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                         .AsNoTracking()
-                        .Where(header => header.QuizId == request.QuizId && header.SubmittedAt.Date >= request.StartDate.Date && header.SubmittedAt.Date <= request.EndDate.Date)
+                        .Where(header => header.QuizId == request.QuizId && 
+                            header.SubmittedAtUtc.Date >= startDateUtc.Date && 
+                            header.SubmittedAtUtc.Date <= endDateUtc.Date)
                         .ToListAsync(cancellationToken);
 
                 if (quizResultHeaders is null || quizResultHeaders.Count == 0)
                 {
                     return Result.Failure(Error.NullValue);
                 }
-
 
                 try
                 {
@@ -94,14 +91,12 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     message.To.Add(MailboxAddress.Parse(request.RecipientEmail));
                     message.Subject = "Tests submitted";
                     var quiz = await dbContext.Quizzes.FindAsync(request.QuizId);
-                    // Include QuizResultHeaders in the email body
-                    var emailBody = $"Here are the results for the  {quiz.Name} between {request.StartDate.ToString("dd/MM/yyyy")} - {request.EndDate.ToString("dd/MM/yyyy")}:\n\n";
+                    var emailBody = $"Here are the results for the {quiz.Name} between {request.StartDateLocal.ToString("dd/MM/yyyy")} - {request.EndDateLocal.ToString("dd/MM/yyyy")}:\n\n";
                     foreach (var header in quizResultHeaders)
                     {
-
                         var user = await dbContext.Users.FindAsync(header.UserId);
 
-                        emailBody += $"User Name: {user.Name}\n Submitted At: {header.SubmittedAt}\n Completion Time: {header.CompletionTime}\n Score: {header.Score}\n Review Pending: {header.ReviewPending}\n";
+                        emailBody += $"User Name: {user.Name}\n Submitted At: {header.SubmittedAtUtc.ToLocalTime}\n Completion Time: {header.CompletionTime}\n Score: {header.Score}\n Review Pending: {header.ReviewPending}\n";
                     }
 
                     message.Body = new TextPart(MimeKit.Text.TextFormat.Plain)
@@ -110,16 +105,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     };
 
                     using var smtp = new SmtpClient();
-                    smtp.Connect("smtp.mail.yahoo.com", 587, false);
-                    smtp.Authenticate("echipafacultate@yahoo.com", "onhqcvgwqodblrtv");
-                    smtp.Send(message);
-                    smtp.Disconnect(true);
+                    await smtp.ConnectAsync("smtp.mail.yahoo.com", 587, false);
+                    await smtp.AuthenticateAsync("echipafacultate@yahoo.com", "onhqcvgwqodblrtv");
+                    await smtp.SendAsync(message);
+                    await smtp.DisconnectAsync(true);
 
                     return Result.Success("Email Sent Successfully");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Exception occurred while sending email: {ex}");
                     return Result.Failure<string>(new Error("EmailSenderError", ex.Message));
                 }
             }
@@ -132,12 +126,12 @@ public class SendCreatedQuizStatsViaEmailEndPoint : ICarterModule
     {
         app.MapGet("api/email/sendCreatedQuizStatsViaEmail", async (Guid quizId, string recipientEmail, DateTime startDate, DateTime endDate, ISender sender) =>
         {
-            var command = new SendCreatedQuizResultsViaEmail.Command
+            var command = new SendCreatedQuizStatsViaEmail.Command
             {
                 RecipientEmail = recipientEmail,
                 QuizId = quizId,
-                StartDate = startDate,
-                EndDate = endDate
+                StartDateLocal = startDate,
+                EndDateLocal = endDate
             };
             var result = await sender.Send(command);
             if (result.IsFailure)

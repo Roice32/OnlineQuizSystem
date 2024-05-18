@@ -16,7 +16,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 {
     public class SendQuizResultViaEmail
     {
-
         public class Command : IRequest<Result>
         {
             public string RecipientEmail { get; set; }
@@ -44,22 +43,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
 
         public class Handler : IRequestHandler<Command, Result>
         {
-            private readonly SmtpSettings _smtpSettings;
-            private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
             private readonly IMediator mediator;
 
-
             public Handler(IOptions<SmtpSettings> smtpSettings, ApplicationDbContext context, IValidator<Command> validator, IMediator mediator)
             {
-                _smtpSettings = smtpSettings.Value ?? throw new ArgumentNullException(nameof(smtpSettings));
-                dbContext = context;
                 this.validator = validator;
                 this.mediator = mediator;
-
-
             }
-
 
             public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -70,7 +61,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                         new Error("EmailSender.Validator",
                             validationResult.ToString()));
                 }
-
 
                 var quizResult = await mediator.Send(new GetQuizResult.Query { QuizId = request.QuizId, UserId = request.UserId }, cancellationToken);
                 if (!quizResult.IsSuccess)
@@ -182,12 +172,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     Console.WriteLine($"Exception occurred while sending email: {ex}");
                     return Result.Failure(new Error("EmailSenderError", ex.Message));
                 }
-
-
-
-
-
-
             }
         }
     }

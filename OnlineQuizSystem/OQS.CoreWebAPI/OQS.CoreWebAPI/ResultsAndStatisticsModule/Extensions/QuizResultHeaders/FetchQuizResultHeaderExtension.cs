@@ -44,7 +44,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
             {
                 QuizId = QuizId,
                 UserId = UserId,
-                SubmittedAt = quizResultHeader.SubmittedAt,
+                SubmittedAtUtc = quizResultHeader.SubmittedAtUtc,
                 CompletionTime = quizResultHeader.CompletionTime,
                 Score = quizResultHeader.Score,
                 ReviewPending = quizResultHeader.ReviewPending,

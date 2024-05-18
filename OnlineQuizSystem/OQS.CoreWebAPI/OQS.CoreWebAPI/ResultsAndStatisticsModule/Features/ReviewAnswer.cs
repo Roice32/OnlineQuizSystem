@@ -105,7 +105,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     (updatedHeader.Value.QuizId,
                     updatedHeader.Value.UserId,
                     updatedHeader.Value.CompletionTime);
-                newQuizResultHeader.SubmittedAt = updatedHeader.Value.SubmittedAt;
+                newQuizResultHeader.SubmittedAtUtc = updatedHeader.Value.SubmittedAtUtc;
                 newQuizResultHeader.Score = updatedHeader.Value.Score;
                 newQuizResultHeader.ReviewPending = updatedHeader.Value.ReviewPending;
 
