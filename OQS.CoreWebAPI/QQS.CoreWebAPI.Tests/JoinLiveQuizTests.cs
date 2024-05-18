@@ -11,6 +11,7 @@ using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.LiveQuizzes;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
+using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest;
 
 namespace QQS.CoreWebAPI.Tests
 {
