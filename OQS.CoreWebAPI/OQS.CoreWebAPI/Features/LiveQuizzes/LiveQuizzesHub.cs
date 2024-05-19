@@ -1,58 +1,34 @@
 using System.Diagnostics;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Contracts;
+
 namespace OQS.CoreWebAPI.Features.LiveQuizzes;
-using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest;
+
 public class LiveQuizzesHub: Hub
 {
     private readonly ApplicationDBContext _context;
-    private readonly OQS.CoreWebAPI.Features.LiveQuizzes.JoinLiveQuiz.Handler _handler;
-    public LiveQuizzesHub(ApplicationDBContext context, OQS.CoreWebAPI.Features.LiveQuizzes.JoinLiveQuiz.Handler handler)
+    private readonly ISender _sender;
+    public LiveQuizzesHub(ApplicationDBContext context,ISender sender)
     {
         _context = context;
-        _handler = handler;
+        _sender = sender;
     }
     
-    public async Task JoinRoom(Contracts.LiveQuizzes.ConnectionRequest conn)
+    public async Task JoinRoom(ConnectionRequest conn)
     {
-         //validator verifica User si Code
-        
-        //daca nu e valid trimit mesaj celui care a facut conexiunea
-        // trimit o metoda clientilor "ConnectionDenied" 
-        
-        var validationResult = await _handler.Handle(conn, CancellationToken.None);
-        
-        if (validationResult.IsFailure)
+        var command = new JoinLiveQuiz.ConnectionCommand(conn.UserId, conn.Code, Context.ConnectionId);
+        var result = await _sender.Send(command);
+        if (result.IsSuccess)
         {
-            await Clients.Caller.SendAsync("ConnectionDenied", validationResult.Error);
-            return;
+            await Groups.AddToGroupAsync(Context.ConnectionId, conn.Code);
+            await Clients.Group(conn.Code).SendAsync("UserJoined", result.Value);
         }
-        
-        var ConnectedUser = await _context.Users.FindAsync(conn.UserId);
-         var connection = new UserConnection
-         { 
-             User = ConnectedUser,
-             ConnectionId = Context.ConnectionId,
-             UserId = ConnectedUser.Id
-         };
-         
-        // Find the LiveQuiz entity in the database
-        var liveQuiz = await _context.LiveQuizzes.FindAsync(conn.Code);
-
-        // Add the connection to the LiveQuiz's connections
-        liveQuiz.Connections.Add(connection);
-
-        // Save changes in the database
-        await _context.SaveChangesAsync();
-
-        // Add the user to the group
-        await Groups.AddToGroupAsync(Context.ConnectionId, conn.Code);
-
-        // Notify the group
-        await Clients.Group(conn.Code)
-            .SendAsync("ReceiveMessage", $"{ConnectedUser.Name} has joined the room");
+        else
+        {
+            await Clients.Caller.SendAsync("Error", result.Error);
+        }
     }
 }

@@ -7,22 +7,23 @@ using System.Threading.Tasks;
 using MediatR;
 using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.Contracts;
 
 namespace OQS.CoreWebAPI.Features.LiveQuizzes
 {
-    
-        public record ConnectionRequest(Guid UserId, string Code) : IRequest<Result<bool>>;
-    
     public class JoinLiveQuiz
     {
-        public class JoinRoomValidator : AbstractValidator<OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest>
+        public record ConnectionCommand(Guid UserId, string Code, string ConnectionId) : IRequest<Result<string>>;
+
+
+        public class JoinLiveQuizValidator : AbstractValidator<ConnectionCommand>
         {
 
             private readonly IServiceScopeFactory _serviceScopeFactory;
 
-            public JoinRoomValidator(IServiceScopeFactory serviceScopeFactory)
-            { _serviceScopeFactory = serviceScopeFactory;
+            public JoinLiveQuizValidator(IServiceScopeFactory serviceScopeFactory)
+            {
+                _serviceScopeFactory = serviceScopeFactory;
+
                 RuleFor(x => x.UserId)
                     .MustAsync(UserExists)
                     .WithMessage("Invalid User Id");
@@ -36,7 +37,7 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-                return await context.Users.FindAsync(userId, cancellationToken) != null;
+                return await context.Users.FindAsync(userId) != null;
             }
 
             private async Task<bool> LiveQuizExists(string code, CancellationToken cancellationToken)
@@ -47,30 +48,40 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
             }
         }
 
-        public sealed class  Handler : IRequestHandler<OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest, Result<bool>>
+        public sealed class Handler : IRequestHandler<ConnectionCommand, Result<string>>
         {
             private readonly ApplicationDBContext _context;
-            private readonly JoinRoomValidator _validator;
+            private readonly JoinLiveQuizValidator _validator;
 
-            public Handler(ApplicationDBContext context, JoinRoomValidator validator)
+            public Handler(ApplicationDBContext context, JoinLiveQuizValidator validator)
             {
                 _context = context;
                 _validator = validator;
             }
 
-            public async Task<Result<bool>> Handle(OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest request, CancellationToken cancellationToken)
+            public async Task<Result<string>> Handle(ConnectionCommand request, CancellationToken cancellationToken)
             {
                 var validationResult = await _validator.ValidateAsync(request);
                 if (!validationResult.IsValid)
                 {
-                    return Result.Failure<bool>(
-                        new Error("JoinRoom.BadRequest",
-                            validationResult.ToString()));
+                    return Result.Failure<string>(new Error("JoinRoom.BadRequest", validationResult.ToString()));
                 }
-                else
+
+                var ConnectedUser = await _context.Users.FindAsync(request.UserId);
+                var connection = new UserConnection
                 {
-                    return Result.Success<bool>(true);
-                }
+                    User = ConnectedUser,
+                    ConnectionId = request.ConnectionId,
+                    UserId = ConnectedUser.Id
+                };
+
+                var liveQuiz = await _context.LiveQuizzes.FindAsync(request.Code);
+                liveQuiz.Connections.Add(connection);
+                await _context.SaveChangesAsync();
+
+
+                return Result.Success<string>($"{ConnectedUser.Name} joined the quiz");
+
             }
 
         }
