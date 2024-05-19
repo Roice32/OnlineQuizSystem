@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.SignalR;
 using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
-
+using OQS.CoreWebAPI.Contracts;
 namespace OQS.CoreWebAPI.Features.LiveQuizzes;
-
+using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest;
 public class LiveQuizzesHub: Hub
 {
     private readonly ApplicationDBContext _context;
@@ -16,7 +16,7 @@ public class LiveQuizzesHub: Hub
         _handler = handler;
     }
     
-    public async Task JoinRoom(ConnectionRequest conn)
+    public async Task JoinRoom(Contracts.LiveQuizzes.ConnectionRequest conn)
     {
          //validator verifica User si Code
         

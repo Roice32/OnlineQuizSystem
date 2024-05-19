@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using MediatR;
 using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Shared;
+using OQS.CoreWebAPI.Contracts;
 
-namespace OQS.CoreWebAPI.Features.LiveQuizzes
+namespace OQS.CoreWebAPI
 { 
-    public record ConnectionRequest(Guid UserId, string Code) : IRequest<Result<bool>>;
+   // public record  OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest (Guid UserId, string Code) : IRequest<Result<bool>>;
 
-    public class JoinRoomValidator : AbstractValidator<ConnectionRequest>
+    public class JoinRoomValidator : AbstractValidator<OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest>
     {
        
         private readonly ApplicationDBContext _context;
@@ -41,7 +42,7 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
         }
     }
 
-    public sealed class Handler : IRequestHandler<ConnectionRequest, Result<bool>>
+    public sealed class Handler : IRequestHandler<OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest, Result<bool>>
         {
             private readonly ApplicationDBContext _context;
             private readonly JoinRoomValidator _validator;
