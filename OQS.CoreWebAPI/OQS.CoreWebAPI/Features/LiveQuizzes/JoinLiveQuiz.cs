@@ -14,7 +14,7 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
     
         public record ConnectionRequest(Guid UserId, string Code) : IRequest<Result<bool>>;
     
-    public class CreateJoinRoom
+    public class JoinLiveQuiz
     {
         public class JoinRoomValidator : AbstractValidator<OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest>
         {

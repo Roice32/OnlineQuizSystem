@@ -9,8 +9,8 @@ using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest
 public class LiveQuizzesHub: Hub
 {
     private readonly ApplicationDBContext _context;
-    private readonly OQS.CoreWebAPI.Features.LiveQuizzes.CreateJoinRoom.Handler _handler;
-    public LiveQuizzesHub(ApplicationDBContext context, OQS.CoreWebAPI.Features.LiveQuizzes.CreateJoinRoom.Handler handler)
+    private readonly OQS.CoreWebAPI.Features.LiveQuizzes.JoinLiveQuiz.Handler _handler;
+    public LiveQuizzesHub(ApplicationDBContext context, OQS.CoreWebAPI.Features.LiveQuizzes.JoinLiveQuiz.Handler handler)
     {
         _context = context;
         _handler = handler;
@@ -22,16 +22,6 @@ public class LiveQuizzesHub: Hub
         
         //daca nu e valid trimit mesaj celui care a facut conexiunea
         // trimit o metoda clientilor "ConnectionDenied" 
-        
-        
-        /*var validator = new JoinRoomValidator(_context);
-        var validationResult = await validator.ValidateAsync(conn);
-        
-        if (!validationResult.IsValid)
-        {
-            await Clients.Caller.SendAsync("ConnectionDenied", validationResult.ToString());
-            return;
-        }*/
         
         var validationResult = await _handler.Handle(conn, CancellationToken.None);
         
