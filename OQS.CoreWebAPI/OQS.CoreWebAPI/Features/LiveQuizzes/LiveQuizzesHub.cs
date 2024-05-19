@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
@@ -17,18 +18,25 @@ public class LiveQuizzesHub: Hub
         _sender = sender;
     }
     
-    public async Task JoinRoom(ConnectionRequest conn)
+    public async Task JoinQuiz(ConnectionRequest conn)
     {
         var command = new JoinLiveQuiz.ConnectionCommand(conn.UserId, conn.Code, Context.ConnectionId);
         var result = await _sender.Send(command);
         if (result.IsSuccess)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, conn.Code);
-            await Clients.Group(conn.Code).SendAsync("UserJoined", result.Value);
+            var liveQuiz = await _context.LiveQuizzes
+                .Include(x => x.CreatedBy)
+                .FirstOrDefaultAsync(x => x.Code == conn.Code);
+            var adminId = await liveQuiz.getAdminConnectionId();
+            var user = await _context.Users.FindAsync(conn.UserId);
+            await Clients.Client(adminId).SendAsync("UserJoined", user.Name);
+            await Clients.Caller.SendAsync("Joined",command.ConnectionId==adminId);
         }
         else
         {
             await Clients.Caller.SendAsync("Error", result.Error);
         }
     }
+   
 }
