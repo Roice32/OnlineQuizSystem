@@ -38,6 +38,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                         db.SeedQuizzez();
                         db.SeedActiveQuizzes();
                         db.SeedExpiredActiveQuizzes();
+                        db.SeedLiveQuizzes();
                     }
                 });
             });
