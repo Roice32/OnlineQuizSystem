@@ -9,8 +9,8 @@ using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest
 public class LiveQuizzesHub: Hub
 {
     private readonly ApplicationDBContext _context;
-    private readonly Handler _handler;
-    public LiveQuizzesHub(ApplicationDBContext context,Handler handler)
+    private readonly OQS.CoreWebAPI.Features.LiveQuizzes.CreateJoinRoom.Handler _handler;
+    public LiveQuizzesHub(ApplicationDBContext context, OQS.CoreWebAPI.Features.LiveQuizzes.CreateJoinRoom.Handler handler)
     {
         _context = context;
         _handler = handler;
