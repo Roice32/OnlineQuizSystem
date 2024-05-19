@@ -3,10 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.Tests.SetUp;
 
 namespace OQS.CoreWebAPI.Tests
@@ -305,5 +308,36 @@ namespace OQS.CoreWebAPI.Tests
             result2.Score.Should().Be(0);
             ((ReviewNeededQuestionResult)result2).ReviewNeededResult.Should().Be(AnswerResult.NotAnswered);
         }
+
+        [Fact]
+        public async Task Given_ReviewNeededQuestionAnQuestionIsCalled_Then_ResultIsPendingAsync()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var userId = Guid.Parse("00000000-0000-0000-0001-000000000001");
+            var questionId = Guid.Parse("00000000-0000-0000-0003-000000000005");
+            var quizId = Guid.Parse("00000000-0000-0000-0002-000000000003");
+            var qaPair = new WrittenQAPair(questionId, "10");
+
+
+            ReviewNeededQuestion ceva = new ReviewNeededQuestion
+                (questionId, "Cat face 5 + 5?",  6,  quizId);
+
+            var result = await QuestionChecker.AskLLMForReviewAsync(ceva, "10");
+            var questionFromDb = dbContext
+                .Questions
+                .FirstOrDefault(q => q.Id == questionId);
+
+            // Act
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Value.Grade.Should().Be(6);
+            result.Value.Review.Should().NotBeNull();
+           // ((ReviewNeededQuestionResult)result).ReviewNeededResult.Should().Be(AnswerResult.Pending);
+        }
+
     }
 }

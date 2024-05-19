@@ -217,9 +217,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             return questionResult;
         }
 
-        private static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
+        public static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
-            var openAI = new OpenAIAPI("gAAAAABmRJeBwgFv5d3OU8_tXune3uBUNs8yCyQVONF1qp6atA5Ms-UAHpT4jxMYZvtEcPE64m9sN-XrTUlP8RtXFgUA0Q6XISKLXcaN67CFt1v_kNtoUrSkXknfLJ1FFfsCsPfkwdcn");
+            var openAI = new OpenAIAPI("Veae6HeSELVq583vloxnT3BlbkFJTgE0zPNVjaCXL0QoSQGh");
             var chatRequest = new ChatRequest
             {
                 Model = Model.ChatGPTTurbo, // Use the appropriate model identifier for gpt-3.5-turbo
