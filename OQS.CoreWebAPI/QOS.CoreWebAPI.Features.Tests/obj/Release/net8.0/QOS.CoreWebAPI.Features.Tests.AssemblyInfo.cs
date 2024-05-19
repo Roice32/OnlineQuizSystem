@@ -12,7 +12,7 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("QOS.CoreWebAPI.Features.Tests")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6cac6182375379c5e9a6aec58cd9365cc97c68b3")]
 [assembly: System.Reflection.AssemblyProductAttribute("QOS.CoreWebAPI.Features.Tests")]

@@ -10,9 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D2BB6A2D
 		AuthenticationTest.cs = AuthenticationTest.cs
 		RegistrationTest.cs = RegistrationTest.cs
 		UnitTest1.cs = UnitTest1.cs
+		UpdateUserDetails.cs = UpdateUserDetails.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QOS.CoreWebAPI.Features.Tests", "QOS.CoreWebAPI.Features.Tests\QOS.CoreWebAPI.Features.Tests.csproj", "{E70F9F5B-5B9C-478C-9B9B-0D66397CF164}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QOS.CoreWebAPI.Features.Tests", "QOS.CoreWebAPI.Features.Tests\QOS.CoreWebAPI.Features.Tests.csproj", "{E70F9F5B-5B9C-478C-9B9B-0D66397CF164}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

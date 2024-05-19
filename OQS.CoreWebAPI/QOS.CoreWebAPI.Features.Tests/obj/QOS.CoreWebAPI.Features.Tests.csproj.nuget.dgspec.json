@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj": {}
+    "C:\\Users\\aioan\\OneDrive\\Desktop\\NewRepo\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj": {}
   },
   "projects": {
-    "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj": {
+    "C:\\Users\\aioan\\OneDrive\\Desktop\\NewRepo\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\aioan\\OneDrive\\Desktop\\NewRepo\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj",
         "projectName": "QOS.CoreWebAPI.Features.Tests",
-        "projectPath": "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj",
-        "packagesPath": "C:\\Users\\ivrem\\.nuget\\packages\\",
-        "outputPath": "D:\\Repos\\OnlineQuiz\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\obj\\",
+        "projectPath": "C:\\Users\\aioan\\OneDrive\\Desktop\\NewRepo\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\QOS.CoreWebAPI.Features.Tests.csproj",
+        "packagesPath": "C:\\Users\\aioan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\aioan\\OneDrive\\Desktop\\NewRepo\\OQS.CoreWebAPI\\QOS.CoreWebAPI.Features.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ivrem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\aioan\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

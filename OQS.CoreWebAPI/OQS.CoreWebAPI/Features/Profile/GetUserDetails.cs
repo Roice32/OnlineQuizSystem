@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Features.Profile;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.Profile
@@ -58,12 +59,27 @@ public class GetUserDetailsEndpoint : ICarterModule
                 Id = id
             };
             var result = await sender.Send(query);
-            if(result.IsFailure)
+            if (result.IsFailure)
             {
                 return Results.NotFound(result.Error);
             }
             return Results.Ok(result.Value);
-        }
-        );
+        });
+
+        app.MapPut("api/profile/{id}", async (Guid id, UpdateUserDetails.UpdateUserDetailsModel updateUserDetails, ISender sender) =>
+        {
+            var command = new UpdateUserDetails.Command
+            {
+                UserId = id.ToString(),
+                UpdateModel = updateUserDetails
+            };
+
+            var result = await sender.Send(command);
+            if (result.IsFailure)
+            {
+                return Results.BadRequest(result.Error);
+            }
+            return Results.Ok();
+        });
     }
 }

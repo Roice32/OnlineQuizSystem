@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Contracts\Models\UpdateUserDetails.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Carter" Version="8.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
     <PackageReference Include="MailKit" Version="4.5.0" />
