@@ -72,15 +72,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     {
                         if (choicesResults[choice] == AnswerResult.Correct)
                         {
-                            result += $"{choice} is correct ";
+                            result += $"{choice} (Correct), ";
                         }
                         else if (choicesResults[choice] == AnswerResult.Wrong)
                         {
-                            result += $"{choice} is wrong ";
+                            result += $"{choice} (Wrong),  ";
                         }   
 
                     }
-                    result = result.Remove(result.Length - 1);
+                    result = result.Remove(result.Length - 2);
                 }
                        
                 return result;
@@ -134,9 +134,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 string result = string.Empty;
                 if (writtenAnswerQuestion != null && writtenAnswerResult != null)
                 {
-                    result += $"Correct answers {string.Join(", ", writtenAnswerQuestion.WrittenAcceptedAnswers)}";
+                    result += $"Correct answers {string.Join(", ", writtenAnswerQuestion.WrittenAcceptedAnswers)}\n";
 
                 }
+                result += $"Your answer: {writtenAnswerResult.WrittenAnswer}";
                 return result;
             }
         }
@@ -151,13 +152,26 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 string result = string.Empty;
                 if (reviewNeededQuestion != null && reviewNeededResult != null)
                 {
+                    result += $"Your answer: {reviewNeededResult.ReviewNeededAnswer}\n";
                     if (reviewNeededResult.ReviewNeededResult.ToString() == "Pending")
                     {
-                        result += $"Your answer is pending.";
+                        result += $"Your answer is pending review.";
                     }
-                    else
+                    else if(reviewNeededResult.ReviewNeededResult.ToString() == "NotAnswered")
                     {
-                        result += $"Your answer is {reviewNeededResult.ReviewNeededResult}. ";
+                        result += $"You did not answer this question.";
+                    }
+                    else if(reviewNeededResult.ReviewNeededResult.ToString()=="PartiallyCorrect")
+                    {
+                        result += $"Your answer is Partially Correct. ";
+                    }
+                    else if(reviewNeededResult.ReviewNeededResult.ToString()=="Correct")
+                    {
+                        result += $"Your answer is Correct. ";
+                    }
+                    else if(reviewNeededResult.ReviewNeededResult.ToString()=="Wrong")
+                    {
+                        result += $"Your answer is Wrong. ";
                     }
                 }
                 return result;
