@@ -1,4 +1,4 @@
-﻿using Carter;
+﻿/*using Carter;
 using OQS.CoreWebAPI.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -70,3 +70,4 @@ public class GetQuizEndpoint : ICarterModule
         });
     }
 }
+*/

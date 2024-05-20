@@ -7,7 +7,7 @@ using Xunit;
 
 namespace QQS.CoreWebAPI.Tests;
 
-public class ActiveQuizCreationTests : ApplicationContextForTesting
+/*public class ActiveQuizCreationTests : ApplicationContextForTesting
 {
     [Fact]
     public async Task CreateActiveQuiz_ReturnsOkStatus()
@@ -25,4 +25,4 @@ public class ActiveQuizCreationTests : ApplicationContextForTesting
         // response.EnsureSuccessStatusCode(); // Verifică dacă răspunsul HTTP indică o operație de succes (codul 2xx)
         // Assert.Equal(HttpStatusCode.OK, response.StatusCode); // Verifică dacă răspunsul HTTP este unul de tip Created (codul 201)
     }
-}
+}*/

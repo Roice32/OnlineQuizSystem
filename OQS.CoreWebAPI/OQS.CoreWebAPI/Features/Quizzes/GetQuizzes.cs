@@ -19,7 +19,7 @@ public static class GetQuizzes
         public int Limit { get; set; } = 10;
     }
 
-    internal sealed class Handler : IRequestHandler<Query, Result<QuizzesResponse>>
+    public class Handler : IRequestHandler<Query, Result<QuizzesResponse>>
     {
         private readonly ApplicationDBContext context;
 

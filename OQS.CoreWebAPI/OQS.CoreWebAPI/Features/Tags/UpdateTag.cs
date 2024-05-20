@@ -7,19 +7,19 @@ using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.Tags;
 using OQS.CoreWebAPI.Shared;
+using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {
     public static class UpdateTag
     {
-        public class BodyUpdateTag : IRequest<Result<TagResponse>>
+        public record BodyUpdateTag : IRequest<Result<TagResponse>>
         {
              public string Name { get; set; } = string.Empty;
         }
         
-        public class Command : IRequest<Result<TagResponse>>
+        public record Command(string TagId) : IRequest<Result<TagResponse>>
         {
-            public Guid Id { get; set; }
             public BodyUpdateTag Body { get; set; } = new BodyUpdateTag();
         }
 
@@ -27,7 +27,6 @@ namespace OQS.CoreWebAPI.Features.Tags
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
 
                 RuleFor(x => x.Body.Name)
                     .NotEmpty().WithMessage("Name is required.")
@@ -36,45 +35,26 @@ namespace OQS.CoreWebAPI.Features.Tags
         }
 
 
-        public class Validator : AbstractValidator<Command>
-        {
-            public Validator()
-            {
-                RuleFor(x => x.Body.Name).NotEmpty();
-            }
-        }
-
         internal sealed class Handler : IRequestHandler<Command, Result<TagResponse>>
         {
             private readonly ApplicationDBContext context;
-            private readonly IValidator<Command> validator;
+          
 
             public Handler(ApplicationDBContext context, IValidator<Command> validator)
             {
                 this.context = context;
-                this.validator = validator;
             }
 
             public async Task<Result<TagResponse>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var validationResult = validator.Validate(request);
-                if (!validationResult.IsValid)
-                {
-                    return Result.Failure<TagResponse>(
-                        new Error(
-                            100, "validation failed"
-                        ));
-                }
 
                 var tag = await context.Tags
-                    .AsNoTracking()
-                    .Where(tag => tag.Id == request.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefaultAsync(tag => tag.Id.ToString() == request.TagId, cancellationToken: cancellationToken);
                 if (tag is null)
                 {
                     return Result.Failure<TagResponse>(
                         new Error(
-                            100, "Tag not found"
+                            404, "Tag not found"
                         ));
                 }
 
@@ -88,16 +68,11 @@ namespace OQS.CoreWebAPI.Features.Tags
                 {
                     return Result.Failure<TagResponse>(
                         new Error(
-                            100, ex.Message
+                            404, "Tag not updated"
                         ));
                 }
 
-                var tagResponse = new TagResponse
-                {
-                    Id = tag.Id,
-                    Name = tag.Name,
-                };
-                return Result.Success(tagResponse);
+                return Result<TagResponse>.Success(new TagResponse(tag));
             }
         }
     }
@@ -108,14 +83,13 @@ public class UpdateTagEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPatch("api/tags/{id}", async(Guid id, UpdateTagRequest request, ISender sender) =>
+        app.MapPatch("api/tags/{id}", async(string id, UpdateTagRequest request, ISender sender) =>
         {
-            var bodyUpdateTag = request.Adapt<UpdateTag.BodyUpdateTag>();
-            
-            var command = new UpdateTag.Command
+
+            var command = new UpdateTag.Command(id.ToString())
             {
-                Id = id,
-                Body = bodyUpdateTag
+                // TagId = id,
+                Body = request.Adapt<UpdateTag.BodyUpdateTag>()
             };
             
             var result = await sender.Send(command);

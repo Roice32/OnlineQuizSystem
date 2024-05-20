@@ -46,12 +46,8 @@ namespace OQS.CoreWebAPI.Features.Tags
                         new Error(400, "No tags found"));
                 }
 
-                var tagResponses = tags.Select(tag => new TagResponse
-                {
-                    Id = tag.Id,
-                    Name = tag.Name,
-                    CreatedOnUtc = tag.CreatedOnUtc,
-                }).ToList();
+                var tagResponses = tags.Select(tag => new TagResponse(tag)).ToList();
+              
 
                 return tagResponses;
             }
