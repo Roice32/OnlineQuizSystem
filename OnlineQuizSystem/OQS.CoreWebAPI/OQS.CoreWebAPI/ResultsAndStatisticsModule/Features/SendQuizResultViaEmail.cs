@@ -19,8 +19,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
     public interface IQuizResultEmailSenderStrategy
     {
         bool CanHandle(QuestionType questionType);
-        string GetCorrectAnswer(QuestionBase question);
-        string GetUserAnswer( QuestionResultBase question);
+     
+        string GetQuestionResultInEmailFormat(QuestionBase question, QuestionResultBase questionResult);
     }
     
 
@@ -31,24 +31,25 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         {
             public bool CanHandle(QuestionType questionType) => questionType == QuestionType.TrueFalse;
 
-            public string GetCorrectAnswer(QuestionBase question)
+           string IQuizResultEmailSenderStrategy.GetQuestionResultInEmailFormat(QuestionBase question, QuestionResultBase questionResult)
             {
                 var trueFalseQuestion = question as TrueFalseQuestion;
-                if (trueFalseQuestion != null)
+                var trueFalseResult = questionResult as TrueFalseQuestionResult;
+                string result = string.Empty;
+                if (trueFalseQuestion != null && trueFalseResult != null)
                 {
-                    return trueFalseQuestion.TrueFalseAnswer ? "False" : "True";
+                    if (trueFalseResult.TrueFalseAnswerResult == AnswerResult.Correct)
+                    {
+                        result += $"Your answer: {(trueFalseQuestion.TrueFalseAnswer ? "True" : "False")}\n";
+                        result += $"Your answer is Correct!";
+                    }
+                    else
+                    {
+                        result += $"Your answer: {(trueFalseQuestion.TrueFalseAnswer ? "False" : "True")}\n";
+                        result += $"Your answer is Incorrect.";
+                    }
                 }
-                return string.Empty;
-            }
-
-            public string GetUserAnswer(QuestionResultBase questionResult)
-            {
-                var trueFalseQuestionResult = questionResult as TrueFalseQuestionResult;
-                if (trueFalseQuestionResult != null)
-                {
-                    return trueFalseQuestionResult.TrueFalseAnswerResult.ToString();
-                }
-                return string.Empty;
+                return result;
             }
         }
 
@@ -56,74 +57,110 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
         {
             public bool CanHandle(QuestionType questionType) => questionType == QuestionType.MultipleChoice;
 
-            public string GetCorrectAnswer(QuestionBase question)
+            public string GetQuestionResultInEmailFormat(QuestionBase question, QuestionResultBase questionResult)
             {
                 var multipleChoiceQuestion = question as MultipleChoiceQuestion;
-                if (multipleChoiceQuestion != null)
+                var multipleChoiceResult = questionResult as ChoiceQuestionResult;
+                string result = string.Empty;
+                if (multipleChoiceQuestion != null && multipleChoiceResult != null)
                 {
-                    return string.Join(", ", multipleChoiceQuestion.MultipleChoiceAnswers);
+                    Dictionary<string, AnswerResult> choicesResults = JsonConvert.DeserializeObject<Dictionary<string, AnswerResult>>(multipleChoiceResult.PseudoDictionaryChoicesResults);
+                    result += $"Possible answers: {string.Join(", ", choicesResults.Keys)}\n";
+                    result += $"Correct answers: {string.Join(", ", multipleChoiceQuestion.MultipleChoiceAnswers)}\n";
+                    result += $"Your answers: ";
+                    foreach (var choice in choicesResults.Keys)
+                    {
+                        if (choicesResults[choice] == AnswerResult.Correct)
+                        {
+                            result += $"{choice} is correct ";
+                        }
+                        else if (choicesResults[choice] == AnswerResult.Wrong)
+                        {
+                            result += $"{choice} is wrong ";
+                        }   
+
+                    }
+                    result = result.Remove(result.Length - 1);
                 }
-                return string.Empty;   
+                       
+                return result;
             }
 
-            public string GetUserAnswer(QuestionResultBase questionResult)
-            {
-                var multipleChoiceResult = questionResult as ChoiceQuestionResult;
-                if (multipleChoiceResult != null)
-                {
-                    return string.Join(", ", JsonConvert.DeserializeObject<Dictionary<string, AnswerResult>>(multipleChoiceResult.PseudoDictionaryChoicesResults).Keys);
-                }
-                return string.Empty;
-            }
         }
+        
 
         public class SingleChoiceQuizResultEmailSender : IQuizResultEmailSenderStrategy
         {
             public bool CanHandle(QuestionType questionType) => questionType == QuestionType.SingleChoice;
 
-            public string GetCorrectAnswer(QuestionBase question)
+            public string GetQuestionResultInEmailFormat(QuestionBase question, QuestionResultBase questionResult)
             {
                 var singleChoiceQuestion = question as SingleChoiceQuestion;
-                if (singleChoiceQuestion != null)
-                {
-                    return singleChoiceQuestion.SingleChoiceAnswer;
-                }
-                return string.Empty;
-            }
-
-            public string GetUserAnswer(QuestionResultBase questionResult)
-            {
                 var singleChoiceResult = questionResult as ChoiceQuestionResult;
-                if (singleChoiceResult != null)
+                string result = string.Empty;
+                if (singleChoiceQuestion != null && singleChoiceResult != null)
                 {
-                    return string.Join(", ", JsonConvert.DeserializeObject<Dictionary<string, AnswerResult>>(singleChoiceResult.PseudoDictionaryChoicesResults).Keys);
+                    Dictionary<string, AnswerResult> choicesResults = JsonConvert.DeserializeObject<Dictionary<string, AnswerResult>>(singleChoiceResult.PseudoDictionaryChoicesResults);
+
+                    result += $"Possible answers: {string.Join(", ", choicesResults.Keys)}\n";
+                    result += $"Correct answers: {string.Join(", ", singleChoiceQuestion.SingleChoiceAnswer)}\n";
+                    result += $"Your answer: ";
+                    foreach (var choice in choicesResults.Keys)
+                    {
+                        if (choicesResults[choice] == AnswerResult.Correct)
+                        {
+                            result += $"{choice} (Correct) ";
+                        }
+                        else if (choicesResults[choice] == AnswerResult.Wrong)
+                        {
+                            result += $"{choice} (Wrong) ";
+                        }   
+
+                    }
                 }
-                return string.Empty;
-            }
+                return result;
+            }       
+
         }
 
         public class WrittenAnswerQuizResultEmailSender : IQuizResultEmailSenderStrategy
         {
             public bool CanHandle(QuestionType questionType) => questionType == QuestionType.WrittenAnswer;
 
-            public string GetCorrectAnswer(QuestionBase question)
+            public string GetQuestionResultInEmailFormat(QuestionBase question, QuestionResultBase questionResult)
             {
                 var writtenAnswerQuestion = question as WrittenAnswerQuestion;
-                if (writtenAnswerQuestion != null)
+                var writtenAnswerResult = questionResult as WrittenAnswerQuestionResult;
+                string result = string.Empty;
+                if (writtenAnswerQuestion != null && writtenAnswerResult != null)
                 {
-                    return string.Join(", ", writtenAnswerQuestion.WrittenAcceptedAnswers);
-                }
-                return string.Empty;
-            }
+                    result += $"Correct answers {string.Join(", ", writtenAnswerQuestion.WrittenAcceptedAnswers)}";
 
-            public string GetUserAnswer(QuestionResultBase questionResult)
-            {
-                var writtenAnswerQuestionResult = questionResult as WrittenAnswerQuestionResult;
-                if (writtenAnswerQuestionResult != null)
-                {
-                    return writtenAnswerQuestionResult.WrittenAnswer;
                 }
-                return string.Empty;
+                return result;
+            }
+        }
+        public class ReviewNeededQuizResultEmailSender : IQuizResultEmailSenderStrategy
+        {
+            public bool CanHandle(QuestionType questionType) => questionType == QuestionType.ReviewNeeded;
+
+            public string GetQuestionResultInEmailFormat(QuestionBase question, QuestionResultBase questionResult)
+            {
+                var reviewNeededQuestion = question as ReviewNeededQuestion;
+                var reviewNeededResult = questionResult as ReviewNeededQuestionResult;
+                string result = string.Empty;
+                if (reviewNeededQuestion != null && reviewNeededResult != null)
+                {
+                    if (reviewNeededResult.ReviewNeededResult.ToString() == "Pending")
+                    {
+                        result += $"Your answer is pending.";
+                    }
+                    else
+                    {
+                        result += $"Your answer is {reviewNeededResult.ReviewNeededResult}. ";
+                    }
+                }
+                return result;
             }
         }
 
@@ -162,7 +199,9 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 { QuestionType.TrueFalse, new TrueFalseQuizResultEmailSender() },
                 { QuestionType.MultipleChoice, new MultipleChoiceQuizResultEmailSender() },
                 { QuestionType.SingleChoice, new SingleChoiceQuizResultEmailSender() },
-                { QuestionType.WrittenAnswer, new WrittenAnswerQuizResultEmailSender()}
+                { QuestionType.WrittenAnswer, new WrittenAnswerQuizResultEmailSender()},
+                {QuestionType.ReviewNeeded, new ReviewNeededQuizResultEmailSender()}
+
             };
             public Handler(IValidator<Command> validator, IMediator mediator)
             {
@@ -189,40 +228,23 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     return Result.Failure(new Error("QuizResultNotFound", "Quiz result not found for the given quiz and user."));
                 }
 
-                var emailBody = new StringBuilder($"Quiz: {quizResult.Value.QuizResultHeader.QuizName}\nScore: {quizResult.Value.QuizResultHeader.Score}\n");
+                var emailBody = new StringBuilder($"Quiz: {quizResult.Value.QuizResultHeader.QuizName}\nScore: {quizResult.Value.QuizResultHeader.Score}\n\n");
                 foreach (var question in quizResult.Value.QuizResultBody.Questions)
                 {
-                    var correspondingAnswerPair = quizResult.Value.QuizResultBody.Questions.FirstOrDefault(qap => qap.Id == question.Id);
+                    var correspondingQuestion = quizResult.Value.QuizResultBody.Questions.FirstOrDefault(qap => qap.Id == question.Id);
                     var correspondingUserAnswer = quizResult.Value.QuizResultBody.QuestionResults.FirstOrDefault(qr => qr.QuestionId == question.Id);
 
                     var formatter = emailSenders.FirstOrDefault(f => f.Value.CanHandle(question.Type));
 
                     if (formatter.Value != null)
                     {
-                        if (correspondingAnswerPair != null && correspondingUserAnswer != null)
+                        if (correspondingQuestion != null && correspondingUserAnswer != null)
                         {
-
-                            var correctAnswer = formatter.Value.GetCorrectAnswer(correspondingAnswerPair);
-                            var userAnswer = formatter.Value.GetUserAnswer(correspondingUserAnswer);
                       
 
-                            emailBody.AppendLine($"Question: {question.Text}\nYour Answer: {userAnswer}\nCorrect Answer: {correctAnswer}");
+                            emailBody.AppendLine($"Question: {question.Text}\n{formatter.Value.GetQuestionResultInEmailFormat(correspondingQuestion,correspondingUserAnswer)}");
+                            emailBody.AppendLine($"{correspondingUserAnswer.Score} points out of {question.AllocatedPoints} \n");
 
-                            if (question.AllocatedPoints == correspondingUserAnswer.Score)
-                            {
-                                emailBody.AppendLine($"Your answer is correct!");
-                                emailBody.AppendLine($"{correspondingUserAnswer.Score} points out of {question.AllocatedPoints} \n");
-                            }
-                            else if (question.AllocatedPoints > correspondingUserAnswer.Score && correspondingUserAnswer.Score != 0)
-                            {
-                                emailBody.AppendLine($"Your answer is partially correct!");
-                                emailBody.AppendLine($"{correspondingUserAnswer.Score} points out of {question.AllocatedPoints} \n");
-                            }
-                            else
-                            {
-                                emailBody.AppendLine($"Your answer is incorrect!");
-                                emailBody.AppendLine($"{correspondingUserAnswer.Score} points out of {question.AllocatedPoints}\n ");
-                            }
                         }
                     }
                 }
