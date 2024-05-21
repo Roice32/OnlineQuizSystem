@@ -191,8 +191,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             return strategies[questionFromDb.Type].CheckQuestion(userId, qaPair, questionFromDb);
         }
 
-
-
         public static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
             var openAI = new OpenAIAPI("apikey");
@@ -219,7 +217,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 Temperature = 0.5f,
                 TopP = 1
             };
-
 
             ChatResult chatResponse = null;
             try
