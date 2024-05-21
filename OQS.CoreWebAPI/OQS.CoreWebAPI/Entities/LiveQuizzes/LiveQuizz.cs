@@ -2,7 +2,7 @@ using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Entities;
 
-public class LiveQuizz
+public class  LiveQuizz
 {
     public string Code { get; set; }
     public Quiz Quiz { get; set; }
@@ -11,8 +11,12 @@ public class LiveQuizz
     
     public async Task<string> getAdminConnectionId()
     {
-        var conn= Connections.FirstOrDefault(c => c.User.Id == CreatedBy.Id);
+        if (Connections == null || CreatedBy == null)
+        {
+            return null;
+        }
+        var conn = Connections.FirstOrDefault(c => c.User != null && c.User.Id == CreatedBy.Id);
       
-        return conn.ConnectionId;
+        return conn?.ConnectionId;
     }
 }

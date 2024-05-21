@@ -38,5 +38,17 @@ public class LiveQuizzesHub: Hub
             await Clients.Caller.SendAsync("Error", result.Error);
         }
     }
-   
+    public async Task CancelQuiz(CancelLiveQuizRequest request)
+    {
+        var command = new CancelLiveQuiz.Command(Context.ConnectionId);
+        var result = await _sender.Send(command);
+        if (result.IsSuccess)
+        {
+            await Clients.Group(request.Code).SendAsync("LiveQuizCanceled", "The live quiz has been canceled by the admin");
+        }
+        else
+        {
+            await Clients.Caller.SendAsync("Error", result.Error);
+        }
+    }
 }
