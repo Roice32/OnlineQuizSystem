@@ -7,3 +7,8 @@ OQS.CoreWebAPI/OQS.CoreWebAPI/obj/Debug/net8.0/OQS.CoreWebAPI.AssemblyInfoInputs
 *.editorconfig
 OQS.CoreWebAPI/.idea/config/applicationhost.config
 b4quiz
+/OnlineQuizSystem/.vs
+/OnlineQuizSystem/OQS.CoreWebAPI.Tests/bin
+/OnlineQuizSystem/OQS.CoreWebAPI.Tests/obj
+/OnlineQuizSystem/OQS.CoreWebAPI/OQS.CoreWebAPI/bin
+/OnlineQuizSystem/OQS.CoreWebAPI/OQS.CoreWebAPI/obj
