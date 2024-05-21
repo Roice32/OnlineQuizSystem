@@ -17,6 +17,18 @@ builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies(asse
 builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
 
+builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,10 +37,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.ApplyMigrations();
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
 app.MapCarter();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseCors("AllowSpecificOrigin");
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
 
