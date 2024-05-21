@@ -29,7 +29,7 @@ public class StartLiveQuiz
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-            var liveQuiz = await context.LiveQuizzes.Include(q => q.Connections)
+            var liveQuiz = await context.LiveQuizzes.Include(q => q.Connections).Include(q=>q.CreatedBy)
                 .FirstOrDefaultAsync(q => q.Connections.Any(c => c.ConnectionId == connectionId));
             if (liveQuiz == null)
             {
@@ -54,24 +54,40 @@ public class StartLiveQuiz
             _hubContext = hubContext;
             _sender = sender;
         }
+ 
 
         public async Task<Result<string>> Handle(StartQuizCommand request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
-                return Result.Failure<string>(new Error("StartQuiz.BadRequest", validationResult.ToString()));
+                var error=new Error("StartQuiz.BadRequest", validationResult.ToString());
+                await _hubContext.Clients.Client(request.connectionID).SendAsync("Error", error);
+                return Result.Failure<string>(error);
             }
-            var connectionResult = await _context.UserConnections.Include(q => q.LiveQuizz)
+            var connectionResult = await _context.UserConnections
+                .Include(q => q.LiveQuizz)
+                .Include(q=>q.LiveQuizz.Connections)
+                .Include(q=>q.LiveQuizz.Connections)
+                .Include(q=>q.LiveQuizz.Quiz)
                 .FirstOrDefaultAsync(q => q.ConnectionId == request.connectionID);
 
             var liveQuiz =  connectionResult.LiveQuizz;
-            foreach (var connection in liveQuiz.Connections)
+          
+            List<Task> tasks = [];
+            var connections= await _context.UserConnections
+                .Include(q=>q.User)
+                .Include(q=>q.LiveQuizz)
+                .Where(q=>q.LiveQuizz.Code==liveQuiz.Code).ToListAsync();
+            foreach (var connection in connections)
             {
-                var command = new CreateActiveQuiz.QuizCreation(liveQuiz.Quiz.Id, connection.User.Id);
-                var result = await _sender.Send(command);
-                await _hubContext.Clients.Client(connection.ConnectionId).SendAsync("StartQuiz", result);
+                    var command = new CreateActiveQuiz.QuizCreation(liveQuiz.Quiz.Id, connection.User.Id);
+                var task = _sender.Send(command)
+                    .ContinueWith(resultTask => 
+                        _hubContext.Clients.Client(connection.ConnectionId).SendAsync("QuizStarted", Result.Success<Guid>(resultTask.Result.Value.Id)));
+                tasks.Add(task);
             }
+            await Task.WhenAll(tasks);
             return Result.Success("Quiz Started Successfully");
         }
     }
