@@ -47,23 +47,6 @@ namespace OQS.CoreWebAPI.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultBody", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("QuizId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("QuestionIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "QuizId");
-
-                    b.ToTable("QuizResultBodies");
-                });
-
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultHeader", b =>
                 {
                     b.Property<Guid>("UserId")

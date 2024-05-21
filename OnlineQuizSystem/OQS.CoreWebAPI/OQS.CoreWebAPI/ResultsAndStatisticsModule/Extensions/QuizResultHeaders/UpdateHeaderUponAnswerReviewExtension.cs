@@ -25,10 +25,11 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders
                 return Result.Failure(Error.NullValue);
             }
 
-            var questionIds = await dbContext.QuizResultBodies
-                .Where(qrb => qrb.UserId == userId && qrb.QuizId == quizId)
-                .Select(qrb => qrb.QuestionIds)
-                .FirstOrDefaultAsync();
+            var questionIds = await dbContext.Questions
+                .AsNoTracking()
+                .Where(q => q.QuizId == quizId)
+                .Select(q => q.Id)
+                .ToListAsync();
             var questionResults = await dbContext.QuestionResults
                 .Where(qr => questionIds.Contains(qr.QuestionId) && qr.UserId == userId)
                 .ToListAsync();

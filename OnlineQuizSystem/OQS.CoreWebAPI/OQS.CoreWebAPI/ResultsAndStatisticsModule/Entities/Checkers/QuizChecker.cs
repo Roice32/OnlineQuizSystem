@@ -32,16 +32,15 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 .Where(q => q.QuizId == toBeChecked.QuizId)
                 .ToListAsync();
 
-            Result<QuizResultBody> resultBody = await BuildQuizResultBodyAsync(toBeChecked, questions, dbContext);
-            if (resultBody.IsFailure)
+            Result<List<QuestionResultBase>> questionsResults = await CheckAndStoreAllQuestionsAsync(toBeChecked, questions, dbContext);
+            if (questionsResults.IsFailure)
             {
-                return Result.Failure(resultBody.Error);
+                return Result.Failure(questionsResults.Error);
             }
-            QuizResultHeader resultHeader = await BuildQuizResultHeaderAsync(toBeChecked, resultBody.Value, dbContext);
-            return await StoreQuizResultAsync(resultHeader, resultBody.Value, dbContext);
+            return await BuildAndStoreQuizResultHeaderAsync(toBeChecked, questionsResults.Value, dbContext);
         }
 
-        private static async Task<Result<QuizResultBody>> BuildQuizResultBodyAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
+        private static async Task<Result<List<QuestionResultBase>>> CheckAndStoreAllQuestionsAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
         {
             List<Guid> questionIds = questionsFromDb.Select(q => q.Id).ToList();
             bool qaPairNotBelongingToQuiz = toBeChecked.QuestionAnswerPairs
@@ -49,51 +48,46 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 
             if (qaPairNotBelongingToQuiz)
             {
-                return Result.Failure<QuizResultBody>(
+                return Result.Failure <List<QuestionResultBase>>(
                     new Error("QuizChecker.StrayAnswer",
                     "QuizSubmission contains answer to question not belonging to this quiz."));
             }
 
-            QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
-                toBeChecked.TakenBy,
-                questionIds);
+            List<QuestionResultBase> questionsResults = [];
             foreach (var question in questionsFromDb)
             {
                 QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs
                     .FirstOrDefault(qaPair => qaPair.QuestionId == question.Id);
                 QuestionResultBase questionResult = QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question);
                 await StoreQuestionResultExtension.StoreQuestionResultAsync(dbContext, questionResult);
+                questionsResults.Add(questionResult);
             }
 
-            return resultBody;
+            return questionsResults;
         }
 
-        private static async Task<QuizResultHeader> BuildQuizResultHeaderAsync(QuizSubmission toBeChecked,
-            QuizResultBody resultBody,
+        private static async Task<Result> BuildAndStoreQuizResultHeaderAsync(QuizSubmission toBeChecked,
+            List<QuestionResultBase> questionsResults,
             ApplicationDbContext dbContext)
         {
-            QuizResultHeader resultHeader = new QuizResultHeader(toBeChecked.QuizId,
+            QuizResultHeader resultHeader = new(toBeChecked.QuizId,
                 toBeChecked.TakenBy, toBeChecked.TimeElapsed);
             resultHeader.Score = 0;
-            foreach (var questionResultId in resultBody.QuestionIds)
+            foreach (var questionResult in questionsResults)
             {
-                QuestionResultBase questionResultBase = dbContext.QuestionResults
-                    .AsNoTracking()
-                    .FirstOrDefault(qr => qr.UserId == toBeChecked.TakenBy && qr.QuestionId == questionResultId);
-                resultHeader.Score += questionResultBase.Score;
-                if (questionResultBase is ReviewNeededQuestionResult &&
-                    ((ReviewNeededQuestionResult)questionResultBase).ReviewNeededResult == AnswerResult.Pending)
+                resultHeader.Score += questionResult.Score;
+                if (questionResult is ReviewNeededQuestionResult result &&
+                    result.ReviewNeededResult == AnswerResult.Pending)
                     resultHeader.ReviewPending = true;
             }
-
-            return resultHeader;
-        }
-
-        private static async Task<Result> StoreQuizResultAsync(QuizResultHeader resultHeader, QuizResultBody resultBody, ApplicationDbContext dbContext)
-        {
-            await dbContext.QuizResultBodies.AddAsync(resultBody);
-            await dbContext.QuizResultHeaders.AddAsync(resultHeader);
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                dbContext.QuizResultHeaders.Add(resultHeader);
+                await dbContext.SaveChangesAsync();
+            } catch (Exception e)
+            {
+                return Result.Failure(new Error("QuizChecker.QuizResultHeaderSaveError", e.Message));
+            }
             return Result.Success();
         }
     }
