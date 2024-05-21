@@ -1,17 +1,17 @@
-﻿using Carter;
+﻿﻿using Carter;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Feautures.Authentication;
+using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace OQS.CoreWebAPI.Feautures.Authentication
+namespace OQS.CoreWebAPI.Features.Authentication
 {
     public class Authentication
     {
@@ -68,7 +68,7 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
                 var userRoles = await userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName!),
+                    new Claim(ClaimTypes.Name, user.Id!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 

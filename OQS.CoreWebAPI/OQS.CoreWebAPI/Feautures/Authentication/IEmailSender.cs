@@ -1,4 +1,4 @@
-﻿namespace OQS.CoreWebAPI.Feautures.Authentication
+﻿﻿namespace OQS.CoreWebAPI.Features.Authentication
 {
     public interface IEmailSender
     {
