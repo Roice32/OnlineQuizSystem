@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OQS.CoreWebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ReMigrateDb : Migration
+    public partial class deitabeis : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,6 +21,7 @@ namespace OQS.CoreWebAPI.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(34)", maxLength: 34, nullable: false),
                     PseudoDictionaryChoicesResults = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReviewNeededAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LLMReview = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReviewNeededResult = table.Column<int>(type: "int", nullable: true),
                     TrueFalseAnswerResult = table.Column<int>(type: "int", nullable: true),
                     WrittenAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -71,7 +72,7 @@ namespace OQS.CoreWebAPI.Migrations
                 {
                     QuizId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SubmittedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CompletionTime = table.Column<int>(type: "int", nullable: false),
                     Score = table.Column<float>(type: "real", nullable: false),
                     ReviewPending = table.Column<bool>(type: "bit", nullable: false)
@@ -89,7 +90,7 @@ namespace OQS.CoreWebAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeLimitMinutes = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -117,7 +118,7 @@ namespace OQS.CoreWebAPI.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

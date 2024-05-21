@@ -32,16 +32,31 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 .Where(q => q.QuizId == toBeChecked.QuizId)
                 .ToListAsync();
 
-            QuizResultBody resultBody = await BuildQuizResultBodyAsync(toBeChecked, questions, dbContext);
-            QuizResultHeader resultHeader = await BuildQuizResultHeaderAsync(toBeChecked, resultBody, dbContext);
-            return await StoreQuizResultAsync(resultHeader, resultBody, dbContext);
+            Result<QuizResultBody> resultBody = await BuildQuizResultBodyAsync(toBeChecked, questions, dbContext);
+            if (resultBody.IsFailure)
+            {
+                return Result.Failure(resultBody.Error);
+            }
+            QuizResultHeader resultHeader = await BuildQuizResultHeaderAsync(toBeChecked, resultBody.Value, dbContext);
+            return await StoreQuizResultAsync(resultHeader, resultBody.Value, dbContext);
         }
 
-        private static async Task<QuizResultBody> BuildQuizResultBodyAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
+        private static async Task<Result<QuizResultBody>> BuildQuizResultBodyAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
         {
+            List<Guid> questionIds = questionsFromDb.Select(q => q.Id).ToList();
+            bool qaPairNotBelongingToQuiz = toBeChecked.QuestionAnswerPairs
+                .Any(qaPair => !questionIds.Contains(qaPair.QuestionId));
+
+            if (qaPairNotBelongingToQuiz)
+            {
+                return Result.Failure<QuizResultBody>(
+                    new Error("QuizChecker.StrayAnswer",
+                    "QuizSubmission contains answer to question not belonging to this quiz."));
+            }
+
             QuizResultBody resultBody = new QuizResultBody(toBeChecked.QuizId,
                 toBeChecked.TakenBy,
-                new List<Guid>(questionsFromDb.Select(qfdb => qfdb.Id)));
+                questionIds);
             foreach (var question in questionsFromDb)
             {
                 QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs

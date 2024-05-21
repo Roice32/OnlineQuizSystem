@@ -1,20 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultBodies;
 using OQS.CoreWebAPI.Tests.SetUp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Tests
 {

@@ -1,6 +1,5 @@
 ﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.Database;
-using Microsoft.EntityFrameworkCore;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultBodies
 {

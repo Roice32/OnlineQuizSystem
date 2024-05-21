@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function SubmittedQuiz() {
   const navigate = useNavigate();
@@ -12,17 +13,19 @@ export default function SubmittedQuiz() {
   }, [navigate]);
 
 
-  const getCreatedQuizStats = async (/* quizId */) => {
+  const getCreatedQuizStats = async () => {
     setShowMessage1(true);
     setShowMessage2(false);
     setShowMessage3(false);
-    /* try {
-      const response = await axios.get(`/api/quizResults/getCreatedQuizStats/${quizId}`);
+    try {
+      const quizId = "00000000-0000-0000-0002-000000000001";
+      const response = await axios.get(`http://localhost:5276/api/quizResults/getCreatedQuizStats/${quizId}`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching created quiz stats:', error);
       return null;
-    } */
+    }
   };
   const getQuizResult = async (/* userId, quizId */) => {
     setShowMessage3(true);

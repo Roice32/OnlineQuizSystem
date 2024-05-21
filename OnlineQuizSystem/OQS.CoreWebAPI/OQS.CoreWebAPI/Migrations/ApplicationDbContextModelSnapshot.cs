@@ -81,7 +81,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.Property<float>("Score")
                         .HasColumnType("real");
 
-                    b.Property<DateTime>("SubmittedAt")
+                    b.Property<DateTime>("SubmittedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("UserId", "QuizId");
@@ -128,7 +128,7 @@ namespace OQS.CoreWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
@@ -173,7 +173,7 @@ namespace OQS.CoreWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -206,6 +206,10 @@ namespace OQS.CoreWebAPI.Migrations
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.ReviewNeededQuestionResult", b =>
                 {
                     b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+
+                    b.Property<string>("LLMReview")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReviewNeededAnswer")
                         .IsRequired()
