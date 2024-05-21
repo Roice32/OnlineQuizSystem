@@ -30,7 +30,7 @@ namespace OQS.CoreWebAPI.Tests
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-
+        
         [Fact]
         public async Task Given_StartDateGreaterThanEndDate_When_SendCreatedQuizStatsViaEmailIsCalled_Then_BadRequestIsReturned()
         {

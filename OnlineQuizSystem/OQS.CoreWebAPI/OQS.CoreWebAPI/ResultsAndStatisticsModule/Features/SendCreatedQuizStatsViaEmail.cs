@@ -83,6 +83,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 {
                     return Result.Failure(Error.NullValue);
                 }
+
                 try
                 {
                     var message = new MimeMessage();
@@ -128,7 +129,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     foreach (var header in quizResultHeaders)
                     {
                         var user = await dbContext.Users.FindAsync(header.UserId);
-
                         results += $"User Name: {user.Name}<br> Submitted At: {header.SubmittedAtUtc.ToLocalTime()}<br> Completion Time: {header.CompletionTime}<br> Score: {header.Score}<br> Review Pending: {header.ReviewPending}<br><br>";
                     }
 

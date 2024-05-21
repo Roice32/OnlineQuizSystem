@@ -178,7 +178,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
             }
         }
 
-
         public class Command : IRequest<Result>
         {
             public string RecipientEmail { get; set; }
