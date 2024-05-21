@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Moq;
+using NSubstitute;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Feautures.Authentication;
 using Xunit;
-
 
 namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
 {
@@ -18,13 +18,11 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
         public async Task Handle_ValidAuthentication_ReturnsToken()
         {
             // Arrange
-            var userStoreMock = new Mock<IUserStore<User>>();
-
-            var userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
-            var validatorMock = new Mock<IValidator<Authentication.Command>>();
-            var configurationMock = new Mock<IConfiguration>();
-            var userRoles = new List<string> { "User" }; // Simulăm un utilizator cu rolul "User"
-
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
+            var validatorMock = Substitute.For<IValidator<Authentication.Command>>();
+            var configurationMock = Substitute.For<IConfiguration>();
+            var userRoles = new List<string> { "User" };
 
             var command = new Authentication.Command
             {
@@ -33,24 +31,20 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
             };
 
             var user = new User { UserName = command.Username };
-            userManagerMock.Setup(um => um.FindByNameAsync(command.Username)).ReturnsAsync(user);
+            userManagerMock.FindByNameAsync(command.Username).Returns(Task.FromResult(user));
+            userManagerMock.CheckPasswordAsync(user, command.Password).Returns(Task.FromResult(true));
+            userManagerMock.GetRolesAsync(user).Returns(Task.FromResult<IList<string>>(userRoles));
 
-            userManagerMock.Setup(um => um.CheckPasswordAsync(user, command.Password)).ReturnsAsync(true);
+            validatorMock.Validate(command).Returns(new ValidationResult());
 
-            userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(userRoles);
-
-
-            validatorMock.Setup(v => v.Validate(command)).Returns(new FluentValidation.Results.ValidationResult());
-
-            configurationMock.Setup(c => c["JWT:Secret"]).Returns("test_secret_12345678901234567890123456789012"); // Cheie de 32 de caract)
-
-            configurationMock.Setup(c => c["JWT:ValidIssuer"]).Returns("valid_issuer");
-            configurationMock.Setup(c => c["JWT:ValidAudience"]).Returns("valid_audience");
+            configurationMock["JWT:Secret"].Returns("test_secret_12345678901234567890123456789012");
+            configurationMock["JWT:ValidIssuer"].Returns("valid_issuer");
+            configurationMock["JWT:ValidAudience"].Returns("valid_audience");
 
             var handler = new Authentication.Handler(
-                userManagerMock.Object,
-                validatorMock.Object,
-                configurationMock.Object);
+                userManagerMock,
+                validatorMock,
+                configurationMock);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -61,21 +55,18 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
             Assert.IsType<string>(result.Value);
         }
 
-
-
         [Fact]
         public async Task Handle_InvalidAuthentication_ReturnsFailure()
         {
             // Arrange
-            var userManagerMock = new Mock<UserManager<User>>(
-                Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
+            var validatorMock = Substitute.For<IValidator<Authentication.Command>>();
 
-            var validatorMock = new Mock<IValidator<Authentication.Command>>();
+            var validationResult = new ValidationResult(new[] { new ValidationFailure("", "Invalid username or password") });
+            validatorMock.Validate(Arg.Any<Authentication.Command>()).Returns(validationResult);
 
-            var validationResult = new FluentValidation.Results.ValidationResult(new[] { new ValidationFailure("", "Invalid username or password") });
-            validatorMock.Setup(v => v.Validate(It.IsAny<Authentication.Command>())).Returns(validationResult);
-
-            var configurationMock = new Mock<IConfiguration>();
+            var configurationMock = Substitute.For<IConfiguration>();
 
             var request = new Authentication.Command
             {
@@ -83,13 +74,12 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
                 Password = "invalidpassword"
             };
 
-            userManagerMock.Setup(x => x.FindByNameAsync(request.Username!))
-                            .ReturnsAsync((User)null);
+            userManagerMock.FindByNameAsync(request.Username).Returns(Task.FromResult<User>(null));
 
             var handler = new Authentication.Handler(
-                userManagerMock.Object,
-                validatorMock.Object,
-                configurationMock.Object
+                userManagerMock,
+                validatorMock,
+                configurationMock
             );
 
             // Act

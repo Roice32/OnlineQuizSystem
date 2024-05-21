@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "GO59j9ccXq3b+3ycReaCKBBpyLcw2tXQZGsJtThUAFT/JoTMbIJXhq1ENfnJn+w5mvLJM8xtyc8JkMa74FxNDA==",
+  "dgSpecHash": "nEBfZX5O/n7NZJoIF80bqFvapSvvL2Fy2tG8n7WGOHRCfGePtt/aRuFIsqttBZFBq+P2MRv00bAwWztlR1h57Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Features.Tests\\OQS.CoreWebAPI.Feautures.Authentication.Tests.csproj",
   "expectedPackageFiles": [
@@ -86,8 +86,6 @@
     "C:\\Users\\Cpirlac\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Cpirlac\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Cpirlac\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
-    "C:\\Users\\Cpirlac\\.nuget\\packages\\moq\\4.20.70\\moq.4.20.70.nupkg.sha512",
-    "C:\\Users\\Cpirlac\\.nuget\\packages\\moq.entityframeworkcore\\8.0.1.2\\moq.entityframeworkcore.8.0.1.2.nupkg.sha512",
     "C:\\Users\\Cpirlac\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\Cpirlac\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Cpirlac\\.nuget\\packages\\nsubstitute\\5.1.0\\nsubstitute.5.1.0.nupkg.sha512",

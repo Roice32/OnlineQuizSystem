@@ -1,39 +1,38 @@
-﻿using FluentValidation;
+﻿using System.Threading.Tasks;
+using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Feautures.Authentication;
-using System;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
 {
-    public class RegistrationTests
+    public class RegistrationTest
     {
         [Fact]
         public async Task Handle_ValidRegistration_ReturnsSuccess()
         {
             // Arrange
-            var userStoreMock = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
 
-            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
-                            .ReturnsAsync(IdentityResult.Success);
+            userManagerMock.CreateAsync(Arg.Any<User>(), Arg.Any<string>())
+                           .Returns(Task.FromResult(IdentityResult.Success));
 
-            userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
-                            .ReturnsAsync((User)null);
+            userManagerMock.FindByNameAsync(Arg.Any<string>())
+                           .Returns(Task.FromResult<User>(null));
 
-            userManagerMock.Setup(x => x.AddToRoleAsync(It.IsAny<User>(), It.IsAny<string>()))
-                            .ReturnsAsync(IdentityResult.Success);
+            userManagerMock.AddToRoleAsync(Arg.Any<User>(), Arg.Any<string>())
+                           .Returns(Task.FromResult(IdentityResult.Success));
 
-            var roleStoreMock = new Mock<IRoleStore<IdentityRole>>();
-            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(
-                roleStoreMock.Object, null, null, null, null);
+            var roleStoreMock = Substitute.For<IRoleStore<IdentityRole>>();
+            var roleManagerMock = Substitute.For<RoleManager<IdentityRole>>(
+                roleStoreMock, null, null, null, null);
 
-            var validatorMock = new Mock<IValidator<Registration.Command>>();
-            var emailServiceMock = new Mock<IEmailSender>();
+            var validatorMock = Substitute.For<IValidator<Registration.Command>>();
+            var emailServiceMock = Substitute.For<IEmailSender>();
 
             var request = new Registration.Command
             {
@@ -44,14 +43,14 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
                 Password = "Password123"
             };
 
-            validatorMock.Setup(v => v.Validate(request))
-                         .Returns(new FluentValidation.Results.ValidationResult());
+            validatorMock.Validate(request)
+                         .Returns(new ValidationResult());
 
             var handler = new Registration.Handler(
-                userManagerMock.Object,
-                roleManagerMock.Object,
-                validatorMock.Object,
-                emailServiceMock.Object
+                userManagerMock,
+                roleManagerMock,
+                validatorMock,
+                emailServiceMock
             );
 
             // Act
@@ -67,42 +66,44 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
         public async Task Handle_InvalidRegistration_ReturnsFailure()
         {
             // Arrange
-            var userManagerMock = new Mock<UserManager<User>>(
-                Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
 
-            var roleManagerMock = new Mock<RoleManager<IdentityRole>>(
-                Mock.Of<IRoleStore<IdentityRole>>(), null, null, null, null);
+            var roleStoreMock = Substitute.For<IRoleStore<IdentityRole>>();
+            var roleManagerMock = Substitute.For<RoleManager<IdentityRole>>(
+                roleStoreMock, null, null, null, null);
 
-            var validatorMock = new Mock<IValidator<Registration.Command>>();
-            var emailServiceMock = new Mock<IEmailSender>();
+            var validatorMock = Substitute.For<IValidator<Registration.Command>>();
+            var emailServiceMock = Substitute.For<IEmailSender>();
 
             var request = new Registration.Command
             {
                 Username = "testuser",
                 FirstName = "John",
                 LastName = "Doe",
-                Email = "invalidemail", // Email invalid
+                Email = "invalidemail", // Invalid email
                 Password = "Password123"
             };
 
             var validationResult = new ValidationResult(new[] { new ValidationFailure("Email", "Invalid email") });
-            validatorMock.Setup(v => v.Validate(request)).Returns(validationResult);
+            validatorMock.Validate(Arg.Any<Registration.Command>())
+                         .Returns(validationResult);
 
             var handler = new Registration.Handler(
-                userManagerMock.Object,
-                roleManagerMock.Object,
-                validatorMock.Object,
-                emailServiceMock.Object
+                userManagerMock,
+                roleManagerMock,
+                validatorMock,
+                emailServiceMock
             );
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            Assert.False(result.IsSuccess); 
+            Assert.False(result.IsSuccess);
             Assert.NotNull(result.Error);
-            Assert.Equal("Registration.Validator", result.Error.Code); 
-            Assert.Equal("Invalid email", result.Error.Message); 
+            Assert.Equal("Registration.Validator", result.Error.Code);
+            Assert.Equal("Invalid email", result.Error.Message);
         }
     }
 }

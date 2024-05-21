@@ -1907,35 +1907,6 @@
           }
         }
       },
-      "Moq/4.20.70": {
-        "type": "package",
-        "dependencies": {
-          "Castle.Core": "5.1.1"
-        },
-        "compile": {
-          "lib/net6.0/Moq.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Moq.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Moq.EntityFrameworkCore/8.0.1.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "8.0.1",
-          "Moq": "4.20.70"
-        },
-        "compile": {
-          "lib/net8.0/Moq.EntityFrameworkCore.dll": {}
-        },
-        "runtime": {
-          "lib/net8.0/Moq.EntityFrameworkCore.dll": {}
-        }
-      },
       "NETStandard.Library/1.6.1": {
         "type": "package",
         "dependencies": {
@@ -1994,6 +1965,22 @@
         },
         "runtime": {
           "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NSubstitute/5.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "5.1.1"
+        },
+        "compile": {
+          "lib/net6.0/NSubstitute.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/NSubstitute.dll": {
             "related": ".xml"
           }
         }
@@ -6312,40 +6299,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Moq/4.20.70": {
-      "sha512": "4rNnAwdpXJBuxqrOCzCyICXHSImOTRktCgCWXWykuF1qwoIsVvEnR7PjbMk/eLOxWvhmj5Kwt+kDV3RGUYcNwg==",
-      "type": "package",
-      "path": "moq/4.20.70",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "icon.png",
-        "lib/net462/Moq.dll",
-        "lib/net462/Moq.xml",
-        "lib/net6.0/Moq.dll",
-        "lib/net6.0/Moq.xml",
-        "lib/netstandard2.0/Moq.dll",
-        "lib/netstandard2.0/Moq.xml",
-        "lib/netstandard2.1/Moq.dll",
-        "lib/netstandard2.1/Moq.xml",
-        "moq.4.20.70.nupkg.sha512",
-        "moq.nuspec",
-        "readme.md"
-      ]
-    },
-    "Moq.EntityFrameworkCore/8.0.1.2": {
-      "sha512": "LAgsu4wwRLlUjM8+t0FFwk4hy7of4BfeKqe52UUfXNaDKYUzYCZqwTcId1dB3FHiuailsmowei6lej1t//d8Ng==",
-      "type": "package",
-      "path": "moq.entityframeworkcore/8.0.1.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "lib/net8.0/Moq.EntityFrameworkCore.dll",
-        "moq.entityframeworkcore.8.0.1.2.nupkg.sha512",
-        "moq.entityframeworkcore.nuspec"
-      ]
-    },
     "NETStandard.Library/1.6.1": {
       "sha512": "WcSp3+vP+yHNgS8EV5J7pZ9IRpeDuARBPN28by8zqff1wJQXm26PVU8L3/fYLBJVU7BtDyqNVWq2KlCVvSSR4A==",
       "type": "package",
@@ -6387,6 +6340,24 @@
         "newtonsoft.json.13.0.3.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
+      ]
+    },
+    "NSubstitute/5.1.0": {
+      "sha512": "ZCqOP3Kpp2ea7QcLyjMU4wzE+0wmrMN35PQMsdPOHYc2IrvjmusG9hICOiqiOTPKN0gJon6wyCn6ZuGHdNs9hQ==",
+      "type": "package",
+      "path": "nsubstitute/5.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net462/NSubstitute.dll",
+        "lib/net462/NSubstitute.xml",
+        "lib/net6.0/NSubstitute.dll",
+        "lib/net6.0/NSubstitute.xml",
+        "lib/netstandard2.0/NSubstitute.dll",
+        "lib/netstandard2.0/NSubstitute.xml",
+        "nsubstitute.5.1.0.nupkg.sha512",
+        "nsubstitute.nuspec"
       ]
     },
     "NuGet.Frameworks/6.5.0": {
@@ -10797,7 +10768,7 @@
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.5",
       "Microsoft.AspNetCore.Mvc.DataAnnotations >= 2.2.0",
       "Microsoft.NET.Test.Sdk >= 17.8.0",
-      "Moq.EntityFrameworkCore >= 8.0.1.2",
+      "NSubstitute >= 5.1.0",
       "OQS.CoreWebAPI >= 1.0.0",
       "coverlet.collector >= 6.0.0",
       "xunit >= 2.5.3",
@@ -10872,9 +10843,9 @@
             "target": "Package",
             "version": "[17.8.0, )"
           },
-          "Moq.EntityFrameworkCore": {
+          "NSubstitute": {
             "target": "Package",
-            "version": "[8.0.1.2, )"
+            "version": "[5.1.0, )"
           },
           "coverlet.collector": {
             "target": "Package",

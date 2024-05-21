@@ -1,5 +1,5 @@
 ﻿using Xunit;
-using Moq;
+using NSubstitute;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -7,7 +7,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Feautures.ResetPassword;
-
+using System.Collections.Generic;
 
 namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
 {
@@ -17,9 +17,9 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
         public async Task Handle_ValidResetPassword_ReturnsSuccess()
         {
             // Arrange
-            var userStoreMock = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>( userStoreMock.Object, null, null, null, null, null, null, null, null);
-            var validatorMock = new Mock<IValidator<ResetPassword.Command>>();
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
+            var validatorMock = Substitute.For<IValidator<ResetPassword.Command>>();
             var userRole = new List<string> { "User" }; // Simulăm un utilizator cu rolul "User"
 
             var command = new ResetPassword.Command
@@ -31,23 +31,22 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
 
             // Simulăm un utilizator existent
             var user = new User { UserName = command.Username };
-            userManagerMock.Setup(um => um.FindByNameAsync(command.Username)).ReturnsAsync(user);
-            userManagerMock.Setup(um => um.VerifyUserTokenAsync(user, It.IsAny<string>(), It.IsAny<string>(), command.Token)).ReturnsAsync(true);
-            userManagerMock.Setup(um => um.ResetPasswordAsync(user, command.Token, command.NewPassword)).ReturnsAsync(IdentityResult.Success);
+            userManagerMock.FindByNameAsync(command.Username).Returns(user);
+            userManagerMock.VerifyUserTokenAsync(user, Arg.Any<string>(), Arg.Any<string>(), command.Token).Returns(true);
+            userManagerMock.ResetPasswordAsync(user, command.Token, command.NewPassword).Returns(IdentityResult.Success);
 
-            validatorMock.Setup(v => v.Validate(command)).Returns(new ValidationResult());
+            validatorMock.Validate(command).Returns(new ValidationResult());
 
             var handler = new ResetPassword.Handler(
-                userManagerMock.Object,
+                userManagerMock,
                 null, //we don't use RoleManager in ResetPassword.Handler
-                validatorMock.Object
+                validatorMock
             );
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-
             Assert.True(result.IsSuccess);
         }
 
@@ -55,10 +54,9 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
         public async Task Handle_InvalidResetPassword_ReturnsFailure()
         {
             // Arrange
-            var userStoreMock = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(
-                userStoreMock.Object, null, null, null, null, null, null, null, null);
-            var validatorMock = new Mock<IValidator<ResetPassword.Command>>();
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
+            var validatorMock = Substitute.For<IValidator<ResetPassword.Command>>();
 
             var command = new ResetPassword.Command
             {
@@ -67,16 +65,16 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
                 Username = "nonexistent_user"
             };
 
-            userManagerMock.Setup(um => um.FindByNameAsync(command.Username)).ReturnsAsync((User)null);
-            userManagerMock.Setup(um => um.VerifyUserTokenAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>(), command.Token)).ReturnsAsync(false);
+            userManagerMock.FindByNameAsync(command.Username).Returns((User)null);
+            userManagerMock.VerifyUserTokenAsync(Arg.Any<User>(), Arg.Any<string>(), Arg.Any<string>(), command.Token).Returns(false);
 
             var validationResult = new ValidationResult(new[] { new ValidationFailure("", "Invalid token") });
-            validatorMock.Setup(v => v.Validate(command)).Returns(validationResult);
+            validatorMock.Validate(command).Returns(validationResult);
 
             var handler = new ResetPassword.Handler(
-                userManagerMock.Object,
+                userManagerMock,
                 null, // RoleManager isn't used in ResetPassword.Handler
-                validatorMock.Object
+                validatorMock
             );
 
             // Act

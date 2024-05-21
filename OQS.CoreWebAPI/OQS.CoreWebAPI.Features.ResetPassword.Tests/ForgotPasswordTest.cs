@@ -1,5 +1,5 @@
 ﻿using Xunit;
-using Moq;
+using NSubstitute;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -10,7 +10,6 @@ using OQS.CoreWebAPI.Feautures.ResetPassword;
 using OQS.CoreWebAPI.Feautures.Authentication;
 using Microsoft.Extensions.Configuration;
 
-
 namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
 {
     public class ForgotPasswordTest
@@ -19,11 +18,11 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
         public async Task Handle_ValidForgotPassword_ReturnsSuccess()
         {
             // Arrange
-            var userStoreMock = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
-            var validatorMock = new Mock<IValidator<ForgotPassword.Command>>();
-            var emailSenderMock = new Mock<IEmailSender>();
-            var configurationMock = new Mock<IConfiguration>();
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
+            var validatorMock = Substitute.For<IValidator<ForgotPassword.Command>>();
+            var emailSenderMock = Substitute.For<IEmailSender>();
+            var configurationMock = Substitute.For<IConfiguration>();
 
             var command = new ForgotPassword.Command
             {
@@ -33,20 +32,20 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
 
             // Simulate a user exists
             var user = new User { UserName = command.Username, Email = command.Email };
-            userManagerMock.Setup(um => um.FindByNameAsync(command.Username)).ReturnsAsync(user);
+            userManagerMock.FindByNameAsync(command.Username).Returns(user);
 
             // Setup validation to succeed
-            validatorMock.Setup(v => v.Validate(command)).Returns(new ValidationResult());
+            validatorMock.Validate(command).Returns(new ValidationResult());
 
             // Setup email sender
-            emailSenderMock.Setup(e => e.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            emailSenderMock.SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                            .Returns(Task.CompletedTask);
 
             var handler = new ForgotPassword.Handler(
-                userManagerMock.Object,
-                validatorMock.Object,
-                configurationMock.Object,
-                emailSenderMock.Object
+                userManagerMock,
+                validatorMock,
+                configurationMock,
+                emailSenderMock
             );
 
             // Act
@@ -54,18 +53,17 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
 
             // Assert
             Assert.True(result.IsSuccess);
-         
         }
 
         [Fact]
         public async Task Handle_InvalidForgotPassword_ReturnsFailure()
         {
             // Arrange
-            var userStoreMock = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
-            var validatorMock = new Mock<IValidator<ForgotPassword.Command>>();
-            var emailSenderMock = new Mock<IEmailSender>();
-            var configurationMock = new Mock<IConfiguration>();
+            var userStoreMock = Substitute.For<IUserStore<User>>();
+            var userManagerMock = Substitute.For<UserManager<User>>(userStoreMock, null, null, null, null, null, null, null, null);
+            var validatorMock = Substitute.For<IValidator<ForgotPassword.Command>>();
+            var emailSenderMock = Substitute.For<IEmailSender>();
+            var configurationMock = Substitute.For<IConfiguration>();
 
             var command = new ForgotPassword.Command
             {
@@ -74,17 +72,17 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
             };
 
             // Simulate no user found
-            userManagerMock.Setup(um => um.FindByNameAsync(command.Username)).ReturnsAsync((User)null);
+            userManagerMock.FindByNameAsync(command.Username).Returns((User)null);
 
             // Setup validation to fail
             var validationResult = new ValidationResult(new[] { new ValidationFailure("", "Invalid username") });
-            validatorMock.Setup(v => v.Validate(command)).Returns(validationResult);
+            validatorMock.Validate(command).Returns(validationResult);
 
             var handler = new ForgotPassword.Handler(
-                userManagerMock.Object,
-                validatorMock.Object,
-                configurationMock.Object,
-                emailSenderMock.Object
+                userManagerMock,
+                validatorMock,
+                configurationMock,
+                emailSenderMock
             );
 
             // Act
@@ -97,4 +95,3 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
         }
     }
 }
-

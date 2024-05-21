@@ -1,5 +1,4 @@
-
-﻿namespace OQS.CoreWebAPI.Contracts.Models
+namespace OQS.CoreWebAPI.Contracts.Models
 {
     public class GetUserDetails
     {

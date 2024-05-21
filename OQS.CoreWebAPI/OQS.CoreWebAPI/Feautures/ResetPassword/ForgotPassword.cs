@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Feautures.Authentication;
+using OQS.CoreWebAPI.Feautures.ResetPassword;
 using OQS.CoreWebAPI.Shared;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace OQS.CoreWebAPI.Feautures.Authentication
+namespace OQS.CoreWebAPI.Feautures.ResetPassword
 {
     public class ForgotPassword
     {

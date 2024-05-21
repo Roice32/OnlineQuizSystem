@@ -16,7 +16,7 @@ namespace OQS.CoreWebAPI.Feautures.Profile
             public Guid Id { get; set; }
         }
 
-        internal sealed class Handler : IRequestHandler<Query, Result<UserDetailsModel>>
+       public class Handler : IRequestHandler<Query, Result<UserDetailsModel>>
         {
             private readonly UserManager<User> userManager;
 
@@ -30,8 +30,7 @@ namespace OQS.CoreWebAPI.Feautures.Profile
                 var user = await userManager.FindByIdAsync(request.Id.ToString());
                 if (user == null)
                 {
-                    return Result.Failure<UserDetailsModel>(
-                                               new Error("Profile.Handler", "User doesn't exists."));
+                    return Result.Failure<UserDetailsModel>(   new Error("Profile.Handler", "User doesn't exists."));
                 }
 
                 var userDetails = new UserDetailsModel
