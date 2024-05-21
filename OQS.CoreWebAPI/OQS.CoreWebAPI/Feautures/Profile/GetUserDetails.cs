@@ -7,7 +7,7 @@ using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Shared;
 
-namespace OQS.CoreWebAPI.Features.Profile
+namespace OQS.CoreWebAPI.Feautures.Profile
 {
     public static class GetUserDetails
     {
@@ -54,7 +54,7 @@ public class GetUserDetailsEndpoint : ICarterModule
     {
         app.MapGet("api/profile/{id}", async (Guid id, ISender sender) =>
         {
-            var query = new OQS.CoreWebAPI.Features.Profile.GetUserDetails.Query
+            var query = new OQS.CoreWebAPI.Feautures.Profile.GetUserDetails.Query
             {
                 Id = id
             };

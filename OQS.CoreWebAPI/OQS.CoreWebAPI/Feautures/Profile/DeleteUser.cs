@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Shared;
 
-namespace OQS.CoreWebAPI.Features.Profile
+namespace OQS.CoreWebAPI.Feautures.Profile
 {
     public class DeleteUser
     {
@@ -69,7 +69,7 @@ public class DeleteUserEndpoint : ICarterModule
     {
         app.MapDelete("api/profile/{id}/delete_account", async (Guid id, ISender sender) =>
         {
-            var command = new OQS.CoreWebAPI.Features.Profile.DeleteUser.Command
+            var command = new OQS.CoreWebAPI.Feautures.Profile.DeleteUser.Command
             {
                 Id = id
             };

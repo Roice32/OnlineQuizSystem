@@ -5,12 +5,12 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Features.Authentication;
+using OQS.CoreWebAPI.Feautures.Authentication;
 using OQS.CoreWebAPI.Shared;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace OQS.CoreWebAPI.Features.Authentication
+namespace OQS.CoreWebAPI.Feautures.Authentication
 {
     public class Logout
     {

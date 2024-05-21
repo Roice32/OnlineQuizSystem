@@ -1,4 +1,4 @@
-﻿using Carter;
+﻿﻿using Carter;
 using FluentValidation;
 using Mapster;
 using MediatR;
@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json.Linq;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Feautures.ResetPassword;
+using OQS.CoreWebAPI.Feautures.Authentication;
 using OQS.CoreWebAPI.Shared;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace OQS.CoreWebAPI.Feautures.ResetPassword
+namespace OQS.CoreWebAPI.Feautures.Authentication
 {
     public class ResetPassword
     {
@@ -61,7 +61,7 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword
 
                 if (user == null)
                 {
-                    return Result.Failure<string>(
+                    return Result.Failure<String>(
                         new Error("ResetPassword.Handler", "User doesn't exists."));
                 }
                 else
@@ -69,11 +69,11 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword
                     var response = userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, UserManager<User>.ResetPasswordTokenPurpose, decodedToken);
                     if (response.Result == false)
                     {
-                        return Result.Failure<string>(
+                        return Result.Failure<String>(
                             new Error("ResetPassword.Handler", $"Invalid token. Token: {decodedToken}"));
                     }
                 }
-
+                
                 var result = await userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
 
                 if (!result.Succeeded)

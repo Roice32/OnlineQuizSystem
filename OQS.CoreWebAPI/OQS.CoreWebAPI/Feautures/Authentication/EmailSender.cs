@@ -1,5 +1,5 @@
 ﻿﻿using Microsoft.AspNetCore.Identity;
-using OQS.CoreWebAPI.Features.Authentication;
+using OQS.CoreWebAPI.Feautures.Authentication;
 using System.Net;
 using System.Net.Mail;
 using System.Text;

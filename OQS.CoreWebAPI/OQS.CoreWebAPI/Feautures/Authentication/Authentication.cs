@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Features.Authentication;
+using OQS.CoreWebAPI.Feautures.Authentication;
 using OQS.CoreWebAPI.Shared;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace OQS.CoreWebAPI.Features.Authentication
+namespace OQS.CoreWebAPI.Feautures.Authentication
 {
     public class Authentication
     {
