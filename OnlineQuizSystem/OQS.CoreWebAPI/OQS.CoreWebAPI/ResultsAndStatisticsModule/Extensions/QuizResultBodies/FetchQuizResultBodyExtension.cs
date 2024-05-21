@@ -18,25 +18,19 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions
 
         public static async Task<Result<FetchQuizResultBodyResponse>> FetchQuizResultBodyAsync(ApplicationDbContext dbContext, Guid quizId, Guid userId)
         {
-            List<Guid> questionIds = await dbContext.QuizResultBodies
+            List<QuestionBase> questions = dbContext.Questions
                 .AsNoTracking()
-                .Where(q => q.QuizId == quizId && q.UserId == userId)
-                .Select(q => q.QuestionIds)
-                .FirstOrDefaultAsync();
+                .Where(q => q.QuizId == quizId)
+                .ToList();
 
-            if (questionIds == null)
+            if (questions == null)
             {
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 
-            List<QuestionBase> questions = dbContext.Questions
-                .AsNoTracking()
-                .Where(q => questionIds.Contains(q.Id))
-                .ToList();
-
             List<QuestionResultBase> questionResults = await dbContext.QuestionResults
                 .AsNoTracking()
-                .Where(q => questionIds.Contains(q.QuestionId) && q.UserId == userId)
+                .Where(q => questions.Select(q => q.Id).Contains(q.QuestionId) && q.UserId == userId)
                 .ToListAsync();
 
             if (questions == null || questionResults == null)

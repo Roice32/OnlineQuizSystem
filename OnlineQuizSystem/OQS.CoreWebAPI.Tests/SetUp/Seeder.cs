@@ -14,7 +14,6 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             SeedQuizzes(dbContext);
             SeedQuestions(dbContext);
             SeedQuestionResults(dbContext);
-            SeedQuizResultBodies(dbContext);
             SeedQuizResultHeaders(dbContext);
         }
 
@@ -236,39 +235,6 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             };
 
             dbContext.QuestionResults.AddRange(questionResults);
-            dbContext.SaveChanges();
-        }
-
-        private static void SeedQuizResultBodies(ApplicationDbContext dbContext)
-        {
-            var quizResultBodies = new List<QuizResultBody>
-            {
-                new QuizResultBody
-                (
-                    userId: Guid.Parse("00000000-0000-0000-0001-000000000001"),
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
-                    questionIds: new List<Guid>
-                    {
-                        Guid.Parse("00000000-0000-0000-0003-000000000001"),
-                        Guid.Parse("00000000-0000-0000-0003-000000000002"),
-                        Guid.Parse("00000000-0000-0000-0003-000000000003"),
-                        Guid.Parse("00000000-0000-0000-0003-000000000004"),
-                        Guid.Parse("00000000-0000-0000-0003-000000000005")
-                    }
-                ),
-                new QuizResultBody
-                (
-                    userId: Guid.Parse("00000000-0000-0000-0001-000000000003"),
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000003"),
-                    questionIds: new List<Guid>
-                    {
-                        Guid.Parse("00000000-0000-0000-0003-000000000007"),
-                        Guid.Parse("00000000-0000-0000-0003-000000000008")
-                    }
-                )
-            };
-
-            dbContext.QuizResultBodies.AddRange(quizResultBodies);
             dbContext.SaveChanges();
         }
 

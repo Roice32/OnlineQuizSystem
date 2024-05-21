@@ -12,8 +12,8 @@ using OQS.CoreWebAPI.Database;
 namespace OQS.CoreWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240514211038_LLMReviewAddedMigration")]
-    partial class LLMReviewAddedMigration
+    [Migration("20240521192921_Final-RSM-Database")]
+    partial class FinalRSMDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,23 +50,6 @@ namespace OQS.CoreWebAPI.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultBody", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("QuizId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("QuestionIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "QuizId");
-
-                    b.ToTable("QuizResultBodies");
-                });
-
             modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultHeader", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -84,7 +67,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.Property<float>("Score")
                         .HasColumnType("real");
 
-                    b.Property<DateTime>("SubmittedAt")
+                    b.Property<DateTime>("SubmittedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("UserId", "QuizId");
@@ -131,7 +114,7 @@ namespace OQS.CoreWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
@@ -176,7 +159,7 @@ namespace OQS.CoreWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")

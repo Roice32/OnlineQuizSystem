@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(db =>
-    db.UseSqlServer(builder.Configuration.GetConnectionString("RSMDatabase")));
+    db.UseSqlServer(builder.Configuration.GetConnectionString("OnlineQuizSystemDatabase")));
 var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
