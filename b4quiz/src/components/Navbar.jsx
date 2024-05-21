@@ -26,12 +26,14 @@ const Navbar = () => {
       {/* Desktop Navigation */}
       <ul className='hidden md:flex'>
         {navItems.map(item => (
-          <li
-            key={item.id}
-            className='p-4 hover:bg-[#DEAE9F] rounded-xl m-2 cursor-pointer duration-300 hover:text-black whitespace-nowrap'
-          >
-            <Link to={item.path}>{item.text}</Link>
-          </li>
+          <Link to={item.path}>
+            <li
+              key={item.id}
+              className='p-4 hover:bg-[#DEAE9F] rounded-xl m-2 cursor-pointer duration-300 hover:text-black whitespace-nowrap'
+            >
+              {item.text}
+            </li>
+          </Link>
         ))}
       </ul>
 
@@ -53,12 +55,14 @@ const Navbar = () => {
 
         {/* Mobile Navigation Items */}
         {navItems.map(item => (
-          <li
-            key={item.id}
-            className='p-4 border-b rounded-xl hover:bg-[#DEAE9F] duration-300 hover:text-black cursor-pointer border-gray-600'
-          >
-            <Link to={item.path}>{item.text}</Link>
-          </li>
+          <Link to={item.path}>
+            <li
+              key={item.id}
+              className='p-4 border-b rounded-xl hover:bg-[#DEAE9F] duration-300 hover:text-black cursor-pointer border-gray-600'
+            >
+              {item.text}
+            </li>
+          </Link>
         ))}
       </ul>
     </div>
