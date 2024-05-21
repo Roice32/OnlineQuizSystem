@@ -8,7 +8,6 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuizResultHeaders;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
-using System.Runtime.CompilerServices;
 
 namespace OQS.CoreWebAPI.Tests
 {

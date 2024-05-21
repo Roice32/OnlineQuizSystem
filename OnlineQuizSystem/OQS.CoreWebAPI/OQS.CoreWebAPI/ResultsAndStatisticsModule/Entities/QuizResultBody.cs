@@ -1,6 +1,4 @@
-﻿using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
-
-namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
+﻿namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities
 {
     // Marked for deletion in next Sprint Iteration
     public class QuizResultBody

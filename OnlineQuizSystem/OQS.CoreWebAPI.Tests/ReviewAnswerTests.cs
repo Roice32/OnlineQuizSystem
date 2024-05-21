@@ -2,12 +2,9 @@
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Features;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
-using System.Text;
 
 namespace OQS.CoreWebAPI.Tests
 {

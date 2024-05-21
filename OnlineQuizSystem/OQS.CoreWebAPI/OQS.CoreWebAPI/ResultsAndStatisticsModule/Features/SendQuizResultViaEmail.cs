@@ -33,10 +33,10 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 if (trueFalseQuestion != null && trueFalseResult != null)
                 {
                     result += $"Your answer: {(trueFalseResult.TrueFalseAnswerResult == AnswerResult.Correct ?
-                        (trueFalseQuestion.TrueFalseAnswer ? "True" : "False") : 
+                        (trueFalseQuestion.TrueFalseAnswer ? "True" : "False") :
                         (trueFalseQuestion.TrueFalseAnswer ? "False" : "True"))}<br>";
-                    result += $"Your answer is {(trueFalseResult.TrueFalseAnswerResult == AnswerResult.Correct ? 
-                        "Correct!" : 
+                    result += $"Your answer is {(trueFalseResult.TrueFalseAnswerResult == AnswerResult.Correct ?
+                        "Correct!" :
                         "Incorrect.")}";
                 }
                 return result;
@@ -224,7 +224,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                             resultsBuilder.AppendLine($"<p><strong>Question:</strong> {question.Text}<br>" +
                                 $"{formatter.Value.GetQuestionResultInEmailFormat(correspondingQuestion, correspondingUserAnswer)}<br>" +
                                 $"{correspondingUserAnswer.Score} points out of {question.AllocatedPoints}</p>");
-                        
+
                         }
                     }
                 }
