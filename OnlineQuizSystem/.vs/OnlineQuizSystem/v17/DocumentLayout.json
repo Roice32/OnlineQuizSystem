@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\casia\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\casia\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -51,6 +55,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
+              "ViewState": "AQIAACYAAAAAAAAAAAAUwDcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-19T21:37:59.426Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Properties\\launchSettings.json",
@@ -58,12 +75,11 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Properties\\launchSettings.json",
               "ViewState": "AQIAABgAAAAAAAAAAAAkwB8AAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-05-18T22:24:04.805Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-18T22:24:04.805Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "GetCreatedQuizStatsResponse.cs",
               "DocumentMoniker": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Contracts\\GetCreatedQuizStatsResponse.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Contracts\\GetCreatedQuizStatsResponse.cs",
@@ -71,12 +87,11 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Contracts\\GetCreatedQuizStatsResponse.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAABOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-14T16:29:54.483Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-14T16:29:54.483Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "GetCreatedQuizStats.cs",
               "DocumentMoniker": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\GetCreatedQuizStats.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\GetCreatedQuizStats.cs",
@@ -88,7 +103,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "CreatedQuizStatsTests.cs",
               "DocumentMoniker": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\CreatedQuizStatsTests.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI.Tests\\CreatedQuizStatsTests.cs",
@@ -100,7 +115,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ReviewAnswerTests.cs",
               "DocumentMoniker": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\ReviewAnswerTests.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI.Tests\\ReviewAnswerTests.cs",
@@ -112,7 +127,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ReviewAnswer.cs",
               "DocumentMoniker": "C:\\Users\\casia\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\ReviewAnswer.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\ResultsAndStatisticsModule\\Features\\ReviewAnswer.cs",
