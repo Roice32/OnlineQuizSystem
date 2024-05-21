@@ -17,8 +17,7 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
         {
             // Arrange
             var userStoreMock = new Mock<IUserStore<User>>();
-            var userManagerMock = new Mock<UserManager<User>>(
-                userStoreMock.Object, null, null, null, null, null, null, null, null);
+            var userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
 
             userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                             .ReturnsAsync(IdentityResult.Success);
@@ -100,13 +99,10 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
             var result = await handler.Handle(request, default);
 
             // Assert
-            Assert.False(result.IsSuccess); // Verificăm că rezultatul este un eșec
-          //  Assert.Null(result.Value); // Verificăm că nu există o valoare de întoarcere
-
-            // Verificăm dacă obiectul de eroare este nul
+            Assert.False(result.IsSuccess); 
             Assert.NotNull(result.Error);
-            Assert.Equal("Registration.Validator", result.Error.Code); // Verificăm codul erorii
-            Assert.Equal("Invalid email", result.Error.Message); // Verificăm mesajul erorii
+            Assert.Equal("Registration.Validator", result.Error.Code); 
+            Assert.Equal("Invalid email", result.Error.Message); 
         }
     }
 }

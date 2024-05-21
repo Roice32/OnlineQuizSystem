@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OQS.CoreWebAPI.Feautures.Authentication.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+50e486f8570e1434e9fb16cf71cbe40bc0f4cc09")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c204d227d4c3243b4e6fd9e96c1ead5de4b4bcf")]
 [assembly: System.Reflection.AssemblyProductAttribute("OQS.CoreWebAPI.Feautures.Authentication.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OQS.CoreWebAPI.Feautures.Authentication.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

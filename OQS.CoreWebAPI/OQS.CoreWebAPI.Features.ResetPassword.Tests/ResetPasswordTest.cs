@@ -49,7 +49,6 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword.Tests
             // Assert
 
             Assert.True(result.IsSuccess);
-            //Assert.Null(result.Error);
         }
 
         [Fact]

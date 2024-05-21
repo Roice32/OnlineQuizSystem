@@ -97,7 +97,6 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
 
             // Assert
             Assert.False(result.IsSuccess);
-          //  Assert.Null(result.Value);
             Assert.NotNull(result.Error);
             Assert.Equal("Authentication.Validator", result.Error.Code);
             Assert.Equal("Invalid username or password", result.Error.Message);
