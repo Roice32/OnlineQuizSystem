@@ -11,22 +11,43 @@ export default function SubmittedQuiz() {
     navigate("/submittedQuiz");
   }, [navigate]);
 
-  const handleFirstButtonClick = () => {
+
+  const getCreatedQuizStats = async (/* quizId */) => {
     setShowMessage1(true);
     setShowMessage2(false);
     setShowMessage3(false);
+    /* try {
+      const response = await axios.get(`/api/quizResults/getCreatedQuizStats/${quizId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching created quiz stats:', error);
+      return null;
+    } */
   };
-
-  const handleSecondButtonClick = () => {
-    setShowMessage2(true);
-    setShowMessage1(false);
-    setShowMessage3(false);
-  };
-
-  const handleThirdButtonClick = () => {
+  const getQuizResult = async (/* userId, quizId */) => {
     setShowMessage3(true);
     setShowMessage1(false);
     setShowMessage2(false);
+   /*  try {
+      const response = await axios.get(`/api/quizResults/getQuizResult/${userId}/${quizId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching quiz result:', error);
+      return null;
+    } */
+  };
+
+  const getTakenQuizzesHistory = async (/* userId */) => {
+     setShowMessage2(true);
+     setShowMessage1(false);
+     setShowMessage3(false);
+     /* try {
+       const response = await axios.get(`/api/quizResults/getTakenQuizzesHistory/${userId}`);
+       return response.data;
+     } catch (error) {
+       console.error('Error fetching taken quizzes history:', error);
+       return null;
+     } */
   };
 
   const handleBackClick = () => {
@@ -53,9 +74,9 @@ export default function SubmittedQuiz() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#1c4e4f] p-6">
       <div className="text-center">
         <h1 style={{fontSize: '40px', color: '#f7ebe7'}} className="submittedQuiz">Submitted Quiz Responses:</h1>
-        <button style={buttonStyle} onClick={handleFirstButtonClick}>GetCreatedQuizStatsExample</button>
-        <button style={buttonStyle} onClick={handleSecondButtonClick}>GetTakenQuizzesHistory</button>
-        <button style={buttonStyle} onClick={handleThirdButtonClick}>GetQuizResult</button>
+        <button style={buttonStyle} onClick={() => getCreatedQuizStats(/* quizId */)}>GetCreatedQuizStatsExample</button>
+        <button style={buttonStyle} onClick={() => getTakenQuizzesHistory(/* userId */)}>GetTakenQuizzesHistory</button>
+        <button style={buttonStyle} onClick={() => getQuizResult(/* userId, quizId */)}>GetQuizResult</button>
       </div>
     </div>
   );

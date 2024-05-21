@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { QuizRoute } from "./Routes/QuizRoute";
-import HomePage from "../Pages/HomePage";
+import SubmittedQuiz from "../Pages/SubmittedQuiz";
 import Root from "../Pages/Root";
 import { ActiveQuizRoute } from "./Routes/ActiveQuizRoute";
 import { SubmittedQuizRoute } from "./Routes/SubmittedQuizRoute";
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomePage />,
+        element: <SubmittedQuiz />,
       },
       QuizRoute,
       ActiveQuizRoute,
