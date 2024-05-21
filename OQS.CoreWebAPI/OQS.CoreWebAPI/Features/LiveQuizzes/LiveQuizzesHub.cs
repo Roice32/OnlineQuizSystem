@@ -38,5 +38,11 @@ public class LiveQuizzesHub: Hub
             await Clients.Caller.SendAsync("Error", result.Error);
         }
     }
+
+    public async Task StartQuiz()
+    {
+        var command = new StartLiveQuiz.StartQuizCommand(Context.ConnectionId);
+        var result = await _sender.Send(command);
+    }
    
 }
