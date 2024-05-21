@@ -8,14 +8,14 @@ using Xunit;
 
 namespace QQS.CoreWebAPI.Tests
 {
-    public class UpdateTagTests : ApplicationContextForTesting
+    public class UpdateTagTest : ApplicationContextForTesting
     {
         [Fact]
         public async Task UpdateTag_ReturnsOkStatus()
         {
             var updateTagRequest = new UpdateTagRequest
             {
-                Name = "UpdatedTag"
+                Name = "UpdatedTag1"
             };
 
             var tagId = Guid.Parse("f792b82b-31ac-42d2-a208-9043eb57a359");

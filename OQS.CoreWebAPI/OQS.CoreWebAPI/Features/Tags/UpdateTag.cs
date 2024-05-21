@@ -1,13 +1,16 @@
 using Carter;
 using FluentValidation;
 using Mapster;
-using OQS.CoreWebAPI.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Tags;
 using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.Entities;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {
@@ -15,9 +18,9 @@ namespace OQS.CoreWebAPI.Features.Tags
     {
         public record BodyUpdateTag : IRequest<Result<TagResponse>>
         {
-             public string Name { get; set; } = string.Empty;
+            public string Name { get; set; } = string.Empty;
         }
-        
+
         public record Command(string TagId) : IRequest<Result<TagResponse>>
         {
             public BodyUpdateTag Body { get; set; } = new BodyUpdateTag();
@@ -27,79 +30,104 @@ namespace OQS.CoreWebAPI.Features.Tags
         {
             public CommandValidator()
             {
-
                 RuleFor(x => x.Body.Name)
                     .NotEmpty().WithMessage("Name is required.")
                     .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
             }
         }
 
-
         internal sealed class Handler : IRequestHandler<Command, Result<TagResponse>>
         {
-            private readonly ApplicationDBContext context;
-          
+            private readonly ApplicationDBContext _context;
+            private readonly IValidator<Command> _validator;
 
             public Handler(ApplicationDBContext context, IValidator<Command> validator)
             {
-                this.context = context;
+                _context = context;
+                _validator = validator;
             }
 
             public async Task<Result<TagResponse>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var validationResult = _validator.Validate(request);
+                if (!validationResult.IsValid)
+                {
+                    var errorMessages = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+                    return Result.Failure<TagResponse>(new Error(400, errorMessages));
+                }
 
-                var tag = await context.Tags
-                    .FirstOrDefaultAsync(tag => tag.Id.ToString() == request.TagId, cancellationToken: cancellationToken);
+                var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id.ToString() == request.TagId, cancellationToken);
                 if (tag is null)
                 {
-                    return Result.Failure<TagResponse>(
-                        new Error(
-                            404, "Tag not found"
-                        ));
+                    return Result.Failure<TagResponse>(new Error(404, "Tag not found"));
                 }
+
+                tag.Name = request.Body.Name;
 
                 try
                 {
-                    tag.Name = request.Body.Name;
-                    context.Tags.Update(tag);
-                    await context.SaveChangesAsync(cancellationToken);
+                    _context.Tags.Update(tag);
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    return Result.Failure<TagResponse>(
-                        new Error(
-                            404, "Tag not updated"
-                        ));
+                    return Result.Failure<TagResponse>(new Error(500, "Tag could not be updated"));
                 }
 
                 return Result<TagResponse>.Success(new TagResponse(tag));
             }
         }
     }
-}
 
-// create and enpoint for updating a tag with patch
-public class UpdateTagEndpoint : ICarterModule
-{
-    public void AddRoutes(IEndpointRouteBuilder app)
+    public class UpdateTagEndpoint : ICarterModule
     {
-        app.MapPatch("api/tags/{id}", async(string id, UpdateTagRequest request, ISender sender) =>
-        {
 
-            var command = new UpdateTag.Command(id.ToString())
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapPatch("api/tags/{id}", async (string id, UpdateTagRequest request, ISender sender) =>
             {
-                // TagId = id,
-                Body = request.Adapt<UpdateTag.BodyUpdateTag>()
-            };
-            
-            var result = await sender.Send(command);
-            
-            if (result.IsFailure)
-            {
-                return Results.NotFound(result.Error);
-            }
-            
-            return Results.Ok(result.Value);
-        });
+                var command = new UpdateTag.Command(id)
+                {
+                    Body = request.Adapt<UpdateTag.BodyUpdateTag>()
+                };
+
+                // Send the command to the handler
+                var result = await sender.Send(command);
+
+                // Check if the result indicates failure
+                if (result.IsFailure)
+                {
+                    // Return a BadRequest response with the error message
+                    return Results.BadRequest(result.Error.Message);
+                }
+
+                // If the result indicates success, return an Ok response with the result value
+                return Results.Ok(result.Value);
+            });
+        }
+    } }
+
+    
+
+    /* public class UpdateTagEndpoint : ICarterModule
+     {
+         public void AddRoutes(IEndpointRouteBuilder app)
+         {
+             app.MapPatch("api/tags/{id}", async (string id, UpdateTagRequest request, ISender sender) =>
+             {
+                 var command = new UpdateTag.Command(id)
+                 {
+                     Body = request.Adapt<UpdateTag.BodyUpdateTag>()
+                 };
+
+                 return await sender.Send(command);
+                /* var result = await sender.Send(command);
+
+                 return result.IsSuccess
+                     ? Results.Ok(result.Value)
+                     : Results.StatusCode(result.Error.Code, result.Error.Message);*
+});
+        }
     }
 }
+*/
