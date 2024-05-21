@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Features;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
 

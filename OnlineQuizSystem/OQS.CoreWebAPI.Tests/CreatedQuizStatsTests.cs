@@ -1,11 +1,6 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Features;
-using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
 

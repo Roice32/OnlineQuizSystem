@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
 using OpenAI_API;
 using OpenAI_API.Chat;
-using OpenAI_API.Models;
-using OpenAI_API.Completions;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.Shared;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Model = OpenAI_API.Models.Model;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
@@ -102,7 +99,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             {
                 if (qaPair is null)
                 {
-                    return new ChoiceQuestionResult(userId, questionFromDb.Id, 0,JsonConvert.SerializeObject(new Dictionary<string, AnswerResult>()));
+                    return new ChoiceQuestionResult(userId, questionFromDb.Id, 0, JsonConvert.SerializeObject(new Dictionary<string, AnswerResult>()));
                 }
 
                 Dictionary<string, AnswerResult> allChoicesResults = new();
@@ -146,16 +143,16 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             {
                 if (qaPair is null)
                 {
-                    return new WrittenAnswerQuestionResult(userId,questionFromDb.Id, 0, "",AnswerResult.NotAnswered);
+                    return new WrittenAnswerQuestionResult(userId, questionFromDb.Id, 0, "", AnswerResult.NotAnswered);
                 }
 
                 if (((WrittenAnswerQuestion)questionFromDb).WrittenAcceptedAnswers
                                    .Contains(((WrittenQAPair)qaPair).WrittenAnswer))
                 {
-                    return new WrittenAnswerQuestionResult(userId, qaPair.QuestionId,questionFromDb.AllocatedPoints, ((WrittenQAPair)qaPair).WrittenAnswer,AnswerResult.Correct);
+                    return new WrittenAnswerQuestionResult(userId, qaPair.QuestionId, questionFromDb.AllocatedPoints, ((WrittenQAPair)qaPair).WrittenAnswer, AnswerResult.Correct);
                 }
 
-                return new WrittenAnswerQuestionResult(userId, qaPair.QuestionId,0,((WrittenQAPair)qaPair).WrittenAnswer, AnswerResult.Wrong);
+                return new WrittenAnswerQuestionResult(userId, qaPair.QuestionId, 0, ((WrittenQAPair)qaPair).WrittenAnswer, AnswerResult.Wrong);
             }
         }
 
@@ -185,7 +182,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 return questionResult;
             }
         }
-      
+
         public static QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
             return strategies[questionFromDb.Type].CheckQuestion(userId, qaPair, questionFromDb);
@@ -194,14 +191,14 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
         public static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
             var openAI = new OpenAIAPI("APIKeyGoesHere");
-           
-            if(question == null)
+
+            if (question == null)
             {
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
                         "The question sent was null"));
             }
-            
+
             var chatRequest = new ChatRequest
             {
                 Model = Model.ChatGPTTurbo, // Use the appropriate model identifier for gpt-3.5-turbo
@@ -244,7 +241,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                 AskLLMForReviewResponse askLLMForReviewResponse = JsonConvert
                     .DeserializeObject<AskLLMForReviewResponse>(chatResponse.Choices[0].Message.Content);
                 return askLLMForReviewResponse;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return Result.Failure<AskLLMForReviewResponse>(
                         new Error("AskLLMForReview.Error",

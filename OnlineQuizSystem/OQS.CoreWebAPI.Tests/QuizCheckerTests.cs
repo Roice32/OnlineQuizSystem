@@ -120,8 +120,8 @@ namespace OQS.CoreWebAPI.Tests
                 }
             }
         }
-        
-        [Fact]    
+
+        [Fact]
         public async Task Given_AnswerToQuestionNotBelongingToQuiz_When_CheckQuizIsCalled_Then_StrayAnswerIsReturned()
         {
             // Arrange

@@ -3,10 +3,8 @@ using FluentValidation;
 using MailKit.Net.Smtp;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using MimeKit;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Features;
 using OQS.CoreWebAPI.Shared;
 
@@ -74,8 +72,8 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                 var endDateUtc = request.EndDateLocal.ToUniversalTime();
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                         .AsNoTracking()
-                        .Where(header => header.QuizId == request.QuizId && 
-                            header.SubmittedAtUtc.Date >= startDateUtc.Date && 
+                        .Where(header => header.QuizId == request.QuizId &&
+                            header.SubmittedAtUtc.Date >= startDateUtc.Date &&
                             header.SubmittedAtUtc.Date <= endDateUtc.Date)
                         .ToListAsync(cancellationToken);
 

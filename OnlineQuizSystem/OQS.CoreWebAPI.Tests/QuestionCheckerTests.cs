@@ -8,9 +8,7 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.Tests.SetUp;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 
 namespace OQS.CoreWebAPI.Tests
 {
@@ -308,7 +306,7 @@ namespace OQS.CoreWebAPI.Tests
             ((ReviewNeededQuestionResult)result2).ReviewNeededResult.Should().Be(AnswerResult.NotAnswered);
         }
 
-         [Fact]
+        [Fact]
         public async Task Given_ValidQuestionAndAnswer_When_AskLLMForReviewAsyncIsCalled_Then_ResultIsCorrect()
         {
             // Arrange
@@ -317,10 +315,10 @@ namespace OQS.CoreWebAPI.Tests
 
             var questionId = Guid.Parse("00000000-0000-0000-0003-000000000005");
             var quizId = Guid.Parse("00000000-0000-0000-0002-000000000003");
-      
+
 
             ReviewNeededQuestion question = new ReviewNeededQuestion
-                (questionId, "Cat face 5 + 5?",  6,  quizId);
+                (questionId, "Cat face 5 + 5?", 6, quizId);
 
             // Act
             var result = await QuestionChecker.AskLLMForReviewAsync(question, "10");

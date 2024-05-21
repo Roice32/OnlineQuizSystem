@@ -2,7 +2,6 @@
 using FluentAssertions;
 using OQS.CoreWebAPI.Tests.SetUp;
 
-
 namespace OQS.CoreWebAPI.Tests
 {
     public class SendCreatedQuizResultsViaEmailTests : ApplicationContextForTesting
@@ -31,7 +30,7 @@ namespace OQS.CoreWebAPI.Tests
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [Fact]
         public async Task Given_StartDateGreaterThanEndDate_When_SendCreatedQuizStatsViaEmailIsCalled_Then_BadRequestIsReturned()
         {
