@@ -2,7 +2,7 @@ using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions;
+using OQS.CoreWebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

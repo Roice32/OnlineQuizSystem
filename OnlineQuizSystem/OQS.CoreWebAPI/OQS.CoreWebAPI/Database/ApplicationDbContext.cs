@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
-using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
+using OQS.CoreWebAPI.Temp;
 
 namespace OQS.CoreWebAPI.Database
 {
