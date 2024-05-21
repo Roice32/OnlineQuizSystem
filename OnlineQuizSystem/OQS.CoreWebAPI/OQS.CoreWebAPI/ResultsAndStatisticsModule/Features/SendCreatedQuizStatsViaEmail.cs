@@ -91,15 +91,54 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     message.To.Add(MailboxAddress.Parse(request.RecipientEmail));
                     message.Subject = "Tests submitted";
                     var quiz = await dbContext.Quizzes.FindAsync(request.QuizId);
-                    var emailBody = $"Here are the results for the {quiz.Name} between {request.StartDateLocal.ToString("dd/MM/yyyy")} - {request.EndDateLocal.ToString("dd/MM/yyyy")}:\n\n";
+
+                    var emailBody = "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n   " +
+                        " <title>Online Quiz Application</title>\r\n    " +
+                        "<style>\r\n" +
+                        "body {\r\n" +
+                        "font-family: Arial, sans-serif;\r\n" +
+                        "padding: 0;\r\n}\r\n" +
+                        "h1{\r\n" +
+                        "text-align: center;\r\n" +
+                        "color: #1c4e4f;\r\n" +
+                        "font-size: 7svh;\r\n" +
+                        "text-shadow: 1px 1px 2px #0a2d2e;\r\n" +
+                        "padding-bottom: 20px;\r\n}\r\n" +
+                        ".container {\r\n" +
+                        "width: 100%;\r\n" +
+                        "max-width: 700px;\r\n" +
+                        "margin: 0 auto;\r\n" +
+                        "padding: 20px;\r\n" +
+                        "background-color: #deae9f;\r\n}\r\n" +
+                        "p{\r\n" +
+                        " font-size: 23px;\r\n" +
+                        "color: #0a2d2e;\r\n}\r\n\r\n" +
+                        " </style>\r\n</head>\r\n<body>\r\n" +
+                        " <div class=\"container\">\r\n" +
+                        " <h1> Online Quiz Application</h1>\r\n" +
+                        " <p>Dear usernameToBeReplaced, <br><br>\r\n" +
+                        " Here are the results for the quizNameToBeReplaced between startDateToBeReplaced - endDateToBeReplaced:\r\n " +
+                        " <br><br>\r\n" +
+                        " resultsToBeReplaced\r\n<br><br>\r\n" +
+                        " If you have any questions or need assistance, don't hesitate to contact us at echipafacultate@yahoo.com.<br>\r\n" +
+                        " Best regards, <br>\r\n " +
+                        " Online Quiz Application Team</p>\r\n" +
+                        "</div>\r\n</body>\r\n</html>\r\n";
+
+                    var results = "";
                     foreach (var header in quizResultHeaders)
                     {
                         var user = await dbContext.Users.FindAsync(header.UserId);
-
-                        emailBody += $"User Name: {user.Name}\n Submitted At: {header.SubmittedAtUtc.ToLocalTime}\n Completion Time: {header.CompletionTime}\n Score: {header.Score}\n Review Pending: {header.ReviewPending}\n";
+                        results += $"User Name: {user.Name}<br> Submitted At: {header.SubmittedAtUtc.ToLocalTime()}<br> Completion Time: {header.CompletionTime}<br> Score: {header.Score}<br> Review Pending: {header.ReviewPending}<br><br>";
                     }
 
-                    message.Body = new TextPart(MimeKit.Text.TextFormat.Plain)
+                    emailBody = emailBody.Replace("usernameToBeReplaced", request.RecipientEmail)
+                                         .Replace("quizNameToBeReplaced", quiz.Name)
+                                         .Replace("startDateToBeReplaced", request.StartDateLocal.ToString("dd/MM/yyyy"))
+                                         .Replace("endDateToBeReplaced", request.EndDateLocal.ToString("dd/MM/yyyy"))
+                                         .Replace("resultsToBeReplaced", results);
+
+                    message.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
                         Text = emailBody
                     };

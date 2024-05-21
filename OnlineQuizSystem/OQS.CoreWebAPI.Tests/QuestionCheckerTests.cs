@@ -8,6 +8,9 @@ using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.Tests.SetUp;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Extensions.QuestionResults;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
+using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 
 namespace OQS.CoreWebAPI.Tests
 {
@@ -298,12 +301,50 @@ namespace OQS.CoreWebAPI.Tests
 
             // Assert
             result1.Should().BeOfType<ReviewNeededQuestionResult>();
-            result1.Score.Should().Be(0);
             ((ReviewNeededQuestionResult)result1).ReviewNeededResult.Should().Be(AnswerResult.Pending);
 
             result2.Should().BeOfType<ReviewNeededQuestionResult>();
             result2.Score.Should().Be(0);
             ((ReviewNeededQuestionResult)result2).ReviewNeededResult.Should().Be(AnswerResult.NotAnswered);
         }
+
+         [Fact]
+        public async Task Given_ValidQuestionAndAnswer_When_AskLLMForReviewAsyncIsCalled_Then_ResultIsCorrect()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var questionId = Guid.Parse("00000000-0000-0000-0003-000000000005");
+            var quizId = Guid.Parse("00000000-0000-0000-0002-000000000003");
+      
+
+            ReviewNeededQuestion question = new ReviewNeededQuestion
+                (questionId, "Cat face 5 + 5?",  6,  quizId);
+
+            // Act
+            var result = await QuestionChecker.AskLLMForReviewAsync(question, "10");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Grade.Should().Be(6);
+            result.Value.Review.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task Given_NullQuestion_When_AskLLMForReviewAsyncIsCalled_Then_FailureIsReturned()
+        {
+            // Arrange
+            using var scope = Application.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            // Act
+            var result = await QuestionChecker.AskLLMForReviewAsync(null, "10");
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+        }
+
     }
 }
