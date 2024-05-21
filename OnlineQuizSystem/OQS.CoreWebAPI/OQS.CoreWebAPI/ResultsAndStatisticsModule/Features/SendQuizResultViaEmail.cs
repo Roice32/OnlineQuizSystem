@@ -319,7 +319,6 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Features
                     return Result.Failure(new Error("EmailSenderError", ex.Message));
                 }
             }
-
         }
     }
     public class SendQuizResultViaEmailEndPoint : ICarterModule

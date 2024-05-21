@@ -1,11 +1,15 @@
 ﻿using Newtonsoft.Json;
 using OpenAI_API;
+using OpenAI_API.Chat;
+using OpenAI_API.Models;
 using OpenAI_API.Completions;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Contracts;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionAnswerPairs;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults;
 using OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp;
 using OQS.CoreWebAPI.Shared;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Model = OpenAI_API.Models.Model;
 
 namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 {
@@ -187,28 +191,39 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             return strategies[questionFromDb.Type].CheckQuestion(userId, qaPair, questionFromDb);
         }
 
-       
-        private static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
+        public static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
-            var openAI = new OpenAIAPI("sk-proj-QSvrIDvvcYVwtOOcjMi8T3BlbkFJPqlYoGxnr47RgxH4DEKH");
-            CompletionRequest completionRequest = new()
+            var openAI = new OpenAIAPI("apikey");
+           
+            if(question == null)
             {
-                Model = "gpt-3.5-turbo",
+                return Result.Failure<AskLLMForReviewResponse>(
+                    new Error("AskLLMForReview.Error",
+                        "The question sent was null"));
+            }
+            
+            var chatRequest = new ChatRequest
+            {
+                Model = Model.ChatGPTTurbo, // Use the appropriate model identifier for gpt-3.5-turbo
+                Messages = new[]
+                {
+                    new ChatMessage(ChatMessageRole.System, "You are a helpful assistant."),
+                    new ChatMessage(ChatMessageRole.User, "Question: " + question.Text +
+                        "\nAnswer: " + answer +
+                        "\nMax Possible Score: " + question.AllocatedPoints +
+                        "\nReturn review & grade as JSON.")
+                },
                 MaxTokens = 100,
                 Temperature = 0.5f,
-                TopP = 1,
-                Prompt = "Question: " + question.Text +
-                    "\nAnswer: " + answer +
-                    "\nMax Possible Score: " + question.AllocatedPoints +
-                    "\nReturn review & grade as JSON."
+                TopP = 1
             };
 
-            CompletionResult completionResponse = null;
+            ChatResult chatResponse = null;
             try
             {
-                completionResponse = await openAI
-                    .Completions
-                    .CreateCompletionAsync(completionRequest);
+                chatResponse = await openAI
+                    .Chat
+                    .CreateChatCompletionAsync(chatRequest);
             }
             catch (HttpRequestException e)
             {
@@ -217,7 +232,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                         e.Message));
             }
 
-            if (completionResponse is null)
+            if (chatResponse is null)
             {
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
@@ -225,7 +240,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
             }
 
             AskLLMForReviewResponse askLLMForReviewResponse = JsonConvert
-                .DeserializeObject<AskLLMForReviewResponse>(completionResponse.Completions[0].Text);
+                .DeserializeObject<AskLLMForReviewResponse>(chatResponse.Choices[0].Message.Content);
 
             if (askLLMForReviewResponse is null)
             {
