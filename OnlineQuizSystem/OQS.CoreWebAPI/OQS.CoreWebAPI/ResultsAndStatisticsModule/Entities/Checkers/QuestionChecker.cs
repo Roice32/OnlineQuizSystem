@@ -193,7 +193,7 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
 
         public static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
-            var openAI = new OpenAIAPI("apikey");
+            var openAI = new OpenAIAPI("APIKeyGoesHere");
            
             if(question == null)
             {
@@ -239,17 +239,17 @@ namespace OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.Checkers
                         "OpenAI API did not respond."));
             }
 
-            AskLLMForReviewResponse askLLMForReviewResponse = JsonConvert
-                .DeserializeObject<AskLLMForReviewResponse>(chatResponse.Choices[0].Message.Content);
-
-            if (askLLMForReviewResponse is null)
+            try
+            {
+                AskLLMForReviewResponse askLLMForReviewResponse = JsonConvert
+                    .DeserializeObject<AskLLMForReviewResponse>(chatResponse.Choices[0].Message.Content);
+                return askLLMForReviewResponse;
+            } catch (Exception)
             {
                 return Result.Failure<AskLLMForReviewResponse>(
-                    new Error("AskLLMForReview.Error",
-                        "OpenAI API did not return a valid response."));
+                        new Error("AskLLMForReview.Error",
+                            "OpenAI API did not return a valid response."));
             }
-
-            return askLLMForReviewResponse;
         }
     }
 }

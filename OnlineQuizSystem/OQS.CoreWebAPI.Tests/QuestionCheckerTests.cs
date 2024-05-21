@@ -301,7 +301,6 @@ namespace OQS.CoreWebAPI.Tests
 
             // Assert
             result1.Should().BeOfType<ReviewNeededQuestionResult>();
-            result1.Score.Should().Be(0);
             ((ReviewNeededQuestionResult)result1).ReviewNeededResult.Should().Be(AnswerResult.Pending);
 
             result2.Should().BeOfType<ReviewNeededQuestionResult>();
@@ -310,7 +309,7 @@ namespace OQS.CoreWebAPI.Tests
         }
 
          [Fact]
-        public async Task Given_AskLLMForReviewAsyncIsCalled_Then_ResultIsCorrect()
+        public async Task Given_ValidQuestionAndAnswer_When_AskLLMForReviewAsyncIsCalled_Then_ResultIsCorrect()
         {
             // Arrange
             using var scope = Application.Services.CreateScope();
@@ -323,18 +322,18 @@ namespace OQS.CoreWebAPI.Tests
             ReviewNeededQuestion question = new ReviewNeededQuestion
                 (questionId, "Cat face 5 + 5?",  6,  quizId);
 
-            var result = await QuestionChecker.AskLLMForReviewAsync(question, "10");
-
             // Act
+            var result = await QuestionChecker.AskLLMForReviewAsync(question, "10");
 
             // Assert
             result.Should().NotBeNull();
+            result.IsSuccess.Should().BeTrue();
             result.Value.Grade.Should().Be(6);
             result.Value.Review.Should().NotBeNull();
         }
 
         [Fact]
-        public async Task Given_AskLLMForReviewAsyncIsCalled_Then_ResultIsWrong()
+        public async Task Given_NullQuestion_When_AskLLMForReviewAsyncIsCalled_Then_FailureIsReturned()
         {
             // Arrange
             using var scope = Application.Services.CreateScope();

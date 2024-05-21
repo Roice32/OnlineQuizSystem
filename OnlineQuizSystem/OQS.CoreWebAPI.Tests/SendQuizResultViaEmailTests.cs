@@ -14,7 +14,7 @@ namespace OQS.CoreWebAPI.Tests
         public async Task SendEmail_WhenCalled_ReturnsSendEmailResponse()
         {
             // Arrange
-            var RecipientEmail = "galatanuemilia14@gmail.com";
+            var RecipientEmail = "writeValidEmailHere";
             var QuizId = Guid.Parse("00000000-0000-0000-0002-000000000001");
             var UserId = Guid.Parse("00000000-0000-0000-0001-000000000001");
             var requestUri = $"api/email/sendQuizResultViaEmail?" +
