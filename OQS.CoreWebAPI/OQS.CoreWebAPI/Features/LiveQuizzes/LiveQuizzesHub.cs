@@ -22,7 +22,6 @@ public class LiveQuizzesHub: Hub
     {
         var command = new JoinLiveQuiz.ConnectionCommand(conn.UserId, conn.Code, Context.ConnectionId);
         var result = await _sender.Send(command);
-      
     }
 
     public async Task StartQuiz()
