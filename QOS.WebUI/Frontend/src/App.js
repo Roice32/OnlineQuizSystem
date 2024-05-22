@@ -12,6 +12,10 @@ import SignIn from './pages/SignIn';
 import Logout from './pages/Logout';
 import VerifyCurrentPassword from './pages/VerifyCurrentPassword';
 import ResetCurrentPasseword from './pages/ResetPasswordFromProfilPage';
+import AddAdmin from './pages/AddAdmin';
+import GetUsers from './pages/GetUsers';
+import DeleteUser from './pages/DeleteUser';
+
 
 const App = () => {
     return (
@@ -19,17 +23,21 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register/>} />
-        <Route path="/" element={<SignIn/>} />
+        <Route path="/" element={<Login/>} />
         <Route path="/afterLogin" element = {<AfterLogin/>} />
         <Route path="/sign_up_confirmation" element = {<SignUpConfirmation/>} />
         <Route path="/forgot_password" element={<ForgotPassword/>} />
         <Route path="/waiting_to_reset_password" element={<WaitingToResetPassword/>} />
         <Route path="/reset_password/:token" element={<ResetPassword/>} />
         <Route path="/edit_your_profile" element={<EditProfile/>} />
-        <Route path="/profile/:id" element={<Profile/>} />
+        <Route path="/profile" element={<Profile/>} />
         <Route path="/logout" element={<Logout/>} />
-        <Route path="/profile/:id/verify_current_password" element={<VerifyCurrentPassword/>} />
-        <Route path="/profile/:id/reset_current_password" element={<ResetCurrentPasseword/>} />
+        <Route path="/profile/verify_current_password" element={<VerifyCurrentPassword/>} />
+        <Route path="/profile/reset_current_password" element={<ResetCurrentPasseword/>} />
+        <Route path="/profile/edit_profile" element={<EditProfile/>} />
+        <Route path="/add_admin" element={<AddAdmin/>} />
+        <Route path="/profile/get_users" element={<GetUsers/>} />
+        <Route path="/profile/delete_user" element={<DeleteUser/>} />
       </Routes>
     </BrowserRouter>
     );

@@ -65,17 +65,17 @@ namespace OQS.CoreWebAPI.Features.Authentication
                                                new Error("Authentication.Handler", "Invalid user or password."));
                 }
 
+                
+
                 var userRoles = await userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Id!),
+                    new Claim(ClaimTypes.Role, userRoles.FirstOrDefault()!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }   
+                 
 
                 string token = GenerateToken(authClaims);
 

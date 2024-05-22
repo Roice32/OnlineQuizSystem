@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace OQS.CoreWebAPI.Features.Authentication
+namespace OQS.CoreWebAPI.Features.ResetPassword
 {
     public class ForgotPassword
     {
@@ -89,7 +89,7 @@ public class ForgotPasswordEndPoind : ICarterModule
     {
         _ = app.MapPost("api/forgot_password", async (ForgotPasswordModel model, ISender sender) =>
         {
-            var command = new ForgotPassword.Command
+            var command = new OQS.CoreWebAPI.Features.ResetPassword.ForgotPassword.Command
             {
                 Email = model.Email,
                 Username = model.Username

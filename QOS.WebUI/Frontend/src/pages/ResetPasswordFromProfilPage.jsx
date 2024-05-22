@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import './SignUp.css';
 import FormInput from '../components/FormInput';
@@ -12,7 +12,7 @@ const ResetPassword = () => {
     });
     const navigate = useNavigate();
     const [response, setResponse] = useState(null);
-    const { id } = useParams();
+    const userId = localStorage.getItem('userId');
 
     const inputs = [
         {
@@ -48,11 +48,18 @@ const ResetPassword = () => {
         const {newPassword, confirmPassword } = userValues;
 
         try {
-            const response = await axios.put(`https://localhost:7117/api/profile/${id}/reset_current_password`, { newPassword});
+            const token = localStorage.getItem('authToken');
+            const response = await axios.put(`https://localhost:7117/api/profile/${userId}/reset_current_password`, { newPassword}, 
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+            );
 
             console.log(response.data.message);
-            if(response.data.message == "Password reset successfully"){
-                navigate(`/profile/${id}`);
+            if(response.data.message === "Password reset successfully!!"){
+                navigate(`/profile`);
             }
             
         } catch (error) {
@@ -62,7 +69,7 @@ const ResetPassword = () => {
 
 
     const handleClose = () => {
-        navigate(`/profile/${id}`);
+        navigate(`/profile`);
     };
 
     return (

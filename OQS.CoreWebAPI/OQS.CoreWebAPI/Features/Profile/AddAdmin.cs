@@ -1,18 +1,15 @@
 ﻿using Carter;
 using FluentValidation;
-using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
-namespace OQS.CoreWebAPI.Features.Authentication
+namespace OQS.CoreWebAPI.Features.Profile
 {
-    public class Registration
+    public class AddAdmin
     {
         public record Command : IRequest<Result<Guid>>
         {
@@ -21,6 +18,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
             public string LastName { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
+            public string Jwt { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -41,17 +39,26 @@ namespace OQS.CoreWebAPI.Features.Authentication
             private readonly RoleManager<IdentityRole> roleManager;
             private readonly IValidator<Command> validator;
             private readonly IEmailSender emailService;
+            private readonly IConfiguration configuration;
 
-            public Handler(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IValidator<Command> validator, IEmailSender emailService)
+            public Handler(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IValidator<Command> validator, IEmailSender emailService, IConfiguration configuration)
             {
                 this.userManager = userManager;
                 this.roleManager = roleManager;
                 this.validator = validator;
                 this.emailService = emailService;
+                this.configuration = configuration;
             }
 
             public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var jwtValidator = new JwtValidator(configuration);
+                if (!jwtValidator.Validate(request.Jwt))
+                {
+                    return Result.Failure<Guid>(
+                        new Error("Authentication", "Invalid Jwt"));
+                }
+
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
@@ -62,7 +69,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
                 var userExists = await userManager.FindByNameAsync(request.Username!);
                 if (userExists != null)
                 {
-                    return Result.Failure<Guid>(new Error("Registration", "User already exists"));
+                    return Result.Failure<Guid>(new Error("Registration", "Admin already exists"));
                 }
 
                 User user = new User()
@@ -79,47 +86,50 @@ namespace OQS.CoreWebAPI.Features.Authentication
                 if (!createUserResult.Succeeded)
                 {
                     return Result.Failure<Guid>(
-                                               new Error("Registration", "User creation failed! Please check user details and try again."));
+                                               new Error("Registration", "Admin creation failed! Please check user details and try again."));
                 }
 
-                
-                if(await roleManager.RoleExistsAsync(UserRole.User))
+
+                if (await roleManager.RoleExistsAsync(UserRole.Admin))
                 {
-                    await roleManager.CreateAsync(new IdentityRole(UserRole.User));
+                    await roleManager.CreateAsync(new IdentityRole(UserRole.Admin));
                 }
-                await userManager.AddToRoleAsync(user, UserRole.User);
+                await userManager.AddToRoleAsync(user, UserRole.Admin);
 
 
                 var body = "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>Welcome to Online Quiz Application</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            padding: 0;\r\n        }\r\n        h1{\r\n            text-align: center;\r\n            color: #1c4e4f;\r\n            font-size: 7svh;\r\n            text-shadow: 1px 1px 2px #0a2d2e;\r\n            padding-bottom: 20px;\r\n        }\r\n        .container {\r\n            width: 100%;\r\n            max-width: 700px;\r\n            margin: 0 auto;\r\n            padding: 20px;\r\n            background-color: #deae9f;\r\n        }\r\n        p{\r\n            font-size: 23px;\r\n            color: #0a2d2e;\r\n        }\r\n        \r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h1> Welcome to Online Quiz Application</h1>\r\n        <p>Dear usernameToBeReplaced, <br><br>\r\n            Thank you for registering with our Online Quiz Application! We're excited to have you in our community.\r\n            You can now start exploring hundreds of available quizzes, create your own quizzes, and share knowledge with other users.\r\n            If you have any questions or need assistance, don't hesitate to contact us at Online.Quiz@outlook.com.<br>\r\n            Welcome to our community! <br><br>\r\n\r\n            Best regards, <br>\r\n            Online Quiz Application Team</p>\r\n    </div>\r\n</body>\r\n</html>\r\n";
-                    body = body.Replace("usernameToBeReplaced", request.Username);
-                await emailService.SendEmailAsync(request.Email, "Account Confirmation & Welcome to Online Quiz Application",body);
+                body = body.Replace("usernameToBeReplaced", request.Username);
+                await emailService.SendEmailAsync(request.Email, "Account Confirmation & Welcome to Online Quiz Application", body);
 
                 return Result.Success(Guid.Parse(user.Id));
             }
         }
-
     }
 }
-public class RegistrationEndPoind : ICarterModule
+
+
+public class AddAdminEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        _ = app.MapPost("api/registration", async (RegistrationModel model, ISender sender) =>
+        _ = app.MapPost("api/add_admin", async (HttpContext context, RegistrationModel model, ISender sender) =>
         {
-            var command = new Registration.Command
+            var jwt = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var command = new OQS.CoreWebAPI.Features.Profile.AddAdmin.Command
             {
                 Username = model.Username,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                Password = model.Password
+                Password = model.Password,
+                Jwt = jwt
             };
 
 
             var result = await sender.Send(command);
             if (result.IsSuccess)
             {
-                return Results.Ok(new { message = "User created successfully!" });
+                return Results.Ok(new { message = "Admin created successfully!" });
             }
             else
             {

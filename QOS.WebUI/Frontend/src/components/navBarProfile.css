@@ -1,7 +1,7 @@
 .navbar {
-    background-color: #436e6f;
-    width: 200px; 
-    height: 100vh; 
+    background-color: #0a2d2e;
+    width: 300px; 
+    min-height: 100vh; 
     top: 0;
     left: 0;
     display: flex;
@@ -43,9 +43,3 @@
     font-size: 20px;
 }
 
-button .nav-linl{
-    color :#6b2c60;
-    text-decoration: none;
-    color: #efd7cf;
-    font-size: 20px;
-}

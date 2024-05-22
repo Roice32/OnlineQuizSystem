@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace OQS.CoreWebAPI.Features.Authentication
+namespace OQS.CoreWebAPI.Features.ResetPassword
 {
     public class ResetPassword
     {
@@ -94,7 +94,7 @@ public class ResetPasswordEndPoind : ICarterModule
     {
         _ = app.MapPost("api/resetPassword/{token}", async (ResetPasswordModel model, ISender sender, string token) =>
         {
-            var command = new ResetPassword.Command
+            var command = new OQS.CoreWebAPI.Features.ResetPassword.ResetPassword.Command
             {
                 Token = token,
                 NewPassword = model.newPassword,

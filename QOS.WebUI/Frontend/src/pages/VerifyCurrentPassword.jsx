@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import './SignUp.css';
 import FormInput from '../components/FormInput';
@@ -11,7 +11,7 @@ const VerifyCurrentPassword = () => {
     });
     const navigate = useNavigate();
     const [response, setResponse] = useState(null);
-    const { id } = useParams();
+    const userId = localStorage.getItem('userId');
 
     const inputs = [
         {
@@ -37,11 +37,11 @@ const VerifyCurrentPassword = () => {
         const { password } = userValues; 
 
         try {
-            const response = await axios.post(`https://localhost:7117/api/profile/${id}/verify_current_password`, { password }); 
+            const response = await axios.post(`https://localhost:7117/api/profile/${userId}/verify_current_password`, { password }); 
             setResponse(response.data);
 
             if(response.data.message === " Confirmed Password !!"){
-                navigate(`/profile/${id}/reset_current_password`);
+                navigate(`/profile/reset_current_password`);
             }
             
             
@@ -52,7 +52,7 @@ const VerifyCurrentPassword = () => {
 
 
     const handleClose = () => {
-       navigate(`/profile/${id}`);
+       navigate(`/profile`);
     };
 
     return (

@@ -2,18 +2,17 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.Profile
 {
-    public class DeleteUser
+    public class DeleteAccount
     {
         public record Command : IRequest<Result<Result>>
         {
-            public string Username{ get; set; }
+            public Guid Id { get; set; }
             public string Jwt { get; set; }
         }
 
@@ -21,7 +20,7 @@ namespace OQS.CoreWebAPI.Features.Profile
         {
             public Validator()
             {
-                RuleFor(x => x.Username).NotEmpty();
+                RuleFor(x => x.Id).NotEmpty();
             }
         }
 
@@ -44,7 +43,7 @@ namespace OQS.CoreWebAPI.Features.Profile
                 if (!jwtValidator.Validate(request.Jwt))
                 {
                     return Result.Failure<List<User>>(
-                        new Error("Authentication", "Invalid Jwt."));
+                        new Error("Authentication", "Invalid Jwt"));
                 }
 
                 var validationResult = validator.Validate(request);
@@ -54,7 +53,7 @@ namespace OQS.CoreWebAPI.Features.Profile
                                                new Error("DeleteUser.Validator", validationResult.ToString()));
                 }
 
-                var user = await userManager.FindByNameAsync(request.Username);
+                var user = await userManager.FindByIdAsync(request.Id.ToString());
                 if (user == null)
                 {
                     return Result.Failure<Result>(
@@ -74,25 +73,25 @@ namespace OQS.CoreWebAPI.Features.Profile
     }
 }
 
-public class DeleteUserEndpoint : ICarterModule
+
+public class DeleteAccountEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapDelete("api/profile/delete_user", async (HttpContext context, String username,  ISender sender) =>
+        app.MapDelete("api/profile/{id}/delete_account", async (HttpContext context, Guid id, ISender sender) =>
         {
             var jwt = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var command = new OQS.CoreWebAPI.Features.Profile.DeleteUser.Command
+            var command = new OQS.CoreWebAPI.Features.Profile.DeleteAccount.Command
             {
-                Jwt = jwt,
-                Username = username
+                Id = id,
+                Jwt = jwt
             };
-
             var result = await sender.Send(command);
-            if(result.IsSuccess)
+            if (result.IsFailure)
             {
-                return Results.Ok( new { message = "User deleted successfully!" });
+                return Results.NotFound(result.Error);
             }
-            return Results.Ok(new { message = result.Error.Message });
+            return Results.Ok(result.Value);
         });
     }
 }

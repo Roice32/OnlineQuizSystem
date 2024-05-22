@@ -16,9 +16,14 @@ const UserProfile = () => {
             })
 
             if(response.data != null){
-                const url = `/profile/${response.data}`;
+                localStorage.setItem('userId', response.data.id);
+                localStorage.setItem('role', response.data.role);
+
+                const url = `/profile`; 
                 navigate(url);
-            }
+            } 
+
+
             
         } catch (error) {
             console.error('Failed to fetch username:', error);
