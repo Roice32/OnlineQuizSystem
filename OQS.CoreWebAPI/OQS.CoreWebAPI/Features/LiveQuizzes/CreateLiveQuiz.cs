@@ -66,11 +66,7 @@ public class CreateLiveQuiz
             var quiz = await _context.Quizzes.FindAsync(request.QuizId, cancellationToken);
             var user = await _context.Users.FindAsync(request.UserId, cancellationToken);
             
-            if (quiz == null || user == null)
-            {
-                return Result.Failure<LiveQuizz>(new Error("CreateLiveQuiz.NotFound",
-                    "Quiz or User not found"));
-            }
+        
     
             var liveQuiz = new LiveQuizz
             {
@@ -98,7 +94,7 @@ public class CreateLiveQuizEndPoint : ICarterModule
             var liveQuizCreation = new CreateLiveQuiz.Query(request.QuizId, request.UserId);
             var result = await sender.Send(liveQuizCreation);
                 
-            return result.IsFailure ? (Result)Result.Failure<LiveQuizz>(result.Error) : Result.Success(result.Value.Code);
+            return result.IsFailure ? Result.Failure<String>(result.Error) : Result.Success<String>(result.Value.Code);
         });
     }
 }

@@ -48,27 +48,27 @@ public class CancelLiveQuiz
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (_context == null || _hubContext == null || _validator == null)
-            {
-                throw new ArgumentNullException(nameof(_context), "The context, hubContext or validator cannot be null.");
-            }
+          
 
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
                 return Result.Failure(new Error("CancelLiveQuiz.ValidationFailed", validationResult.ToString()));
             }
-
             var liveQuiz = await GetLiveQuiz(request, cancellationToken);
             if (liveQuiz == null)
             {
-                return Result.Failure(new Error("CancelLiveQuiz.NotFound", "Live quiz not found"));
+                var error = new Error("CancelLiveQuiz.NotFound", "Live quiz not found");
+                await _hubContext.Clients.Client(request.ConnectionId).SendAsync("Error",error );
+                return Result.Failure(error);
             }
 
             var adminConnection = await liveQuiz.getAdminConnectionId();
             if (adminConnection == null || adminConnection != request.ConnectionId)
             {
-                return Result.Failure(new Error("CancelLiveQuiz.Unauthorized", "User is not the admin"));
+                var error=new Error("CancelLiveQuiz.Unauthorized", "User is not the admin");
+                await _hubContext.Clients.Client(request.ConnectionId).SendAsync("Error", error);
+                return Result.Failure(error);
             }
 
             await NotifyClients(liveQuiz.Code);
@@ -88,16 +88,13 @@ public class CancelLiveQuiz
 
         private async Task NotifyClients(string groupCode)
         {
-            if (_hubContext.Clients == null || _hubContext.Clients.Group == null)
-            {
-                throw new ArgumentNullException(nameof(_hubContext.Clients), "The Clients or Group property of hubContext cannot be null.");
-            }
-
-            await _hubContext.Clients.Group(groupCode).SendAsync("LiveQuizCanceled", "The live quiz has been canceled by the admin");
+            await _hubContext.Clients.Group(groupCode).SendAsync("QuizCanceled", "The live quiz has been canceled by the admin");
         }
 
         private async Task RemoveLiveQuiz(LiveQuizz liveQuiz, CancellationToken cancellationToken)
         {
+            var connections = liveQuiz.Connections.ToList();
+            _context.UserConnections.RemoveRange(connections);
             _context.LiveQuizzes.Remove(liveQuiz);
             await _context.SaveChangesAsync(cancellationToken);
         }

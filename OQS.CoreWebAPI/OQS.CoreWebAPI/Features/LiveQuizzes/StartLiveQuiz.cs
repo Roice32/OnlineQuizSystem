@@ -81,14 +81,19 @@ public class StartLiveQuiz
                 .Where(q=>q.LiveQuizz.Code==liveQuiz.Code).ToListAsync();
             foreach (var connection in connections)
             {
-                    var command = new CreateActiveQuiz.QuizCreation(liveQuiz.Quiz.Id, connection.User.Id);
-                var task = _sender.Send(command)
-                    .ContinueWith(resultTask => 
-                        _hubContext.Clients.Client(connection.ConnectionId).SendAsync("QuizStarted", Result.Success<Guid>(resultTask.Result.Value.Id)));
-                tasks.Add(task);
+                if(connection.ConnectionId!=request.connectionID)
+                 tasks.Add(NotifyClients(connection));
             }
             await Task.WhenAll(tasks);
+            await _hubContext.Clients.Client(request.connectionID).SendAsync("QuizStartedAdmin", Result.Success<Guid>(liveQuiz.Quiz.Id));
             return Result.Success("Quiz Started Successfully");
         }
+        private async Task NotifyClients(UserConnection connection)
+        {
+            var result = await _sender.Send(new CreateActiveQuiz.QuizCreation(connection.LiveQuizz.Quiz.Id, connection.UserId));
+            await _hubContext.Clients.Client(connection.ConnectionId).SendAsync("QuizStarted", Result.Success<Guid>(result.Value.Id));
+        }
     }
+    
+   
 }
