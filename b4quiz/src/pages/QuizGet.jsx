@@ -34,27 +34,31 @@ function FormGetId() {
     };
 
     return (
-        <div>
+        <div className="min-h-screen">
             <Navbar />
-            <div className="flex items-center flex-col ">
-
-                <form onSubmit={handleSubmit} >
-                    <div className="flex flex-col items-center justify-center">
-                        <label>
-                            <input
-                                type="text"
-                                value={quizID}
-                                onChange={handleChange} 
-                                onKeyDown={handleKeyDown} 
-                            />
+            <div className="flex flex-col items-center justify-center py-10">
+                <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="quizID">
+                            Quiz ID
                         </label>
-                        <span>
-                            <button className="mt-5 text-white border rounded-3 rounded w-10" type="submit">OK</button>
-                        </span>
-                    </div> 
+                        <input
+                            id="quizID"
+                            type="text"
+                            value={quizID}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            OK
+                        </button>
+                    </div>
                 </form>
 
-                {showInfo && <ShowInfo quizID={quizID} />}
+                {showInfo && <div className="mt-10 w-full max-w-md"><ShowInfo quizID={quizID} /></div>}
             </div>
         </div>
     );
