@@ -11,7 +11,7 @@ using Xunit;
 using FluentAssertions;
 
 
-namespace QQS.CoreWebAPI.Tests
+namespace OQS.CoreWebAPI.Tests
 {
     public class CreateTagTest : ApplicationContextForTesting
     {
