@@ -9,17 +9,9 @@ public static class SeedLiveQuizzesExtension
 {
     public static void SeedLiveQuizzes(this ApplicationDBContext context)
     {
-        if(context.LiveQuizzes.Any(q=>q.Code == "pv00SE" || q.Code == "xxAwXD"))
-        {
-            var q1 = context.LiveQuizzes.Include(q => q.Connections).First(q => q.Code == "pv00SE");
-            q1.Connections.Clear();
-            context.UserConnections.RemoveRange(q1.Connections);
-            var q2 = context.LiveQuizzes.Include(q=>q.Connections).First(q => q.Code == "xxAwXD");
-            q2.Connections.Clear();
-            context.UserConnections.RemoveRange(q2.Connections);
-            context.SaveChanges();
-            return;
-        }
+        var liveQuizzes = context.LiveQuizzes.ToList();
+        context.LiveQuizzes.RemoveRange(liveQuizzes);
+        context.SaveChanges();
         var quiz1 = new LiveQuizz()
         {
             // Code = LiveQuizCode.Generate(),

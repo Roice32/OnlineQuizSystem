@@ -22,7 +22,6 @@ public class LiveQuizzesHub: Hub
     {
         var command = new JoinLiveQuiz.ConnectionCommand(conn.UserId, conn.Code, Context.ConnectionId);
         var result = await _sender.Send(command);
-      
     }
 
     public async Task StartQuiz()
@@ -30,17 +29,18 @@ public class LiveQuizzesHub: Hub
         var command = new StartLiveQuiz.StartQuizCommand(Context.ConnectionId);
         var result = await _sender.Send(command);
     }
-    public async Task CancelQuiz(CancelLiveQuizRequest request)
+    public async Task CancelQuiz()
     {
         var command = new CancelLiveQuiz.Command(Context.ConnectionId);
         var result = await _sender.Send(command);
-        if (result.IsSuccess)
-        {
-            await Clients.Group(request.Code).SendAsync("LiveQuizCanceled", "The live quiz has been canceled by the admin");
-        }
-        else
-        {
-            await Clients.Caller.SendAsync("Error", result.Error);
-        }
+        
     }
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        var command = new DisconnectClient.DisconnectClientCommand(Context.ConnectionId);
+        var result = await _sender.Send(command);
+        base.OnDisconnectedAsync(exception);
+    }
+    
+    
 }
