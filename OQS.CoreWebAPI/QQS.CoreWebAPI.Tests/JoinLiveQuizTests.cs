@@ -1,16 +1,6 @@
-
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using OQS.CoreWebAPI.Contracts.LiveQuizzes;
-using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Extensions;
-using OQS.CoreWebAPI.Features.LiveQuizzes;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
 using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest;

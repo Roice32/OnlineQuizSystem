@@ -3,7 +3,6 @@ using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Extensions;
 using OQS.CoreWebAPI.Features.LiveQuizzes;

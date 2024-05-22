@@ -1,5 +1,3 @@
-using OQS.CoreWebAPI.Shared;
-
 namespace OQS.CoreWebAPI.Entities;
 
 public class  LiveQuizz

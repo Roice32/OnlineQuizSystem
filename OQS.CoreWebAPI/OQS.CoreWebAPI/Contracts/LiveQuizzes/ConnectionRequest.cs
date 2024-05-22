@@ -1,6 +1,3 @@
-using MediatR;
-using OQS.CoreWebAPI.Shared;
-
 namespace OQS.CoreWebAPI.Contracts.LiveQuizzes;
 
 public class ConnectionRequest 

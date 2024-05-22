@@ -1,11 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using OQS.CoreWebAPI.Contracts;
-using OQS.CoreWebAPI.Entities.ActiveQuiz;
-using OQS.CoreWebAPI.Features;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;

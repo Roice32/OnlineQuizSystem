@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Shared;

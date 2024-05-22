@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 

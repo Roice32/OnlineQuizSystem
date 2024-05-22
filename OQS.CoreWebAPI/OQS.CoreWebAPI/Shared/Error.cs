@@ -1,6 +1,3 @@
-using System.Net;
-using System.Runtime.InteropServices.JavaScript;
-
 namespace OQS.CoreWebAPI.Shared;
 
 public record Error(string Code, string Message)

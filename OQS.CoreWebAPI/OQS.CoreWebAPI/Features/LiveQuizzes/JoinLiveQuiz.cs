@@ -1,13 +1,9 @@
 using FluentValidation;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.LiveQuizzes

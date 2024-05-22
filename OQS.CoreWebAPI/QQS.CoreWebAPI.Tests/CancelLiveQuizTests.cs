@@ -4,7 +4,6 @@ using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.LiveQuizzes;
 using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Shared;
