@@ -1,6 +1,6 @@
 import './App.css'
 import React from 'react'
-import QuizCreate from './pages/QuizCreate'
+import QuizCreate from './pages/QuizCreate/QuizCreate'
 import QuizCreateFoo from './pages/QuizCreateFoo'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace QQS.CoreWebAPI.Tests
+namespace OQS.CoreWebAPI.Tests
 {
     public class GetTagTest : ApplicationContextForTesting
     
