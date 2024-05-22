@@ -333,18 +333,6 @@ function QuestionComponent({ question, setQuiz, quiz }) {
                           return {
                             ...q,
                             choices: newOptionsWrittenAnswer,
-                          }
-                        }
-                        return q
-                      }),
-                    })
-
-                    setQuiz({
-                      ...quiz,
-                      questions: quiz.questions.map((q) => {
-                        if (q.id === question.id) {
-                          return {
-                            ...q,
                             writtenAcceptedAnswers: newOptionsWrittenAnswer,
                           }
                         }
