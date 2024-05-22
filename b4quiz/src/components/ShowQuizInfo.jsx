@@ -26,27 +26,33 @@ function ShowInfo({ quizID }) {
     }, [quizID]);
 
     return (
-        <>
-            {error ? <p className='text-white'>{error}</p> : null}
+        <div className="container mx-auto p-6">
+            {error ? (
+                <p className="text-red-500 text-center">{error}</p>
+            ) : null}
             {quizData && !error && (
-                <div className="text-white mt-20">
+                <div className="bg-gray-800 p-8 rounded-lg shadow-md text-white mt-10">
                     {Object.entries(quizData).map(([key, value]) => (
-                        <div className='mt-5' key={key}>
-                            <div className="font-bold capitalize">
+                        <div className="mt-5" key={key}>
+                            <div className="font-bold text-lg capitalize mb-2">
                                 {key}:
-                            </div> 
+                            </div>
                             {key === 'imageUrl' ? (
-                                <div>
-                                    <img src={value} alt="Quiz Image" style={{ width: '500px', height: '200px', cursor: 'default' }} />
+                                <div className="flex justify-center">
+                                    <img src={value} alt="Quiz Image" className="rounded-lg shadow-lg w-96 h-48 object-cover" />
                                 </div>
                             ) : (
-                                typeof value === 'object' ? <pre>{JSON.stringify(value, null, 2)}</pre> : value
+                                typeof value === 'object' ? (
+                                    <pre className="bg-gray-700 p-4 rounded-lg">{JSON.stringify(value, null, 2)}</pre>
+                                ) : (
+                                    <p className="text-base">{value}</p>
+                                )
                             )}
                         </div>
                     ))}
                 </div>
             )}
-        </>
+        </div>
     );
 }
 
