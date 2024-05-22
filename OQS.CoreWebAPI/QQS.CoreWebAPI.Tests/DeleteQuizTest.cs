@@ -11,6 +11,7 @@ namespace QQS.CoreWebAPI.Tests
         [Fact]
         public async Task DeleteQuiz_ReturnsOkStatus()
         {
+
             // Arrange
             HttpRequest request;
            Guid quizId = Guid.Parse("00000000-0000-1000-0004-000000000000");
@@ -21,7 +22,6 @@ namespace QQS.CoreWebAPI.Tests
             // Assert
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK); // Verifică dacă ștergerea a avut succes 
         }
-
 
 
         [Fact]
