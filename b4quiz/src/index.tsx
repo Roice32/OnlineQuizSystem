@@ -4,14 +4,17 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { Theme } from '@radix-ui/themes';
+import '@radix-ui/themes/styles.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <Theme accentColor='teal'>
+      <App />
+    </Theme>
   </React.StrictMode>
     
 );

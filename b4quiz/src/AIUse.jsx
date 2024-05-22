@@ -88,7 +88,7 @@ const AIUse = () => {
             <div>
                 <Navbar />
                 <div className='flex flex-col items-center'>
-                    <h1 className='text-[#DEAE9F] text-4xl font-bold mt-6'>Aish</h1>
+                    <h1 className='text-[#DEAE9F] text-4xl font-bold mt-6'>AI</h1>
                 </div>
             </div>
 
