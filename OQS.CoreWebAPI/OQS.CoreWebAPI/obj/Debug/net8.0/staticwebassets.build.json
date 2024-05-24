@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "ZYFI5erV6O9+proK08CvB0q8ddMj7VHCB26ZdQxh6aA=",
+  "Source": "OQS.CoreWebAPI",
+  "BasePath": "_content/OQS.CoreWebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
