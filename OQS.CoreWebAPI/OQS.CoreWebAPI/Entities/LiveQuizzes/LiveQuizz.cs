@@ -13,7 +13,7 @@ public class  LiveQuizz
         {
             return null;
         }
-        var conn = Connections.FirstOrDefault(c => c.User != null && c.User.Id == CreatedBy.Id);
+        var conn = Connections.FirstOrDefault(c => c.UserId == CreatedBy.Id);
       
         return conn?.ConnectionId;
     }
