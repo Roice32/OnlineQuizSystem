@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Extensions;
 
 namespace OQS.CoreWebAPI.Tests.SetUp
@@ -43,6 +45,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                 });
             });
             Client = Application.CreateClient();
+         
         }
 
         public async ValueTask DisposeAsync()

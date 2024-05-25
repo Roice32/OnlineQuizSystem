@@ -83,7 +83,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
                 }
 
                 
-                if(await roleManager.RoleExistsAsync(UserRole.User))
+                if(!await roleManager.RoleExistsAsync(UserRole.User))
                 {
                     await roleManager.CreateAsync(new IdentityRole(UserRole.User));
                 }

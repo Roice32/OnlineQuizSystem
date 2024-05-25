@@ -90,7 +90,7 @@ namespace OQS.CoreWebAPI.Features.Profile
                 }
 
 
-                if (await roleManager.RoleExistsAsync(UserRole.Admin))
+                if (!await roleManager.RoleExistsAsync(UserRole.Admin))
                 {
                     await roleManager.CreateAsync(new IdentityRole(UserRole.Admin));
                 }
