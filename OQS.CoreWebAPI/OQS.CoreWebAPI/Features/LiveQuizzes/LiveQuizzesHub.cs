@@ -1,10 +1,9 @@
-using System.Diagnostics;
+
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
+
 
 namespace OQS.CoreWebAPI.Features.LiveQuizzes;
 

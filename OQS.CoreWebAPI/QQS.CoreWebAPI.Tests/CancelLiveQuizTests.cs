@@ -4,7 +4,6 @@ using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.LiveQuizzes;
 using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Shared;
@@ -24,7 +23,7 @@ namespace QQS.CoreWebAPI.Tests
 
             using (var dbContext = new ApplicationDBContext(options))
             {
-                var adminUser = new User { Id = Guid.NewGuid(), Name = "Admin", Email = "admin@example.com", Type = UserType.Admin };
+                var adminUser = new User { Id = Guid.NewGuid().ToString(), FirstName = "Admin", Email = "admin@example.com"};
                 var liveQuiz = new LiveQuizz
                 {
                     Code = "ABC123",
@@ -70,8 +69,8 @@ namespace QQS.CoreWebAPI.Tests
 
             using (var dbContext = new ApplicationDBContext(options))
             {
-                var adminUser = new User { Id = Guid.NewGuid(), Name = "Admin", Email = "admin@example.com", Type = UserType.Admin };
-                var nonAdminUser = new User { Id = Guid.NewGuid(), Name = "Non Admin", Email = "nonadmin@example.com", Type = UserType.Member };
+                var adminUser = new User { Id = Guid.NewGuid().ToString(), FirstName = "Admin", Email = "admin@example.com"};
+                var nonAdminUser = new User { Id = Guid.NewGuid().ToString(), FirstName = "Non Admin", Email = "nonadmin@example.com" };
 
                 var liveQuiz = new LiveQuizz
                 {

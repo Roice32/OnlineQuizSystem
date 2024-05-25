@@ -1,20 +1,16 @@
 using FluentValidation;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.Contracts.LiveQuizzes;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.LiveQuizzes
 {
     public class JoinLiveQuiz
     {
-        public record ConnectionCommand(Guid UserId, string Code, string ConnectionId) : IRequest<Result<string>>;
+        public record ConnectionCommand(string UserId, string Code, string ConnectionId) : IRequest<Result<string>>;
 
 
         public class JoinLiveQuizValidator : AbstractValidator<ConnectionCommand>
@@ -35,7 +31,7 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
                     .WithMessage("Invalid Live Quiz Code");
             }
 
-            private async Task<bool> UserExists(Guid userId, CancellationToken cancellationToken)
+            private async Task<bool> UserExists(string userId, CancellationToken cancellationToken)
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
@@ -89,9 +85,9 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
                 await _hubContext.Groups.AddToGroupAsync(request.ConnectionId, request.Code);
                
                 var adminId = await liveQuiz.getAdminConnectionId();
-                await _hubContext.Clients.Client(adminId).SendAsync("UserJoined", ConnectedUser.Name);
+                await _hubContext.Clients.Client(adminId).SendAsync("UserJoined", ConnectedUser.UserName);
                 await _hubContext.Clients.Client(request.ConnectionId).SendAsync("Joined",request.ConnectionId==adminId);
-                return Result.Success<string>($"{ConnectedUser.Name} joined the quiz");
+                return Result.Success<string>($"{ConnectedUser.UserName} joined the quiz");
 
             }
 

@@ -1,6 +1,4 @@
-using Azure.Core;
 using Carter;
-using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
