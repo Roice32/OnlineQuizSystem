@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuestionResults;
@@ -54,7 +53,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                     "QuizSubmission contains answer to question not belonging to this quiz."));
             }
 
-            List<QuestionResultBase> questionsResults = [];
+            List<QuestionResultBase> questionsResults = new List<QuestionResultBase>();
             foreach (var question in questionsFromDb)
             {
                 QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs

@@ -12,7 +12,7 @@ using OQS.CoreWebAPI.Database;
 namespace OQS.CoreWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240521192921_Final-RSM-Database")]
+    [Migration("20240522140937_Final-RSM-Database")]
     partial class FinalRSMDatabase
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace OQS.CoreWebAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -50,7 +50,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultHeader", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuizResultHeader", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -75,7 +75,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("QuizResultHeaders");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.QuestionBase", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Quiz", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.Quiz", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,7 +135,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("Quizzes");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Tag", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,7 +153,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.User", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,9 +178,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.ChoiceQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.ChoiceQuestionResult", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<string>("PseudoDictionaryChoicesResults")
                         .IsRequired()
@@ -189,9 +189,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("ChoiceQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.ReviewNeededQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.ReviewNeededQuestionResult", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<string>("LLMReview")
                         .IsRequired()
@@ -207,9 +207,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("ReviewNeededQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.TrueFalseQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.TrueFalseQuestionResult", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<int>("TrueFalseAnswerResult")
                         .HasColumnType("int");
@@ -217,9 +217,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("TrueFalseQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.WrittenAnswerQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.WrittenAnswerQuestionResult", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<string>("WrittenAnswer")
                         .IsRequired()
@@ -231,9 +231,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("WrittenAnswerQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ChoiceQuestionBase", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.ChoiceQuestionBase", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Temp.QuestionBase");
 
                     b.Property<string>("Choices")
                         .IsRequired()
@@ -242,16 +242,16 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("ChoiceQuestionBase");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ReviewNeededQuestion", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.ReviewNeededQuestion", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Temp.QuestionBase");
 
                     b.HasDiscriminator().HasValue("ReviewNeededQuestion");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.TrueFalseQuestion", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.TrueFalseQuestion", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Temp.QuestionBase");
 
                     b.Property<bool>("TrueFalseAnswer")
                         .HasColumnType("bit");
@@ -259,9 +259,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("TrueFalseQuestion");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.WrittenAnswerQuestion", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.WrittenAnswerQuestion", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Temp.QuestionBase");
 
                     b.Property<string>("WrittenAcceptedAnswers")
                         .IsRequired()
@@ -270,9 +270,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("WrittenAnswerQuestion");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.MultipleChoiceQuestion", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.MultipleChoiceQuestion", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ChoiceQuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Temp.ChoiceQuestionBase");
 
                     b.Property<string>("MultipleChoiceAnswers")
                         .IsRequired()
@@ -281,9 +281,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("MultipleChoiceQuestion");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.SingleChoiceQuestion", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Temp.SingleChoiceQuestion", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ChoiceQuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Temp.ChoiceQuestionBase");
 
                     b.Property<string>("SingleChoiceAnswer")
                         .IsRequired()
