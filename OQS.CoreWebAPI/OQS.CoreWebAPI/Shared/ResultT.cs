@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace OQS.CoreWebAPI.Shared;
 
 public class Result<T> : Result

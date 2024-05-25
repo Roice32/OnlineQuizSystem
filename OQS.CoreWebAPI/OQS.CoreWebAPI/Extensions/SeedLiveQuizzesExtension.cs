@@ -1,7 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Extensions;
 

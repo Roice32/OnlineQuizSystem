@@ -20,7 +20,7 @@ public class CreateLiveQuizTest : ApplicationContextForTesting
         var newLiveQuiz = new CreateLiveQuizRequest()
         {
             QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13b"),
-            UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d")
+            UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d").ToString()
         };
 
         
@@ -40,7 +40,7 @@ public class CreateLiveQuizTest : ApplicationContextForTesting
         var newLiveQuiz = new CreateLiveQuizRequest()
         {
             QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13a"),
-            UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d")
+            UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d").ToString()
         };
     
         
@@ -59,7 +59,7 @@ public class CreateLiveQuizTest : ApplicationContextForTesting
         var newLiveQuiz = new CreateLiveQuizRequest()
         {
             QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13b"),
-            UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4a")
+            UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4a").ToString()
         };
 
 

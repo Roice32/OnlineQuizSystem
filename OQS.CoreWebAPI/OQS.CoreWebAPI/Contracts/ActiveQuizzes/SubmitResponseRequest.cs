@@ -3,7 +3,7 @@ namespace OQS.CoreWebAPI.Contracts;
 
 public class SubmitResponseRequest
 {
-    public Guid UserId { get; set; }
+    public String UserId { get; set; }
     public Guid ActiveQuizId { get; set; }
     public List<Answer> Answers { get; set; }
 }

@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\OQS.CoreWebAPI",
+    "\\OQS.CoreWebAPI\\Feautures",
+    "\\OQS.CoreWebAPI\\Feautures\\Authentication"
+  ],
+  "SelectedNode": "\\OQS.CoreWebAPI\\Feautures\\Authentication\\AuthService.cs",
+  "PreviewInSolutionExplorer": false
+}

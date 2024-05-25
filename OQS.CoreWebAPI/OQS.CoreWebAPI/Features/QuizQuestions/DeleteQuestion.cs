@@ -1,17 +1,10 @@
 ﻿using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.QuizQuestions;
-using OQS.CoreWebAPI.Features.Quizzes;
 using OQS.CoreWebAPI.Shared;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
 
 namespace OQS.CoreWebAPI.Features.QuizQuestions
 {

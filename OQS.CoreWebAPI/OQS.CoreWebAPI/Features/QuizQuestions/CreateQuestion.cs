@@ -1,13 +1,10 @@
 ﻿using Carter;
 using FluentValidation;
-using Mapster;
 using MediatR;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Quizzes;
 using OQS.CoreWebAPI.Shared;
-using System;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Quizzes
 {

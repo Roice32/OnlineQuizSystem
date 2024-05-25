@@ -1,7 +1,5 @@
 ﻿using Carter;
 using OQS.CoreWebAPI.Contracts;
-using OQS.CoreWebAPI.Contracts.CRUD;
-using OQS.CoreWebAPI.Entities.ActiveQuiz;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

@@ -1,16 +1,8 @@
 using Carter;
-using Microsoft.AspNetCore.Routing;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using OQS.CoreWebAPI.Database;
 using Microsoft.EntityFrameworkCore;
-using Carter;
 using OQS.CoreWebAPI.Contracts;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Features.Tags;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.Tags

@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using OQS.CoreWebAPI.Contracts.CRUD;
-
 namespace OQS.CoreWebAPI.Entities.ActiveQuiz;
 
 public class ActiveQuiz

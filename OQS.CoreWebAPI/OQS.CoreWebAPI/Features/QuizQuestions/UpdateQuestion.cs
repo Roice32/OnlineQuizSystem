@@ -9,8 +9,6 @@ using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.QuizQuestions;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Entities;
-using System;
-using System.Collections.Generic;
 using OQS.CoreWebAPI.Contracts.CRUD;
 
 namespace OQS.CoreWebAPI.Features.QuizQuestions

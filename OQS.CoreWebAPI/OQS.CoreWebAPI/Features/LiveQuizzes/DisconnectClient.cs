@@ -72,7 +72,7 @@ public class DisconnectClient
                     else
                     {
                         await _hubContext.Groups.RemoveFromGroupAsync(request.ConnectionId, connection.LiveQuizz.Code);
-                        await _hubContext.Clients.Client(adminConnectionId).SendAsync("UserLeft", connection.User.Name);
+                        await _hubContext.Clients.Client(adminConnectionId).SendAsync("UserLeft", connection.User.UserName);
                         _context.UserConnections.Remove(connection);
                         await _context.SaveChangesAsync();
                     }

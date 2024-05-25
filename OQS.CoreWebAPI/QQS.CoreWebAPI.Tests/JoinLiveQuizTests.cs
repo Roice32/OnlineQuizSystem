@@ -1,16 +1,6 @@
-
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using OQS.CoreWebAPI.Contracts.LiveQuizzes;
-using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Extensions;
-using OQS.CoreWebAPI.Features.LiveQuizzes;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
 using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest;
@@ -51,7 +41,7 @@ namespace QQS.CoreWebAPI.Tests
 
             var connectionRequest = new ConnectionRequest()
             {
-                UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"), // Use a random user ID
+                UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d").ToString(), // Use a random user ID
                 Code = "pv00SE" // Use a test code
             };
 
