@@ -10,7 +10,7 @@ namespace OQS.CoreWebAPI.Features;
 
 public class CreateActiveQuiz
 {
-    public record QuizCreation(Guid QuizId, Guid TakenBy) : IRequest <Result<ActiveQuiz>>;
+    public record QuizCreation(Guid QuizId, string TakenBy) : IRequest <Result<ActiveQuiz>>;
    
         private readonly ApplicationDBContext _context;
 
@@ -42,7 +42,7 @@ public class CreateActiveQuiz
                 return await context.Quizzes.FindAsync(quizId) != null;
             }
 
-            private async Task<bool> UserExists(Guid takenBy, CancellationToken cancellationToken)
+            private async Task<bool> UserExists(string takenBy, CancellationToken cancellationToken)
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();

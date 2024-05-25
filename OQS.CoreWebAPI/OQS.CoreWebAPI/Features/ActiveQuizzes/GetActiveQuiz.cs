@@ -31,14 +31,14 @@ public class GetActiveQuizById
             .NotEmpty().WithMessage("User ID cookie cannot be empty")
             .MustAsync(async (userIdCookie, cancellation) =>
             {
-                if (!Guid.TryParse(userIdCookie, out var userId))
-                {
-                    return false;
-                }
+                // if (!Guid.TryParse(userIdCookie, out var userId))
+                // {
+                //     return false;
+                // }
                 
                 using var scope = _serviceScopeFactory.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-                return await dbContext.Users.AnyAsync(u => u.Id == userId, cancellation);
+                return await dbContext.Users.AnyAsync(u => u.Id == userIdCookie, cancellation);
             }).WithMessage("Invalid User ID");
 
         RuleFor(x => x.ActiveQuizId)
@@ -57,10 +57,7 @@ public class GetActiveQuizById
         RuleFor(x => new{x.ActiveQuizId, userIdCookie = x.UserIdCookie})
             .MustAsync(async (query, _, cancellation) =>
             {
-                if (!Guid.TryParse(query.UserIdCookie, out var userId))
-                {
-                    return false;
-                }
+                
 
                 using var scope = _serviceScopeFactory.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
@@ -68,7 +65,7 @@ public class GetActiveQuizById
                     .Include(aq => aq.User)
                     .FirstOrDefaultAsync(aq => aq.Id == query.ActiveQuizId, cancellation);
                 
-                return activeQuiz != null && activeQuiz.User.Id == userId;
+                return activeQuiz != null && activeQuiz.User.Id == query.UserIdCookie;
             }).WithMessage("User is not associated with the given active quiz ID");
     }
 }

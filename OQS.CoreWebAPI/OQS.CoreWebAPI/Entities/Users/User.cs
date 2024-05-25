@@ -1,14 +1,13 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace OQS.CoreWebAPI.Entities;
 
 // temporary User class
-public class User
+public class User: IdentityUser
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public UserType Type { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public string Email { get; set; }
-    
-    public List<UserConnection> Connections { get; set; }
-    
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+
+    public List<UserConnection> Connections { get; set; } = new();
+
 }

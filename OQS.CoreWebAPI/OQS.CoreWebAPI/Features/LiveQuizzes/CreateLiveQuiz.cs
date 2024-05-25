@@ -10,7 +10,7 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes;
 
 public class CreateLiveQuiz
 {
-    public record Query(Guid QuizId, Guid UserId) : IRequest <Result<LiveQuizz>>;
+    public record Query(Guid QuizId, string UserId) : IRequest <Result<LiveQuizz>>;
 
     public class Validator : AbstractValidator<Query>
     {
@@ -34,7 +34,7 @@ public class CreateLiveQuiz
             return await context.Quizzes.FindAsync(quizId, cancellationToken) != null;
         }
 
-        private async Task<bool> UserExists(Guid userId, CancellationToken cancellationToken)
+        private async Task<bool> UserExists(string userId, CancellationToken cancellationToken)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();

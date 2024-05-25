@@ -21,7 +21,7 @@ namespace QQS.CoreWebAPI.Tests
 
             var newResponse = new SubmitResponseRequest
             {
-                UserId = userId,
+                UserId = userId.ToString(),
                 ActiveQuizId = activeQuizId,
                 Answers = new List<Answer>
                 {
@@ -52,7 +52,7 @@ namespace QQS.CoreWebAPI.Tests
 
             var newResponse = new SubmitResponseRequest
             {
-                UserId = invalidUserId,
+                UserId = invalidUserId.ToString(),
                 ActiveQuizId = activeQuizId,
                 Answers = new List<Answer>
                 {
@@ -83,7 +83,7 @@ namespace QQS.CoreWebAPI.Tests
 
             var newResponse = new SubmitResponseRequest
             {
-                UserId = userId,
+                UserId = userId.ToString(),
                 ActiveQuizId = activeQuizId,
                 Answers = new List<Answer>
                 {

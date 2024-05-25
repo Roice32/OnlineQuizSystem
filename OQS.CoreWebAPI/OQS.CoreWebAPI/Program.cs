@@ -11,6 +11,8 @@ using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Extensions;
 using OQS.CoreWebAPI.Features.Authentication;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using OQS.CoreWebAPI.Features.LiveQuizzes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,10 +38,6 @@ else
 }
 
 
-var assembly = typeof(Program).Assembly;
-builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
-builder.Services.AddValidatorsFromAssembly(assembly);
-builder.Services.AddCarter();
 
 builder.Services.AddCors(options =>
 {
@@ -52,10 +50,10 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionUser")));
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders();
 
 var assembly = typeof(Program).Assembly;
@@ -83,20 +81,6 @@ builder.Services.AddAuthorization();
 // Pentru trimiterea email-urilor
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-
-// Add configuration for CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:3000")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
-
-
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
@@ -113,8 +97,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowSpecificOrigin");
-
-
 
 
 dbContext.SeedQuizzez();

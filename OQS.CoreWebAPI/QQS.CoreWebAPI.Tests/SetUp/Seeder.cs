@@ -18,20 +18,20 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             {
                 new User
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000001"),
+                    Id = Guid.Parse("00000000-0000-0000-0001-000000000001").ToString(),
                    
                     Email = "email1@email.com"
                     
                 },
                 new User
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000002"),
+                    Id = Guid.Parse("00000000-0000-0000-0001-000000000002").ToString(),
                     
                     Email = "email2@email.com"
                 },
                 new User
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000003"),
+                    Id = Guid.Parse("00000000-0000-0000-0001-000000000003").ToString(),
                  
                     Email = "emai3@email.com"
                 }

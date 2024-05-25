@@ -41,7 +41,7 @@ namespace QQS.CoreWebAPI.Tests
 
             var connectionRequest = new ConnectionRequest()
             {
-                UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d"), // Use a random user ID
+                UserId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d").ToString(), // Use a random user ID
                 Code = "pv00SE" // Use a test code
             };
 

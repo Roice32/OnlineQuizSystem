@@ -4,6 +4,9 @@ obj
 ./**/obj
 ./**/bin
 
+/ignore dlls
+../packages/*
+
 ../.idea/*
 ../.vs/*
 
