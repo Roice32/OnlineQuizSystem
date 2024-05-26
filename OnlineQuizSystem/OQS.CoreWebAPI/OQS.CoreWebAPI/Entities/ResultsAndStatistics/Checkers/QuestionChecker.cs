@@ -208,7 +208,8 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                     new ChatMessage(ChatMessageRole.User, "Question: " + question.Text +
                         "\nAnswer: " + answer +
                         "\nMax Possible Score: " + question.AllocatedPoints +
-                        "\nReturn review & grade as JSON.")
+                        "\nPlease review and grade the answer based on the provided criteria, and return the response in the following JSON format: " +
+                        "{ \"review\" : \"textReview\", \"grade\" : floatValueBetween0AndMaxPossibleScore }")
                 },
                 MaxTokens = 100,
                 Temperature = 0.5f,
