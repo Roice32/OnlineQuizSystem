@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace OQS.CoreWebAPI.Entities;
 
 public abstract class QuestionBase

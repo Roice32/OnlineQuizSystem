@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;

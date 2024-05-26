@@ -2,14 +2,9 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.Quizzes;
 using OQS.CoreWebAPI.Shared;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Quizzes
 {

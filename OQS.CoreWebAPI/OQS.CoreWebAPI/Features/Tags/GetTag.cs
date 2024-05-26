@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.Tags;
 using OQS.CoreWebAPI.Shared;
-using FluentValidation;
-using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {

@@ -1,10 +1,6 @@
 ﻿using Carter;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.Entities;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Quizzes;
 public class SubmitResponse : ICarterModule

@@ -5,12 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Features.Tags;
 using OQS.CoreWebAPI.Shared;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {

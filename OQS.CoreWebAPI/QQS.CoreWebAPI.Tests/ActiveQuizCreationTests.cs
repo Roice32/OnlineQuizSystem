@@ -1,10 +1,3 @@
-using System.Net;
-using System.Net.Http.Json;
-using FluentAssertions;
-using OQS.CoreWebAPI.Contracts;
-using OQS.CoreWebAPI.Tests.SetUp;
-using Xunit;
-
 namespace QQS.CoreWebAPI.Tests;
 
 /*public class ActiveQuizCreationTests : ApplicationContextForTesting

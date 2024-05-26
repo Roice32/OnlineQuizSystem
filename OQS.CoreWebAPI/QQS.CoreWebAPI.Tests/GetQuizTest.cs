@@ -1,9 +1,5 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Net;
 using FluentAssertions;
-using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
 
