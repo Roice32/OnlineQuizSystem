@@ -1,4 +1,5 @@
 ﻿using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
+using OQS.CoreWebAPI.Features.ResultsAndStatistics;
 using OQS.CoreWebAPI.Temp;
 
 namespace OQS.CoreWebAPI.Extensions
@@ -25,6 +26,20 @@ namespace OQS.CoreWebAPI.Extensions
             }
 
             services.AddSingleton<QuestionChecker>();
+        }
+
+        public static void AddEmailSenderStrategiesFromAssembly(IServiceCollection services)
+        {
+            var assembly = typeof(Program).Assembly;
+            var senderTypes = assembly.GetTypes()
+                                       .Where(t => typeof(IQuizResultEmailSenderStrategy).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+
+            foreach (var senderType in senderTypes)
+            {
+                services.AddScoped(typeof(IQuizResultEmailSenderStrategy), senderType);
+            }
+
+            services.AddScoped<SendQuizResultViaEmail.Handler>();
         }
     }
 }

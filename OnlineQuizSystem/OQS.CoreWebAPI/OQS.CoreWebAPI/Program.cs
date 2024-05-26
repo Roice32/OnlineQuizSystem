@@ -33,6 +33,9 @@ builder.Services.AddCors(options =>
 DependencyInjector.AddQuestionCheckersFromAssembly(builder.Services);
 var serviceProvider = builder.Services.BuildServiceProvider();
 serviceProvider.GetRequiredService<QuestionChecker>();
+DependencyInjector.AddEmailSenderStrategiesFromAssembly(builder.Services);
+
+
 
 var app = builder.Build();
 
