@@ -25,7 +25,7 @@ export interface QuizResultHeader {
   }
   
   export interface QuizResults {
-    quizResultHeaders: QuizResultHeader;
+    quizResultHeaders?: QuizResultHeader;
     quizResultBody: QuizResultBody;
   }
   
