@@ -5,7 +5,7 @@ namespace OQS.CoreWebAPI.Contracts.ResultsAndStatistics
 {
     public class FetchQuizResultBodyResponse
     {
-        public List<QuestionBase> Questions { get; set; } = new();
-        public List<QuestionResultBase> QuestionResults { get; set; } = new();
+        public List<QuestionResponse> Questions { get; set; } = new();
+        public List<QuestionResultResponse> QuestionResults { get; set; } = new();
     }
 }

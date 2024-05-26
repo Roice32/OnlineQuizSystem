@@ -4,6 +4,7 @@ using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Temp;
+using OQS.CoreWebAPI.Contracts;
 
 namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
 {
@@ -38,10 +39,13 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 
+            List<QuestionResponse> questionResponses = questions.Select(q => new QuestionResponse(q)).ToList();
+            List<QuestionResultResponse> questionResultResponses = questionResults.Select(qr => new QuestionResultResponse(qr)).ToList();
+
             return new FetchQuizResultBodyResponse
             {
-                Questions = questions,
-                QuestionResults = questionResults
+                Questions = questionResponses,
+                QuestionResults = questionResultResponses
             };
         }
     }
