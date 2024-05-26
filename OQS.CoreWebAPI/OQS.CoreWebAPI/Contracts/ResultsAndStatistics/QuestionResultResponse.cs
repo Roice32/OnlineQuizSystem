@@ -18,6 +18,8 @@ namespace OQS.CoreWebAPI.Contracts.ResultsAndStatistics
         public string? LLMReview { get; set; } = string.Empty;
         public AnswerResult? ReviewNeededResult { get; set; }
 
+        public QuestionResultResponse() { }
+
         public QuestionResultResponse(QuestionResultBase questionResult)
         {
             UserId = questionResult.UserId;

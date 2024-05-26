@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Temp;
+using OQS.CoreWebAPI.Contracts;
+using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 
 namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics
 {
@@ -11,8 +13,10 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(QuestionBase) ||
+                objectType == typeof(QuestionResponse) ||
                 objectType == typeof(QuestionAnswerPairBase) ||
-                objectType == typeof(QuestionResultBase);
+                objectType == typeof(QuestionResultBase) ||
+                objectType == typeof(QuestionResultResponse);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -25,6 +29,14 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics
             else if (objectType == typeof(QuestionResultBase))
             {
                 return DeserializeQuestionResult(jo);
+            }
+            else if (objectType == typeof(QuestionResponse))
+            {
+                return DeserializeQuestionResponse(jo);
+            }
+            else if (objectType == typeof(QuestionResultResponse))
+            {
+                return DeserializeQuestionResultResponse(jo);
             }
             return DeserializeQuestion(jo);
         }
@@ -50,6 +62,11 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics
             return jo.ToObject<ReviewNeededQuestion>();
         }
 
+        public QuestionResponse DeserializeQuestionResponse(JObject jo)
+        {
+            return jo.ToObject<QuestionResponse>();
+        }
+
         public QuestionAnswerPairBase DeserializeQuestionAnswerPair(JObject jo)
         {
             if (jo["TrueFalseAnswer"] != null)
@@ -69,6 +86,11 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics
                 return jo.ToObject<WrittenQAPair>();
             }
             return null;
+        }
+
+        public QuestionResultResponse DeserializeQuestionResultResponse(JObject jo)
+        {
+            return jo.ToObject<QuestionResultResponse>();
         }
 
         public QuestionResultBase DeserializeQuestionResult(JObject jo)

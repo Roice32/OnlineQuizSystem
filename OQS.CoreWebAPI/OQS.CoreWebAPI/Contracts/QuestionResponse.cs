@@ -15,6 +15,22 @@ namespace OQS.CoreWebAPI.Contracts
         public string? SingleChoiceAnswer { get; set; }
         public List<string>? WrittenAcceptedAnswers { get; set; }
 
+        public QuestionResponse() { }
+
+        public QuestionResponse(Guid id, Guid quizId, QuestionType type, string text, int allocatedPoints, List<string>? choices, bool? trueFalseAnswer, List<string>? multipleChoiceAnswers, string? singleChoiceAnswer, List<string>? writtenAcceptedAnswers)
+        {
+            Id = id;
+            QuizId = quizId;
+            Type = type;
+            Text = text;
+            AllocatedPoints = allocatedPoints;
+            Choices = choices;
+            TrueFalseAnswer = trueFalseAnswer;
+            MultipleChoiceAnswers = multipleChoiceAnswers;
+            SingleChoiceAnswer = singleChoiceAnswer;
+            WrittenAcceptedAnswers = writtenAcceptedAnswers;
+        }
+
         public QuestionResponse(QuestionBase question)
         {
             Id = question.Id;
