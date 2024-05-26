@@ -43,6 +43,7 @@ public static class GetQuizzes
                 {
                     Id = quiz.Id,
                     Name = quiz.Name,
+                    ImageUrl = quiz.ImageUrl,
                     Description = quiz.Description,
                     CreatedAt = quiz.CreatedAt,
                 }))
