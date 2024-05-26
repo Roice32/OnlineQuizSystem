@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const [faqs, setFaqs] = useState([
@@ -9,6 +10,40 @@ const HomePage = () => {
 
   const [newQuestion, setNewQuestion] = useState('');
   const [newAnswer, setNewAnswer] = useState('');
+  const [quizzes, setQuizzes] = useState([]);
+  const [quizQuestionsCount, setQuizQuestionsCount] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('http://localhost:5276/api/quizzes?offset=0&limit=8')
+      .then(response => response.json())
+      .then(async data => {
+        const quizzes = data.quizzes;
+        setQuizzes(quizzes);
+
+        const counts = await Promise.all(quizzes.map(async (quiz) => {
+          const response = await fetch(`http://localhost:5276/api/quizzes/${quiz.id}/questions`);
+          const result = await response.json();
+          return { quizId: quiz.id, count: result.value.length };
+        }));
+
+        const countsMap = counts.reduce((acc, { quizId, count }) => {
+          acc[quizId] = count;
+          return acc;
+        }, {});
+
+        setQuizQuestionsCount(countsMap);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching quizzes:', error);
+        setError(error);
+        setLoading(false);
+      });
+  }, []);
 
   const handleAddFaq = () => {
     if (newQuestion.trim() && newAnswer.trim()) {
@@ -20,6 +55,10 @@ const HomePage = () => {
 
   const handleDeleteFaq = (indexToDelete) => {
     setFaqs(faqs.filter((_, index) => index !== indexToDelete));
+  };
+
+  const handleTakeQuiz = (quizId) => {
+    navigate(`/quiz/${quizId}`);
   };
 
   return (
@@ -77,120 +116,41 @@ const HomePage = () => {
             >
               Add
             </button>
-            </div>
+          </div>
         </div>
       </div>
-      
+
       <div className="flex justify-start px-6 mt-10">
         <h2 className="text-2xl text-[#1c4e4f] font-semibold">Take a quiz</h2>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 mt-10 px-6">
-        <div className="bg-[#436e6f] text-[#f7ebe7] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz1.jpg" alt="Quiz 1" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">Math Quiz</h3>
-            <p>Test your math skills with this challenging quiz.</p>
-            <div className="flex justify-between mt-2">
-            <button className="bg-[#efd7cf] text-[#1c4e4f] px-4 py-2 rounded-md hover:bg-[#1c4e4f] hover:text-[#f7ebe7]">
-                Take Quiz
-              </button>
-              <p>10 Questions</p>
-            </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-10 px-6">
+        {loading ? (
+          <div className="col-span-full flex justify-center mt-10">
+            <div className="spinner"></div>
           </div>
-        </div>
-        <div className="bg-[#efd7cf] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz2.jpg" alt="Quiz 2" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">Geography Quiz</h3>
-            <p>Explore your knowledge of the world with this geography quiz.</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-[#436e6f] text-[#f7ebe7] px-4 py-2 rounded-md hover:bg-[#efd7cf] hover:text-[#1c4e4f]">
-                Take Quiz
-              </button>
-              <p>19 Questions</p>
+        ) : (
+          quizzes.map((quiz, index) => (
+            <div key={quiz.id} className={`p-4 rounded-md shadow-md bg-opacity-50 ${
+              index % 2 === 0 ? 'bg-[#436e6f] text-[#f7ebe7]' : 'bg-[#efd7cf]'
+            }`}>
+              <img src={quiz.imageUrl} alt={quiz.imageUrl} className="w-full h-32 object-cover rounded-t-md" />
+              <div className="p-2">
+                <h3 className="font-semibold">{quiz.name}</h3>
+                <p>{quiz.description}</p>
+                <div className="flex justify-between mt-2">
+                  <button onClick={() => handleTakeQuiz(quiz.id)}
+                  className={`${
+              index % 2 === 0 ? 'bg-[#efd7cf] text-[#1c4e4f]' : ' bg-[#436e6f] text-[#f7ebe7]'
+            } px-4 py-2 rounded-md ${index % 2 === 0 ? 'hover:bg-[#CBC2BB] hover:text-[#1c4e4f]' : 'hover:bg-[#1c4e4f] hover:text-[#f7ebe7]'}`}>
+                    Take Quiz
+                  </button>
+                  <p>{quizQuestionsCount[quiz.id] || 0} Questions</p> {/* Afișează numărul de întrebări */}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="bg-[#436e6f] text-[#f7ebe7] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz3.jpg" alt="Quiz 1" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">History Quiz</h3>
-            <p>This quiz covers a wide range of topics in world history, from ancient civilizations to modern events. It tests your understanding of historical figures, significant events, and the evolution of societies across the globe.</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-[#efd7cf] text-[#1c4e4f] px-4 py-2 rounded-md hover:bg-[#1c4e4f] hover:text-[#f7ebe7]">
-                Take Quiz
-              </button>
-              <p>10 Questions</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#efd7cf] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz4.jpg" alt="Quiz 2" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">Music Quiz: Tune in to Your Musical Knowledge</h3>
-            <p> This quiz covers a wide range of musical genres, artists, and historical periods. It challenges you to identify songs, instruments, musical terms, and the influence of music on various cultures and societies.s</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-[#436e6f] text-[#f7ebe7] px-4 py-2 rounded-md hover:bg-[#efd7cf] hover:text-[#1c4e4f]">
-                Take Quiz
-              </button>
-              <p>15 Questions</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#efd7cf] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz5.jpg" alt="Quiz 2" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">Sports Quiz: Prove Your Athletic Expertise</h3>
-            <p> This quiz tests your knowledge of different sports, teams, athletes, and sporting events. It covers a variety of sports, from popular team games to individual disciplines, and aims to test your understanding of sports history, rules, and accomplishments.</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-[#436e6f] text-[#f7ebe7] px-4 py-2 rounded-md hover:bg-[#efd7cf] hover:text-[#1c4e4f]">
-                Take Quiz
-              </button>
-              <p>17 Questions</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#436e6f] text-[#f7ebe7] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz6.jpg" alt="Quiz 1" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">Literature Quiz: Bookworm's Delight</h3>
-            <p>This quiz focuses on literature, testing your familiarity with classic and contemporary novels, authors, literary movements, and literary devices. It's designed to engage avid readers and literature enthusiasts.
-</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-[#efd7cf] text-[#1c4e4f] px-4 py-2 rounded-md hover:bg-[#1c4e4f] hover:text-[#f7ebe7]">
-                Take Quiz
-              </button>
-              <p>8 Questions</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#efd7cf] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz7.jpg" alt="Quiz 2" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">Computer Science Quiz: Byte-Sized Challenge</h3>
-            <p> This quiz delves into the fundamental concepts of computer science, including data structures, algorithms, programming languages, computer hardware, and software development principles. Test your problem-solving skills and technical knowledge.</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-[#436e6f] text-[#f7ebe7] px-4 py-2 rounded-md hover:bg-[#efd7cf] hover:text-[#1c4e4f]">
-                Take Quiz
-              </button>
-              <p>15 Questions</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#436e6f] text-[#f7ebe7] bg-opacity-50 p-4 rounded-md shadow-md">
-          <img src="quiz8.jpg" alt="Quiz 1" className="w-full h-32 object-cover rounded-t-md" />
-          <div className="p-2">
-            <h3 className="font-semibold">Psychology Quiz: Unravel the Mind</h3>
-            <p>Explore the fascinating field of psychology with this quiz. It covers a range of topics, including human behavior, cognitive processes, mental disorders, developmental stages, and prominent psychological theories and experiments.</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-[#efd7cf] text-[#1c4e4f] px-4 py-2 rounded-md hover:bg-[#1c4e4f] hover:text-[#f7ebe7]">
-                Take Quiz
-              </button>
-              <p>12 Questions</p>
-            </div>
-          </div>
-        </div>
+          ))
+        )}
       </div>
     </div>
   );

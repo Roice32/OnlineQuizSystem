@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 type Quiz = {
     id: string;
@@ -23,16 +26,28 @@ type QuizResponse = {
     quizzes: Quiz[];
 };
 
-function QuizzesList(props: { quizzes: Quiz[] }) {
-    console.log(props.quizzes)
+function QuizzesList(props: { quizzes: Quiz[], onDelete: (id: string) => void }) {
     return (
-        <ul className="list-none space-y-4">
+        <div className="space-y-4">
             {props.quizzes.map((quiz) => (
-                <li key={quiz.id} className="p-4 bg-[#EEEFEE] rounded shadow">
-                    {quiz.name}
-                </li>
+                <div key={quiz.id} className="flex items-center">
+                    <li className="flex-1 p-4 bg-[#EEEFEE] rounded shadow list-none">
+                        {quiz.name}
+                    </li>
+                    <Link to={`http://localhost:3000/create-quiz`}>
+                        <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center ml-4 rounded">
+                            <FontAwesomeIcon icon={faEdit} />
+                        </div>
+                    </Link>
+                    <div
+                        className="w-8 h-8 bg-red-500 text-white flex items-center justify-center ml-2 rounded cursor-pointer"
+                        onClick={() => props.onDelete(quiz.id)}
+                    >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                    </div>
+                </div>
             ))}
-        </ul>
+        </div>
     );
 }
 
@@ -93,13 +108,42 @@ function useQuizzes(limit: number, offset: number) {
             .finally(() => setIsLoading(false));
     }, [limit, offset]);
 
-    return { data, error, isLoading };
+    const reloadQuizzes = () => {
+        setIsLoading(true);
+        fetch(`http://localhost:5276/api/quizzes?offset=${offset}&limit=${limit}`)
+            .then((response) => response.json() as Promise<QuizResponse>)
+            .then((data) => setData(data))
+            .catch((error) => setError(error))
+            .finally(() => setIsLoading(false));
+    };
+
+    return { data, error, isLoading, reloadQuizzes };
 }
 
 const QuizzesPage = () => {
     const [limit, setLimit] = useState(10);
     const [offset, setOffset] = useState(0);
-    const { data, error, isLoading } = useQuizzes(limit, offset);
+    const { data, error, isLoading, reloadQuizzes } = useQuizzes(limit, offset);
+
+    const handleDelete = (id: string) => {
+        fetch(`http://localhost:5276/api/quizzes/${id}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    // If delete was successful, refetch the quizzes
+                    reloadQuizzes();
+                    // Optionally reset to the first page
+                    setOffset(0);
+                } else {
+                    // Handle error case
+                    console.error('Failed to delete quiz');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting quiz:', error);
+            });
+    };
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -110,7 +154,7 @@ const QuizzesPage = () => {
             <Navbar />
             <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg max-w-[500px] mt-11">
                 <h1 className="text-4xl font-bold mb-4 text-[#376060]">Quizzes</h1>
-                <QuizzesList quizzes={data.quizzes} />
+                <QuizzesList quizzes={data.quizzes} onDelete={handleDelete} />
                 <Pagination
                     offset={data.pagination.offset}
                     limit={data.pagination.limit}

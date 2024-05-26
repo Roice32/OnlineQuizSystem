@@ -17,6 +17,8 @@ import {
 
 import './QuizCreate.css'
 
+import { useNavigate } from 'react-router-dom'
+
 import { useState } from 'react'
 import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons'
 import { v4 as uuid } from 'uuid'
@@ -331,18 +333,6 @@ function QuestionComponent({ question, setQuiz, quiz }) {
                           return {
                             ...q,
                             choices: newOptionsWrittenAnswer,
-                          }
-                        }
-                        return q
-                      }),
-                    })
-
-                    setQuiz({
-                      ...quiz,
-                      questions: quiz.questions.map((q) => {
-                        if (q.id === question.id) {
-                          return {
-                            ...q,
                             writtenAcceptedAnswers: newOptionsWrittenAnswer,
                           }
                         }
@@ -481,6 +471,7 @@ let ErrorMessagesQuizCreateString = [
 
 
 export default function QuizCreate() {
+  const navigate = useNavigate()
   const [quiz, setQuiz] = useState<QuizCreateProps>({ language: 'romanian' })
   const [errorMessages, setErrorMessages] = useState<ErrorMessagesQuizCreate>({})
 
@@ -632,7 +623,8 @@ export default function QuizCreate() {
                       imageUrl: quiz.imageUrl,
                       timeLimitMinutes: quiz.timeLimit,
                       language: quiz.language,
-                      creatorId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                      description: quiz.description,
+                      creatorId: '822c13a0-8872-431e-ad64-00f5249db11f',
                     }
 
                     console.log(quiz)
@@ -644,10 +636,17 @@ export default function QuizCreate() {
                       },
                       body: JSON.stringify(quizRequest),
                     })
-                      .then((response) => response.json())
+                      .then((response) =>
+                        response.json(),
+                      )
                       .then((data) => {
+                        if (typeof data === 'string') {
+                          return navigate(data.substring(4, data.length))
+                        }
+
+                        console.log(data)
                         if (data.code !== 200) {
-                          let errorMessagesStrings = data.message.split('\n')
+                          let errorMessagesStrings = data?.message.split('\n')
                           let errorMessages = {}
                           for (let error of errorMessagesStrings) {
                             if (error.toLowerCase().includes('name')) {
@@ -668,9 +667,8 @@ export default function QuizCreate() {
                           }
 
                           setErrorMessages({ ...errorMessages })
-                        } else {
-
                         }
+
                         console.log('Success:', data)
                       })
                       .catch((error) => {
