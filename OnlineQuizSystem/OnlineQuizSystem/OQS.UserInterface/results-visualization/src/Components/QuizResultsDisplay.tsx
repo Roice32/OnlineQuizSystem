@@ -1,6 +1,6 @@
 import axios from "axios";
 import { QuestionType } from "../utils/types/questions";
-import { QuizResults } from "../utils/types/results-and-statistics/quiz-results";
+import { QuestionResult, QuizResults } from "../utils/types/results-and-statistics/quiz-results";
 import { useEffect, useState } from "react";
 import { QuestionReview } from "../utils/types/results-and-statistics/question-review";
 export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizResults}) {
@@ -28,15 +28,15 @@ export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizRe
     setShowMessage2(false);
     try {
       console.log(`Fetching review for user ID: ${userId} quizId: ${quizId} questionId: ${questionId} score: ${score}`);
-      const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
-    /*console.log(`ia aici ${response1.data}`);
-      const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult/`, {
+     /* const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
+  console.log(`ia aici ${response1.data}`);
+       */ const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult/`, {
         userId: userId,
         quizId: quizId,
         questionId: questionId,
         score: score,
       
-      });*/
+      });
       console.log(response.data);
       setReviewResults(response.data);
     } catch (error) {
@@ -85,10 +85,11 @@ export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizRe
               <h2 className="text-lg font-bold mb-2">Questions:</h2>
               <ul>
                 {quizResults?.quizResultBody?.questions.map((header, index) => {
-                  const questionResult2 = quizResults.quizResultBody.questionResults.find(item => item.questionId === header.id) || { questionId: header.id, score: 0 };
+                  const questionResult2 = quizResults.quizResultBody.questionResults.find(item => item.questionId === header.id) as QuestionResult;
                   console.log("Question Result:", questionResult2);
                   console.log("UserId from arguments: ", quizResults.userId);
                   console.log("Quiz ID from arguments: ", quizResults.quizId);
+                  console.log("Pendung? ", questionResult2.reviewNeededResult);
                   return (
                     <li key={index} className="mb-2">
                       <p>Question Text: {header.text}</p>

@@ -1,6 +1,7 @@
 import { QuestionType } from "../questions";
+import { AnswerResult } from "./question-review";
 
-export interface QuizResultHeader {
+export type QuizResultHeader = {
     quizId: string;
     userId: string;
     username: string;
@@ -10,29 +11,30 @@ export interface QuizResultHeader {
     reviewPending: boolean;
   }
   
-  export interface Question {
+  export type Question = {
     quizId: string;
     id: string;
     text: string;
     type: QuestionType;
   }
   
-  export interface QuestionResult {
+  export type QuestionResult = {
     userId: string;
     questionId: string;
     score: number;
+    reviewNeededResult: AnswerResult;
   }
   
-  export interface QuizResultBody {
+  export type QuizResultBody = {
     questions: Question[];
     questionResults: QuestionResult[];
   }
   
-  export interface QuizResults {
+  export type QuizResults =  {
     then(arg0: () => void): unknown;
     userId : string;
     quizId : string;
-    quizResultHeader?: QuizResultHeader;
+    quizResultHeader: QuizResultHeader;
     quizResultBody: QuizResultBody;
   }
   
