@@ -14,6 +14,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {
     public class QuestionCheckerTests : ApplicationContextForTesting
     {
+        
         [Fact]
         public async Task Given_QuestionNotAnswered_When_CheckQuestionIsCalled_Then_QuestionResultIsNotAnswered()
         {

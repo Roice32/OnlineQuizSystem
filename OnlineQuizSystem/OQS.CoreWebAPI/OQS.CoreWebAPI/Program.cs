@@ -13,7 +13,6 @@ public partial class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Adăugarea serviciilor în container.
-        // Învățați mai multe despre configurarea Swagger/OpenAPI la https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddDbContext<ApplicationDbContext>(db =>
@@ -22,7 +21,6 @@ public partial class Program
         builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies(assembly));
         builder.Services.AddValidatorsFromAssembly(assembly);
         builder.Services.AddCarter();
-
 
         builder.Services.AddControllers();
         builder.Services.AddCors(options =>
@@ -37,10 +35,12 @@ public partial class Program
         });
 
         AddQuestionCheckersFromAssembly(builder.Services);
+        var services = new ServiceCollection();
+        Program.AddQuestionCheckersFromAssembly(services);
+        var serviceProvider = services.BuildServiceProvider();
+        serviceProvider.GetRequiredService<QuestionChecker>();
 
         var app = builder.Build();
-
-
 
         // Configurarea canalului de cereri HTTP.
         if (app.Environment.IsDevelopment())
@@ -63,43 +63,27 @@ public partial class Program
         app.Run();
     }
 
-    private static void AddQuestionCheckersFromAssembly(IServiceCollection services)
+    public static void AddQuestionCheckersFromAssembly(IServiceCollection services)
     {
         var assembly = typeof(Program).Assembly;
         var checkerTypes = assembly.GetTypes()
-                                   .Where(t => typeof(IQuestionCheckerStrategy).IsAssignableFrom(t) && !t.IsInterface);
+                                   .Where(t => typeof(IQuestionCheckerStrategy).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
 
         var addedQuestionTypes = new HashSet<QuestionType>();
 
         foreach (var checkerType in checkerTypes)
         {
-            var implementedInterfaces = checkerType.GetInterfaces();
-            var questionTypeInterface = implementedInterfaces.FirstOrDefault(i => i.GetProperty("GetQuestionType") != null);
+            var instance = (IQuestionCheckerStrategy)Activator.CreateInstance(checkerType);
+            var questionType = instance.GetQuestionType;
 
-            if (questionTypeInterface != null)
+            if (addedQuestionTypes.Add(questionType))
             {
-                var questionTypeProp = questionTypeInterface.GetProperty("GetQuestionType");
-                var instance = Activator.CreateInstance(checkerType);
-                var questionTypeValue = (QuestionType)questionTypeProp.GetValue(instance);
-
-                if (!addedQuestionTypes.Contains(questionTypeValue))
-                {
-                    QuestionChecker.AddStrategy(questionTypeValue, (IQuestionCheckerStrategy)instance);
-
-                    addedQuestionTypes.Add(questionTypeValue);
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException($"The checker {checkerType.Name} does not implement the GetQuestionType property.");
+                services.AddSingleton(typeof(IQuestionCheckerStrategy), instance);
             }
         }
 
         services.AddSingleton<QuestionChecker>();
     }
-
-
 }
-
 
 public partial class Program { }

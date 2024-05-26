@@ -249,13 +249,36 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     }
 
+
+
     public class QuestionChecker
     {
-        private static readonly Dictionary<QuestionType, IQuestionCheckerStrategy> _strategies;
+        private static readonly Dictionary<QuestionType, IQuestionCheckerStrategy> _strategies = new();
 
         static QuestionChecker()
         {
-            _strategies = new Dictionary<QuestionType, IQuestionCheckerStrategy>();
+            // This static constructor will ensure the initialization is done only once.
+        }
+
+        public QuestionChecker(IEnumerable<IQuestionCheckerStrategy> strategies)
+        {
+            foreach (var strategy in strategies)
+            {
+                if (!_strategies.ContainsKey(strategy.GetQuestionType))
+                {
+                    _strategies[strategy.GetQuestionType] = strategy;
+                }
+            }
+        }
+
+        public static QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
+        {
+            if (_strategies.TryGetValue(questionFromDb.Type, out var strategy))
+            {
+                return strategy.CheckQuestion(userId, qaPair, questionFromDb);
+            }
+
+            throw new NotSupportedException($"Question type {questionFromDb.Type} is not supported.");
         }
 
         public static void AddStrategy(QuestionType questionType, IQuestionCheckerStrategy strategy)
@@ -265,19 +288,5 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                 throw new ArgumentException($"A strategy for question type {questionType} has already been added.");
             }
         }
-
-
-        public static QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
-        {
-            if (_strategies.TryGetValue(questionFromDb.Type, out IQuestionCheckerStrategy? strategy))
-            {
-                return strategy.CheckQuestion(userId, qaPair, questionFromDb);
-            }
-            else
-            {
-                throw new NotSupportedException($"Question type {questionFromDb.Type} is not supported.");
-            }
-        }
     }
-
 }
