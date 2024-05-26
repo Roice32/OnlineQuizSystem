@@ -22,6 +22,7 @@ public partial class Program {
         builder.Services.AddValidatorsFromAssembly(assembly);
         builder.Services.AddCarter();
 
+
         builder.Services.AddControllers();
         builder.Services.AddCors(options =>
         {
@@ -33,13 +34,8 @@ public partial class Program {
                         .AllowAnyMethod();
                 });
         });
-      
-        builder.Services.AddTransient<IQuestionCheckerStrategy, TrueFalseQuestionChecker>();    
-        builder.Services.AddTransient<IQuestionCheckerStrategy, MultipleChoiceQuestionChecker>();
-        builder.Services.AddTransient<IQuestionCheckerStrategy, SingleChoiceQuestionChecker>();
-        builder.Services.AddTransient<IQuestionCheckerStrategy, WrittenAnswerQuestionChecker>();
-        builder.Services.AddTransient<IQuestionCheckerStrategy, ReviewNeededQuestionChecker>();
-        
+        AddQuestionCheckersFromAssembly(builder.Services);
+
         var app = builder.Build();
        
        
@@ -64,6 +60,18 @@ public partial class Program {
 
         app.Run();
     }
+    private static void AddQuestionCheckersFromAssembly(IServiceCollection services)
+    {
+        var assembly = typeof(Program).Assembly;
+        var checkerTypes = assembly.GetTypes()
+                                   .Where(t => typeof(IQuestionCheckerStrategy).IsAssignableFrom(t) && !t.IsInterface);
+
+        foreach (var checkerType in checkerTypes)
+        {
+            services.AddTransient(typeof(IQuestionCheckerStrategy), checkerType);
+        }
+    }
 }
+
 
 public partial class Program { }
