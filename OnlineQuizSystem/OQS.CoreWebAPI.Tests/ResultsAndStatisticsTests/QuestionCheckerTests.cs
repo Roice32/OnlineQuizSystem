@@ -321,7 +321,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
                 (questionId, "Cat face 5 + 5?", 6, quizId);
 
             // Act
-            var result = await QuestionChecker.AskLLMForReviewAsync(question, "10");
+            var result = await ReviewNeededQuestionChecker.AskLLMForReviewAsync(question, "10");
 
             // Assert
             result.Should().NotBeNull();
@@ -338,7 +338,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             // Act
-            var result = await QuestionChecker.AskLLMForReviewAsync(null, "10");
+            var result = await ReviewNeededQuestionChecker.AskLLMForReviewAsync(null, "10");
 
             // Assert
             result.IsFailure.Should().BeTrue();
