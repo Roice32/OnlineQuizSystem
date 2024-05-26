@@ -6,7 +6,8 @@ using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
 using OQS.CoreWebAPI.Extensions;
 using OQS.CoreWebAPI.Temp;
 
-public partial class Program {
+public partial class Program
+{
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -34,11 +35,12 @@ public partial class Program {
                         .AllowAnyMethod();
                 });
         });
+
         AddQuestionCheckersFromAssembly(builder.Services);
 
         var app = builder.Build();
-       
-       
+
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -68,8 +70,10 @@ public partial class Program {
 
         foreach (var checkerType in checkerTypes)
         {
-            services.AddTransient(typeof(IQuestionCheckerStrategy), checkerType);
+            services.AddScoped(typeof(IQuestionCheckerStrategy), checkerType);
         }
+
+        services.AddSingleton<QuestionChecker>();
     }
 }
 

@@ -12,6 +12,8 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 {
     public interface IQuestionCheckerStrategy
     {
+        QuestionType QuestionType { get; }
+
         QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb);
     }
 
@@ -19,6 +21,8 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class TrueFalseQuestionChecker : IQuestionCheckerStrategy
     {
+        public QuestionType QuestionType => QuestionType.TrueFalse;
+
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
             if (qaPair is null)
@@ -37,6 +41,8 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class MultipleChoiceQuestionChecker : IQuestionCheckerStrategy
     {
+        public QuestionType QuestionType => QuestionType.MultipleChoice;
+
 
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
@@ -86,6 +92,8 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
     }
     public class SingleChoiceQuestionChecker : IQuestionCheckerStrategy
     {
+        public QuestionType QuestionType => QuestionType.SingleChoice;
+
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
             if (qaPair is null)
@@ -130,6 +138,8 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class WrittenAnswerQuestionChecker : IQuestionCheckerStrategy
     {
+        public QuestionType QuestionType => QuestionType.WrittenAnswer;
+
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
             if (qaPair is null)
@@ -149,6 +159,8 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class ReviewNeededQuestionChecker : IQuestionCheckerStrategy
     {
+        public QuestionType QuestionType => QuestionType.ReviewNeeded;
+
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
             if (qaPair is null)
@@ -236,21 +248,32 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
 
     }
-    public static class QuestionChecker
-    {
-        private static Dictionary<QuestionType, IQuestionCheckerStrategy> Strategies;
 
-        public static void InitializeStrategies(Dictionary<QuestionType, IQuestionCheckerStrategy> strategies)
+    public class QuestionChecker
+    {
+        private static readonly Dictionary<QuestionType, IQuestionCheckerStrategy> _strategies;
+
+        static QuestionChecker()
         {
-            Strategies = strategies;
+            _strategies = new Dictionary<QuestionType, IQuestionCheckerStrategy>();
         }
+
+        public static void AddStrategy(QuestionType questionType, IQuestionCheckerStrategy strategy)
+        {
+            _strategies.Add(questionType, strategy);
+        }
+
         public static QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
-            return Strategies[questionFromDb.Type].CheckQuestion(userId, qaPair, questionFromDb);
+            if (_strategies.TryGetValue(questionFromDb.Type, out IQuestionCheckerStrategy? strategy))
+            {
+                return strategy.CheckQuestion(userId, qaPair, questionFromDb);
+            }
+            else
+            {
+                throw new NotSupportedException($"Question type {questionFromDb.Type} is not supported.");
+            }
         }
-
-       
-
-
     }
+
 }
