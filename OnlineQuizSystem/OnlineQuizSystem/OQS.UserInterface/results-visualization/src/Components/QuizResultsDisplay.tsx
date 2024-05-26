@@ -72,15 +72,15 @@ export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizRe
           </div>
         ) : (
           <div style={borderStyle}>
-           <div className="flex flex-col md:flex-row justify-around mb-4 space-y-2 md:space-y-0">
-           <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.username}</p>
-           <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
-           <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
-           <p className="text-lg bg-gray-200 p-2 rounded-md">Score: {quizResults.quizResultHeader.score}</p>
-           <p className="text-lg bg-gray-200 p-2 rounded-md">
-             {quizResults.quizResultHeader.reviewPending ? "Review Pending" : "Review Not Pending"}
-           </p>
-         </div>
+  <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.userName}</p>
+    <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
+    <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
+    <p className="text-lg bg-gray-200 p-2 rounded-md">Score: {quizResults.quizResultHeader.score}</p>
+    <p className="text-lg bg-gray-200 p-2 rounded-md">
+      {quizResults.quizResultHeader.reviewPending ? "Review Pending" : "Review Not Pending"}
+    </p>
+  </div>
             <div>
               <h2 className="text-lg font-bold mb-2">Questions:</h2>
               <ul>

@@ -4,7 +4,7 @@ import { AnswerResult } from "./question-review";
 export type QuizResultHeader = {
     quizId: string;
     userId: string;
-    username: string;
+    userName: string;
     quizName: string;
     completionTime: string;
     score: number;

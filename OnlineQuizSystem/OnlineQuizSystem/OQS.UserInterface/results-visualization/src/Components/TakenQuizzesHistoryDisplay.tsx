@@ -76,17 +76,17 @@ export default function TakenQuizzesHistory({ userId }: { userId: string }) {
               <p className="text-lg">No quiz history found.</p>
             </div>
           ) : (
-            <ul>
+            <div>
               {quizHistory.quizResultHeaders.map((header, index) => (
-                <ul key={index} className="mb-2 p-2" style={borderStyle}>
+                <div key={index} className="mb-2 p-2" style={borderStyle}>
                   <p>Quiz Name: {quizHistory.quizNames[header.quizId]}</p>
                   <p>Score: {header.score}</p>
                   <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
                   <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
                   <button style={buttonStyle} onClick={() => getQuizResult( userId , header.quizId)}>Show more details about the quiz</button>
-                </ul>
+                </div>
               ))}
-            </ul>
+            </div>
           )
         )}
       </div>
