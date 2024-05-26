@@ -30,6 +30,11 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
             public async Task<Result<List<QuestionResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var totalQuestions = await context.Questions
+                    .CountAsync(question => question.QuizId == request.QuizId);
+                Console.WriteLine($"Total questions for QuizId {request.QuizId}: {totalQuestions}");
+                
+                
                 var questions = await context.Questions
                 .Where(question => question.QuizId == request.QuizId)
                 .Skip(request.Offset)
@@ -49,7 +54,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
         {
             app.MapGet("api/quizzes/{id}/questions", async (Guid id, ISender sender) =>
             {
-                var query = new GetAllQuestions.Query(id, Limit: 10, Offset: 1);
+                var query = new GetAllQuestions.Query(id, Limit: 10, Offset: 0);
                 return await sender.Send(query);
             });
         }
