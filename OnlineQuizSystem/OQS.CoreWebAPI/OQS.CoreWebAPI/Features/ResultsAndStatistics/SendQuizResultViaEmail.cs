@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Temp;
+using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
@@ -177,13 +180,13 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         public class Handler : IRequestHandler<Command, Result>
         {
             private readonly IValidator<Command> validator;
-            private readonly IMediator mediator;
+            private readonly ApplicationDbContext dbContext;
             private readonly Dictionary<QuestionType, IQuizResultEmailSenderStrategy> emailSenders;
 
-            public Handler(IValidator<Command> validator, IMediator mediator, IEnumerable<IQuizResultEmailSenderStrategy> strategies)
+            public Handler(IValidator<Command> validator, ApplicationDbContext dbContext, IEnumerable<IQuizResultEmailSenderStrategy> strategies)
             {
                 this.validator = validator;
-                this.mediator = mediator;
+                this.dbContext = dbContext;
                 emailSenders = strategies.ToDictionary<IQuizResultEmailSenderStrategy, QuestionType, IQuizResultEmailSenderStrategy>(
                     strategy => strategy.GetHandledQuestionType(), strategy => strategy);
             }
@@ -196,20 +199,39 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     return Result.Failure(new Error("EmailSender.Validator", validationResult.ToString()));
                 }
 
-                var quizResult = await mediator.Send(new GetQuizResult.Query { QuizId = request.QuizId, UserId = request.UserId }, cancellationToken);
-                if (!quizResult.IsSuccess)
+
+                var quizResultHeader = await dbContext.QuizResultHeaders
+               .AsNoTracking()
+               .FirstOrDefaultAsync(quiz => quiz.QuizId == request.QuizId && quiz.UserId == request.UserId);
+
+                if (quizResultHeader == null)
                 {
-                    return Result.Failure(new Error("QuizResultNotFound", "Quiz result not found for the given quiz and user."));
+                    return Result.Failure<FetchQuizResultHeaderResponse>(Error.NullValue);
                 }
 
-                var resultsBuilder = new StringBuilder();
-                resultsBuilder.AppendLine($"<p><strong>Quiz:</strong> {quizResult.Value.QuizResultHeader.QuizName}<br>");
-                resultsBuilder.AppendLine($"<strong>Score:</strong> {quizResult.Value.QuizResultHeader.Score}</p><br>");
+                var questions = await dbContext.Questions
+                    .Where(q => q.QuizId == request.QuizId)
+                    .ToListAsync(cancellationToken);
 
-                foreach (var question in quizResult.Value.QuizResultBody.Questions)
+                var questionResults = await dbContext.QuestionResults
+                    .Where(qr => qr.UserId == quizResultHeader.UserId)
+                    .ToListAsync(cancellationToken);
+                
+                var quizName = await dbContext
+                .Quizzes
+                .AsNoTracking()
+                .Where(q => q.Id == request.QuizId)
+                .Select(q => q.Name)
+                .FirstOrDefaultAsync();
+
+                var resultsBuilder = new StringBuilder();
+                resultsBuilder.AppendLine($"<p><strong>Quiz:</strong> {quizName}<br>");
+                resultsBuilder.AppendLine($"<strong>Score:</strong> {quizResultHeader.Score}</p><br>");
+
+                foreach (var question in questions)
                 {
-                    var correspondingQuestion = quizResult.Value.QuizResultBody.Questions.FirstOrDefault(qap => qap.Id == question.Id);
-                    var correspondingUserAnswer = quizResult.Value.QuizResultBody.QuestionResults.FirstOrDefault(qr => qr.QuestionId == question.Id);
+                    var correspondingQuestion = questions.FirstOrDefault(qap => qap.Id == question.Id);
+                    var correspondingUserAnswer = questionResults.FirstOrDefault(qr => qr.QuestionId == question.Id);
 
                     if (correspondingQuestion != null && correspondingUserAnswer != null && emailSenders.TryGetValue(question.Type, out var formatter))
                     {

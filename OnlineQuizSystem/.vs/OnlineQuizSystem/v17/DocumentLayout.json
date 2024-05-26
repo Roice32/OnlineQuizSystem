@@ -7,23 +7,19 @@
       "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\features\\resultsandstatistics\\sendquizresultviaemail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\extensions\\resultsandstatistics\\quizresultheaders\\fetchquizresultheaderextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\extensions\\resultsandstatistics\\quizresultheaders\\fetchquizresultheaderextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\extensions\\resultsandstatistics\\quizresultbodies\\fetchquizresultbodyextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\extensions\\resultsandstatistics\\quizresultbodies\\fetchquizresultbodyextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\extensions\\dependencyinjector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\extensions\\dependencyinjector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi.tests\\resultsandstatisticstests\\sendquizresultviaemailtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|solutionrelative:oqs.corewebapi.tests\\resultsandstatisticstests\\sendquizresultviaemailtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi.tests\\oqs.corewebapi.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{FF4FD99A-D129-4B83-BE5B-8F7C70946AF8}|OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj|solutionrelative:oqs.corewebapi.tests\\oqs.corewebapi.tests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/OQS_Db_Record/True/SqlTable/dbo.Questions.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|d:\\onedrive\\documente\\github\\onlinequizsystem\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{529D2332-B9F7-4B1F-962D-76A4D450C2FC}|OQS.CoreWebAPI\\OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\oqs.corewebapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -33,32 +29,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "SendQuizResultViaEmailTests.cs",
-              "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\ResultsAndStatisticsTests\\SendQuizResultViaEmailTests.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Tests\\ResultsAndStatisticsTests\\SendQuizResultViaEmailTests.cs",
-              "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\ResultsAndStatisticsTests\\SendQuizResultViaEmailTests.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI.Tests\\ResultsAndStatisticsTests\\SendQuizResultViaEmailTests.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAoAAABJAAAA",
+              "Title": "FetchQuizResultBodyExtension.cs",
+              "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultBodies\\FetchQuizResultBodyExtension.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultBodies\\FetchQuizResultBodyExtension.cs",
+              "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultBodies\\FetchQuizResultBodyExtension.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultBodies\\FetchQuizResultBodyExtension.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAwCQAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-26T21:56:45.227Z",
+              "WhenOpened": "2024-05-26T22:16:14.875Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "OQS.CoreWebAPI.Tests",
-              "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj",
-              "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj",
-              "RelativeToolTip": "OQS.CoreWebAPI.Tests\\OQS.CoreWebAPI.Tests.csproj",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-05-26T21:56:37.033Z",
+              "DocumentIndex": 1,
+              "Title": "FetchQuizResultHeaderExtension.cs",
+              "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultHeaders\\FetchQuizResultHeaderExtension.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultHeaders\\FetchQuizResultHeaderExtension.cs",
+              "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultHeaders\\FetchQuizResultHeaderExtension.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\ResultsAndStatistics\\QuizResultHeaders\\FetchQuizResultHeaderExtension.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAYwCAAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T22:14:48.361Z",
               "EditorCaption": ""
             },
             {
@@ -68,21 +64,7 @@
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/OQS_Db_Record/True/SqlTable/dbo.Questions.sql",
               "ToolTip": "dbo.Questions [Data]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-05-26T21:55:34.907Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Program.cs",
-              "ViewState": "AQIAAB8AAAAAAAAAAAAAwD0AAAAgAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-26T21:43:38.299Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-26T21:55:34.907Z"
             },
             {
               "$type": "Document",
@@ -92,14 +74,14 @@
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Features\\ResultsAndStatistics\\SendQuizResultViaEmail.cs",
               "ToolTip": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Features\\ResultsAndStatistics\\SendQuizResultViaEmail.cs",
               "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Features\\ResultsAndStatistics\\SendQuizResultViaEmail.cs",
-              "ViewState": "AQIAABIBAAAAAAAAAAAQwLIAAAA7AAAA",
+              "ViewState": "AQIAABkBAAAAAAAAAAAUwOoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-26T21:32:17.62Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "DependencyInjector.cs",
               "DocumentMoniker": "D:\\OneDrive\\Documente\\GitHub\\OnlineQuizSystem\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\DependencyInjector.cs",
               "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\DependencyInjector.cs",
@@ -107,8 +89,7 @@
               "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Extensions\\DependencyInjector.cs",
               "ViewState": "AQIAABcAAAAAAAAAAAAQwCwAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-26T21:28:39.215Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-26T21:28:39.215Z"
             }
           ]
         }
