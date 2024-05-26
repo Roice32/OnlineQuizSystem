@@ -12,7 +12,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 {
     public interface IQuestionCheckerStrategy
     {
-        QuestionType QuestionType { get; }
+        QuestionType GetQuestionType { get; }
 
         QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb);
     }
@@ -21,7 +21,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class TrueFalseQuestionChecker : IQuestionCheckerStrategy
     {
-        public QuestionType QuestionType => QuestionType.TrueFalse;
+        public QuestionType GetQuestionType => QuestionType.TrueFalse;
 
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class MultipleChoiceQuestionChecker : IQuestionCheckerStrategy
     {
-        public QuestionType QuestionType => QuestionType.MultipleChoice;
+        public QuestionType GetQuestionType => QuestionType.MultipleChoice;
 
 
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
@@ -92,7 +92,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
     }
     public class SingleChoiceQuestionChecker : IQuestionCheckerStrategy
     {
-        public QuestionType QuestionType => QuestionType.SingleChoice;
+        public QuestionType GetQuestionType => QuestionType.SingleChoice;
 
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
@@ -138,7 +138,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class WrittenAnswerQuestionChecker : IQuestionCheckerStrategy
     {
-        public QuestionType QuestionType => QuestionType.WrittenAnswer;
+        public QuestionType GetQuestionType => QuestionType.WrittenAnswer;
 
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
@@ -159,7 +159,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
     public class ReviewNeededQuestionChecker : IQuestionCheckerStrategy
     {
-        public QuestionType QuestionType => QuestionType.ReviewNeeded;
+        public QuestionType GetQuestionType => QuestionType.ReviewNeeded;
 
         public QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
@@ -260,8 +260,12 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
         public static void AddStrategy(QuestionType questionType, IQuestionCheckerStrategy strategy)
         {
-            _strategies.Add(questionType, strategy);
+            if (!_strategies.TryAdd(questionType, strategy))
+            {
+                throw new ArgumentException($"A strategy for question type {questionType} has already been added.");
+            }
         }
+
 
         public static QuestionResultBase CheckQuestion(Guid userId, QuestionAnswerPairBase qaPair, QuestionBase questionFromDb)
         {
