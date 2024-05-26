@@ -72,7 +72,7 @@ export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizRe
           </div>
         ) : (
           <div style={borderStyle}>
-  <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
     <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.userName}</p>
     <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
     <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
