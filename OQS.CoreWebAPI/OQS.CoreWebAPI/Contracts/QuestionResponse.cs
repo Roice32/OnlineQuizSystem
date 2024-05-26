@@ -1,16 +1,14 @@
 using OQS.CoreWebAPI.Entities;
-using System;
-using System.Collections.Generic;
 
 namespace OQS.CoreWebAPI.Contracts
 {
     public class QuestionResponse
     {
         public Guid Id { get; set; }
+        public Guid QuizId { get; set; }
         public QuestionType Type { get; set; }
         public string Text { get; set; }
 
-        public Guid QuizId { get; set; }
         public int AlocatedPoints { get; set; }
 
         public int TimeLimit { get; set; }
@@ -23,9 +21,9 @@ namespace OQS.CoreWebAPI.Contracts
         public QuestionResponse(QuestionBase question)
         {
             this.Id = question.Id;
+            this.QuizId = question.QuizId;
             this.Type = question.Type;
             this.Text = question.Text;
-            this.QuizId = question.QuizId;
             this.TimeLimit = question.TimeLimit;
             this.AlocatedPoints = question.AlocatedPoints;
             if (question is ChoiceQuestionBase choiceQuestion)

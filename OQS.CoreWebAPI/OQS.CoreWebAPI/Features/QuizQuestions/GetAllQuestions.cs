@@ -1,17 +1,10 @@
 ﻿using Carter;
-using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.QuizQuestions;
 using OQS.CoreWebAPI.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.QuizQuestions
 {

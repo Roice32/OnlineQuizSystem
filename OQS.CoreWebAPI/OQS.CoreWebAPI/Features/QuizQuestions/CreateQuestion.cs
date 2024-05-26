@@ -1,13 +1,10 @@
 ﻿using Carter;
 using FluentValidation;
-using Mapster;
 using MediatR;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Quizzes;
 using OQS.CoreWebAPI.Shared;
-using System;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Quizzes
 {
@@ -39,6 +36,8 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                      .MaximumLength(255).WithMessage("Text must not exceed 255 characters.");
                 RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId is required.");
                 RuleFor(x => x.Type).IsInEnum().WithMessage("Invalid question type.");
+                RuleFor(x => x.AlocatedPoints).GreaterThan(0).WithMessage("AlocatedPoints must be greater than 0."); 
+                RuleFor(x => x.TimeLimit).GreaterThan(0).WithMessage("TimeLimit must be greater than 0.");
 
                 When(x => x.Type == QuestionType.MultipleChoice || x.Type == QuestionType.SingleChoice,
                     () =>

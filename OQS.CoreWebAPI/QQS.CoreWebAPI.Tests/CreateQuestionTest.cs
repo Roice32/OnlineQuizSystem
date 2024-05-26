@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
 using FluentAssertions;
-using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Quizzes;
 using OQS.CoreWebAPI.Tests.SetUp;

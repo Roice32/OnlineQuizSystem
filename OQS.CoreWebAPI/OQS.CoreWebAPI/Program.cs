@@ -2,7 +2,6 @@
 using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Extensions;
 

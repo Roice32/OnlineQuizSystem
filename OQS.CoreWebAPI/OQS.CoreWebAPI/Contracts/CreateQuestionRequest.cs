@@ -1,6 +1,4 @@
 ﻿using OQS.CoreWebAPI.Entities;
-using System;
-using System.Collections.Generic;
 
 namespace OQS.CoreWebAPI.Contracts
 {

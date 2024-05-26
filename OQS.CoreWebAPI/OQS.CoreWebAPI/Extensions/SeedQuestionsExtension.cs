@@ -1,5 +1,4 @@
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Extensions;
 

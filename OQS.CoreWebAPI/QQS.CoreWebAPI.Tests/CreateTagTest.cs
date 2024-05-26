@@ -1,12 +1,7 @@
 ﻿using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Tests.SetUp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 
