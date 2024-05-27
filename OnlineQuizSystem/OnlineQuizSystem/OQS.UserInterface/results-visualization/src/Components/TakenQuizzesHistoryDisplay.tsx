@@ -43,6 +43,8 @@ export default function TakenQuizzesHistory({ userId }: { userId: string }) {
     try {
       const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
       console.log(response.data);
+      response.data.userId = userId;
+      response.data.quizId = quizId;
       setQuizResults(response.data);
     } catch (error) {
       console.error('Error fetching quiz result:', error);
@@ -74,17 +76,17 @@ export default function TakenQuizzesHistory({ userId }: { userId: string }) {
               <p className="text-lg">No quiz history found.</p>
             </div>
           ) : (
-            <ul>
+            <div>
               {quizHistory.quizResultHeaders.map((header, index) => (
-                <li key={index} className="mb-2 border-2 border-gray-300 rounded-lg p-2">
+                <div key={index} className="mb-2 p-2" style={borderStyle}>
                   <p>Quiz Name: {quizHistory.quizNames[header.quizId]}</p>
                   <p>Score: {header.score}</p>
                   <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
                   <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
-                  <button style={buttonStyle} onClick={() => getQuizResult( userId , header.quizId)}>Show more details about the quiz</button>
-                </li>
+                  <button className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4" onClick={() => getQuizResult( userId , header.quizId)}>Show more details about the quiz</button>
+                </div>
               ))}
-            </ul>
+            </div>
           )
         )}
       </div>
@@ -93,16 +95,8 @@ export default function TakenQuizzesHistory({ userId }: { userId: string }) {
   );
 }
 
-const buttonStyle = {
-  display: 'block',
-  width: '200px',
-  height: '35px',
-  backgroundColor: '#436e6f',
-  color: 'white',
+const borderStyle = {
   borderRadius: '50px',
-  alignItems: 'center',
-  textAlign: 'center',
-  fontSize: '12px',
-  textDecoration: 'none',
-  textDecorationColor: '#f7ebe7',
+  border: '1px solid gray',
+  padding: '20px',
 };

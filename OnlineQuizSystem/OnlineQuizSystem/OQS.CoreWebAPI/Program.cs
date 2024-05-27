@@ -2,6 +2,7 @@ using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
 using OQS.CoreWebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,11 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
+
+DependencyInjector.AddQuestionCheckersFromAssembly(builder.Services);
+var serviceProvider = builder.Services.BuildServiceProvider();
+serviceProvider.GetRequiredService<QuestionChecker>();
+DependencyInjector.AddEmailSenderStrategiesFromAssembly(builder.Services);
 
 var app = builder.Build();
 

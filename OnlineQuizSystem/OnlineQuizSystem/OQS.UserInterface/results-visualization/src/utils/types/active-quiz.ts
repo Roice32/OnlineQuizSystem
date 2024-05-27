@@ -9,11 +9,11 @@ export type ActiveQuiz = {
 }
 
 export type Answer={
-    questionId:string;
-    questionType:QuestionType;
-    trueFalseAnswer?:boolean;
-    multipleChoiceAnswers?:string[];
-    singleChoiceAnswer?:string;
-    writeAnswer?:string;
-    reviewNeeded?:string;
+    questionId: string;
+    questionType: QuestionType;
+    trueFalseAnswer?: boolean;
+    multipleChoiceAnswers?: string[];
+    singleChoiceAnswer?: string;
+    writeAnswer?: string;
+    reviewNeeded?: string;
 }

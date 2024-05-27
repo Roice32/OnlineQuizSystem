@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OQS.CoreWebAPI\OQS.CoreWebAPI\OQS.CoreWebAPI.csproj" />
+    <ProjectReference Include="..\OQS.CoreWebAPI\OQS.CoreWebAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

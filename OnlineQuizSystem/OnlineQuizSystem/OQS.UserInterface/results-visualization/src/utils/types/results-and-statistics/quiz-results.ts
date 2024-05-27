@@ -1,31 +1,51 @@
 import { QuestionType } from "../questions";
+import { AnswerResult } from "./question-review";
 
-export interface QuizResultHeader {
-    username: string;
+export type QuizResultHeader = {
+    quizId: string;
+    userId: string;
+    userName: string;
     quizName: string;
     completionTime: string;
     score: number;
     reviewPending: boolean;
   }
   
-  export interface Question {
+  export type Question = {
+    quizId: string;
     id: string;
     text: string;
     type: QuestionType;
   }
   
-  export interface QuestionResult {
+  export type QuestionResult = {
+    userId: string;
     questionId: string;
     score: number;
+    reviewNeededResult: AnswerResult;
+    trueFalseAnswerResult: AnswerResult;
+    multipleChoiceResult: AnswerResult;
+    singleChoiceResult: AnswerResult;
+    writtenAnswerResult: AnswerResult;
+    writtenAnswer: string;
+    reviewNeededAnswer : string;
+    LLMReview : string;
+    multipleChoiceAnswers : string[];
+    
+    singleChoiceAnswer : string;
+    pseudoDictionaryChoicesResults: string;
   }
   
-  export interface QuizResultBody {
+  export type QuizResultBody = {
     questions: Question[];
     questionResults: QuestionResult[];
   }
   
-  export interface QuizResults {
-    quizResultHeaders?: QuizResultHeader;
+  export type QuizResults =  {
+    then(arg0: () => void): unknown;
+    userId : string;
+    quizId : string;
+    quizResultHeader: QuizResultHeader;
     quizResultBody: QuizResultBody;
   }
   

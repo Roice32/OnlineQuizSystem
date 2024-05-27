@@ -12,7 +12,7 @@ using OQS.CoreWebAPI.Database;
 namespace OQS.CoreWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240525210639_Final-RSM-Database")]
+    [Migration("20240527135246_Final-RSM-Database")]
     partial class FinalRSMDatabase
     {
         /// <inheritdoc />

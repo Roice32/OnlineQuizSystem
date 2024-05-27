@@ -1,11 +1,10 @@
 import React from 'react';
 import { QuestionBase } from "../../utils/types/questions";
 import { Answer } from "../../utils/types/active-quiz";
-import { QuestionResult } from '../../utils/types/results-and-statistics/quiz-results';
 
 interface WrittenQuestionResultDisplayProps {
   question: QuestionBase;
-  userAnswer: QuestionResult;
+  userAnswer: Answer;
   correctAnswer: string;
   questionText: string;
   questionScore: number;
@@ -27,7 +26,7 @@ export default function WrittenQuestionResultDisplay({userAnswer, correctAnswer,
                 <label
                   className='p-2 rounded-full border border-gray-300 w-full max-w-md text-left bg-green-500 text-white'
                 >
-                  Your Answer: {userAnswer.writtenAnswer || userAnswer.reviewNeededAnswer}
+                  Your Answer: {userAnswer.writeAnswer?.toString()}
                 </label>
               </div>
               <div className="flex items-center justify-center mb-2">

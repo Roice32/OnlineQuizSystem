@@ -7,17 +7,12 @@ export enum QuestionType{
     ReviewNeeded
 }
 
-
 export interface QuestionBase{
-    id:string;
-    text:string;
-    type: QuestionType;
+    id: string;
+    text: string;
+    type: string;
     choices?: string[];
 }
-
-/* export interface ChoiceQuestion extends QuestionBase{
-    choices: string[];
-} */
 
 
 
