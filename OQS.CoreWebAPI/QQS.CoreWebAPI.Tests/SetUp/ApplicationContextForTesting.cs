@@ -45,7 +45,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                 });
             });
             Client = Application.CreateClient();
-         
+            Client.DefaultRequestHeaders.Add("Authorization","Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjViMDQ4OTEzLTVkZjAtNDI5Zi1hNDJiLTA1MTkwNDY3MmU0ZCIsInJvbGUiOiJBZG1pbiIsImp0aSI6ImFhNjRkMjUwLTAxNmUtNDM1Mi04NTUwLTcwNzk2ZTk5Zjc0MyIsIm5iZiI6MTcxNjgwNzMwOSwiZXhwIjoxNzE2ODE4MTA5LCJpYXQiOjE3MTY4MDczMDksImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMTciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTE3In0.-YHqzQDX_hyHFgIAnK5OyLgnWCiN0cY-bgxPk54w8I0");
         }
 
         public async ValueTask DisposeAsync()

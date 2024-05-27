@@ -1,113 +1,131 @@
+using System.IdentityModel.Tokens.Jwt;
 using Carter;
 using FluentValidation;
 using MediatR;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities.ActiveQuiz;
+using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features;
 
 public class CreateActiveQuiz
 {
-    public record QuizCreation(Guid QuizId, string TakenBy) : IRequest <Result<ActiveQuiz>>;
-   
-        private readonly ApplicationDBContext _context;
+    public record QuizCreation(Guid QuizId, string Jwt) : IRequest<Result<ActiveQuiz>>;
 
-        public CreateActiveQuiz(ApplicationDBContext context)
-        {
-            _context = context;
-        }
+    private readonly ApplicationDBContext _context;
 
-        public class QuizCreationValidator : AbstractValidator<QuizCreation>
-        {
-           // private readonly ApplicationDBContext _dbContext;
-           private readonly IServiceScopeFactory _serviceScopeFactory;
-            public QuizCreationValidator(IServiceScopeFactory serviceScopeFactory)
-            {
-                _serviceScopeFactory = serviceScopeFactory;
-                RuleFor(x => x.QuizId)
-                    .MustAsync(QuizExists)
-                    .WithMessage("Invalid Quiz Id");
+    private readonly IConfiguration _configuration;
 
-                RuleFor(x => x.TakenBy)
-                    .MustAsync(UserExists)
-                    .WithMessage("Invalid User Id");
-            }
-
-            private async Task<bool> QuizExists(Guid quizId, CancellationToken cancellationToken)
-            {
-                using var scope = _serviceScopeFactory.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-                return await context.Quizzes.FindAsync(quizId) != null;
-            }
-
-            private async Task<bool> UserExists(string takenBy, CancellationToken cancellationToken)
-            {
-                using var scope = _serviceScopeFactory.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-                return await context.Users.FindAsync(takenBy) != null;
-            }
-        }
-
-
-    internal sealed class Handler : IRequestHandler<QuizCreation, Result<ActiveQuiz>>
+    public CreateActiveQuiz(ApplicationDBContext context, IConfiguration configuration)
     {
-        private readonly ApplicationDBContext _context;
-        private readonly QuizCreationValidator _validator;
-        
-        public Handler(ApplicationDBContext context,QuizCreationValidator validator)
+        _configuration = configuration;
+        _context = context;
+    }
+
+    public class QuizCreationValidator : AbstractValidator<QuizCreation>
+    {
+        // private readonly ApplicationDBContext _dbContext;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly JwtValidator _jwtValidator;
+
+        public QuizCreationValidator(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
         {
-            _context = context;
-            _validator = validator;
+            _serviceScopeFactory = serviceScopeFactory;
+            _jwtValidator = new JwtValidator(configuration);
+            RuleFor(x => x.QuizId)
+                .MustAsync(QuizExists)
+                .WithMessage("Invalid Quiz Id");
+
+            RuleFor(x => x.Jwt)
+                .MustAsync(ValidJwt)
+                .WithMessage("Invalid Token");
         }
-        
-        public async Task<Result<ActiveQuiz>> Handle(QuizCreation request, CancellationToken cancellationToken)
+
+        private async Task<bool> QuizExists(Guid quizId, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request);
-            if (!validationResult.IsValid)
+            using var scope = _serviceScopeFactory.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            return await context.Quizzes.FindAsync(quizId) != null;
+        }
+
+        private async Task<bool> ValidJwt(string Jwt, CancellationToken cancellationToken)
+        {
+            return _jwtValidator.Validate(Jwt);
+        }
+
+
+        internal sealed class Handler : IRequestHandler<QuizCreation, Result<ActiveQuiz>>
+        {
+            private readonly ApplicationDBContext _context;
+            private readonly QuizCreationValidator _validator;
+            private readonly JwtSecurityTokenHandler _jwtHandler;
+
+            public Handler(ApplicationDBContext context, QuizCreationValidator validator)
             {
-                return Result.Failure<ActiveQuiz>(
-                    new Error("CreateActiveQuiz.BadRequest", 
-                        validationResult.ToString()));
+                _context = context;
+                _validator = validator;
+                _jwtHandler = new JwtSecurityTokenHandler();
             }
 
-            var quiz = await _context.Quizzes.FindAsync(request.QuizId);
-            var user = await _context.Users.FindAsync(request.TakenBy);
-    
-            var activeQuiz = new ActiveQuiz
+            public async Task<Result<ActiveQuiz>> Handle(QuizCreation request, CancellationToken cancellationToken)
             {
-                Id = Guid.NewGuid(),
-                Quiz = quiz,
-                User = user,
-                StartedAt = DateTime.UtcNow 
-            };
+                var validationResult = await _validator.ValidateAsync(request);
+                if (!validationResult.IsValid)
+                {
+                    return Result.Failure<ActiveQuiz>(
+                        new Error("CreateActiveQuiz.BadRequest",
+                            validationResult.ToString()));
+                }
 
-            _context.ActiveQuizzes.Add(activeQuiz);
-            await _context.SaveChangesAsync();
+                var quiz = await _context.Quizzes.FindAsync(request.QuizId);
+                var userId = _jwtHandler.ReadJwtToken(request.Jwt).Claims
+                    .FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
 
-            return Result.Success(activeQuiz);
+                var user = await _context.Users.FindAsync(userId);
+
+                var activeQuiz = new ActiveQuiz
+                {
+                    Id = Guid.NewGuid(),
+                    Quiz = quiz,
+                    User = user,
+                    StartedAt = DateTime.UtcNow
+                };
+
+                _context.ActiveQuizzes.Add(activeQuiz);
+                await _context.SaveChangesAsync();
+
+                return Result.Success(activeQuiz);
+            }
+
         }
-        
+
     }
-  
 }
 
 public class CreateActiveQuizEndPoint : ICarterModule
-{
-    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/active-quizzes",async(CreateActiveQuizRequest request ,ISender sender) =>
+        public void AddRoutes(IEndpointRouteBuilder app)
         {
-            var quizCreation = new CreateActiveQuiz.QuizCreation(request.QuizId, request.TakenBy);
-            var result = await sender.Send(quizCreation);
-                
-            if (result.IsFailure)
-            {
-                return Result.Failure(result.Error);
-            }
-            
-            return Result.Success(result.Value.Id);
-        });
+            app.MapPost("api/active-quizzes",
+                async (CreateActiveQuizRequest request, HttpContext context, ISender sender) =>
+                {
+                    if(context.Request.Headers["Authorization"].Count == 0)
+                    {
+                        return Results.Unauthorized();
+                    }
+                    var jwt = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                    var quizCreation = new CreateActiveQuiz.QuizCreation(request.QuizId, jwt);
+                    var result = await sender.Send(quizCreation);
+
+                    if (result.IsFailure)
+                    {
+                        return Results.Ok(Result.Failure(result.Error));
+                    }
+
+                    return Results.Ok(Result.Success(result.Value.Id));
+                });
+        }
     }
-}
+

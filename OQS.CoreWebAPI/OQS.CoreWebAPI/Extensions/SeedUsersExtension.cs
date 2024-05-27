@@ -15,6 +15,7 @@ public static class SeedUsersExtension
             return;
         }
         //password: User@123
+        //token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjViMDQ4OTEzLTVkZjAtNDI5Zi1hNDJiLTA1MTkwNDY3MmU0ZCIsInJvbGUiOiJBZG1pbiIsImp0aSI6ImFhNjRkMjUwLTAxNmUtNDM1Mi04NTUwLTcwNzk2ZTk5Zjc0MyIsIm5iZiI6MTcxNjgwNzMwOSwiZXhwIjoxNzE2ODE4MTA5LCJpYXQiOjE3MTY4MDczMDksImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMTciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTE3In0.-YHqzQDX_hyHFgIAnK5OyLgnWCiN0cY-bgxPk54w8I0
         User user = new User()
         {
             Id = "5b048913-5df0-429f-a42b-051904672e4d",
@@ -29,6 +30,7 @@ public static class SeedUsersExtension
             EmailConfirmed = true
         };
         //password: User2@123
+        //token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjQ5YjAxM2QyLWMxMzYtNGUxYy1hOGQ3LTBkNzAyNmJkMzRhZiIsInJvbGUiOiJVc2VyIiwianRpIjoiNmI5MjA0ZmUtOWFjMy00ZjUwLTliZTUtYWM1NTk3MTdmMTYzIiwibmJmIjoxNzE2ODA3NDYxLCJleHAiOjE3MTY4MTgyNjEsImlhdCI6MTcxNjgwNzQ2MSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzExNyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMTcifQ.3lhiblp99DlPJE8qNyTqfWF2ZbC3ouuoNN1Pfzx5qTw
         User user2 = new User()
         {
             Id = "49b013d2-c136-4e1c-a8d7-0d7026bd34af",
