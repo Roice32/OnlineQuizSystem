@@ -26,63 +26,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 246,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 9,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Registration.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
-              "ViewState": "AQIAAGYAAAAAAAAAAAAUwGoAAABeAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T09:42:30.932Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Logout.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
-              "ViewState": "AQIAADcAAAAAAAAAAAAAAAwAAAAdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T09:42:07.383Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Authentication.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
-              "ViewState": "AQIAAEQAAAAAAAAAAAAAAA8AAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T09:40:32.143Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "JwtValidator.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T09:38:27.825Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Bookmark",
@@ -109,8 +65,53 @@
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Registration.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Registration.cs",
+              "ViewState": "AQIAAEUAAAAAAAAAAAAUwGoAAABeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T09:42:30.932Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Logout.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Logout.cs",
+              "ViewState": "AQIAADcAAAAAAAAAAAAAAAwAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T09:42:07.383Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Authentication.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\Authentication.cs",
+              "ViewState": "AQIAAEQAAAAAAAAAAAAAAA8AAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T09:40:32.143Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "JwtValidator.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Authentication\\JwtValidator.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T09:38:27.825Z"
             }
           ]
         }

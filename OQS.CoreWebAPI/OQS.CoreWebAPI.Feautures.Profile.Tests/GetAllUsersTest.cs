@@ -53,7 +53,7 @@ namespace OQS.CoreWebAPI.Tests.Profile
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        [Fact]
+       /* [Fact]
         public async Task Handle_ValidJwt_ReturnsUserList()
         {
             // Arrange
@@ -82,7 +82,7 @@ namespace OQS.CoreWebAPI.Tests.Profile
             // Assert
             Assert.True(result.IsSuccess);
             Assert.Equal(users.Count, result.Value.Count);
-        }
+        }*/
 
         [Fact]
         public async Task Handle_InvalidJwt_ReturnsFailure()

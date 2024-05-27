@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OQS.CoreWebAPI.Feautures.ResetPassword.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad0e5c92957babbd7d1994d47fc93425ae967a70")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a0fa16dcb57b2d7b1858f0ffc678e011933f8e9a")]
 [assembly: System.Reflection.AssemblyProductAttribute("OQS.CoreWebAPI.Feautures.ResetPassword.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OQS.CoreWebAPI.Feautures.ResetPassword.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
