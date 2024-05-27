@@ -12,28 +12,35 @@ export type QuizResultHeader = {
   }
   
   export type Question = {
-    quizId: string;
     id: string;
-    text: string;
+    quizId: string;
     type: QuestionType;
+    text: string;
+    allocatedPoints: number;
+
+    choices?: string[];
+    trueFalseAnswer?: boolean;
+    multipleChoiceAnswer?: string[];
+    singleChoiceAnswer?: string;
+    writtenAcceptedAnswers?: string[];
   }
   
   export type QuestionResult = {
     userId: string;
     questionId: string;
     score: number;
-    reviewNeededResult: AnswerResult;
-    trueFalseAnswerResult: AnswerResult;
-    multipleChoiceResult: AnswerResult;
-    singleChoiceResult: AnswerResult;
-    writtenAnswerResult: AnswerResult;
-    writtenAnswer: string;
-    reviewNeededAnswer : string;
-    LLMReview : string;
-    multipleChoiceAnswers : string[];
-    
-    singleChoiceAnswer : string;
-    pseudoDictionaryChoicesResults: string;
+    type: QuestionType;
+
+    trueFalseAnswerResult?: AnswerResult;
+
+    pseudoDictionaryChoicesResults?: string;
+
+    writtenAnswer?: string;
+    writtenAnswerResult?: AnswerResult;
+
+    reviewNeededAnswer?: string;
+    LLMReview?: string;
+    reviewNeededResult?: AnswerResult;
   }
   
   export type QuizResultBody = {

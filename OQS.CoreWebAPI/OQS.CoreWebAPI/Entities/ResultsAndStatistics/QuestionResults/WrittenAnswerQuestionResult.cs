@@ -7,7 +7,6 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults
         public string WrittenAnswer { get; set; }
         public AnswerResult WrittenAnswerResult { get; set; }
 
-
         public WrittenAnswerQuestionResult(Guid userId, Guid questionId, float score, string writtenAnswer, AnswerResult writtenAnswerResult) :
             base(userId, questionId, score)
         {

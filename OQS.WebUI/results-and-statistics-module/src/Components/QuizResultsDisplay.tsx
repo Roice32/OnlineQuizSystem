@@ -107,10 +107,7 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
                       {header.type === QuestionType.TrueFalse && (
                                             <TrueFalseQuestionResultDisplay
                                               question={header}
-                                              userAnswer={questionResult2}
-                                              correctAnswer={questionResult2.trueFalseAnswerResult === AnswerResult.Correct}
-                                              questionText={header.text}
-                                              questionScore={questionResult2.score}
+                                              questionResult={questionResult2}
                                             />
                                           )}
                       {header.type === QuestionType.SingleChoice && (
