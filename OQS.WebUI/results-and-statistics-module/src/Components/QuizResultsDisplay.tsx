@@ -74,7 +74,7 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
               </div>
             ) : (
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center p-4 rounded-3xl border-4 border-solid border-gray-400">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center p-4 rounded-3xl rounded-b-none border-4 border-solid border-gray-400">
               <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.userName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
@@ -83,7 +83,7 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
                 {quizResults.quizResultHeader.reviewPending ? "Review Pending" : "Review Not Pending"}
               </p>
             </div>
-            <div className="p-4 rounded-3xl border-4 border-solid border-gray-400">
+            <div className="p-4 rounded-3xl rounded-t-none border-4 border-t-0 border-solid border-gray-400">
               <h2 className="text-lg font-bold mb-2">Questions:</h2>
               <ul>
                 {quizResults?.quizResultBody?.questions.map((header, index) => {
