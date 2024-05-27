@@ -183,7 +183,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
         }
         public static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
-            var openAI = new OpenAIAPI("APIKeyGoesHere");
+            var openAI = new OpenAIAPI("sk-proj-Veae6HeSELVq583vloxnT3BlbkFJTgE0zPNVjaCXL0QoSQGh");
 
             if (question == null)
             {
