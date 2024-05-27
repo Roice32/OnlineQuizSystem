@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Entities.ActiveQuiz;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.LiveQuizzes;
@@ -76,6 +77,7 @@ public class StartLiveQuiz
             var connections= await _context.UserConnections
                 .Include(q=>q.User)
                 .Include(q=>q.LiveQuizz)
+                .Include(q=>q.LiveQuizz.Quiz)
                 .Where(q=>q.LiveQuizz.Code==liveQuiz.Code).ToListAsync();
             foreach (var connection in connections)
             {
@@ -88,8 +90,16 @@ public class StartLiveQuiz
         }
         private async Task NotifyClients(UserConnection connection)
         {
-            var result = await _sender.Send(new CreateActiveQuiz.QuizCreation(connection.LiveQuizz.Quiz.Id, connection.UserId));
-            await _hubContext.Clients.Client(connection.ConnectionId).SendAsync("QuizStarted", Result.Success<Guid>(result.Value.Id));
+            var activeQuiz = new ActiveQuiz
+            {
+                Id = Guid.NewGuid(),
+                Quiz = connection.LiveQuizz.Quiz,
+                User = connection.User,
+                StartedAt = DateTime.UtcNow
+            };
+            await _context.ActiveQuizzes.AddAsync(activeQuiz);
+            await _context.SaveChangesAsync();
+            await _hubContext.Clients.Client(connection.ConnectionId).SendAsync("QuizStarted", Result.Success<Guid>(activeQuiz.Id));
         }
     }
     
