@@ -20,7 +20,7 @@ export type QuizResultHeader = {
 
     choices?: string[];
     trueFalseAnswer?: boolean;
-    multipleChoiceAnswer?: string[];
+    multipleChoiceAnswers?: string[];
     singleChoiceAnswer?: string;
     writtenAcceptedAnswers?: string[];
   }

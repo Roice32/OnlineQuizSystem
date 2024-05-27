@@ -3,9 +3,9 @@ import { QuestionType } from "../utils/types/questions";
 import { QuestionResult, QuizResults } from "../utils/types/results-and-statistics/quiz-results";
 import { useEffect, useState } from "react";
 import { AnswerResult, QuestionReview } from "../utils/types/results-and-statistics/question-review";
-import TrueFalseQuestionResultDisplay from '../Components/SubmittedQuestions/TrueFalseQuestionResultDisplay';
-import SingleChoiceQuestionResultDisplay from "./SubmittedQuestions/SingleChoiceQuestionResultDisplay";
-import WrittenQuestionResultDisplay from "./Questions/WrittenQuestionDisplay";
+import TrueFalseQuestionResultDisplay from './SubmittedQuestions/TrueFalseQuestionResultDisplay';
+import ChoiceQuestionResultDisplay from "./SubmittedQuestions/ChoiceQuestionResultDisplay";
+import WrittenQuestionResultDisplay from "./SubmittedQuestions/WrittenQuestionResultDisplay";
 
 export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizResults }) {
   const [showMessage1, setShowMessage1] = useState(false);
@@ -73,8 +73,8 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
                 <p className="text-lg">Loading...</p>
               </div>
             ) : (
-              <div style={borderStyle}>
-                <div style={borderStyle} className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center p-4 rounded-3xl border-4 border-solid border-gray-400">
               <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.userName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
@@ -83,25 +83,11 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
                 {quizResults.quizResultHeader.reviewPending ? "Review Pending" : "Review Not Pending"}
               </p>
             </div>
-            <div>
+            <div className="p-4 rounded-3xl border-4 border-solid border-gray-400">
               <h2 className="text-lg font-bold mb-2">Questions:</h2>
               <ul>
                 {quizResults?.quizResultBody?.questions.map((header, index) => {
                   const questionResult2 = quizResults.quizResultBody.questionResults.find(item => item.questionId === header.id) as QuestionResult;
-                  const userAnswer = quizResults.quizResultBody.questions.find(item => item.id === header.id);
-                  console.log("Question Result:", questionResult2);
-                  console.log("UserId from arguments: ", quizResults.userId);
-                  console.log("Quiz ID from arguments: ", quizResults.quizId);
-                  console.log("Pending? ", questionResult2.reviewNeededResult);
-                  console.log("Answer", questionResult2.trueFalseAnswerResult);
-                  let choicesResults = {};
-                  if (questionResult2?.pseudoDictionaryChoicesResults) {
-                    choicesResults = JSON.parse(questionResult2.pseudoDictionaryChoicesResults);
-                  }
-                  let writtenAnswers = {};
-                  if (questionResult2?.writtenAnswer) {
-
-                  }
                   return (
                     <div key={index} className="flex items-center justify-center mb-2 mr-2">
                       {header.type === QuestionType.TrueFalse && (
@@ -110,53 +96,18 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
                                               questionResult={questionResult2}
                                             />
                                           )}
-                      {header.type === QuestionType.SingleChoice && (
-                                              <SingleChoiceQuestionResultDisplay
+                      { (header.type === QuestionType.SingleChoice || header.type === QuestionType.MultipleChoice) && (
+                                              <ChoiceQuestionResultDisplay
                                                 question={header}
-                                                userAnswer={questionResult2}
-                                                correctAnswer={questionResult2.singleChoiceResult === AnswerResult.Correct}
-                                                questionText={header.text}
-                                                questionScore={questionResult2.score}
-                                                choices={Object.keys(choicesResults)}
+                                                questionResult={questionResult2}
                                               />
                                             )}
-                      {header.type === QuestionType.MultipleChoice && (<div>
-                                              <p>Possible answers: {Object.keys(choicesResults).join(", ")}</p>
-                                              <p>Correct answers: {Object.keys(choicesResults).filter(choice => choicesResults[choice] === AnswerResult.Correct || choicesResults[choice] === AnswerResult.CorrectNotPicked).join(", ")}</p>
-                                              <p>Your answers: {Object.keys(choicesResults).filter(choice => choicesResults[choice] !== AnswerResult.CorrectNotPicked && choicesResults[choice] !== AnswerResult.Other).join(", ")}</p>
-
-                                            </div>)}
-                      {header.type === QuestionType.WriteAnswer && (
-                            <WrittenQuestionResultDisplay
-                              question={header}
-                              userAnswer={questionResult2}
-                              correctAnswer={questionResult2.writtenAnswerResult === AnswerResult.Correct}
-                              questionText={header.text}
-                              questionScore={questionResult2.score}
-                            />
-                          )}
-                     {header.type === QuestionType.ReviewNeeded && questionResult2.reviewNeededResult === AnswerResult.Pending &&
-                       <button
-                         className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-                         onClick={() => getReview(
-                           quizResults.userId,
-                           quizResults.quizId,
-                           questionResult2.questionId,
-                           questionResult2.score
-                         )}
-                       >
-                         Review
-                       </button>
-                     }
-                     {header.type === QuestionType.ReviewNeeded && questionResult2.reviewNeededResult !== AnswerResult.Pending &&
-                       <WrittenQuestionResultDisplay
-                         question={header}
-                         userAnswer={questionResult2}
-                         correctAnswer={questionResult2.reviewNeededResult === AnswerResult.Correct}
-                         questionText={header.text}
-                         questionScore={questionResult2.score}
-                       />
-                     }
+                     {header.type === QuestionType.WrittenAnswer && (
+                        <WrittenQuestionResultDisplay
+                          question={header}
+                          questionResult={questionResult2}
+                        />
+                     )}
                     </div>
                   );
                 })}
