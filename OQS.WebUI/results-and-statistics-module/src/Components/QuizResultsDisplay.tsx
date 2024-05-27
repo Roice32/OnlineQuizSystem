@@ -1,11 +1,8 @@
-import axios from "axios";
-import { QuestionType } from "../utils/types/questions";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { QuestionResult, QuizResults } from "../utils/types/results-and-statistics/quiz-results";
-import { useEffect, useState } from "react";
-import { AnswerResult, QuestionReview } from "../utils/types/results-and-statistics/question-review";
-import TrueFalseQuestionResultDisplay from './SubmittedQuestions/TrueFalseQuestionResultDisplay';
-import ChoiceQuestionResultDisplay from "./SubmittedQuestions/ChoiceQuestionResultDisplay";
-import WrittenQuestionResultDisplay from "./SubmittedQuestions/WrittenQuestionResultDisplay";
+import { QuestionReview } from "../utils/types/results-and-statistics/question-review";
+import QuestionResultDisplay from './QuestionResultDisplays/QuestionResultDisplay';
 
 export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizResults }) {
   const [showMessage1, setShowMessage1] = useState(false);
@@ -14,30 +11,32 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
   const [quizResultss, setQuizResults] = useState<QuizResults | null>(null);
   const [questionReview, setReviewResults] = useState<QuestionReview | null>(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (quizResults) {
       setQuizResults(quizResults);
       setLoading(false);
     }
   }, [quizResults]);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     date.setHours(date.getHours() + 2);
     const isoString = date.toISOString();
     return isoString.replace('T', ' ').split('.')[0];
   };
+
   const getReview = async (userId: string, quizId: string, questionId?: string, score?: number) => {
     setShowMessage3(true);
     setShowMessage1(false);
     setShowMessage2(false);
     try {
-        console.log(`Fetching review for user ID: ${userId} quizId: ${quizId} questionId: ${questionId} score: ${score}`);
-        const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult/`, {
+      console.log(`Fetching review for user ID: ${userId} quizId: ${quizId} questionId: ${questionId} score: ${score}`);
+      const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult/`, {
         userId: userId,
         quizId: quizId,
         questionId: questionId,
         score: score,
-
       });
       console.log(response.data);
       setReviewResults(response.data);
@@ -65,16 +64,16 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
     );
   }
   return (
-     <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
-          <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
-            <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Quiz Results</h1>
-            {loading ? (
-              <div className="text-center">
-                <p className="text-lg">Loading...</p>
-              </div>
-            ) : (
-              <div>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center p-4 rounded-3xl rounded-b-none border-4 border-solid border-gray-400">
+    <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
+      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
+        <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Quiz Results</h1>
+        {loading ? (
+          <div className="text-center">
+            <p className="text-lg">Loading...</p>
+          </div>
+        ) : (
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center p-4 rounded-3xl rounded-b-none border-4 border-solid border-gray-400">
               <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.userName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
@@ -90,24 +89,7 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
                   const questionResult2 = quizResults.quizResultBody.questionResults.find(item => item.questionId === header.id) as QuestionResult;
                   return (
                     <div key={index} className="flex items-center justify-center mb-2 mr-2">
-                      {header.type === QuestionType.TrueFalse && (
-                                            <TrueFalseQuestionResultDisplay
-                                              question={header}
-                                              questionResult={questionResult2}
-                                            />
-                                          )}
-                      { (header.type === QuestionType.SingleChoice || header.type === QuestionType.MultipleChoice) && (
-                                              <ChoiceQuestionResultDisplay
-                                                question={header}
-                                                questionResult={questionResult2}
-                                              />
-                                            )}
-                     {header.type === QuestionType.WrittenAnswer && (
-                        <WrittenQuestionResultDisplay
-                          question={header}
-                          questionResult={questionResult2}
-                        />
-                     )}
+                      <QuestionResultDisplay question={header} questionResult={questionResult2} />
                     </div>
                   );
                 })}
@@ -119,9 +101,3 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
     </div>
   );
 }
-
-const borderStyle = {
-  borderRadius: '50px',
-  border: '1px solid gray',
-  padding: '10px',
-};
