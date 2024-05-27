@@ -1,4 +1,4 @@
-﻿﻿using Carter;
+﻿using Carter;
 using FluentValidation;
 using Mapster;
 using MediatR;
@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Feautures.Authentication;
-using OQS.CoreWebAPI.Feautures.ResetPassword;
 using OQS.CoreWebAPI.Shared;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -74,7 +73,7 @@ namespace OQS.CoreWebAPI.Feautures.ResetPassword
                             new Error("ResetPassword.Handler", $"Invalid token. Token: {decodedToken}"));
                     }
                 }
-                
+
                 var result = await userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
 
                 if (!result.Succeeded)
@@ -95,7 +94,7 @@ public class ResetPasswordEndPoind : ICarterModule
     {
         _ = app.MapPost("api/resetPassword/{token}", async (ResetPasswordModel model, ISender sender, string token) =>
         {
-            var command = new ResetPassword.Command
+            var command = new OQS.CoreWebAPI.Feautures.ResetPassword.ResetPassword.Command
             {
                 Token = token,
                 NewPassword = model.newPassword,

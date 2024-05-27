@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Feautures.Profile;
 using OQS.CoreWebAPI.Contracts.Models;
-using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Tests.Profile
 {
@@ -22,7 +21,8 @@ namespace OQS.CoreWebAPI.Tests.Profile
 
             var query = new Feautures.Profile.GetUserDetails.Query
             {
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                Jwt = "valid_jwt_token"
             };
 
             // Simulate an existing user
@@ -36,7 +36,7 @@ namespace OQS.CoreWebAPI.Tests.Profile
             };
             userManagerMock.FindByIdAsync(query.Id.ToString()).Returns(user);
 
-            var handler = new Feautures.Profile.GetUserDetails.Handler(userManagerMock);
+            var handler = new Feautures.Profile.GetUserDetails.Handler(userManagerMock, null);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -59,13 +59,14 @@ namespace OQS.CoreWebAPI.Tests.Profile
 
             var query = new Feautures.Profile.GetUserDetails.Query
             {
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                Jwt = "valid_jwt_token"
             };
 
             // Simulate a non-existing user
             userManagerMock.FindByIdAsync(query.Id.ToString()).Returns((User)null);
 
-            var handler = new Feautures.Profile.GetUserDetails.Handler(userManagerMock);
+            var handler = new Feautures.Profile.GetUserDetails.Handler(userManagerMock, null);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);
@@ -74,6 +75,30 @@ namespace OQS.CoreWebAPI.Tests.Profile
             Assert.False(result.IsSuccess);
             Assert.NotNull(result.Error);
             Assert.Equal("User doesn't exists.", result.Error.Message);
+        }
+
+        [Fact]
+        public async Task Handle_InvalidJwt_ReturnsFailure()
+        {
+            // Arrange
+            var userManagerMock = Substitute.For<UserManager<User>>(
+                Substitute.For<IUserStore<User>>(), null, null, null, null, null, null, null, null);
+
+            var query = new Feautures.Profile.GetUserDetails.Query
+            {
+                Id = Guid.NewGuid(),
+                Jwt = "invalid_jwt_token"
+            };
+
+            var handler = new Feautures.Profile.GetUserDetails.Handler(userManagerMock, null);
+
+            // Act
+            var result = await handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.NotNull(result.Error);
+            Assert.Equal("Invalid Jwt", result.Error.Message);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿﻿using Carter;
+﻿using Carter;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +21,7 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
             public string Password { get; set; }
         }
 
-        public class  Validator : AbstractValidator<Command>
+        public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
@@ -65,17 +65,17 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
                                                new Error("Authentication.Handler", "Invalid user or password."));
                 }
 
+
+
                 var userRoles = await userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Id!),
+                    new Claim(ClaimTypes.Role, userRoles.FirstOrDefault()!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }   
+
 
                 string token = GenerateToken(authClaims);
 

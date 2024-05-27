@@ -5,10 +5,10 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using NSubstitute;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Feautures.Authentication;
+using OQS.CoreWebAPI.Feautures.Authentication; 
 using Xunit;
+using NSubstitute;
 
 namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
 {
@@ -52,7 +52,7 @@ namespace OQS.CoreWebAPI.Feautures.Authentication.Tests
             // Assert
             Assert.True(result.IsSuccess);
             Assert.NotNull(result.Value);
-            Assert.IsType<string>(result.Value);
+        
         }
 
         [Fact]

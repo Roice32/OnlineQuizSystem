@@ -42,6 +42,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         });
 
 builder.Services.AddCarter();
+builder.Services.AddAuthorization();
 
 // Pentru trimiterea email-urilor
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -70,11 +71,14 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.MapCarter();
-app.UseHttpsRedirection();
-
 // Add configuration for CORS here
 app.UseCors("AllowSpecificOrigin");
+
+app.MapCarter();
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 // Replace the ASP.NET Core routing with Carter's routing
 

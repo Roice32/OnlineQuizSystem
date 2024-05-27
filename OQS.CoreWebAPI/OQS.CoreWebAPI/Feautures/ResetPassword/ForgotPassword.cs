@@ -1,4 +1,4 @@
-﻿﻿using Carter;
+﻿using Carter;
 using FluentValidation;
 using Mapster;
 using MediatR;
@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Feautures.Authentication;
-using OQS.CoreWebAPI.Feautures.ResetPassword;
 using OQS.CoreWebAPI.Shared;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -90,7 +89,7 @@ public class ForgotPasswordEndPoind : ICarterModule
     {
         _ = app.MapPost("api/forgot_password", async (ForgotPasswordModel model, ISender sender) =>
         {
-            var command = new ForgotPassword.Command
+            var command = new OQS.CoreWebAPI.Feautures.ResetPassword.ForgotPassword.Command
             {
                 Email = model.Email,
                 Username = model.Username

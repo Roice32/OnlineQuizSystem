@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.feautures.profile.tests\\getuseridtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|solutionrelative:oqs.corewebapi.feautures.profile.tests\\getuseridtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.feautures.profile.tests\\updateusertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|solutionrelative:oqs.corewebapi.feautures.profile.tests\\updateusertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\feautures\\profile\\getuserid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\feautures\\profile\\getuserid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.feautures.profile.tests\\getalluserstest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|solutionrelative:oqs.corewebapi.feautures.profile.tests\\getalluserstest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi\\feautures\\profile\\getallusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CE8E8B9-8934-45A7-BCCB-C6E32B4C7E52}|OQS.CoreWebAPI\\OQS.CoreWebAPI.csproj|solutionrelative:oqs.corewebapi\\feautures\\profile\\getallusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|c:\\users\\cpirlac\\desktop\\onlinequizsystem\\oqs.corewebapi\\oqs.corewebapi.feautures.profile.tests\\deleteusertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A59A154-2BD0-48D7-ADD3-87B4F91FD3C5}|OQS.CoreWebAPI.Feautures.Profile.Tests\\OQS.CoreWebAPI.Feautures.Profile.Tests.csproj|solutionrelative:oqs.corewebapi.feautures.profile.tests\\deleteusertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 246,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,23 +34,62 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UpdateUserTest.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\UpdateUserTest.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Feautures.Profile.Tests\\UpdateUserTest.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\UpdateUserTest.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Feautures.Profile.Tests\\UpdateUserTest.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T10:46:56.037Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "GetUserId.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile\\GetUserId.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Feautures\\Profile\\GetUserId.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile\\GetUserId.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI\\Feautures\\Profile\\GetUserId.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAYAAAA",
+              "Title": "GetAllUsersTest.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\GetAllUsersTest.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Feautures.Profile.Tests\\GetAllUsersTest.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\GetAllUsersTest.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Feautures.Profile.Tests\\GetAllUsersTest.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAuwB4AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T09:46:06.597Z",
+              "WhenOpened": "2024-05-27T10:45:52.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GetAllUsers.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile\\GetAllUsers.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI\\Feautures\\Profile\\GetAllUsers.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI\\Feautures\\Profile\\GetAllUsers.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI\\Feautures\\Profile\\GetAllUsers.cs",
+              "ViewState": "AQIAACAAAAAAAAAAAAAYwC8AAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T10:44:47.573Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DeleteUserTest.cs",
+              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\DeleteUserTest.cs",
+              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Feautures.Profile.Tests\\DeleteUserTest.cs",
+              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\DeleteUserTest.cs",
+              "RelativeToolTip": "OQS.CoreWebAPI.Feautures.Profile.Tests\\DeleteUserTest.cs",
+              "ViewState": "AQIAAFIAAAAAAAAAAAAgwFoAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T10:43:34.903Z",
               "EditorCaption": ""
             },
             {
@@ -68,19 +115,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GetUserIdTest.cs",
-              "DocumentMoniker": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\GetUserIdTest.cs",
-              "RelativeDocumentMoniker": "OQS.CoreWebAPI.Feautures.Profile.Tests\\GetUserIdTest.cs",
-              "ToolTip": "C:\\Users\\Cpirlac\\Desktop\\OnlineQuizSystem\\OQS.CoreWebAPI\\OQS.CoreWebAPI.Feautures.Profile.Tests\\GetUserIdTest.cs",
-              "RelativeToolTip": "OQS.CoreWebAPI.Feautures.Profile.Tests\\GetUserIdTest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAABcAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T09:46:28.131Z",
-              "EditorCaption": ""
             }
           ]
         }

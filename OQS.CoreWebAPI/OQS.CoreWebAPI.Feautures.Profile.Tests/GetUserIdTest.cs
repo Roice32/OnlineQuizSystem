@@ -1,68 +1,63 @@
 ﻿using Xunit;
 using NSubstitute;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using OQS.CoreWebAPI.Feautures.Profile;
+using OQS.CoreWebAPI.Contracts.Models;
+using QOS.CoreWebAPI.Feautures.Profile;
 
 namespace OQS.CoreWebAPI.Tests.Profile
 {
-    public class GetUsernameTests
+    public class GetUserIdTest
     {
-        private const string SecretKey = "supersecretkey!12345678901234567890123456789012"; 
-
         [Fact]
-        public async Task Handle_ValidJwt_ReturnsUsername()
+        public async Task Handle_ValidJwt_ReturnsUserId()
         {
             // Arrange
-            var username = "testuser";
-            var jwt = CreateJwtToken(username);
+            var configurationMock = Substitute.For<IConfiguration>();
 
-            var handler = new GetUsername.Handler();
-            var command = new GetUsername.Command(jwt);
+            var jwt = "valid_jwt_token";
 
-            // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var handler = new GetUserId.Handler(configurationMock);
 
-            // Assert
-            Assert.Equal(username, result);
-        }
-
-        [Fact]
-        public async Task Handle_InvalidJwt_ReturnsNull()
-        {
-            // Arrange
-            var jwt = "invalid_jwt";
-            var handler = new GetUsername.Handler();
-            var command = new GetUsername.Command(jwt);
-
-            // Act
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            // Assert
-            Assert.Null(result);
-        }
-
-        private string CreateJwtToken(string username)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(SecretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var command = new GetUserId.Command
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("unique_name", username)
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Jwt = jwt
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.NotNull(result.Value);
+            Assert.Equal("username_claim_value", result.Value.Id);
+            Assert.Equal("role_claim_value", result.Value.Role);
+        }
+
+        [Fact]
+        public async Task Handle_InvalidJwt_ReturnsFailure()
+        {
+            // Arrange
+            var configurationMock = Substitute.For<IConfiguration>();
+
+            var jwt = "invalid_jwt_token";
+
+            var handler = new GetUserId.Handler(configurationMock);
+
+            var command = new GetUserId.Command
+            {
+                Jwt = jwt
+            };
+
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.NotNull(result.Error);
+            Assert.Equal("Invalid Jwt", result.Error.Message);
         }
     }
 }

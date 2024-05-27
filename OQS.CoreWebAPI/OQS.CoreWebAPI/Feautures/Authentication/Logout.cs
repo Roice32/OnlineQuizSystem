@@ -16,19 +16,29 @@ namespace OQS.CoreWebAPI.Feautures.Authentication
     {
         public record Command : IRequest<Result>
         {
+            public string Jwt { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result>
         {
             private readonly SignInManager<User> signInManager;
+            private readonly IConfiguration configuration;
 
-            public Handler(SignInManager<User> signInManager)
+            public Handler(SignInManager<User> signInManager, IConfiguration configuration)
             {
                 this.signInManager = signInManager;
+                this.configuration = configuration;
             }
 
             public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
+                var jwtValidator = new JwtValidator(configuration);
+                if (!jwtValidator.Validate(request.Jwt))
+                {
+                    return Result.Failure<List<User>>(
+                        new Error("Authentication", "Invalid Jwt"));
+                }
+
                 await signInManager.SignOutAsync();
 
                 return Result.Success();
@@ -41,9 +51,13 @@ public class LogoutEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        _ = app.MapPost("api/profile/{id}/logout", async (ISender sender) =>
+        _ = app.MapPost("api/profile/{id}/logout", async (HttpContext context, ISender sender) =>
         {
-            var command = new Logout.Command();
+            var jwt = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var command = new Logout.Command
+            {
+                Jwt = jwt
+            };
 
             var result = await sender.Send(command);
             if (result.IsSuccess)
