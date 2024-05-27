@@ -25,8 +25,9 @@ export default function TrueFalseQuestionResultDisplay({ question, questionResul
                     'p-2 rounded-full border border-gray-300 w-full max-w-md text-left',
                     {
                       'bg-green-500 text-white': question.trueFalseAnswer === true && questionResult.trueFalseAnswerResult === AnswerResult.Correct,
-                      'bg-red-500 text-white': question.trueFalseAnswer === true && questionResult.trueFalseAnswerResult === AnswerResult.Wrong,
-                      'bg-white text-black': question.trueFalseAnswer !== true && questionResult.trueFalseAnswerResult === AnswerResult.Correct
+                      'bg-green-200 text-black': question.trueFalseAnswer === true && questionResult.trueFalseAnswerResult === AnswerResult.Wrong,
+                      'bg-red-500 text-white': question.trueFalseAnswer !== true && questionResult.trueFalseAnswerResult === AnswerResult.Wrong,
+                      "bg-gray-200 text-black": question.trueFalseAnswer !== true && questionResult.trueFalseAnswerResult === AnswerResult.Correct
                     }
                   )}
                 >
@@ -39,8 +40,9 @@ export default function TrueFalseQuestionResultDisplay({ question, questionResul
                     'p-2 rounded-full border border-gray-300 w-full max-w-md text-left',
                     {
                       'bg-green-500 text-white': question.trueFalseAnswer === false && questionResult.trueFalseAnswerResult === AnswerResult.Correct,
-                      'bg-red-500 text-white': question.trueFalseAnswer === false && questionResult.trueFalseAnswerResult === AnswerResult.Wrong,
-                      'bg-white text-black': question.trueFalseAnswer !== false && questionResult.trueFalseAnswerResult === AnswerResult.Correct
+                      'bg-green-200 text-black': question.trueFalseAnswer === false && questionResult.trueFalseAnswerResult === AnswerResult.Wrong,
+                      'bg-red-500 text-white': question.trueFalseAnswer !== false && questionResult.trueFalseAnswerResult === AnswerResult.Wrong,
+                      "bg-gray-200 text-black": question.trueFalseAnswer !== false && questionResult.trueFalseAnswerResult === AnswerResult.Correct
                     }
                   )}
                 >
