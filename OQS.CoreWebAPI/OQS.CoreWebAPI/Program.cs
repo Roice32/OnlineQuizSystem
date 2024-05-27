@@ -70,7 +70,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidIssuer = "https://localhost:7117",
-                ValidAudience = "https://localhost:7117",
+                ValidAudience = null,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("7567693c464441e000f6f4150eb7ff2db7449baa25e8b369dead88967e2f841b"))
             };
         });
