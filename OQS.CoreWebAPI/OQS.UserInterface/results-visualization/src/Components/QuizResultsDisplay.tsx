@@ -112,11 +112,15 @@ export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizRe
                         <p>Your Answer: {questionResult2?.trueFalseAnswerResult === AnswerResult.Correct ? "True" : "False"}</p>
                         </div>
                       )}
-                      {header.type===QuestionType.WriteAnswer&& (<div>
+                      {header.type===QuestionType.WriteAnswer && (<div>
+                        <p>Accepted Answers: {header.writtenAcceptedAnswers?.join(", ")}</p>
                         <p>Your answers: {questionResult2.writtenAnswer}</p>
 
                       </div>)}
-                      {header.type === QuestionType.ReviewNeeded && questionResult2.reviewNeededResult === AnswerResult.Pending &&
+                      {header.type === QuestionType.ReviewNeeded &&
+                      (<div>
+                        <p>Your answer: {questionResult2.reviewNeededAnswer}</p>
+                        {questionResult2.reviewNeededResult === AnswerResult.Pending && 
                         <button 
                           style={buttonStyle} 
                           onClick={() => getReview(
@@ -127,9 +131,9 @@ export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizRe
                           )}
                         >
                           Review
-                        </button>
+                        </button>}
+                      </div>)
                       } 
-                   {header.type === QuestionType.ReviewNeeded && questionResult2.reviewNeededResult !== AnswerResult.Pending && <p>Your Answer: {questionResult2.reviewNeededAnswer}</p>}
                    {header.type===QuestionType.MultipleChoice&& (<div>
                           <p>Possible answers: {Object.keys(choicesResults).join(", ")}</p>
                           <p>Correct answers: {Object.keys(choicesResults).filter(choice => choicesResults[choice] === AnswerResult.Correct||choicesResults[choice]===AnswerResult.CorrectNotPicked).join(", ")}</p>
@@ -141,7 +145,6 @@ export default function QuizResultsDisplay({ quizResults}: { quizResults: QuizRe
                           <p>Correct answer: {Object.keys(choicesResults).filter(choice => choicesResults[choice] === AnswerResult.Correct||choicesResults[choice]===AnswerResult.CorrectNotPicked).join(", ")}</p>
                           <p>Your answers: {Object.keys(choicesResults).filter(choice => choicesResults[choice]=== AnswerResult.Correct||choicesResults[choice]===AnswerResult.Wrong).join(", ")}</p>
                         </div>)}
- 
                     </div>
                   );
                 })}

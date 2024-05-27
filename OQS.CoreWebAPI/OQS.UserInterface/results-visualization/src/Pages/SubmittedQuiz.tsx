@@ -108,7 +108,7 @@ export default function SubmittedQuiz() {
         <h1 style={{ fontSize: '40px', color: '#f7ebe7' }} className="submittedQuiz">Submitted Quiz Responses:</h1>
         <button style={buttonStyle} onClick={() => getCreatedQuizStats("00000000-0000-0000-0002-000000000001")}>Get Created Quiz Stats Example</button>
         <button style={buttonStyle} onClick={() => getTakenQuizzesHistory("00000000-0000-0000-0001-000000000001")}>Get Taken Quizzes History</button>
-        <button style={buttonStyle} onClick={() => getQuizResult("00000000-0000-0000-0001-000000000001", "00000000-0000-0000-0002-000000000001")}>Get Quiz Result</button>
+        <button style={buttonStyle} onClick={() => getQuizResult("00000000-0000-0000-0001-000000000003", "00000000-0000-0000-0002-000000000003")}>Get Quiz Result</button>
       </div>
     </div>
   );
