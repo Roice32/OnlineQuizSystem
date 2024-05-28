@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Navbar from '../../components/Navbar'
 import {
-  Card,
+  Dialog,
   TextField,
   Flex,
   CheckboxGroup,
@@ -15,12 +15,14 @@ import {
   Button,
 } from '@radix-ui/themes'
 
+import * as Toast from '@radix-ui/react-toast'
+
 import './QuizCreate.css'
 
 import { useNavigate } from 'react-router-dom'
 
 import { useState } from 'react'
-import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons'
+import { Cross1Icon, PlusIcon, RocketIcon } from '@radix-ui/react-icons'
 import { v4 as uuid } from 'uuid'
 
 const steps = [
@@ -57,9 +59,9 @@ let QuestionTypeString = {
   3: 'Written Answer',
 }
 
-function optionSingleChoice(value: string) {
+function optionSingleChoice(value: string, i: number) {
   return (
-    <RadioGroup.Item value={value}>
+    <RadioGroup.Item key={i} value={value}>
       <Flex>
         {value}
       </Flex>
@@ -79,11 +81,13 @@ function optionMultipleChoice(value: string) {
 
 }
 
-function QuestionComponent({ question, setQuiz, quiz }) {
+function QuestionComponent({ id, setQuiz, quiz }) {
   const [addOptionMultipleChoice, setAddOptionMultipleChoice] = useState(false)
   const [newOptionMultipleChoice, setNewOptionMultipleChoice] = useState('')
   const [addOptionWrittenAnswer, setAddOptionWrittenAnswer] = useState(false)
   const [newOptionWrittenAnswer, setNewOptionWrittenAnswer] = useState('')
+
+  const question = quiz.questions.find((q) => q.id === id)
 
   let questionType = quiz.questions.find((q) => q.id === question.id).type
   let questionText = quiz.questions.find((q) => q.id === question.id).text
@@ -94,6 +98,7 @@ function QuestionComponent({ question, setQuiz, quiz }) {
   const [addOptionSingleChoice, setAddOptionSingleChoice] = useState(false)
   const [newOptionSingleChoice, setNewOptionSingleChoice] = useState('')
   const [correctAnswerSingleChoice, setCorrectAnswerSingleChoice] = useState('')
+
 
   const submitQuestion = (event) => {
     const data = Object.fromEntries(new FormData(event.currentTarget))
@@ -187,7 +192,7 @@ function QuestionComponent({ question, setQuiz, quiz }) {
           <>
             <CheckboxGroup.Root value={correctAnswers} onValueChange={setCorrectAnswerMultipleChoice}
                                 name="example" mb="10px">
-              {question.choices.map(e => optionMultipleChoice(e.value))}
+              {question.choices.map(e => optionMultipleChoice(e))}
             </CheckboxGroup.Root>
             {addOptionMultipleChoice && (
               <>
@@ -195,10 +200,7 @@ function QuestionComponent({ question, setQuiz, quiz }) {
                           onChange={(event) => setNewOptionMultipleChoice(event.target.value)} />
                 <Flex justify="between">
                   <Button mb="20px" onClick={() => {
-                    let newOptionsMultipleChoice = [...question.multipleChoiceAnswers, {
-                      value: newOptionMultipleChoice,
-                      isCorrect: false,
-                    }]
+                    let newOptionsMultipleChoice = [...question.multipleChoiceAnswers, newOptionMultipleChoice]
                     setQuiz({
                       ...quiz,
                       questions: quiz.questions.map((q) => {
@@ -239,7 +241,7 @@ function QuestionComponent({ question, setQuiz, quiz }) {
           <>
             <RadioGroup.Root value={correctAnswerSingleChoice} onValueChange={setCorrectAnswerSingleChoice}
                              name="example" mb="10px">
-              {question.choices.map(e => optionSingleChoice(e.value))}
+              {question.choices.map((e, i) => optionSingleChoice(e, i))}
             </RadioGroup.Root>
             {addOptionSingleChoice && (
               <>
@@ -247,10 +249,9 @@ function QuestionComponent({ question, setQuiz, quiz }) {
                           onChange={(event) => setNewOptionSingleChoice(event.target.value)} />
                 <Flex justify="between">
                   <Button mb="20px" onClick={() => {
-                    let newOptionsSingleChoice = [...question.choices, {
-                      value: newOptionSingleChoice,
-                      isCorrect: false,
-                    }]
+                    let newOptionsSingleChoice = [...question.choices,
+                      newOptionSingleChoice,
+                    ]
 
                     setQuiz({
                       ...quiz,
@@ -321,10 +322,9 @@ function QuestionComponent({ question, setQuiz, quiz }) {
                           onChange={(event) => setNewOptionWrittenAnswer(event.target.value)} />
                 <Flex justify="between">
                   <Button mb="20px" onClick={() => {
-                    let newOptionsWrittenAnswer = [...question.choices, {
-                      value: newOptionWrittenAnswer,
-                      isCorrect: false,
-                    }]
+                    let newOptionsWrittenAnswer = [...question.choices,
+                      newOptionWrittenAnswer,
+                    ]
 
                     setQuiz({
                       ...quiz,
@@ -475,214 +475,376 @@ export default function QuizCreate() {
   const [quiz, setQuiz] = useState<QuizCreateProps>({ language: 'romanian' })
   const [errorMessages, setErrorMessages] = useState<ErrorMessagesQuizCreate>({})
 
+  const [open, setOpen] = React.useState(false)
+
+  const [messageToast, setMessageToast] = React.useState('')
+  const [titleToast, setTitleToast] = React.useState('')
+
+  const [loadingAI, setLoadingAI] = React.useState(false)
+  const [doneAI, setDoneAI] = React.useState(false)
+  const [prompt, setPrompt] = React.useState('')
+
+  const [currentElement, setCurrentElement] = React.useState('quiz-details')
+
   return (
     <>
-      <Navbar />
-      <Container p="30px">
-        <Tabs.Root defaultValue="quiz-details">
-          <Flex justify="between">
-            <Tabs.List size={'2'} wrap={'wrap'}>
-              <Tabs.Trigger value="quiz-details">Quiz details</Tabs.Trigger>
-              {quiz.questions && quiz.questions.map((question, index) => (<>
-                <Tabs.Trigger value={`question${index}`}>Question {index + 1}</Tabs.Trigger>
-              </>))}
-              <Tabs.Trigger value="submit-quiz">Submit Quiz</Tabs.Trigger>
-            </Tabs.List>
+      <Dialog.Root>
+        <Navbar />
+        <Toast.Provider swipeDirection="right">
+          <Container p="30px">
+            <Tabs.Root value={currentElement} onValueChange={setCurrentElement}>
+              <Flex justify="between">
+                <Tabs.List size={'2'} wrap={'wrap'}>
+                  <Tabs.Trigger value="quiz-details">Quiz details</Tabs.Trigger>
+                  {quiz.questions && quiz.questions.map((question, index) => (<>
+                    <Tabs.Trigger value={`question${index}`}>Question {index + 1}</Tabs.Trigger>
+                  </>))}
+                  <Tabs.Trigger value="submit-quiz">Submit Quiz</Tabs.Trigger>
+                </Tabs.List>
 
-            <Button onClick={() => {
-              if (!quiz.questions) {
-                setQuiz({
-                  ...quiz, 'questions': [{
-                    id: uuid(),
-                    text: '',
-                    type: 0,
-                    allocatedPoints: 0,
-                    trueFalseAnswer: true,
-                    choices: [],
-                    multipleChoiceAnswers: [],
-                    writtenAcceptedAnswers: [],
-                    timeLimit: 0,
-                  }],
-                })
-              } else {
-                setQuiz({
-                  ...quiz,
-                  questions: [...quiz.questions, {
-                    id: uuid(),
-                    text: '',
-                    type: 0,
-                    choices: [],
-                    trueFalseAnswer: true,
-                    multipleChoiceAnswers: [],
-                    writtenAcceptedAnswers: [],
-                    allocatedPoints: 0,
-                    timeLimit: 0,
-                  }],
-                })
-              }
-            }}>Add Question</Button>
+                <Box>
+                  <Button mr="10px" onClick={() => {
+                    if (!quiz.questions) {
+                      setQuiz({
+                        ...quiz, 'questions': [{
+                          id: uuid(),
+                          text: '',
+                          type: 0,
+                          allocatedPoints: 0,
+                          trueFalseAnswer: true,
+                          choices: [],
+                          multipleChoiceAnswers: [],
+                          writtenAcceptedAnswers: [],
+                          timeLimit: 0,
+                        }],
+                      })
+                    } else {
+                      setQuiz({
+                        ...quiz,
+                        questions: [...quiz.questions, {
+                          id: uuid(),
+                          text: '',
+                          type: 0,
+                          choices: [],
+                          trueFalseAnswer: true,
+                          multipleChoiceAnswers: [],
+                          writtenAcceptedAnswers: [],
+                          allocatedPoints: 0,
+                          timeLimit: 0,
+                        }],
+                      })
+                    }
+                  }}>Add Question</Button>
+                  <Dialog.Trigger>
+                    <Button>
+                      <RocketIcon />
+                    </Button>
+                  </Dialog.Trigger>
+                </Box>
+              </Flex>
+
+              <Box pt="3" width="100%">
+                <Tabs.Content value="quiz-details">
+                  <Flex direction="column" align="center">
+                    <Flex maxWidth="400px" direction="column">
+                      <Box mb="10px">
+                        <Text as="label">Name</Text>
+                        <TextField.Root placeholder="Add a name..." value={quiz.name} onChange={(event) => {
+                          if (!event.target.value) {
+                            if (event.target.value === '') {
+                              setQuiz({ ...quiz, 'name': event.target.value })
+                            }
+                            setErrorMessages({ ...errorMessages, 'name': 'Name is required' })
+                          } else {
+                            setQuiz({ ...quiz, 'name': event.target.value })
+                            setErrorMessages({ ...errorMessages, 'name': '' })
+                          }
+                        }} />
+                        {errorMessages.name && <Text as="p" color="red">{errorMessages.name}</Text>}
+                      </Box>
+                      <Box mb="10px">
+                        <Text as="label">Image URL</Text>
+                        <TextField.Root placeholder="Add a image url..." value={quiz.imageUrl} onChange={(event) => {
+                          if (!event.target.value) {
+                            if (event.target.value === '') {
+                              setQuiz({ ...quiz, 'imageUrl': event.target.value })
+                            }
+                            setErrorMessages({ ...errorMessages, 'imageUrl': 'Image URL is required' })
+                          } else {
+                            setQuiz({ ...quiz, 'imageUrl': event.target.value })
+                            setErrorMessages({ ...errorMessages, 'imageUrl': '' })
+                          }
+                        }} />
+                        {errorMessages.imageUrl && <Text as="p" color="red">{errorMessages.imageUrl}</Text>}
+                      </Box>
+                      <Box mb="10px">
+                        <Text as="label">Description</Text>
+                        <TextArea placeholder="Add a description..." value={quiz.description} onChange={(event) => {
+                          if (!event.target.value) {
+                            if (event.target.value === '') {
+                              setQuiz({ ...quiz, 'description': event.target.value })
+                            }
+                            setErrorMessages({ ...errorMessages, 'description': 'Description is required' })
+                          } else {
+                            setQuiz({ ...quiz, 'description': event.target.value })
+                            setErrorMessages({ ...errorMessages, 'description': '' })
+                          }
+                        }} />
+                        {errorMessages.description && <Text as="p" color="red">{errorMessages.description}</Text>}
+                      </Box>
+                      <Flex mb="10px" direction="column">
+                        <Text as="label">Language</Text>
+                        <Select.Root defaultValue="romanian" value={quiz.language} onValueChange={(value) => {
+                          setQuiz({ ...quiz, 'language': value })
+                        }}>
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Item value="romanian">Romanian</Select.Item>
+                            <Select.Item value="english">English</Select.Item>
+                            <Select.Item value="spanish">Spanish</Select.Item>
+                            <Select.Item value="french">French</Select.Item>
+                          </Select.Content>
+                        </Select.Root>
+                      </Flex>
+                      <Box mb="10px">
+                        <Text as="label">Time limit</Text>
+                        <TextField.Root placeholder="Add a time limit..." value={quiz.timeLimit} onChange={(event) => {
+                          // verify if a string is a number in js
+
+                          if (!isNaN(Number(event.target.value)) && Number(event.target.value) > 0) {
+                            setQuiz({ ...quiz, 'timeLimit': Number(event.target.value) })
+                            setErrorMessages({ ...errorMessages, 'timeLimit': '' })
+                          } else {
+                            if ('' === event.target.value) {
+                              setQuiz({ ...quiz, 'timeLimit': event.target.value })
+                            }
+                            setErrorMessages({ ...errorMessages, 'timeLimit': 'Invalid time limit' })
+                          }
+                        }} />
+                        {errorMessages.timeLimit && <Text as="p" color="red">{errorMessages.timeLimit}</Text>}
+                      </Box>
+                    </Flex>
+                  </Flex>
+                </Tabs.Content>
+
+                {quiz.questions && quiz.questions.map((question, index) => (<>
+                  <Tabs.Content value={`question${index}`}>
+                    <QuestionComponent id={question.id} setQuiz={setQuiz} quiz={quiz} />
+                  </Tabs.Content>
+                </>))}
+
+                <Tabs.Content value="submit-quiz">
+                  <Flex justify="center">
+                    <Flex direction="column" justify="center" maxWidth="500px">
+                      <Text mb="20px">If you are ready you can submit your quiz</Text>
+                      <Button onClick={() => {
+                        let quizRequest = {
+                          name: quiz.name,
+                          imageUrl: quiz.imageUrl,
+                          timeLimitMinutes: quiz.timeLimit,
+                          language: quiz.language,
+                          description: quiz.description,
+                          creatorId: '822c13a0-8872-431e-ad64-00f5249db11f',
+                        }
+
+                        console.log(quiz)
+                        console.log(quizRequest)
+                        fetch('http://localhost:5276/api/quizzes', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify(quizRequest),
+                        })
+                          .then((response) =>
+                            response.json(),
+                          )
+                          .then((data) => {
+                            if (typeof data === 'string') {
+                              return navigate(data.substring(4, data.length))
+                            }
+
+                            console.log(data)
+                            if (data.code !== 200) {
+                              setOpen(true)
+                              setMessageToast(data.message)
+                              setTitleToast('Error at creating the quiz')
+                              console.log(data.message)
+                              let errorMessagesStrings = data?.message.split('\n')
+                              let errorMessages = {}
+                              for (let error of errorMessagesStrings) {
+                                if (error.toLowerCase().includes('name')) {
+                                  errorMessages = { ...errorMessages, 'name': error }
+                                }
+                                if (error.toLowerCase().includes('image')) {
+                                  errorMessages = { ...errorMessages, 'imageUrl': error }
+                                }
+                                if (error.toLowerCase().includes('description')) {
+                                  errorMessages = { ...errorMessages, 'description': error }
+                                }
+                                if (error.toLowerCase().includes('time')) {
+                                  errorMessages = { ...errorMessages, 'timeLimit': error }
+                                }
+                                if (error.toLowerCase().includes('language')) {
+                                  errorMessages = { ...errorMessages, 'language': error }
+                                }
+                              }
+
+                              setErrorMessages({ ...errorMessages })
+                            }
+
+                            console.log('Success:', data)
+                          })
+                          .catch((error) => {
+                            console.error('Error:', error)
+                          })
+                      }}>
+                        Submit Quiz
+                      </Button>
+                    </Flex>
+                  </Flex>
+                </Tabs.Content>
+              </Box>
+            </Tabs.Root>
+          </Container>
+          <Toast.Root className="ToastRoot" open={open} onOpenChange={setOpen}>
+            <Toast.Title className="ToastTitle">{titleToast}</Toast.Title>
+            <Toast.Description asChild>
+              <Box className="ToastDescription">
+                {messageToast}
+              </Box>
+            </Toast.Description>
+            <Toast.Action className="ToastAction" asChild altText="Confirm">
+              <Button>Confirm</Button>
+            </Toast.Action>
+          </Toast.Root>
+          <Toast.Viewport className="ToastViewport" />
+
+        </Toast.Provider>
+
+
+        <Dialog.Content maxWidth="450px">
+          <Dialog.Title>Generate question</Dialog.Title>
+          <Dialog.Description size="2" mb="4">
+            Enter your prompt for AI to generate a question
+          </Dialog.Description>
+
+          <Flex direction="column" gap="3">
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Prompt
+              </Text>
+              <TextField.Root
+                value={prompt}
+                onChange={(event) => setPrompt(event.target.value)}
+                placeholder="Enter your prompt"
+              />
+            </label>
           </Flex>
 
-          <Box pt="3" width="100%">
-            <Tabs.Content value="quiz-details">
-              <Flex direction="column" align="center">
-                <Flex maxWidth="400px" direction="column">
-                  <Box mb="10px">
-                    <Text as="label">Name</Text>
-                    <TextField.Root placeholder="Add a name..." value={quiz.name} onChange={(event) => {
-                      if (!event.target.value) {
-                        if (event.target.value === '') {
-                          setQuiz({ ...quiz, 'name': event.target.value })
-                        }
-                        setErrorMessages({ ...errorMessages, 'name': 'Name is required' })
-                      } else {
-                        setQuiz({ ...quiz, 'name': event.target.value })
-                        setErrorMessages({ ...errorMessages, 'name': '' })
-                      }
-                    }} />
-                    {errorMessages.name && <Text as="p" color="red">{errorMessages.name}</Text>}
-                  </Box>
-                  <Box mb="10px">
-                    <Text as="label">Image URL</Text>
-                    <TextField.Root placeholder="Add a image url..." value={quiz.imageUrl} onChange={(event) => {
-                      if (!event.target.value) {
-                        if (event.target.value === '') {
-                          setQuiz({ ...quiz, 'imageUrl': event.target.value })
-                        }
-                        setErrorMessages({ ...errorMessages, 'imageUrl': 'Image URL is required' })
-                      } else {
-                        setQuiz({ ...quiz, 'imageUrl': event.target.value })
-                        setErrorMessages({ ...errorMessages, 'imageUrl': '' })
-                      }
-                    }} />
-                    {errorMessages.imageUrl && <Text as="p" color="red">{errorMessages.imageUrl}</Text>}
-                  </Box>
-                  <Box mb="10px">
-                    <Text as="label">Description</Text>
-                    <TextArea placeholder="Add a description..." value={quiz.description} onChange={(event) => {
-                      if (!event.target.value) {
-                        if (event.target.value === '') {
-                          setQuiz({ ...quiz, 'description': event.target.value })
-                        }
-                        setErrorMessages({ ...errorMessages, 'description': 'Description is required' })
-                      } else {
-                        setQuiz({ ...quiz, 'description': event.target.value })
-                        setErrorMessages({ ...errorMessages, 'description': '' })
-                      }
-                    }} />
-                    {errorMessages.description && <Text as="p" color="red">{errorMessages.description}</Text>}
-                  </Box>
-                  <Flex mb="10px" direction="column">
-                    <Text as="label">Language</Text>
-                    <Select.Root defaultValue="romanian" value={quiz.language} onValueChange={(value) => {
-                      setQuiz({ ...quiz, 'language': value })
-                    }}>
-                      <Select.Trigger />
-                      <Select.Content>
-                        <Select.Item value="romanian">Romanian</Select.Item>
-                        <Select.Item value="english">English</Select.Item>
-                        <Select.Item value="spanish">Spanish</Select.Item>
-                        <Select.Item value="french">French</Select.Item>
-                      </Select.Content>
-                    </Select.Root>
-                  </Flex>
-                  <Box mb="10px">
-                    <Text as="label">Time limit</Text>
-                    <TextField.Root placeholder="Add a time limit..." value={quiz.timeLimit} onChange={(event) => {
-                      // verify if a string is a number in js
+          <Flex gap="3" mt="4" justify="end">
+            {!loadingAI && (
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            )}
 
-                      if (!isNaN(Number(event.target.value)) && Number(event.target.value) > 0) {
-                        setQuiz({ ...quiz, 'timeLimit': Number(event.target.value) })
-                        setErrorMessages({ ...errorMessages, 'timeLimit': '' })
-                      } else {
-                        if ('' === event.target.value) {
-                          setQuiz({ ...quiz, 'timeLimit': event.target.value })
-                        }
-                        setErrorMessages({ ...errorMessages, 'timeLimit': 'Invalid time limit' })
-                      }
-                    }} />
-                    {errorMessages.timeLimit && <Text as="p" color="red">{errorMessages.timeLimit}</Text>}
-                  </Box>
-                </Flex>
-              </Flex>
-            </Tabs.Content>
+            {!doneAI && !loadingAI && (<Button
+              onClick={async () => {
+                setLoadingAI(true)
 
-            {quiz.questions && quiz.questions.map((question, index) => (<>
-              <Tabs.Content value={`question${index}`}>
-                <QuestionComponent question={question} setQuiz={setQuiz} quiz={quiz} />
-              </Tabs.Content>
-            </>))}
+                let currentElementNumber = currentElement.substring(8)
+                // verify if current element is number
+                if (isNaN(Number(currentElementNumber))) {
+                  setLoadingAI(false)
+                  setMessageToast('You need to be on a question')
+                  setTitleToast('Error')
+                  setOpen(true)
+                  return
+                }
 
-            <Tabs.Content value="submit-quiz">
-              <Flex justify="center">
-                <Flex direction="column" justify="center" maxWidth="500px">
-                  <Text mb="20px">If you are ready you can submit your quiz</Text>
-                  <Button onClick={() => {
-                    let quizRequest = {
-                      name: quiz.name,
-                      imageUrl: quiz.imageUrl,
-                      timeLimitMinutes: quiz.timeLimit,
-                      language: quiz.language,
-                      description: quiz.description,
-                      creatorId: '822c13a0-8872-431e-ad64-00f5249db11f',
+                let mesaj = `Vreau să creezi 1 întrebări de dificultate medie, fiecare având 4 variante de răspuns, una corectă și 3 greșite, pentru un quiz cu tema "${prompt}". Vei returna raspunsul sub forma de json, unde intrebarea va fi un string, iar variantele de raspuns vor fi un array de stringuri. Varianta corecta va fi prima varianta posibila.
+                Exemplu: {
+                    "1": {
+                        "intrebare": "Cine a fost primul rege al Angliei?",
+                        "variante": [
+                            "William I Cuceritorul",
+                            "Henry VIII",
+                            "Elizabeth I",
+                            "Richard III"
+                        ]
                     }
+                }`
 
-                    console.log(quiz)
-                    console.log(quizRequest)
-                    fetch('http://localhost:5276/api/quizzes', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(quizRequest),
-                    })
-                      .then((response) =>
-                        response.json(),
-                      )
-                      .then((data) => {
-                        if (typeof data === 'string') {
-                          return navigate(data.substring(4, data.length))
-                        }
+                const response = await fetch('https://api.textcortex.com/v1/codes', {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': 'Bearer gAAAAABmOiEDhlUAHKGx2bE9D5STmMvKgsuM2FaNLHVZ3_OWSGEJvhsPCfyztsWqT9V-03iE-uoHVSoRVZgdTeW593DH7j2Uc1ZLBIe_ySogrTb91Sjq72zVyzZc6KwBXzvBdTJ19AwZ',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    'max_tokens': 2048,
+                    'mode': 'python',
+                    'model': 'icortex-1',
+                    'n': 1,
+                    'temperature': 0,
+                    'text': mesaj,
+                  }),
+                })
 
-                        console.log(data)
-                        if (data.code !== 200) {
-                          let errorMessagesStrings = data?.message.split('\n')
-                          let errorMessages = {}
-                          for (let error of errorMessagesStrings) {
-                            if (error.toLowerCase().includes('name')) {
-                              errorMessages = { ...errorMessages, 'name': error }
-                            }
-                            if (error.toLowerCase().includes('image')) {
-                              errorMessages = { ...errorMessages, 'imageUrl': error }
-                            }
-                            if (error.toLowerCase().includes('description')) {
-                              errorMessages = { ...errorMessages, 'description': error }
-                            }
-                            if (error.toLowerCase().includes('time')) {
-                              errorMessages = { ...errorMessages, 'timeLimit': error }
-                            }
-                            if (error.toLowerCase().includes('language')) {
-                              errorMessages = { ...errorMessages, 'language': error }
-                            }
-                          }
+                if (!response.ok) {
+                  throw new Error('Network response was not ok')
+                }
 
-                          setErrorMessages({ ...errorMessages })
-                        }
+                const responseData = await response.json()
+                console.log('Răspunsul API:', responseData)
+                let raspunsAI = responseData.data.outputs[0].text
+                let responseObject = JSON.parse(raspunsAI)
 
-                        console.log('Success:', data)
-                      })
-                      .catch((error) => {
-                        console.error('Error:', error)
-                      })
-                  }}>
-                    Submit Quiz
-                  </Button>
-                </Flex>
-              </Flex>
-            </Tabs.Content>
-          </Box>
-        </Tabs.Root>
-      </Container>
+                let correctAnswer = responseObject['1'].variante[0]
+                let text = responseObject['1'].intrebare
+                let choices = responseObject['1'].variante
+                console.log(choices)
+
+                let currentQuestion = quiz.questions.find((q) => q.id === quiz.questions[Number(currentElementNumber)].id)
+
+                setQuiz({
+                  ...quiz,
+                  questions: quiz.questions.map((q) => {
+                    if (q.id === currentQuestion.id) {
+                      return {
+                        ...q,
+                        text: text,
+                        type: 2,
+                        choices: choices,
+                        singleChoiceAnswer: correctAnswer,
+                      }
+                    }
+                    return q
+                  }),
+                })
+                setDoneAI(true)
+                setLoadingAI(false)
+
+              }}>
+              Generate question
+            </Button>)}
+
+            {loadingAI && (
+              <Button loading>Generate question</Button>
+            )}
+
+            {doneAI && (
+              <Dialog.Close>
+                <Button onClick={() => {
+                  setDoneAI(false)
+                }}>Done</Button>
+              </Dialog.Close>
+            )}
+          </Flex>
+        </Dialog.Content>
+
+      </Dialog.Root>
     </>
   )
 }
