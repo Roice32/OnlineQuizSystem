@@ -3,6 +3,7 @@ import { Question, QuestionResult } from '../../utils/types/results-and-statisti
 import TrueFalseQuestionResultDisplay from './TrueFalseQuestionResultDisplay';
 import ChoiceQuestionResultDisplay from "./ChoiceQuestionResultDisplay";
 import WrittenQuestionResultDisplay from "./WrittenQuestionResultDisplay";
+import ReviewNeededQuestionResultDisplay from "./ReviewNeededQuestionResultDisplay";
 
 interface CommonQuestionResultDisplayProps {
   question: Question;
@@ -28,6 +29,9 @@ export default function CommonQuestionResultDisplay({ question, questionResult }
             )}
             {question.type === QuestionType.WrittenAnswer && (
               <WrittenQuestionResultDisplay question={question} questionResult={questionResult} />
+            )}
+            {question.type === QuestionType.ReviewNeeded && (
+              <ReviewNeededQuestionResultDisplay question={question} questionResult={questionResult} />
             )}
           </div>
         </div>
