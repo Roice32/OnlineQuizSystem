@@ -87,7 +87,7 @@ export default function SubmittedQuiz() {
   if (showMessage3) {
     return (
       <div>
-        <div>
+        <div className="bg-[#1c4e4f]">
           {quizResults && <QuizResultsDisplay quizResults={quizResults} />}
         </div>
         <button className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4" onClick={handleBackClick}>Back</button>
