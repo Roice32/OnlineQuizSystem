@@ -12,6 +12,7 @@ import QuizzesPage from './pages/QuizzesPage'
 import FormGetId from './pages/QuizGet'
 import ShowInfo from './components/ShowQuizInfo'
 import AIUse from './AIUse'
+import QuizPage from './pages/QuizPage'
 
 function App(): JSX.Element {
   return (
@@ -31,9 +32,12 @@ function App(): JSX.Element {
           <Route path="/my-quizzes" element={<HomePage />} />
           <Route path="/tags" element={<TagsPage />} />
           <Route path="/aiuse" element={<AIUse />} />
-          <Route path="/quiz/:id" element={<FormGetId />} />
+          <Route path="/all-quizzes/" element={<FormGetId />} />
           <Route path="/profile" element={<HomePage />} />
-          <Route path="/quizzes" element={<QuizzesPage />} />
+          <Route path="quizzes">
+          <Route path=":quizID" element={<QuizPage />} />
+          <Route path="" element={<QuizzesPage />} />
+          </Route>
         </Routes>
       </div>
     </Router>
