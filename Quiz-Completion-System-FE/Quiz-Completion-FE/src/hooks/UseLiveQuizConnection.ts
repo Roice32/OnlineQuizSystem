@@ -31,6 +31,7 @@ export default function UseLiveQuizConnection() {
         userId: userState.user?.id as string,
         code,
     };
+    console.log("connectionRequest",connectionRequest);
 
     const startQuiz = async () => {
         if(config.useBackend)

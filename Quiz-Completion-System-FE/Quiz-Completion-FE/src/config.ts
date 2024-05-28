@@ -5,7 +5,7 @@ type Config = {
 }
 
 export const config: Config = {
-    useBackend: false,
+    useBackend: true,
     useAuth: false,
     backendURL: 'http://localhost:5276'
 }

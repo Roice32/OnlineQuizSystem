@@ -6,13 +6,14 @@ import axios from "../utils/axios-service";
 import { GetAllQuizzesResponse } from "../utils/types/get-all-quizzes-response";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userMock, userMock2 } from "../utils/mocks/userMock";
 import { User } from "../utils/types/user";
 import { useCookies } from "react-cookie";
 import { setUser } from "../redux/User/UserState";
 import { CustomModal } from "../Components/Reusable/CustomModal";
 import { Button, Input, InputLabel, Stack } from "@mui/material";
+import { clearExpiredActiveQuizzes } from "../redux/ActiveQuiz/ActiveQuizzesState";
 
 export const QuizzesLoader = async (): Promise<Quiz[]> => {
   const response = (await axios.get("/api/quizzes?offset=0&limit=10", {}))
@@ -28,6 +29,7 @@ export default function QuizPage() {
   const [quizCode, setQuizCode] = useState("");
   const dispatch = useDispatch();
   const [cookies, setCookie, removeCookie] = useCookies();
+  const { user, isLogged } = useSelector((state: RootState) => state.user);
 
   const handleModalSubmit = async () => {
     if (quizCode) {
@@ -39,11 +41,15 @@ export default function QuizPage() {
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
-  const logIn = (user: User) => {
+
+  useEffect(() => {
+    dispatch(clearExpiredActiveQuizzes());
+  }, []);
+  /*   const logIn = (user: User) => {
     setCookie("userId", user.id);
     setCookie("token", user.token);
     dispatch(setUser(user));
-  };
+  }; */
 
   return (
     <div>
@@ -59,7 +65,7 @@ export default function QuizPage() {
           </li>
         ))}
       </ul>
-      <button onClick={handleOpenModal}>Enter Quiz Code</button>
+      {isLogged && <button onClick={handleOpenModal}>Enter Quiz Code</button>}
 
       <CustomModal
         title={"Enter Quiz Code"}

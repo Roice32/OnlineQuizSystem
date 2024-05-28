@@ -37,7 +37,7 @@ type CreateLiveQuizRequest = {
 
 export default function QuizDetailsPage() {
   const quiz = useLoaderData() as Quiz;
-  /* const user = useAuth(); */
+  const user = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userState = useSelector((state: RootState) => state.user);

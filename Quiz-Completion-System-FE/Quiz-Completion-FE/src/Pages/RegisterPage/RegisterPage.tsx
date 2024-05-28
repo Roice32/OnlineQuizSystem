@@ -96,7 +96,7 @@ function RegisterPage() {
     e.preventDefault();
     try {
       const response = await axios.post("/api/registration", userValues);
-      console.log(response);
+      console.log(response.data);
       if (response.data.message === "User created successfully!") {
         dispatch(
           openSnackbar({

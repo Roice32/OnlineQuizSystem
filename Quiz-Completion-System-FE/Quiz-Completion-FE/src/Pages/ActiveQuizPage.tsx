@@ -91,6 +91,46 @@ export default function ActiveQuizPage() {
     }
   }, [quizNotSet, activeQuizState, quizData, activeQuizId, dispatch]);
 
+  const handleSubmission = async (
+    activeQuizId: string,
+    nav: ReturnType<typeof useNavigate>
+  ) => {
+    try {
+      const response = await axios.post(`/api/active-quizzes/${activeQuizId}`, {
+        activeQuizId: activeQuizId,
+        answers: Object.values(answers),
+        userId: cookies["userId"],
+      });
+      console.log("Response", response);
+
+      if (response.data.isFailure) {
+        dispatch(
+          openSnackbar({
+            message: response.data.error.message,
+            severity: "error",
+          })
+        );
+      } else {
+        // reducer for deleting active quiz
+        dispatch(
+          openSnackbar({ message: "Quiz submitted", severity: "success" })
+        );
+        /* console.log("Submission", JSON.stringify(Object.values(answers))); */
+        // redirect to quiz page
+        nav(`/quiz`);
+        dispatch(deleteActiveQuiz(activeQuizId));
+      }
+    } catch (error) {
+      console.error("Error submitting active quiz:", error);
+      dispatch(
+        openSnackbar({
+          message: "Error submitting quiz. Please try again.",
+          severity: "error",
+        })
+      );
+    }
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -132,46 +172,6 @@ export default function ActiveQuizPage() {
     activeQuiz: { id, quiz, answers, deadline },
     currentQuestion: currentQuestionIndex,
   } = activeQuizState as ActiveQuizState;
-
-  const handleSubmission = async (
-    activeQuizId: string,
-    nav: ReturnType<typeof useNavigate>
-  ) => {
-    try {
-      const response = await axios.post(`/api/active-quizzes/${activeQuizId}`, {
-        activeQuizId: activeQuizId,
-        answers: Object.values(answers),
-        userId: cookies["userId"],
-      });
-      console.log("Response", response);
-
-      if (response.data.isFailure) {
-        dispatch(
-          openSnackbar({
-            message: response.data.error.message,
-            severity: "error",
-          })
-        );
-      } else {
-        // reducer for deleting active quiz
-        dispatch(
-          openSnackbar({ message: "Quiz submitted", severity: "success" })
-        );
-        /* console.log("Submission", JSON.stringify(Object.values(answers))); */
-        // redirect to quiz page
-        nav(`/quiz`);
-        dispatch(deleteActiveQuiz(activeQuizId));
-      }
-    } catch (error) {
-      console.error("Error submitting active quiz:", error);
-      dispatch(
-        openSnackbar({
-          message: "Error submitting quiz. Please try again.",
-          severity: "error",
-        })
-      );
-    }
-  };
 
   const handleNextQuestion = () => {
     setQuestionTransition(true);

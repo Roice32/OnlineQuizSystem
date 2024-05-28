@@ -66,6 +66,12 @@ const activeQuizSlice = createSlice({
     deleteActiveQuiz: (state, action: PayloadAction<string>) => {
       return state.filter((quizState) => quizState.activeQuiz.id !== action.payload);
     },
+
+    clearExpiredActiveQuizzes: (state) => {
+      const now=new Date();
+      console.log(now);
+      return state.filter((quizState) => new Date(quizState.activeQuiz.deadline) > now);
+    }
   },
 });
 
@@ -77,6 +83,7 @@ export const {
   deleteActiveQuiz,
   goToFirstQuestion,
   goToLastQuestion,
+  clearExpiredActiveQuizzes
 } = activeQuizSlice.actions;
 
 export default activeQuizSlice.reducer;

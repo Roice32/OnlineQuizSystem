@@ -72,9 +72,24 @@ public class DisconnectClient
                     else
                     {
                         await _hubContext.Groups.RemoveFromGroupAsync(request.ConnectionId, connection.LiveQuizz.Code);
+                        
+                        
+                            _context.UserConnections.Remove(connection);
+                        
+                    
+
                         await _hubContext.Clients.Client(adminConnectionId).SendAsync("UserLeft", connection.User.UserName);
-                        _context.UserConnections.Remove(connection);
-                        await _context.SaveChangesAsync();
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException e)
+                        {
+                            foreach (var entry in e.Entries)
+                            {
+                                _context.Entry(entry.Entity).State = EntityState.Detached;
+                            }
+                        }
                     }
                 }
 

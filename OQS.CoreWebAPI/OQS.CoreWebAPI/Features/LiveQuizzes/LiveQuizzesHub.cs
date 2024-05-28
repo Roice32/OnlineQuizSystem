@@ -38,7 +38,7 @@ public class LiveQuizzesHub: Hub
     {
         var command = new DisconnectClient.DisconnectClientCommand(Context.ConnectionId);
         var result = await _sender.Send(command);
-        base.OnDisconnectedAsync(exception);
+        await base.OnDisconnectedAsync(exception);
     }
     
     

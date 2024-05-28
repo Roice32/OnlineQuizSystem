@@ -6,7 +6,7 @@ import { userMock } from "./mocks/userMock";
 
 const axiosService = axios.create({
     baseURL: config.backendURL,
-    timeout: 1000,
+    timeout: 15000,
     withCredentials: true
 });
 

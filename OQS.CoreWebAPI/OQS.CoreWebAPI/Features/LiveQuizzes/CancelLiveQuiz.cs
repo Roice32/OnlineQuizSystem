@@ -1,3 +1,4 @@
+using System.Data;
 using MediatR;
 using FluentValidation;
 using OQS.CoreWebAPI.Shared;
@@ -96,7 +97,16 @@ public class CancelLiveQuiz
             var connections = liveQuiz.Connections.ToList();
             _context.UserConnections.RemoveRange(connections);
             _context.LiveQuizzes.Remove(liveQuiz);
-            await _context.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+            }catch(DbUpdateConcurrencyException e)
+            {
+                foreach (var entry in e.Entries)
+                {
+                    _context.Entry(entry.Entity).State = EntityState.Detached;
+                }
+            }
         }
 
     }
