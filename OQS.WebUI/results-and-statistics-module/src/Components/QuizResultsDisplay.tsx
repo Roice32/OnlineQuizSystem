@@ -83,9 +83,9 @@ export default function QuizResultsDisplay({ quizResults: initialQuizResults }: 
   }
 
   return (
-    <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
-      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
-        <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Quiz Results</h1>
+    <div className="flex flex-col items-center p-6 font-mono">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 border-4 border-solid border-green-700">
+        <h1 className="text-2xl font-bold mb-4 text-center">Quiz Results</h1>
         {showMessage3 ? (
           <div className="text-center">
             <p className="text-lg">Loading...</p>

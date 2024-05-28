@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { QuestionType } from "../../utils/types/questions";
-import { Question, QuestionResult, QuizResults } from '../../utils/types/results-and-statistics/quiz-results';
-import { AnswerResult, QuestionReview } from '../../utils/types/results-and-statistics/question-review';
 import axios from 'axios';
 import classNames from 'classnames';
+import { Question, QuestionResult, QuizResults } from '../../utils/types/results-and-statistics/quiz-results';
+import { AnswerResult, QuestionReview } from '../../utils/types/results-and-statistics/question-review';
 import QuizResultsDisplay from '../QuizResultsDisplay';
+import { QuestionType } from '../../utils/types/questions';
 
 interface ReviewNeededQuestionResultDisplayProps {
   question: Question;
   questionResult: QuestionResult;
 }
 
-export default function ReviewNeededQuestionResultDisplay({ question, questionResult }: ReviewNeededQuestionResultDisplayProps) {
+const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult }) => {
   const [needReview, setNeedReview] = useState(false);
   const [questionReview, setReviewResults] = useState<QuestionReview | null>(null);
   const [showFullScreenResults, setShowFullScreenResults] = useState(false);
@@ -20,9 +20,7 @@ export default function ReviewNeededQuestionResultDisplay({ question, questionRe
 
   const getQuizReview = async (userId: string, quizId: string, questionId: string, score: number) => {
     try {
-      console.log(`Fetching review for user ID: ${userId} quizId: ${quizId} questionId: ${questionId} score: ${score}`);
       const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
-      console.log(response.data);
       setReviewResults(response.data);
       setNeedReview(true);
     } catch (error) {
@@ -34,7 +32,6 @@ export default function ReviewNeededQuestionResultDisplay({ question, questionRe
     setLoading(true);
     try {
       const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
-      console.log(response.data);
       response.data.userId = userId;
       response.data.quizId = quizId;
       setQuizResults(response.data);
@@ -43,25 +40,31 @@ export default function ReviewNeededQuestionResultDisplay({ question, questionRe
       console.error('Error fetching quiz result:', error);
     } finally {
       setLoading(false);
-      window.location.reload(); // Trigger full page refresh
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
-          <p>Loading...</p>
-        </div>
+      <div className="fixed inset-0 bg-white flex justify-center items-center">
+         <h1 className="text-2xl font-bold mb-4 text-center">Quiz Results</h1>
+        <p>Loading quiz results...</p>
       </div>
     );
   }
 
   if (showFullScreenResults && quizResults) {
     return (
-      <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
-        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-8">
+      <div className="fixed inset-0 bg-[#1c4e4f] flex flex-col justify-start items-center overflow-auto p-4">
+        <header className="w-full bg-teal-700 text-white p-4 shadow-lg">
+        </header>
+        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-8 mt-4 border-4 border-solid border-green-700">
           <QuizResultsDisplay quizResults={quizResults} />
+          <button 
+            className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
+            onClick={() => setShowFullScreenResults(false)}
+          >
+            Back
+          </button>
         </div>
       </div>
     );
@@ -108,4 +111,6 @@ export default function ReviewNeededQuestionResultDisplay({ question, questionRe
       }
     </div>
   );
-}
+};
+
+export default ReviewNeededQuestionResultDisplay;
