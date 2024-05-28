@@ -55,4 +55,3 @@ export type QuizResultHeader = {
     quizResultHeader: QuizResultHeader;
     quizResultBody: QuizResultBody;
   }
-  

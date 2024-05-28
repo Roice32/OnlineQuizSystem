@@ -1,29 +1,26 @@
 import React, { useState } from 'react';
-import { QuestionType } from "../../utils/types/questions";
-import { Question, QuestionResult, QuizResults } from '../../utils/types/results-and-statistics/quiz-results';
-import { AnswerResult, QuestionReview } from '../../utils/types/results-and-statistics/question-review';
 import axios from 'axios';
 import classNames from 'classnames';
+import { Question, QuestionResult, QuizResults } from '../../utils/types/results-and-statistics/quiz-results';
+import { AnswerResult, QuestionReview } from '../../utils/types/results-and-statistics/question-review';
 import QuizResultsDisplay from '../QuizResultsDisplay';
+import { QuestionType } from '../../utils/types/questions';
 
 interface ReviewNeededQuestionResultDisplayProps {
   question: Question;
   questionResult: QuestionResult;
 }
 
-export default function ReviewNeededQuestionResultDisplay({ question, questionResult }: ReviewNeededQuestionResultDisplayProps) {
+const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult }) => {
   const [needReview, setNeedReview] = useState(false);
-  const [questionReview, setReviewResults] = useState<QuestionReview>();
-  const [showMessage1, setShowMessage1] = useState(false);
-  const [showMessage2, setShowMessage2] = useState(false);
-  const [showMessage3, setShowMessage3] = useState(false);
+  const [questionReview, setReviewResults] = useState<QuestionReview | null>(null);
+  const [showFullScreenResults, setShowFullScreenResults] = useState(false);
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const getQuizReview = async (userId: string, quizId: string, questionId: string, score: number) => {
     try {
-      console.log(`Fetching review for user ID: ${userId} quizId: ${quizId} questionId: ${questionId} score: ${score}`);
       const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
-      console.log(response.data);
       setReviewResults(response.data);
       setNeedReview(true);
     } catch (error) {
@@ -32,66 +29,89 @@ export default function ReviewNeededQuestionResultDisplay({ question, questionRe
   };
 
   const getQuizResult = async (userId: string, quizId: string) => {
-    setShowMessage3(true);
-    setShowMessage1(false);
-    setShowMessage2(false);
+    setLoading(true);
     try {
       const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
-      console.log(response.data);
       response.data.userId = userId;
       response.data.quizId = quizId;
       setQuizResults(response.data);
+      setShowFullScreenResults(true);
     } catch (error) {
       console.error('Error fetching quiz result:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (showMessage3) {
+  if (loading) {
     return (
-      <div>
-        <div>
-          {quizResults && <QuizResultsDisplay quizResults={quizResults} />}
-        </div>
-      </div>
-    );
-  } else {
-    if (needReview === true) {
-      return (
-        <p>
-          <button className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-            onClick={() => getQuizResult(questionResult.userId, question.quizId)}>
-            Grade
-          </button>
-          <p>LLMResponse: {questionReview?.updatedQuestionResult.LLMReview}</p>
-        </p>
-      );
-    }
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-center mb-2">
-          <label
-            className={classNames(
-              'p-2 rounded-full rounded-full w-full max-w-md text-left',
-              {
-                'bg-green-500 text-white border-4 border-solid border-green-700': questionResult.reviewNeededResult === AnswerResult.Correct,
-                'bg-red-500 text-white border-4 border-solid border-red-700': questionResult.reviewNeededResult === AnswerResult.Wrong || questionResult.reviewNeededResult === AnswerResult.NotAnswered,
-                'bg-yellow-300 text-black border-4 border-solid border-yellow-500': questionResult.reviewNeededResult === AnswerResult.PartiallyCorrect,
-                'bg-purple-500 text-white border-4 border-solid border-purple-700': questionResult.reviewNeededResult === AnswerResult.Pending,
-              }
-            )}
-          >
-            Your Answer: {questionResult.reviewNeededAnswer}
-          </label>
-        </div>
-        {question.type === QuestionType.ReviewNeeded && questionResult.reviewNeededResult === AnswerResult.Pending &&
-          <button
-            className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-            onClick={() => getQuizReview(questionResult.userId, question.quizId, questionResult.questionId, questionResult.score)}
-          >
-            Review
-          </button>
-        }
+      <div className="fixed inset-0 bg-white flex justify-center items-center">
+         <h1 className="text-2xl font-bold mb-4 text-center">Quiz Results</h1>
+        <p>Loading quiz results...</p>
       </div>
     );
   }
-}
+
+  if (showFullScreenResults && quizResults) {
+    return (
+      
+      <div className="fixed inset-0 bg-[#1c4e4f] flex flex-col justify-start items-center overflow-auto p-4">
+
+    <div className="space-y-4">
+
+          <QuizResultsDisplay quizResults={quizResults} />
+          <button 
+            className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
+            onClick={() => setShowFullScreenResults(false)}
+          >
+            Back
+          </button>
+        </div>
+        </div>
+    );
+  }
+
+  if (needReview) {
+    return (
+      <div>
+        <button 
+          className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
+          onClick={() => getQuizResult(questionResult.userId, question.quizId)}
+        >
+          Grade
+        </button>
+        <p>LLMResponse: {questionReview?.updatedQuestionResult.LLMReview}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-center mb-2">
+        <label
+          className={classNames(
+            'p-2 rounded-full w-full max-w-md text-left',
+            {
+              'bg-green-500 text-white border-4 border-solid border-green-700': questionResult.reviewNeededResult === AnswerResult.Correct,
+              'bg-red-500 text-white border-4 border-solid border-red-700': questionResult.reviewNeededResult === AnswerResult.Wrong || questionResult.reviewNeededResult === AnswerResult.NotAnswered,
+              'bg-yellow-300 text-black border-4 border-solid border-yellow-500': questionResult.reviewNeededResult === AnswerResult.PartiallyCorrect,
+              'bg-purple-500 text-white border-4 border-solid border-purple-700': questionResult.reviewNeededResult === AnswerResult.Pending,
+            }
+          )}
+        >
+          Your Answer: {questionResult.reviewNeededAnswer}
+        </label>
+      </div>
+      {question.type === QuestionType.ReviewNeeded && questionResult.reviewNeededResult === AnswerResult.Pending &&
+        <button
+          className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
+          onClick={() => getQuizReview(questionResult.userId, question.quizId, questionResult.questionId, questionResult.score)}
+        >
+          Review
+        </button>
+      }
+    </div>
+  );
+};
+
+export default ReviewNeededQuestionResultDisplay;
