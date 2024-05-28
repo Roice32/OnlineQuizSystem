@@ -1,121 +1,251 @@
 import React, { useState, useEffect } from 'react';
+import { BsPencilSquare, BsTrash, BsPlus } from 'react-icons/bs';
+import { IoIosAddCircleOutline } from 'react-icons/io';
 import Navbar from '../components/Navbar';
 
 const TagsPage = () => {
     const [tags, setTags] = useState([]);
-    const [updateNames, setUpdateNames] = useState({});
+    const [totalTags, setTotalTags] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(5);
+    const [loading, setLoading] = useState(true);
+    const [editingTagId, setEditingTagId] = useState(null);
+    const [editedTagName, setEditedTagName] = useState('');
     const [newTagName, setNewTagName] = useState('');
+    const [showAddTagInput, setShowAddTagInput] = useState(false);
+
+    useEffect(() => {
+        fetchTags();
+    }, [currentPage, pageSize]);
 
     const fetchTags = async () => {
+        setLoading(true);
         try {
-            const response = await fetch('http://localhost:5276/api/tags');
+            const response = await fetch(`http://localhost:5276/api/tags?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch tags');
             }
             const data = await response.json();
-            setTags(data);
+            setTags(data.tags);
+            setTotalTags(data.totalTags);
         } catch (error) {
             console.error('Error fetching tags:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchTags();
-    }, []);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
-    const handleUpdate = async (tagId) => {
-        const updatedName = updateNames[tagId];
+    const handlePageSizeChange = (event) => {
+        setPageSize(Number(event.target.value));
+        setCurrentPage(1);
+    };
+
+    const handleEditTag = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5276/api/tags/${tagId}`, {
+            const response = await fetch(`http://localhost:5276/api/tags/${id}`, {
                 method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ Name: updatedName })
+                body: JSON.stringify({ name: editedTagName }),
             });
-
             if (!response.ok) {
-                throw new Error('Failed to update tag');
+                throw new Error('Failed to edit tag');
             }
-
-            setUpdateNames(prev => ({ ...prev, [tagId]: '' })); // Clear the input after update
-            fetchTags(); // Refresh tags after update
+            fetchTags();
+            setEditingTagId(null);
+            setEditedTagName('');
         } catch (error) {
-            console.error('Error updating tag:', error);
+            console.error('Error editing tag:', error);
         }
     };
 
-    const handleDelete = async (tagId) => {
-        try {
-            const response = await fetch(`http://localhost:5276/api/tags/${tagId}`, {
-                method: 'DELETE'
-            });
+    const renderTags = () => {
+        if (loading) {
+            return <p className="text-center mt-4">Se încarcă tag-urile...</p>;
+        }
 
+        if (tags.length === 0) {
+            return (
+                <ul className="mt-4">
+                    <li className="flex items-center bg-gray-200 rounded-lg px-3 py-3 text-sm mb-2">
+                        {showAddTagInput ? (
+                            <>
+                                <input
+                                    type="text"
+                                    value={newTagName}
+                                    onChange={(e) => setNewTagName(e.target.value)}
+                                    placeholder="Numele noului tag"
+                                    className="flex-grow text-xl bg-white border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    className="ml-1 text-green-500 text-2xl"
+                                    title="Adaugă tag nou"
+                                    onClick={handleAddTag}
+                                >
+                                    <BsPlus />
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                className="text-green-500 text-3xl"
+                                title="Adaugă tag nou"
+                                onClick={() => setShowAddTagInput(true)}
+                            >
+                                <IoIosAddCircleOutline />
+                            </button>
+                        )}
+                    </li>
+                </ul>
+            );
+        }
+
+        return (
+            <ul className="mt-4">
+                {tags.map(tag => (
+                    <li key={tag.id} className="flex items-center bg-gray-200 rounded-lg px-3 py-3 text-sm mb-2">
+                        {editingTagId === tag.id ? (
+                            <>
+                                <input
+                                    type="text"
+                                    value={editedTagName}
+                                    onChange={(e) => setEditedTagName(e.target.value)}
+                                    className="flex-grow text-xl bg-white border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    className="ml-1 text-blue-500 text-2xl"
+                                    title="Salvează modificările"
+                                    onClick={() => handleEditTag(tag.id)}
+                                >
+                                    <BsPencilSquare />
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <span className="flex-grow text-xl">{tag.name}</span>
+                                <button
+                                    className="ml-1 text-blue-500 text-2xl"
+                                    title="Modificare"
+                                    onClick={() => {
+                                        setEditingTagId(tag.id);
+                                        setEditedTagName(tag.name);
+                                    }}
+                                >
+                                    <BsPencilSquare />
+                                </button>
+                                <button
+                                    className="ml-1 text-red-500 text-2xl"
+                                    title="Ștergere"
+                                    onClick={() => handleDeleteTag(tag.id)}
+                                >
+                                    <BsTrash />
+                                </button>
+                            </>
+                        )}
+                    </li>
+                ))}
+                <li className="flex items-center bg-gray-200 rounded-lg px-3 py-3 text-sm mb-2">
+                    {showAddTagInput ? (
+                        <>
+                            <input
+                                type="text"
+                                value={newTagName}
+                                onChange={(e) => setNewTagName(e.target.value)}
+                                placeholder="Numele noului tag"
+                                className="flex-grow text-xl bg-white border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button
+                                className="ml-1 text-green-500 text-2xl"
+                                title="Adaugă tag nou"
+                                onClick={handleAddTag}
+                            >
+                                <BsPlus />
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            className="text-green-500 text-3xl"
+                            title="Adaugă tag nou"
+                            onClick={() => setShowAddTagInput(true)}
+                        >
+                            <IoIosAddCircleOutline />
+                        </button>
+                    )}
+                </li>
+            </ul>
+        );
+    };
+
+    const handleDeleteTag = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5276/api/tags/${id}`, {
+                method: 'DELETE',
+            });
             if (!response.ok) {
                 throw new Error('Failed to delete tag');
             }
-
-            fetchTags(); // Refresh tags after deletion
+            fetchTags();
         } catch (error) {
             console.error('Error deleting tag:', error);
         }
     };
 
-    const handleCreate = async () => {
+    const handleAddTag = async () => {
         try {
-            const response = await fetch('http://localhost:5276/api/tags', {
+            const response = await fetch(`http://localhost:5276/api/tags`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ Name: newTagName })
+                body: JSON.stringify({ name: newTagName }),
             });
-
             if (!response.ok) {
-                throw new Error('Failed to create tag');
+                throw new Error('Failed to add tag');
             }
-
+            fetchTags();
             setNewTagName('');
-            fetchTags(); // Refresh tags after creation
+            setShowAddTagInput(false);
         } catch (error) {
-            console.error('Error creating tag:', error);
+            console.error('Error adding tag:', error);
         }
     };
 
-    const handleUpdateNameChange = (tagId, value) => {
-        setUpdateNames(prev => ({ ...prev, [tagId]: value }));
-    };
+    const totalPages = Math.ceil(totalTags / pageSize);
 
     return (
         <div>
             <Navbar />
-            <div className='flex flex-col items-center'>
-                <h1 className='text-[#efd7cf] text-4xl font-bold mt-6'>Tags</h1>
-                <div className="flex justify-end mb-4 mt-8">
-                    <input type="text" value={newTagName} onChange={e => setNewTagName(e.target.value)} className="border border-gray-300 px-2 py-1 rounded-md mr-2" />
-                    <button onClick={handleCreate} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded bg-[#436e6f] hover:bg-[#1c4e4f]" style={{ transition: 'background-color 0.3s ease'}}>Create Tag</button>
+            <div className="max-w-2xl mx-auto px-4">
+                <h1 className="text-2xl font-bold mt-8 mb-4 text-center">TAGS</h1>
+                {renderTags()}
+                <div className="flex justify-center items-center mt-4">
+                    <select
+                        value={pageSize}
+                        onChange={handlePageSizeChange}
+                        className="px-2 py-1 border border-gray-300 rounded-md"
+                    >
+                        <option value={1}>1</option>
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                    </select>
                 </div>
-                <ul className="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    {tags.map(tag => (
-                        <li key={tag.id} className="flex flex-col items-center justify-center bg-[#f7ebe7] text-[#0a2d2e] py-2 px-4 rounded-lg shadow-md transition-colors duration-200">
-                            <div className="mb-4 text-2xl text-[#1c4e4f]">
-                                <span>{tag.name}</span>
-                            </div>
-                            <div className="mt-2">
-                                <input
-                                    type="text"
-                                    value={updateNames[tag.id] || ''}
-                                    onChange={e => handleUpdateNameChange(tag.id, e.target.value)}
-                                    className="border border-gray-300 px-2 py-1 rounded-md mr-2"
-                                />
-                                <button onClick={() => handleUpdate(tag.id)} className="text-white font-bold py-2 px-4 rounded bg-[#436e6f] hover:bg-[#1c4e4f]" style={{transition: 'background-color 0.3s ease'}}>Update</button>
-                            </div>
-                            <div className="mt-2">
-                                <button onClick={() => handleDelete(tag.id)} className="text-white font-bold py-2 px-4 rounded bg-[#deae9f] hover:bg-[#a49e97]" style={{transition: 'background-color 0.3s ease'}}>Delete</button>
-                            </div>   
-                        </li>
-                    ))}
-                </ul>
+                {totalPages > 1 && (
+                    <div className="flex justify-center mt-4">
+                        {[...Array(totalPages).keys()].map(page => (
+                            <button
+                                key={page + 1}
+                                onClick={() => handlePageChange(page + 1)}
+                                className={`bg-blue-500 text-white rounded-lg px-3 py-1 ${currentPage === page + 1 ? 'bg-blue-700' : ''} ml-2`}
+                            >
+                                {page + 1}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

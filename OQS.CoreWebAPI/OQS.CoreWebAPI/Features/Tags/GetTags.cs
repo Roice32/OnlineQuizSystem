@@ -1,21 +1,33 @@
 using Carter;
-using OQS.CoreWebAPI.Database;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts;
-using MediatR;
+using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Shared;
+using MediatR;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {
     public class GetTags
     {
-        public class Query : IRequest<Result<List<TagResponse>>>
+        public class Query : IRequest<Result<TagsResponse>>
         {
             public int Limit { get; set; } = 12;
             public int Offset { get; set; } = 0;
         }
 
-        internal sealed class Handler : IRequestHandler<Query, Result<List<TagResponse>>>
+        public class TagsResponse
+        {
+            public List<TagResponse> Tags { get; set; }
+            public int TotalTags { get; set; }
+        }
+
+        internal sealed class Handler : IRequestHandler<Query, Result<TagsResponse>>
         {
             private readonly ApplicationDBContext context;
 
@@ -24,7 +36,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 this.context = context;
             }
 
-            public async Task<Result<List<TagResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<TagsResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var tags = await context.Tags
                     .AsNoTracking()
@@ -32,16 +44,23 @@ namespace OQS.CoreWebAPI.Features.Tags
                     .Take(request.Limit)
                     .ToListAsync(cancellationToken);
 
+                var totalTags = await context.Tags.CountAsync(cancellationToken);
+
                 if (tags == null || !tags.Any())
                 {
-                    return Result.Failure<List<TagResponse>>(
+                    return Result.Failure<TagsResponse>(
                         new Error(400, "No tags found"));
                 }
 
                 var tagResponses = tags.Select(tag => new TagResponse(tag)).ToList();
-              
 
-                return tagResponses;
+                var response = new TagsResponse
+                {
+                    Tags = tagResponses,
+                    TotalTags = totalTags,
+                };
+
+                return response;
             }
         }
     }
