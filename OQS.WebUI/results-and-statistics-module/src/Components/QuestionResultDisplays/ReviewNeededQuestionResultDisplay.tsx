@@ -46,7 +46,6 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
   if (loading) {
     return (
       <div className="fixed inset-0 bg-white flex justify-center items-center">
-         <h1 className="text-2xl font-bold mb-4 text-center">Quiz Results</h1>
         <p>Loading quiz results...</p>
       </div>
     );
@@ -54,10 +53,8 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
 
   if (showFullScreenResults && quizResults) {
     return (
-      <div className="fixed inset-0 bg-[#1c4e4f] flex flex-col justify-start items-center overflow-auto p-4">
-        <header className="w-full bg-teal-700 text-white p-4 shadow-lg">
-        </header>
-        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-8 mt-4 border-4 border-solid border-green-700">
+      <div className="fixed inset-0 bg-teal-700 flex flex-col items-center overflow-auto p-6">
+        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 border-4 border-green-700">
           <QuizResultsDisplay quizResults={quizResults} />
           <button 
             className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
@@ -72,7 +69,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
 
   if (needReview) {
     return (
-      <div>
+      <div className="border-4 border-green-700 p-4">
         <button 
           className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
           onClick={() => getQuizResult(questionResult.userId, question.quizId)}
@@ -85,7 +82,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 border-4 border-green-700 p-4">
       <div className="flex items-center justify-center mb-2">
         <label
           className={classNames(
