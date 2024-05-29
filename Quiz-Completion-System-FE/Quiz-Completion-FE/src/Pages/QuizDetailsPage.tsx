@@ -21,9 +21,12 @@ interface PageProps {
 export const QuizDetailsLoader = async ({
   params: { id },
 }: LoaderFunctionArgs<PageProps>): Promise<Quiz> => {
-  const response = (await axios.get(`/api/quizzes/${id}`, {})).data as Quiz;
-
-  return response;
+  const response = (await axios.get(`/api/quizzes/${id}`, {}))
+    .data as Result<Quiz>;
+  if (response.isFailure) {
+    throw new Error(response.error?.message);
+  }
+  return response.value as Quiz;
 };
 
 type CreateActiveQuizRequest = {
@@ -37,6 +40,7 @@ type CreateLiveQuizRequest = {
 
 export default function QuizDetailsPage() {
   const quiz = useLoaderData() as Quiz;
+  console.log(quiz);
   const user = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();

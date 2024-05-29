@@ -45,9 +45,11 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (!validationResult.IsValid)
                 {
                     return Result.Failure<Guid>(
-                        new Error("CreateTag.Validator", 
-                        validationResult.ToString()));
+                        new Error(
+                            "400",
+                            validationResult.ToString()));
                 }
+
                 var tag = new Tag
                 {
                     Id = Guid.NewGuid(),
@@ -76,6 +78,7 @@ public class CreateTagEndPoint : ICarterModule
             {
                 return Results.BadRequest(result.Error);
             }
+
             return Results.Ok($"/api/tags/{result.Value}");
         });
     }

@@ -1,25 +1,23 @@
 using Carter;
 using FluentValidation;
 using Mapster;
-using OQS.CoreWebAPI.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Features.Tags;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {
     public static class UpdateTag
     {
-        public class BodyUpdateTag : IRequest<Result<TagResponse>>
+        public record BodyUpdateTag : IRequest<Result<TagResponse>>
         {
-             public string Name { get; set; } = string.Empty;
+            public string Name { get; set; } = string.Empty;
         }
-        
-        public class Command : IRequest<Result<TagResponse>>
+
+        public record Command(string TagId) : IRequest<Result<TagResponse>>
         {
-            public Guid Id { get; set; }
             public BodyUpdateTag Body { get; set; } = new BodyUpdateTag();
         }
 
@@ -27,105 +25,104 @@ namespace OQS.CoreWebAPI.Features.Tags
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
-
                 RuleFor(x => x.Body.Name)
                     .NotEmpty().WithMessage("Name is required.")
                     .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
             }
         }
 
-
-        public class Validator : AbstractValidator<Command>
-        {
-            public Validator()
-            {
-                RuleFor(x => x.Body.Name).NotEmpty();
-            }
-        }
-
         internal sealed class Handler : IRequestHandler<Command, Result<TagResponse>>
         {
-            private readonly ApplicationDBContext context;
-            private readonly IValidator<Command> validator;
+            private readonly ApplicationDBContext _context;
+            private readonly IValidator<Command> _validator;
 
             public Handler(ApplicationDBContext context, IValidator<Command> validator)
             {
-                this.context = context;
-                this.validator = validator;
+                _context = context;
+                _validator = validator;
             }
 
             public async Task<Result<TagResponse>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var validationResult = validator.Validate(request);
+                var validationResult = _validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
-                    return Result.Failure<TagResponse>(
-                        new Error(
-                            "UpdateTag.Validator", "validation failed"
-                        ));
+                    var errorMessages = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+                    return Result.Failure<TagResponse>(new Error("400", errorMessages));
                 }
 
-                var tag = await context.Tags
-                    .AsNoTracking()
-                    .Where(tag => tag.Id == request.Id)
-                    .FirstOrDefaultAsync(cancellationToken);
+                var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id.ToString() == request.TagId,
+                    cancellationToken);
                 if (tag is null)
                 {
-                    return Result.Failure<TagResponse>(
-                        new Error(
-                            "UpdateTag.NotFound", "Tag not found"
-                        ));
+                    return Result.Failure<TagResponse>(new Error("404", "Tag not found"));
                 }
+
+                tag.Name = request.Body.Name;
 
                 try
                 {
-                    tag.Name = request.Body.Name;
-                    context.Tags.Update(tag);
-                    await context.SaveChangesAsync(cancellationToken);
+                    _context.Tags.Update(tag);
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    return Result.Failure<TagResponse>(
-                        new Error(
-                            "UpdateTag.UpdateTag", ex.Message
-                        ));
+                    return Result.Failure<TagResponse>(new Error("500", "Tag could not be updated"));
                 }
 
-                var tagResponse = new TagResponse
-                {
-                    Id = tag.Id,
-                    Name = tag.Name,
-                };
-                return Result.Success(tagResponse);
+                return Result<TagResponse>.Success(new TagResponse(tag));
             }
+        }
+    }
+
+    public class UpdateTagEndpoint : ICarterModule
+    {
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapPatch("api/tags/{id}", async (string id, UpdateTagRequest request, ISender sender) =>
+            {
+                var command = new UpdateTag.Command(id)
+                {
+                    Body = request.Adapt<UpdateTag.BodyUpdateTag>()
+                };
+
+                // Send the command to the handler
+                var result = await sender.Send(command);
+
+                // Check if the result indicates failure
+                if (result.IsFailure)
+                {
+                    // Return a BadRequest response with the error message
+                    return Results.BadRequest(result.Error.Message);
+                }
+
+                // If the result indicates success, return an Ok response with the result value
+                return Results.Ok(result.Value);
+            });
         }
     }
 }
 
-// create and enpoint for updating a tag with patch
-public class UpdateTagEndpoint : ICarterModule
-{
-    public void AddRoutes(IEndpointRouteBuilder app)
-    {
-        app.MapPatch("api/tags/{id}", async(Guid id, UpdateTagRequest request, ISender sender) =>
-        {
-            var bodyUpdateTag = request.Adapt<UpdateTag.BodyUpdateTag>();
-            
-            var command = new UpdateTag.Command
-            {
-                Id = id,
-                Body = bodyUpdateTag
-            };
-            
-            var result = await sender.Send(command);
-            
-            if (result.IsFailure)
-            {
-                return Results.NotFound(result.Error);
-            }
-            
-            return Results.Ok(result.Value);
-        });
+
+/* public class UpdateTagEndpoint : ICarterModule
+ {
+     public void AddRoutes(IEndpointRouteBuilder app)
+     {
+         app.MapPatch("api/tags/{id}", async (string id, UpdateTagRequest request, ISender sender) =>
+         {
+             var command = new UpdateTag.Command(id)
+             {
+                 Body = request.Adapt<UpdateTag.BodyUpdateTag>()
+             };
+
+             return await sender.Send(command);
+            /* var result = await sender.Send(command);
+
+             return result.IsSuccess
+                 ? Results.Ok(result.Value)
+                 : Results.StatusCode(result.Error.Code, result.Error.Message);*
+});
     }
 }
+}
+*/

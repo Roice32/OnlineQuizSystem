@@ -1,21 +1,27 @@
 using Carter;
-using OQS.CoreWebAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts;
-using MediatR;
+using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Shared;
+using MediatR;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {
     public class GetTags
     {
-        public class Query : IRequest<Result<List<TagResponse>>>
+        public class Query : IRequest<Result<TagsResponse>>
         {
-            public int Limit { get; set; } = 10;
+            public int Limit { get; set; } = 12;
             public int Offset { get; set; } = 0;
         }
 
-        internal sealed class Handler : IRequestHandler<Query, Result<List<TagResponse>>>
+        public class TagsResponse
+        {
+            public List<TagResponse> Tags { get; set; }
+            public int TotalTags { get; set; }
+        }
+
+        internal sealed class Handler : IRequestHandler<Query, Result<TagsResponse>>
         {
             private readonly ApplicationDBContext context;
 
@@ -24,7 +30,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 this.context = context;
             }
 
-            public async Task<Result<List<TagResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<TagsResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var tags = await context.Tags
                     .AsNoTracking()
@@ -32,20 +38,23 @@ namespace OQS.CoreWebAPI.Features.Tags
                     .Take(request.Limit)
                     .ToListAsync(cancellationToken);
 
+                var totalTags = await context.Tags.CountAsync(cancellationToken);
+
                 if (tags == null || !tags.Any())
                 {
-                    return Result.Failure<List<TagResponse>>(
-                        new Error("GetTags.Empty", "No tags found"));
+                    return Result.Failure<TagsResponse>(
+                        new Error("400", "No tags found"));
                 }
 
-                var tagResponses = tags.Select(tag => new TagResponse
-                {
-                    Id = tag.Id,
-                    Name = tag.Name,
-                    CreatedOnUtc = tag.CreatedOnUtc,
-                }).ToList();
+                var tagResponses = tags.Select(tag => new TagResponse(tag)).ToList();
 
-                return tagResponses;
+                var response = new TagsResponse
+                {
+                    Tags = tagResponses,
+                    TotalTags = totalTags,
+                };
+
+                return response;
             }
         }
     }
@@ -54,7 +63,7 @@ namespace OQS.CoreWebAPI.Features.Tags
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/tags", async (ISender sender, int limit = 10, int offset = 0) =>
+            app.MapGet("api/tags", async (ISender sender, int limit = 12, int offset = 0) =>
             {
                 var query = new GetTags.Query
                 {

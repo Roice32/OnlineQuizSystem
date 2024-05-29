@@ -1,4 +1,4 @@
-﻿using Carter;
+﻿/*using Carter;
 using OQS.CoreWebAPI.Contracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 if (quiz is null)
                 {
                     return Result.Failure<QuizResponse>(
-                        new Error("GetQuiz.Null", "Quiz not found"));
+                        new Error(404, "Quiz not found"));
                 }
 
                 var quizResponse = new QuizResponse(quiz);
@@ -70,3 +70,4 @@ public class GetQuizEndpoint : ICarterModule
         });
     }
 }
+*/

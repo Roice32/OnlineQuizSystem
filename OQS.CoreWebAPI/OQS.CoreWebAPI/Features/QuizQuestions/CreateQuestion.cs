@@ -15,6 +15,11 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             public Guid QuizId { get; set; }
             public string Text { get; set; } = string.Empty;
             public QuestionType Type { get; set; }
+
+            public int AlocatedPoints { get; set; }
+
+            public int TimeLimit { get; set; }
+
             public List<string>? Choices { get; set; }
             public bool? TrueFalseAnswer { get; set; }
             public List<string>? MultipleChoiceAnswers { get; set; }
@@ -29,16 +34,18 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 RuleFor(x => x.Text)
                     .NotEmpty().WithMessage("Text is required.")
                     .MaximumLength(255).WithMessage("Text must not exceed 255 characters.");
-
-                RuleFor(x => x.Type)
-                    .IsInEnum().WithMessage("Invalid question type.");
+                RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId is required.");
+                RuleFor(x => x.Type).IsInEnum().WithMessage("Invalid question type.");
+                RuleFor(x => x.AlocatedPoints).GreaterThan(0).WithMessage("AlocatedPoints must be greater than 0.");
+                RuleFor(x => x.TimeLimit).GreaterThan(0).WithMessage("TimeLimit must be greater than 0.");
 
                 When(x => x.Type == QuestionType.MultipleChoice || x.Type == QuestionType.SingleChoice,
                     () =>
                     {
                         RuleFor(x => x.Choices)
                             .NotNull().WithMessage("Choices are required.")
-                            .Must(choices => choices != null && choices.Count > 0).WithMessage("At least one choice is required.");
+                            .Must(choices => choices != null && choices.Count > 0)
+                            .WithMessage("At least one choice is required.");
                     });
 
                 When(x => x.Type == QuestionType.TrueFalse,
@@ -53,7 +60,8 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                     {
                         RuleFor(x => x.MultipleChoiceAnswers)
                             .NotNull().WithMessage("MultipleChoiceAnswers are required.")
-                            .Must(answers => answers != null && answers.Count > 0).WithMessage("At least one answer is required.");
+                            .Must(answers => answers != null && answers.Count > 0)
+                            .WithMessage("At least one answer is required.");
                     });
 
                 When(x => x.Type == QuestionType.SingleChoice,
@@ -68,7 +76,8 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                     {
                         RuleFor(x => x.WrittenAcceptedAnswers)
                             .NotNull().WithMessage("WrittenAcceptedAnswers are required.")
-                            .Must(answers => answers != null && answers.Count > 0).WithMessage("At least one accepted answer is required.");
+                            .Must(answers => answers != null && answers.Count > 0)
+                            .WithMessage("At least one accepted answer is required.");
                     });
             }
         }
@@ -91,12 +100,12 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 if (!validationResult.IsValid)
                 {
                     return Result.Failure<Guid>(
-                        new Error("CreateQuestion.Validator", validationResult.ToString()));
+                        new Error("400", validationResult.ToString()));
                 }
 
                 var quiz = await _dbContext.Quizzes.FindAsync(request.QuizId);
                 if (quiz == null)
-                    return Result.Failure<Guid>(new Error("CreateQuestion.NotFound", "Quiz not found"));
+                    return Result.Failure<Guid>(new Error("404", "Quiz not found"));
 
                 QuestionBase question;
 
@@ -105,28 +114,36 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 switch (request.Type)
                 {
                     case QuestionType.TrueFalse:
-                        question = new TrueFalseQuestion(Guid.NewGuid(), request.Text, request.TrueFalseAnswer ?? false);
-                       // _dbContext.TrueFalseQuestions.Add((TrueFalseQuestion)question);
+                        question = new TrueFalseQuestion(Guid.NewGuid(), request.Text, request.QuizId,
+                            request.TimeLimit, request.AlocatedPoints, request.TrueFalseAnswer ?? false);
+                        // _dbContext.TrueFalseQuestions.Add((TrueFalseQuestion)question);
                         break;
                     case QuestionType.MultipleChoice:
-                        question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Text, request.Choices ?? new List<string>(), request.MultipleChoiceAnswers ?? new List<string>());
-                      //  _dbContext.MultipleChoiceQuestions.Add((MultipleChoiceQuestion)question);
+                        question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Text, request.QuizId,
+                            request.TimeLimit, request.AlocatedPoints, request.Choices ?? new List<string>(),
+                            request.MultipleChoiceAnswers ?? new List<string>());
+                        //  _dbContext.MultipleChoiceQuestions.Add((MultipleChoiceQuestion)question);
                         break;
                     case QuestionType.SingleChoice:
-                        question = new SingleChoiceQuestion(Guid.NewGuid(), request.Text, request.Choices ?? new List<string>(), request.SingleChoiceAnswer ?? string.Empty);
-                       // _dbContext.SingleChoiceQuestions.Add((SingleChoiceQuestion)question);
+                        question = new SingleChoiceQuestion(Guid.NewGuid(), request.Text, request.QuizId,
+                            request.TimeLimit, request.AlocatedPoints, request.Choices ?? new List<string>(),
+                            request.SingleChoiceAnswer ?? string.Empty);
+                        // _dbContext.SingleChoiceQuestions.Add((SingleChoiceQuestion)question);
                         break;
                     case QuestionType.WriteAnswer:
-                        question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Text, request.WrittenAcceptedAnswers ?? new List<string>());
-                       // _dbContext.WrittenAnswerQuestions.Add((WrittenAnswerQuestion)question);
+                        question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Text, request.QuizId,
+                            request.TimeLimit, request.AlocatedPoints,
+                            request.WrittenAcceptedAnswers ?? new List<string>());
+                        // _dbContext.WrittenAnswerQuestions.Add((WrittenAnswerQuestion)question);
                         break;
                     case QuestionType.ReviewNeeded:
-                        question = new ReviewNeededQuestion(Guid.NewGuid(), request.Text);
-                       // _dbContext.ReviewNeededQuestions.Add((ReviewNeededQuestion)question);
+                        question = new ReviewNeededQuestion(Guid.NewGuid(), request.Text, request.QuizId,
+                            request.TimeLimit, request.AlocatedPoints);
+                        // _dbContext.ReviewNeededQuestions.Add((ReviewNeededQuestion)question);
                         break;
                     default:
                         return Result.Failure<Guid>(
-                            new Error("CreateQuestion.InvalidType", "Invalid question type"));
+                            new Error("400", "Invalid question type"));
                 }
 
                 quiz.Questions.Add(question);
@@ -153,6 +170,6 @@ public class CreateQuizQuestionEndPoint : ICarterModule
             }
 
             return Results.Ok(result.Value);
-        }); 
+        });
     }
 }
