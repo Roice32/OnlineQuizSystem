@@ -134,7 +134,7 @@ const HomePage = () => {
             <div key={quiz.id} className={`p-4 rounded-md shadow-md bg-opacity-50 ${
               index % 2 === 0 ? 'bg-[#436e6f] text-[#f7ebe7]' : 'bg-[#efd7cf]'
             }`}>
-              <img src={quiz.imageUrl} alt={quiz.imageUrl} className="w-full h-32 object-cover rounded-t-md" />
+              <img src={quiz.imageUrl} alt={quiz.imageUrl} onError={(e) => e.target.src = 'https://www.shutterstock.com/shutterstock/photos/2052894734/display_1500/stock-vector-quiz-and-question-marks-trivia-night-quiz-symbol-neon-sign-night-online-game-with-questions-2052894734.jpg'} className="w-full h-32 object-cover rounded-t-md"  />
               <div className="p-2">
                 <h3 className="font-semibold">{quiz.name}</h3>
                 <p>{quiz.description}</p>
