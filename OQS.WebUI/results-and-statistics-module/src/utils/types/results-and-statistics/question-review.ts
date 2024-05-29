@@ -13,11 +13,8 @@ export enum AnswerResult
 
 export type ReviewNeededQuestionResult = {
     reviewNeededAnswer: string;
-    llmReview : string;
+    LLMReview : string;
     reviewNeededResult: AnswerResult;
-    questionId : string;
-    score : number;
-    userId : string;
 }
 
 export type QuestionReview= {

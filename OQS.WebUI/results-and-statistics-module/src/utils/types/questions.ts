@@ -3,15 +3,8 @@ export enum QuestionType{
     TrueFalse,
     MultipleChoice,
     SingleChoice,
-    WriteAnswer,
+    WrittenAnswer,
     ReviewNeeded
-}
-
-export interface QuestionBase{
-    id: string;
-    text: string;
-    type: string;
-    choices?: string[];
 }
 
 

@@ -45,7 +45,7 @@ export default function TrueFalseQuestionDisplay({
                 />
                 <label
                   htmlFor="true"
-                  className={`cursor-pointer p-2 rounded-full border-2 border-black-300 w-full max-w-md text-left ${
+                  className={`cursor-pointer p-2 rounded-full border border-gray-300 w-full max-w-md text-left ${
                     selectedAnswer?.trueFalseAnswer === true
                       ? "bg-[#1c4e4f] text-white"
                       : "bg-white text-black"

@@ -1,12 +1,8 @@
-import axios from "axios";
-import { QuestionType } from "../utils/types/questions";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { QuestionResult, QuizResults } from "../utils/types/results-and-statistics/quiz-results";
-import { useEffect, useState } from "react";
-import { AnswerResult, QuestionReview } from "../utils/types/results-and-statistics/question-review";
-import TrueFalseQuestionResultDisplay from '../Components/SubmittedQuestions/TrueFalseQuestionResultDisplay';
-import SingleChoiceQuestionResultDisplay from "./SubmittedQuestions/SingleChoiceQuestionResultDisplay";
-import WrittenQuestionResultDisplay from "./Questions/WrittenQuestionDisplay";
-import ReviewNeededQuestionResultDisplay from "./SubmittedQuestions/ReviewNedeedQuestionResultDisplay";
+import { QuestionReview } from "../utils/types/results-and-statistics/question-review";
+import QuestionResultDisplay from './QuestionResultDisplays/QuestionResultDisplay';
 
 export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizResults }) {
   const [showMessage1, setShowMessage1] = useState(false);
@@ -15,18 +11,21 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
   const [quizResultss, setQuizResults] = useState<QuizResults | null>(null);
   const [questionReview, setReviewResults] = useState<QuestionReview | null>(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (quizResults) {
       setQuizResults(quizResults);
       setLoading(false);
     }
   }, [quizResults]);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     date.setHours(date.getHours() + 2);
     const isoString = date.toISOString();
     return isoString.replace('T', ' ').split('.')[0];
   };
+
   const getReview = async (userId: string, quizId: string, questionId?: string, score?: number) => {
     setShowMessage3(true);
     setShowMessage1(false);
@@ -38,7 +37,6 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
         quizId: quizId,
         questionId: questionId,
         score: score,
-
       });
       console.log(response.data);
       setReviewResults(response.data);
@@ -74,8 +72,8 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
             <p className="text-lg">Loading...</p>
           </div>
         ) : (
-          <div style={borderStyle}>
-            <div style={borderStyle} className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center p-4 rounded-3xl rounded-b-none border-4 border-solid border-gray-400">
               <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.userName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
@@ -84,66 +82,14 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
                 {quizResults.quizResultHeader.reviewPending ? "Review Pending" : "Review Not Pending"}
               </p>
             </div>
-            <div>
+            <div className="p-4 rounded-3xl rounded-t-none border-4 border-t-0 border-solid border-gray-400">
               <h2 className="text-lg font-bold mb-2">Questions:</h2>
               <ul>
                 {quizResults?.quizResultBody?.questions.map((header, index) => {
                   const questionResult2 = quizResults.quizResultBody.questionResults.find(item => item.questionId === header.id) as QuestionResult;
-                  const userAnswer = quizResults.quizResultBody.questions.find(item => item.id === header.id);
-                  // console.log("Question Result:", questionResult2);
-                  // console.log("UserId from arguments: ", quizResults.userId);
-                  // console.log("Quiz ID from arguments: ", quizResults.quizId);
-                  // console.log("Pending? ", questionResult2.reviewNeededResult);
-                  // console.log("Answer", questionResult2.trueFalseAnswerResult);
-                  let choicesResults = {};
-                  if (questionResult2?.pseudoDictionaryChoicesResults) {
-                    choicesResults = JSON.parse(questionResult2.pseudoDictionaryChoicesResults);
-                  }
-                  let writtenAnswers = {};
-                  if (questionResult2?.writtenAnswer) {
-
-                  }
                   return (
                     <div key={index} className="flex items-center justify-center mb-2 mr-2">
-                      {header.type === QuestionType.TrueFalse && (
-                        <TrueFalseQuestionResultDisplay
-                          question={header}
-                          questionResult={questionResult2}
-                        />
-                      )}
-                      {header.type === QuestionType.SingleChoice && (
-                        <SingleChoiceQuestionResultDisplay
-                          question={header}
-                          userAnswer={questionResult2}
-                          correctAnswer={questionResult2.singleChoiceResult === AnswerResult.Correct}
-                          questionText={header.text}
-                          questionScore={questionResult2.score}
-                          choices={Object.keys(choicesResults)}
-                        />
-                      )}
-                      {header.type === QuestionType.MultipleChoice && (<div>
-                        <p>Possible answers: {Object.keys(choicesResults).join(", ")}</p>
-                        <p>Correct answers: {Object.keys(choicesResults).filter(choice => choicesResults[choice] === AnswerResult.Correct || choicesResults[choice] === AnswerResult.CorrectNotPicked).join(", ")}</p>
-                        <p>Your answers: {Object.keys(choicesResults).filter(choice => choicesResults[choice] !== AnswerResult.CorrectNotPicked && choicesResults[choice] !== AnswerResult.Other).join(", ")}</p>
-
-                      </div>)}
-                      {header.type === QuestionType.WriteAnswer && (
-                        <WrittenQuestionResultDisplay
-                          question={header}
-                          userAnswer={questionResult2}
-                          correctAnswer={questionResult2.writtenAnswerResult === AnswerResult.Correct}
-                          questionText={header.text}
-                          questionScore={questionResult2.score}
-                        />
-                      )}
-                      {header.type === QuestionType.ReviewNeeded&&
-                        <ReviewNeededQuestionResultDisplay
-                          question={header}
-                          questionResult={questionResult2}
-                          questionText={header.text}
-                          questionScore={questionResult2.score}
-                        />
-                      }
+                      <QuestionResultDisplay question={header} questionResult={questionResult2} />
                     </div>
                   );
                 })}
@@ -155,9 +101,3 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
     </div>
   );
 }
-
-const borderStyle = {
-  borderRadius: '50px',
-  border: '1px solid gray',
-  padding: '10px',
-};
