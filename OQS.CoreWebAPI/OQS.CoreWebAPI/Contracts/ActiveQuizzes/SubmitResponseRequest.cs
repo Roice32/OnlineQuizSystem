@@ -1,11 +1,14 @@
-﻿using OQS.CoreWebAPI.Entities;
+﻿using MediatR;
+using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Shared;
+
 namespace OQS.CoreWebAPI.Contracts;
 
-public class SubmitResponseRequest
+public class SubmitResponseRequest: IRequest<Result<string>>
 {
-    public String UserId { get; set; }
     public Guid ActiveQuizId { get; set; }
     public List<Answer> Answers { get; set; }
+    
 }
 public class Answer
 {
