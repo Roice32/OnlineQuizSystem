@@ -6,6 +6,8 @@ public class SubmitResponseRequest
     public String UserId { get; set; }
     public Guid ActiveQuizId { get; set; }
     public List<Answer> Answers { get; set; }
+    
+    public string Jwt { get; set; }
 }
 public class Answer
 {
