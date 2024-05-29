@@ -11,6 +11,9 @@
     <PackageReference Include="Carter" Version="8.0.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3"/>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
@@ -42,8 +45,18 @@
 
   <ItemGroup>
     <Compile Remove="Contracts\ActiveQuiz\**" />
+    <Compile Remove="Migrations\20240522104204_Initial.cs" />
+    <Compile Remove="Migrations\20240522104204_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20240528212222_Add_ImageUrl_to_be_optional.cs" />
+    <Compile Remove="Migrations\20240528212222_Add_ImageUrl_to_be_optional.Designer.cs" />
+    <Compile Remove="Migrations\ApplicationDBContextModelSnapshot.cs" />
   </ItemGroup>
 
+
+
+  <ItemGroup>
+    <None Remove="Contracts\ActiveQuiz\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Migrations\" />
