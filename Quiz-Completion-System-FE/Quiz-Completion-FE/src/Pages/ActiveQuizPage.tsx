@@ -99,7 +99,6 @@ export default function ActiveQuizPage() {
       const response = await axios.post(`/api/active-quizzes/${activeQuizId}`, {
         activeQuizId: activeQuizId,
         answers: Object.values(answers),
-        userId: cookies["userId"],
       });
       console.log("Response", response);
 
