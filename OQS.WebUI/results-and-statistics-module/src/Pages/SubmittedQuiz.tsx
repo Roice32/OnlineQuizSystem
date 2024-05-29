@@ -27,8 +27,9 @@ export default function SubmittedQuiz() {
     setShowMessage3(false);
     try {
       const response = await axios.get(`http://localhost:5276/api/quizResults/getCreatedQuizStats/${quizId}`);
-      console.log(response.data);
+      //console.log(response.data);
       setQuizStats(response.data);
+      navigate(`/quizStats/${quizId}`);
     } catch (error) {
       console.error('Error fetching created quiz stats:', error);
     }
@@ -44,6 +45,7 @@ export default function SubmittedQuiz() {
       response.data.userId = userId;
       response.data.quizId = quizId;
       setQuizResults(response.data);
+      navigate(`/quizResults/${userId}/${quizId}`);
     } catch (error) {
       console.error('Error fetching quiz result:', error);
     }
@@ -54,7 +56,8 @@ export default function SubmittedQuiz() {
     setShowMessage1(false);
     setShowMessage3(false);
     setUserId(userId);
-  };
+    navigate(`/takenQuizzesHistory/${userId}`);
+  };3
 
   const handleBackClick = () => {
     setShowMessage1(false);
