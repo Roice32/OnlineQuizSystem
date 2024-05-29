@@ -3,10 +3,11 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.Contracts;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
-using OQS.CoreWebAPI.Entities;
+
 namespace QQS.CoreWebAPI.Tests
 {
     public class SubmitResponseTests : ApplicationContextForTesting
@@ -14,14 +15,18 @@ namespace QQS.CoreWebAPI.Tests
         [Fact]
         public async Task SubmitResponse_ReturnsOk()
         {
+            // Arrange
             var client = Application.CreateClient();
-            
+
+            // Add JWT token to request headers
+            var token = "your_jwt_token_here"; // Replace with your JWT token
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450");
-            var userId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d");
 
             var newResponse = new SubmitResponseRequest
             {
-                UserId = userId.ToString(),
+                // No need to specify UserId
                 ActiveQuizId = activeQuizId,
                 Answers = new List<Answer>
                 {
@@ -33,26 +38,32 @@ namespace QQS.CoreWebAPI.Tests
                     }
                 }
             };
-            
+
+            // Act
             var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
-            
+
+            // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Result<string>>(jsonString); 
+            var result = JsonConvert.DeserializeObject<Result<string>>(jsonString);
             result.IsSuccess.Should().BeTrue();
         }
 
         [Fact]
         public async Task SubmitResponse_InvalidUserId_ReturnsBadRequest()
         {
+            // Arrange
             var client = Application.CreateClient();
-            
+
+            // Add JWT token to request headers
+            var token = "your_jwt_token_here"; // Replace with your JWT token
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450");
-            var invalidUserId = Guid.Empty;
 
             var newResponse = new SubmitResponseRequest
             {
-                UserId = invalidUserId.ToString(),
+                // No need to specify UserId
                 ActiveQuizId = activeQuizId,
                 Answers = new List<Answer>
                 {
@@ -65,25 +76,33 @@ namespace QQS.CoreWebAPI.Tests
                 }
             };
 
+            // Act
             var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
-            
-       
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var result = await response.Content.ReadFromJsonAsync<Result<string>>();
             result.IsSuccess.Should().BeFalse();
-            result.Error.Should().NotBeNull();
+            result.Error.Should().NotBeNull(); // Ensure that an error object is present
             result.Error.Code.Should().Be("BadRequest");
+            ;
         }
+
         [Fact]
         public async Task SubmitResponse_PastDeadline_ReturnsBadRequest()
         {
+            // Arrange
             var client = Application.CreateClient();
-            
+
+            // Add JWT token to request headers
+            var token = "your_jwt_token_here"; // Replace with your JWT token
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972451");
-            var userId = Guid.Parse("5b048913-5df0-429f-a42b-051904672e4d");
 
             var newResponse = new SubmitResponseRequest
             {
-                UserId = userId.ToString(),
+                // No need to specify UserId
                 ActiveQuizId = activeQuizId,
                 Answers = new List<Answer>
                 {
@@ -96,9 +115,11 @@ namespace QQS.CoreWebAPI.Tests
                 }
             };
 
-            var response = await Client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
-            
-        
+            // Act
+            var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var result = await response.Content.ReadFromJsonAsync<Result<string>>();
             result.IsSuccess.Should().BeFalse();
             result.Error.Should().NotBeNull();
