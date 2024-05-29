@@ -398,7 +398,7 @@ function QuestionComponent({ id, setQuiz, quiz }) {
   return (
     <>
       <Flex direction="column" align="center">
-        <Flex maxWidth="400px" direction="column">
+        <Flex direction="column" className="w-10/12 sm:w-96">
           <Box mb="10px">
             <Text as="label">Question</Text>
             <TextArea placeholder="Add a question…" value={questionText} onChange={onChangeQuestion} />
@@ -488,9 +488,9 @@ export default function QuizCreate() {
 
   return (
     <>
-      <Dialog.Root>
-        <Navbar />
-        <Toast.Provider swipeDirection="right">
+      <Toast.Provider swipeDirection="right">
+        <Dialog.Root>
+          <Navbar />
           <Container p="30px">
             <Tabs.Root value={currentElement} onValueChange={setCurrentElement}>
               <Flex justify="between">
@@ -546,7 +546,7 @@ export default function QuizCreate() {
               <Box pt="3" width="100%">
                 <Tabs.Content value="quiz-details">
                   <Flex direction="column" align="center">
-                    <Flex maxWidth="400px" direction="column">
+                    <Flex className="w-10/12 sm:w-96" direction="column">
                       <Box mb="10px">
                         <Text as="label">Name</Text>
                         <TextField.Root placeholder="Add a name..." value={quiz.name} onChange={(event) => {
@@ -656,8 +656,9 @@ export default function QuizCreate() {
                           },
                           body: JSON.stringify(quizRequest),
                         })
-                          .then((response) =>
-                            response.json(),
+                          .then((response) => {
+                              return response.json()
+                            },
                           )
                           .then((data) => {
                             if (typeof data === 'string') {
@@ -696,7 +697,13 @@ export default function QuizCreate() {
                             console.log('Success:', data)
                           })
                           .catch((error) => {
-                            console.error('Error:', error)
+                            if (error instanceof SyntaxError) {
+                              setOpen(true)
+                              setMessageToast('Review the quiz details and the questions!')
+                              setTitleToast('Error at creating the quiz')
+                            } else {
+                              console.error('Error:', error)
+                            }
                           })
                       }}>
                         Submit Quiz
@@ -720,50 +727,50 @@ export default function QuizCreate() {
           </Toast.Root>
           <Toast.Viewport className="ToastViewport" />
 
-        </Toast.Provider>
 
+          <Dialog.Content maxWidth="450px">
+            <Dialog.Title>Generate question</Dialog.Title>
+            <Dialog.Description size="2" mb="4">
+              Enter your prompt for AI to generate a question
+            </Dialog.Description>
 
-        <Dialog.Content maxWidth="450px">
-          <Dialog.Title>Generate question</Dialog.Title>
-          <Dialog.Description size="2" mb="4">
-            Enter your prompt for AI to generate a question
-          </Dialog.Description>
+            <Flex direction="column" gap="3">
+              <label>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Prompt
+                </Text>
+                <TextField.Root
+                  value={prompt}
+                  onChange={(event) => setPrompt(event.target.value)}
+                  placeholder="Enter your prompt"
+                />
+              </label>
+            </Flex>
 
-          <Flex direction="column" gap="3">
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Prompt
-              </Text>
-              <TextField.Root
-                value={prompt}
-                onChange={(event) => setPrompt(event.target.value)}
-                placeholder="Enter your prompt"
-              />
-            </label>
-          </Flex>
+            <Flex gap="3" mt="4" justify="end">
+              {!loadingAI && (
+                <Dialog.Close>
+                  <Button variant="soft" color="gray">
+                    Cancel
+                  </Button>
+                </Dialog.Close>
+              )}
 
-          <Flex gap="3" mt="4" justify="end">
-            {!loadingAI && (
-              <Button variant="soft" color="gray">
-                Cancel
-              </Button>
-            )}
+              {!doneAI && !loadingAI && (<Button
+                onClick={async () => {
+                  setLoadingAI(true)
 
-            {!doneAI && !loadingAI && (<Button
-              onClick={async () => {
-                setLoadingAI(true)
+                  let currentElementNumber = currentElement.substring(8)
+                  // verify if current element is number
+                  if (isNaN(Number(currentElementNumber))) {
+                    setLoadingAI(false)
+                    setMessageToast('You need to be on a question')
+                    setTitleToast('Error')
+                    setOpen(true)
+                    return
+                  }
 
-                let currentElementNumber = currentElement.substring(8)
-                // verify if current element is number
-                if (isNaN(Number(currentElementNumber))) {
-                  setLoadingAI(false)
-                  setMessageToast('You need to be on a question')
-                  setTitleToast('Error')
-                  setOpen(true)
-                  return
-                }
-
-                let mesaj = `Vreau să creezi 1 întrebări de dificultate medie, fiecare având 4 variante de răspuns, una corectă și 3 greșite, pentru un quiz cu tema "${prompt}". Vei returna raspunsul sub forma de json, unde intrebarea va fi un string, iar variantele de raspuns vor fi un array de stringuri. Varianta corecta va fi prima varianta posibila.
+                  let mesaj = `Vreau să creezi 1 întrebări de dificultate medie, fiecare având 4 variante de răspuns, una corectă și 3 greșite, pentru un quiz cu tema "${prompt}". Vei returna raspunsul sub forma de json, unde intrebarea va fi un string, iar variantele de raspuns vor fi un array de stringuri. Varianta corecta va fi prima varianta posibila.
                 Exemplu: {
                     "1": {
                         "intrebare": "Cine a fost primul rege al Angliei?",
@@ -776,75 +783,80 @@ export default function QuizCreate() {
                     }
                 }`
 
-                const response = await fetch('https://api.textcortex.com/v1/codes', {
-                  method: 'POST',
-                  headers: {
-                    'Authorization': 'Bearer gAAAAABmOiEDhlUAHKGx2bE9D5STmMvKgsuM2FaNLHVZ3_OWSGEJvhsPCfyztsWqT9V-03iE-uoHVSoRVZgdTeW593DH7j2Uc1ZLBIe_ySogrTb91Sjq72zVyzZc6KwBXzvBdTJ19AwZ',
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    'max_tokens': 2048,
-                    'mode': 'python',
-                    'model': 'icortex-1',
-                    'n': 1,
-                    'temperature': 0,
-                    'text': mesaj,
-                  }),
-                })
+                  const response = await fetch('https://api.textcortex.com/v1/codes', {
+                    method: 'POST',
+                    headers: {
+                      'Authorization': 'Bearer gAAAAABmOiEDhlUAHKGx2bE9D5STmMvKgsuM2FaNLHVZ3_OWSGEJvhsPCfyztsWqT9V-03iE-uoHVSoRVZgdTeW593DH7j2Uc1ZLBIe_ySogrTb91Sjq72zVyzZc6KwBXzvBdTJ19AwZ',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      'max_tokens': 2048,
+                      'mode': 'python',
+                      'model': 'icortex-1',
+                      'n': 1,
+                      'temperature': 0,
+                      'text': mesaj,
+                    }),
+                  })
 
-                if (!response.ok) {
-                  throw new Error('Network response was not ok')
-                }
+                  if (!response.ok) {
+                    setOpen(true)
+                    setMessageToast('')
+                    setTitleToast('Service currently unavailable!')
+                    setDoneAI(false)
+                    setLoadingAI(false)
+                  } else {
+                    const responseData = await response.json()
+                    console.log('Răspunsul API:', responseData)
+                    let raspunsAI = responseData.data.outputs[0].text
+                    let responseObject = JSON.parse(raspunsAI)
 
-                const responseData = await response.json()
-                console.log('Răspunsul API:', responseData)
-                let raspunsAI = responseData.data.outputs[0].text
-                let responseObject = JSON.parse(raspunsAI)
+                    let correctAnswer = responseObject['1'].variante[0]
+                    let text = responseObject['1'].intrebare
+                    let choices = responseObject['1'].variante
+                    console.log(choices)
 
-                let correctAnswer = responseObject['1'].variante[0]
-                let text = responseObject['1'].intrebare
-                let choices = responseObject['1'].variante
-                console.log(choices)
+                    let currentQuestion = quiz.questions.find((q) => q.id === quiz.questions[Number(currentElementNumber)].id)
 
-                let currentQuestion = quiz.questions.find((q) => q.id === quiz.questions[Number(currentElementNumber)].id)
+                    setQuiz({
+                      ...quiz,
+                      questions: quiz.questions.map((q) => {
+                        if (q.id === currentQuestion.id) {
+                          return {
+                            ...q,
+                            text: text,
+                            type: 2,
+                            choices: choices,
+                            singleChoiceAnswer: correctAnswer,
+                          }
+                        }
+                        return q
+                      }),
+                    })
+                    setDoneAI(true)
+                    setLoadingAI(false)
+                  }
 
-                setQuiz({
-                  ...quiz,
-                  questions: quiz.questions.map((q) => {
-                    if (q.id === currentQuestion.id) {
-                      return {
-                        ...q,
-                        text: text,
-                        type: 2,
-                        choices: choices,
-                        singleChoiceAnswer: correctAnswer,
-                      }
-                    }
-                    return q
-                  }),
-                })
-                setDoneAI(true)
-                setLoadingAI(false)
+                }}>
+                Generate question
+              </Button>)}
 
-              }}>
-              Generate question
-            </Button>)}
+              {loadingAI && (
+                <Button loading>Generate question</Button>
+              )}
 
-            {loadingAI && (
-              <Button loading>Generate question</Button>
-            )}
+              {doneAI && (
+                <Dialog.Close>
+                  <Button onClick={() => {
+                    setDoneAI(false)
+                  }}>Done</Button>
+                </Dialog.Close>
+              )}
+            </Flex>
+          </Dialog.Content>
 
-            {doneAI && (
-              <Dialog.Close>
-                <Button onClick={() => {
-                  setDoneAI(false)
-                }}>Done</Button>
-              </Dialog.Close>
-            )}
-          </Flex>
-        </Dialog.Content>
-
-      </Dialog.Root>
+        </Dialog.Root>
+      </Toast.Provider>
     </>
   )
 }
