@@ -8,7 +8,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
     {
         public static void SeedDb(ApplicationDBContext dbContext)
         {
-             SeedUsers(dbContext);
+            SeedUsers(dbContext);
             SeedQuizzes(dbContext);
             SeedTags(dbContext);
         }
@@ -57,29 +57,27 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             dbContext.Quizzes.Add(quiz4);
 
             dbContext.SaveChanges();
-
-
         }
+
         private static void SeedUsers(ApplicationDBContext dbContext)
         {
             var users = new List<User>
             {
                 new User
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000001"),
+                    Id = Guid.Parse("00000000-0000-0000-0001-000000000001").ToString(),
 
                     Email = "email1@email.com"
                 },
                 new User
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000002"),
+                    Id = Guid.Parse("00000000-0000-0000-0001-000000000002").ToString(),
 
                     Email = "email2@email.com"
                 },
                 new User
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000003"),
-
+                    Id = Guid.Parse("00000000-0000-0000-0001-000000000003").ToString(),
                     Email = "emai3@email.com"
                 }
             };
@@ -88,6 +86,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
             dbContext.SaveChanges();
         }
+
         private static void SeedTags(ApplicationDBContext dbContext)
         {
             var tags = new List<Tag>

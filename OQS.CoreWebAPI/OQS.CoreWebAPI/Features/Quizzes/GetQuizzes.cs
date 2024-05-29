@@ -41,9 +41,10 @@ public static class GetQuizzes
                 {
                     Id = quiz.Id,
                     Name = quiz.Name,
-                    ImageUrl = quiz.ImageUrl,
                     Description = quiz.Description,
                     CreatedAt = quiz.CreatedAt,
+                    ImageUrl = quiz.ImageUrl,
+                    Language = quiz.Language,
                 }))
                 .ToList();
 

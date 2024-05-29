@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Features.Tags
 
                 if (tag == null)
                 {
-                    return Result.Failure(new Error(404, "Tag not found."));
+                    return Result.Failure(new Error("404", "Tag not found."));
                 }
 
                 _dbContext.Tags.Remove(tag);

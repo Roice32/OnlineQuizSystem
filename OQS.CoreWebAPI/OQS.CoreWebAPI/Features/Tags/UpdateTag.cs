@@ -48,13 +48,14 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (!validationResult.IsValid)
                 {
                     var errorMessages = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
-                    return Result.Failure<TagResponse>(new Error(400, errorMessages));
+                    return Result.Failure<TagResponse>(new Error("400", errorMessages));
                 }
 
-                var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id.ToString() == request.TagId, cancellationToken);
+                var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id.ToString() == request.TagId,
+                    cancellationToken);
                 if (tag is null)
                 {
-                    return Result.Failure<TagResponse>(new Error(404, "Tag not found"));
+                    return Result.Failure<TagResponse>(new Error("404", "Tag not found"));
                 }
 
                 tag.Name = request.Body.Name;
@@ -66,7 +67,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 }
                 catch (Exception)
                 {
-                    return Result.Failure<TagResponse>(new Error(500, "Tag could not be updated"));
+                    return Result.Failure<TagResponse>(new Error("500", "Tag could not be updated"));
                 }
 
                 return Result<TagResponse>.Success(new TagResponse(tag));
@@ -76,7 +77,6 @@ namespace OQS.CoreWebAPI.Features.Tags
 
     public class UpdateTagEndpoint : ICarterModule
     {
-
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             app.MapPatch("api/tags/{id}", async (string id, UpdateTagRequest request, ISender sender) =>
@@ -100,29 +100,29 @@ namespace OQS.CoreWebAPI.Features.Tags
                 return Results.Ok(result.Value);
             });
         }
-    } }
-
-    
-
-    /* public class UpdateTagEndpoint : ICarterModule
-     {
-         public void AddRoutes(IEndpointRouteBuilder app)
-         {
-             app.MapPatch("api/tags/{id}", async (string id, UpdateTagRequest request, ISender sender) =>
-             {
-                 var command = new UpdateTag.Command(id)
-                 {
-                     Body = request.Adapt<UpdateTag.BodyUpdateTag>()
-                 };
-
-                 return await sender.Send(command);
-                /* var result = await sender.Send(command);
-
-                 return result.IsSuccess
-                     ? Results.Ok(result.Value)
-                     : Results.StatusCode(result.Error.Code, result.Error.Message);*
-});
-        }
     }
+}
+
+
+/* public class UpdateTagEndpoint : ICarterModule
+ {
+     public void AddRoutes(IEndpointRouteBuilder app)
+     {
+         app.MapPatch("api/tags/{id}", async (string id, UpdateTagRequest request, ISender sender) =>
+         {
+             var command = new UpdateTag.Command(id)
+             {
+                 Body = request.Adapt<UpdateTag.BodyUpdateTag>()
+             };
+
+             return await sender.Send(command);
+            /* var result = await sender.Send(command);
+
+             return result.IsSuccess
+                 ? Results.Ok(result.Value)
+                 : Results.StatusCode(result.Error.Code, result.Error.Message);*
+});
+    }
+}
 }
 */

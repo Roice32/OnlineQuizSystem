@@ -1,5 +1,4 @@
-﻿
-using Carter;
+﻿using Carter;
 using FluentValidation;
 using Mapster;
 using OQS.CoreWebAPI.Contracts;
@@ -9,6 +8,8 @@ using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.QuizQuestions;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Contracts.CRUD;
+
 namespace OQS.CoreWebAPI.Features.QuizQuestions
 {
     public static class UpdateQuestion
@@ -21,9 +22,9 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
             public int TimeLimit { get; set; }
             public List<string>? Choices { get; set; } = new List<string>();
             public bool? TrueFalseAnswer { get; set; }
-            public List<string>? MultipleChoiceAnswers { get; set; }= new List<string>();
-            public string? SingleChoiceAnswer { get; set; }= string.Empty;
-            public List<string>? WrittenAcceptedAnswers { get; set; }= new List<string>();
+            public List<string>? MultipleChoiceAnswers { get; set; } = new List<string>();
+            public string? SingleChoiceAnswer { get; set; } = string.Empty;
+            public List<string>? WrittenAcceptedAnswers { get; set; } = new List<string>();
         }
 
         public class Command : IRequest<Result<QuestionResponse>>
@@ -37,58 +38,58 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
         {
             public Validator()
             {
-             RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Id is required.");
+                RuleFor(x => x.Id)
+                    .NotEmpty().WithMessage("Id is required.");
 
-             RuleFor(x => x.QuizId)
-                .NotEmpty().WithMessage("QuizId is required.");
+                RuleFor(x => x.QuizId)
+                    .NotEmpty().WithMessage("QuizId is required.");
 
-             RuleFor(x => x.Body)
-            .NotNull().WithMessage("Body is required.")
-            .DependentRules(() =>
-            {
-                RuleFor(x => x.Body.Text)
-                    .NotEmpty().WithMessage("Text is required.");
+                RuleFor(x => x.Body)
+                    .NotNull().WithMessage("Body is required.")
+                    .DependentRules(() =>
+                    {
+                        RuleFor(x => x.Body.Text)
+                            .NotEmpty().WithMessage("Text is required.");
 
-                RuleFor(x => x.Body.Type)
-                    .NotEmpty().WithMessage("Type is required.");
+                        RuleFor(x => x.Body.Type)
+                            .NotEmpty().WithMessage("Type is required.");
 
-                RuleFor(x => x.Body.AlocatedPoints)
-                    .GreaterThan(0).WithMessage("AlocatedPoints must be greater than 0.");
-               
-                RuleFor(x => x.Body.TimeLimit)
-                    .GreaterThan(0).WithMessage("TimeLimit must be greater than 0.");
+                        RuleFor(x => x.Body.AlocatedPoints)
+                            .GreaterThan(0).WithMessage("AlocatedPoints must be greater than 0.");
 
-                When(x => x.Body.Choices != null, () =>
-                {
-                    RuleFor(x => x.Body.Choices)
-                        .NotEmpty().WithMessage("Choices are required.");
-                });
+                        RuleFor(x => x.Body.TimeLimit)
+                            .GreaterThan(0).WithMessage("TimeLimit must be greater than 0.");
 
-                When(x => x.Body.MultipleChoiceAnswers != null, () =>
-                {
-                    RuleFor(x => x.Body.MultipleChoiceAnswers)
-                        .NotEmpty().WithMessage("MultipleChoiceAnswers are required.");
-                });
+                        When(x => x.Body.Choices != null, () =>
+                        {
+                            RuleFor(x => x.Body.Choices)
+                                .NotEmpty().WithMessage("Choices are required.");
+                        });
 
-                When(x => x.Body.SingleChoiceAnswer != null, () =>
-                {
-                    RuleFor(x => x.Body.SingleChoiceAnswer)
-                        .NotEmpty().WithMessage("SingleChoiceAnswer is required.");
-                });
+                        When(x => x.Body.MultipleChoiceAnswers != null, () =>
+                        {
+                            RuleFor(x => x.Body.MultipleChoiceAnswers)
+                                .NotEmpty().WithMessage("MultipleChoiceAnswers are required.");
+                        });
 
-                When(x => x.Body.TrueFalseAnswer != null, () =>
-                {
-                    RuleFor(x => x.Body.TrueFalseAnswer)
-                        .NotEmpty().WithMessage("TrueFalseAnswer is required.");
-                });
+                        When(x => x.Body.SingleChoiceAnswer != null, () =>
+                        {
+                            RuleFor(x => x.Body.SingleChoiceAnswer)
+                                .NotEmpty().WithMessage("SingleChoiceAnswer is required.");
+                        });
 
-                When(x => x.Body.WrittenAcceptedAnswers != null, () =>
-                {
-                    RuleFor(x => x.Body.WrittenAcceptedAnswers)
-                        .NotEmpty().WithMessage("WrittenAcceptedAnswers are required.");
-                });
-            });
+                        When(x => x.Body.TrueFalseAnswer != null, () =>
+                        {
+                            RuleFor(x => x.Body.TrueFalseAnswer)
+                                .NotEmpty().WithMessage("TrueFalseAnswer is required.");
+                        });
+
+                        When(x => x.Body.WrittenAcceptedAnswers != null, () =>
+                        {
+                            RuleFor(x => x.Body.WrittenAcceptedAnswers)
+                                .NotEmpty().WithMessage("WrittenAcceptedAnswers are required.");
+                        });
+                    });
             }
         }
 
@@ -106,13 +107,13 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
             public async Task<Result<QuestionResponse>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
-               /* if (!validationResult.IsValid)
-                {
-                    return Result.Failure<QuestionResponse>(
-                        new Error(
-                            400, "validation failed"
-                        ));
-                }*/
+                /* if (!validationResult.IsValid)
+                 {
+                     return Result.Failure<QuestionResponse>(
+                         new Error(
+                             400, "validation failed"
+                         ));
+                 }*/
 
                 var question = await context.Questions
                     .AsNoTracking()
@@ -122,7 +123,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
                 {
                     return Result.Failure<QuestionResponse>(
                         new Error(
-                            404, "Question not found"
+                            "404", "Question not found"
                         ));
                 }
 
@@ -144,28 +145,39 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
                         switch (request.Body.Type)
                         {
                             case QuestionType.TrueFalse:
-                                question = new TrueFalseQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId, request.Body.TimeLimit, request.Body.AlocatedPoints, request.Body.TrueFalseAnswer ?? false);
+                                question = new TrueFalseQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
+                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.TrueFalseAnswer ?? false);
                                 // _dbContext.TrueFalseQuestions.Add((TrueFalseQuestion)question);
                                 break;
                             case QuestionType.MultipleChoice:
-                                question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId, request.Body.TimeLimit, request.Body.AlocatedPoints, request.Body.Choices ?? new List<string>(), request.Body.MultipleChoiceAnswers ?? new List<string>());
+                                question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
+                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.Choices ?? new List<string>(),
+                                    request.Body.MultipleChoiceAnswers ?? new List<string>());
                                 //  _dbContext.MultipleChoiceQuestions.Add((MultipleChoiceQuestion)question);
                                 break;
                             case QuestionType.SingleChoice:
-                                question = new SingleChoiceQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId, request.Body.TimeLimit, request.Body.AlocatedPoints, request.Body.Choices ?? new List<string>(), request.Body.SingleChoiceAnswer ?? string.Empty);
+                                question = new SingleChoiceQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
+                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.Choices ?? new List<string>(),
+                                    request.Body.SingleChoiceAnswer ?? string.Empty);
                                 // _dbContext.SingleChoiceQuestions.Add((SingleChoiceQuestion)question);
                                 break;
                             case QuestionType.WriteAnswer:
-                                question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId, request.Body.TimeLimit, request.Body.AlocatedPoints, request.Body.WrittenAcceptedAnswers ?? new List<string>());
+                                question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
+                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.WrittenAcceptedAnswers ?? new List<string>());
                                 // _dbContext.WrittenAnswerQuestions.Add((WrittenAnswerQuestion)question);
                                 break;
                             case QuestionType.ReviewNeeded:
-                                question = new ReviewNeededQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId, request.Body.TimeLimit, request.Body.AlocatedPoints);
+                                question = new ReviewNeededQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
+                                    request.Body.TimeLimit, request.Body.AlocatedPoints);
                                 // _dbContext.ReviewNeededQuestions.Add((ReviewNeededQuestion)question);
                                 break;
                             default:
                                 return Result.Failure<QuestionResponse>(
-                                    new Error(400, "Invalid question type"));
+                                    new Error("400", "Invalid question type"));
                         }
 
                         /*     if (request.Body.Choices != null && request.Body.Choices.Any())
@@ -192,7 +204,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
                 {
                     return Result.Failure<QuestionResponse>(
                         new Error(
-                            400, ex.Message
+                            "400", ex.Message
                         ));
                 }
 
@@ -207,25 +219,26 @@ public class UpdateQuestionEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPatch("api/quizzes/{quiz_id}/questions/{question_id}", async (Guid quiz_id, Guid question_id, UpdateQuestionRequest request, ISender sender) =>
-        {
-            var bodyUpdateQuiz = request.Adapt<UpdateQuestion.BodyUpdateQuestion>();
-
-            var command = new UpdateQuestion.Command
+        app.MapPatch("api/quizzes/{quiz_id}/questions/{question_id}",
+            async (Guid quiz_id, Guid question_id, UpdateQuestionRequest request, ISender sender) =>
             {
-                QuizId = quiz_id,
-                Id = question_id,
-                Body = bodyUpdateQuiz
-            };
+                var bodyUpdateQuiz = request.Adapt<UpdateQuestion.BodyUpdateQuestion>();
 
-            var result = await sender.Send(command);
+                var command = new UpdateQuestion.Command
+                {
+                    QuizId = quiz_id,
+                    Id = question_id,
+                    Body = bodyUpdateQuiz
+                };
 
-            if (result.IsFailure)
-            {
-                return Results.NotFound(result.Error);
-            }
+                var result = await sender.Send(command);
 
-            return Results.Ok(result.Value);
-        });
+                if (result.IsFailure)
+                {
+                    return Results.NotFound(result.Error);
+                }
+
+                return Results.Ok(result.Value);
+            });
     }
 }

@@ -22,6 +22,4 @@ protected QuestionBase(Guid id, QuestionType type, string text, Guid QuizId, int
         this.TimeLimit = TimeLimit;
 
     }
-    
-   
 }

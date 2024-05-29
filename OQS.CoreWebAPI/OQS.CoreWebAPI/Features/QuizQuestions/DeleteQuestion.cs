@@ -6,7 +6,6 @@ using OQS.CoreWebAPI.Features.QuizQuestions;
 using OQS.CoreWebAPI.Shared;
 using FluentValidation;
 
-
 namespace OQS.CoreWebAPI.Features.QuizQuestions
 {
     public static class DeleteQuestion
@@ -17,14 +16,14 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
             public Guid QuestionId { get; init; }
         }
 
-     public class CommandValidator : AbstractValidator<Command>
-{
-    public CommandValidator()
-    {
-        RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId must be provided.");
-        RuleFor(x => x.QuestionId).NotEmpty().WithMessage("QuestionId must be provided.");
-    }
-}
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId must be provided.");
+                RuleFor(x => x.QuestionId).NotEmpty().WithMessage("QuestionId must be provided.");
+            }
+        }
 
         internal sealed class Handler : IRequestHandler<Command, Result>
         {
@@ -41,7 +40,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
                 if (quiz == null)
                 {
-                    return Result.Failure(new Error(404, "Quiz not found."));
+                    return Result.Failure(new Error("404", "Quiz not found."));
                 }
 
                 var question =
@@ -49,7 +48,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
                 if (question == null)
                 {
-                    return Result.Failure(new Error(404, "Question not found."));
+                    return Result.Failure(new Error("404", "Question not found."));
                 }
 
                 _dbContext.Questions.Remove(question);
