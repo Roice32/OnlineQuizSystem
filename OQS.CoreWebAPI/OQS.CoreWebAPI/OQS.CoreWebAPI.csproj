@@ -29,6 +29,11 @@
 
   <ItemGroup>
     <Compile Remove="Contracts\ActiveQuiz\**" />
+    <Compile Remove="Migrations\20240522104204_Initial.cs" />
+    <Compile Remove="Migrations\20240522104204_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20240528212222_Add_ImageUrl_to_be_optional.cs" />
+    <Compile Remove="Migrations\20240528212222_Add_ImageUrl_to_be_optional.Designer.cs" />
+    <Compile Remove="Migrations\ApplicationDBContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>
