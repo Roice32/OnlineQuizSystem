@@ -7,7 +7,6 @@ import { ActiveQuizRoute } from "./Routes/ActiveQuizRoute";
 import { SubmittedQuizRoute } from "./Routes/SubmittedQuizRoute";
 import TakenQuizzesHistoryPage from "../Pages/TakenQuizHistoryPage";
 import QuizResultsPage from "../Pages/QuizResultsPage";
-import UpdatedQuizResultsPage from "../Pages/UpdatedQuizResultsPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,10 +29,7 @@ export const router = createBrowserRouter([
         path: "quizResults/:userId/:quizId",
         element: <QuizResultsPage />,
       },
-      {
-        path: "updatedQuizResults/:userId/:quizId",
-        element: <UpdatedQuizResultsPage />,
-      },
+      
       QuizRoute,
       ActiveQuizRoute,
       SubmittedQuizRoute,

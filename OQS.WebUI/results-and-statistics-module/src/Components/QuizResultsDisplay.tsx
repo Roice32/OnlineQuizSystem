@@ -73,11 +73,12 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
           </div>
         ) : (
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center p-4 rounded-3xl rounded-b-none border-4 border-solid border-gray-400">
+  <div className="grid grid-cols-1 md:grid-cols-6 gap-4 text-center p-4 rounded-3xl rounded-b-none border-4 border-solid border-gray-400">
               <p className="text-lg bg-gray-200 p-2 rounded-md">Username: {quizResults.quizResultHeader.userName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Quiz Name: {quizResults.quizResultHeader.quizName}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Completion Time: {quizResults.quizResultHeader.completionTime}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">Score: {quizResults.quizResultHeader.score}</p>
+              <p className="text-lg bg-gray-200 p-2 rounded-md">Submitted At: {formatDate(quizResults.quizResultHeader.submittedAt)}</p>
               <p className="text-lg bg-gray-200 p-2 rounded-md">
                 {quizResults.quizResultHeader.reviewPending ? "Review Pending" : "Review Not Pending"}
               </p>
