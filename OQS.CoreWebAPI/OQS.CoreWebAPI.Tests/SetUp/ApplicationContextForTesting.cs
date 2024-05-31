@@ -36,13 +36,17 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
                         db.Database.EnsureDeleted();
                         db.Database.EnsureCreated();
-                        db.SeedQuestions();
+
+                        // Used by RSM for temporary testing. Will need merging and / or specialization.
+                        db.SeedDbForRSMComplete();
+
+                        /*db.SeedQuestions();
                         db.SeedQuizzez();
                         db.SeedUsers();
                         db.SeedQuizzez();
                         db.SeedActiveQuizzes();
                         db.SeedExpiredActiveQuizzes();
-                        db.SeedLiveQuizzes();
+                        db.SeedLiveQuizzes();*/
                     }
                 });
             });

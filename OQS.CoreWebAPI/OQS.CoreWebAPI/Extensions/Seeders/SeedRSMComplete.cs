@@ -1,4 +1,4 @@
-using Carter;
+﻿using Carter;
 using MediatR;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
@@ -11,7 +11,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
 {
     public static class SeedRSMComplete
     {
-        /*public static void SeedDbForRSMComplete(this ApplicationDbContext dbContext)
+        public static void SeedDbForRSMComplete(this ApplicationDbContext dbContext)
         {
             SeedUsers(dbContext);
             SeedQuizzes(dbContext);
@@ -353,6 +353,6 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
 
             dbContext.QuizResultHeaders.AddRange(quizResultHeaders);
             dbContext.SaveChanges();
-        }*/
+        }
     }
 }

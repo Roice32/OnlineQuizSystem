@@ -105,11 +105,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSpecificOrigin");
 
+// Used only for testing RSM's features.
+dbContext.SeedDbForRSMComplete();
 
-dbContext.SeedQuizzez();
+/*dbContext.SeedQuizzez();
 dbContext.SeedUsers();
 dbContext.SeedActiveQuizzes();
-dbContext.SeedLiveQuizzes();
+dbContext.SeedLiveQuizzes();*/
 
 app.MapCarter();
 app.MapHub<LiveQuizzesHub>("/ws/live-quizzes");
