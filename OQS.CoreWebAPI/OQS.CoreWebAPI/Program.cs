@@ -13,6 +13,8 @@ using OQS.CoreWebAPI.Features.Authentication;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using OQS.CoreWebAPI.Features.LiveQuizzes;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
+using OQS.CoreWebAPI.Extensions.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +30,12 @@ builder.Services.AddSwaggerGen(options =>
 // check if platform is linux
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 {
-    builder.Services.AddDbContext<ApplicationDBContext>(db =>
+    builder.Services.AddDbContext<ApplicationDbContext>(db =>
         db.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseLinux")));
 }
 else
 {
-    builder.Services.AddDbContext<ApplicationDBContext>(db =>
+    builder.Services.AddDbContext<ApplicationDbContext>(db =>
         db.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 }
 
@@ -50,10 +52,10 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDBContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDBContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 var assembly = typeof(Program).Assembly;
@@ -81,10 +83,15 @@ builder.Services.AddAuthorization();
 // Pentru trimiterea email-urilor
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+DependencyInjector.AddQuestionCheckersFromAssembly(builder.Services);
+var serviceProvider = builder.Services.BuildServiceProvider();
+serviceProvider.GetRequiredService<QuestionChecker>();
+DependencyInjector.AddEmailSenderStrategiesFromAssembly(builder.Services);
+
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
 if (app.Environment.IsDevelopment())
 {

@@ -80,7 +80,7 @@ namespace OQS.CoreWebAPI.Tests
                 QuizId = Guid.NewGuid(), // Non-existent quiz ID
                 Text = "What is the capital of France?",
                 Type = QuestionType.SingleChoice,
-                AlocatedPoints = 5,
+                AllocatedPoints = 5,
                 TimeLimit = 30,
                 Choices = new List<string> { "Paris", "London", "Berlin" },
                 SingleChoiceAnswer = "Paris"
@@ -108,7 +108,7 @@ namespace OQS.CoreWebAPI.Tests
                 QuizId = quizId,
                 Text = "2+2 =4 ?",
                 Type = QuestionType.TrueFalse,
-                AlocatedPoints = 0,
+                AllocatedPoints = 0,
                 TimeLimit = 0,
                 Choices = new List<string> { "true", "false" },
                 TrueFalseAnswer = true,

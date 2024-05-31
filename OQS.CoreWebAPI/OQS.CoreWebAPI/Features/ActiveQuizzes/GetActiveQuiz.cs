@@ -14,10 +14,10 @@ public class GetActiveQuizById
 {
     public record Query(Guid ActiveQuizId, string Jwt) : IRequest<Result<ActiveQuizResponse>>;
     
-    private readonly ApplicationDBContext _context;
+    private readonly ApplicationDbContext _context;
     private readonly IConfiguration _configuration;
     
-    GetActiveQuizById(ApplicationDBContext context, IConfiguration configuration)
+    GetActiveQuizById(ApplicationDbContext context, IConfiguration configuration)
     {
         _context = context;
         _configuration = configuration;
@@ -52,7 +52,7 @@ public class GetActiveQuizById
                 var userId = jwtHandler.ReadJwtToken(query.Jwt).Claims
                     .FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
                 using var scope = _serviceScopeFactory.CreateScope();
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 var activeQuiz = await dbContext.ActiveQuizzes
                     .Include(aq => aq.User)
                     .FirstOrDefaultAsync(aq => aq.Id == query.ActiveQuizId, cancellation);
@@ -64,7 +64,7 @@ public class GetActiveQuizById
     private async Task<bool> ActiveQuizExists(Guid activeQuizId, CancellationToken cancellationToken)
     {
         using var scope = _serviceScopeFactory.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         return await context.ActiveQuizzes.FindAsync(activeQuizId) != null;
     }
     
@@ -78,10 +78,10 @@ public class GetActiveQuizById
     
     internal sealed class Handler : IRequestHandler<Query, Result<ActiveQuizResponse>>
     {
-        private readonly ApplicationDBContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IValidator<Query> _validator;
 
-        public Handler(ApplicationDBContext context, IValidator<Query> validator)
+        public Handler(ApplicationDbContext context, IValidator<Query> validator)
         {
             _context = context;
             _validator = validator;

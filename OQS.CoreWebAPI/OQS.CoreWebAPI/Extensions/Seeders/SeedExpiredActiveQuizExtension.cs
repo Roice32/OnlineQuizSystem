@@ -1,13 +1,13 @@
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities.ActiveQuiz;
 
-namespace OQS.CoreWebAPI.Extensions;
+namespace OQS.CoreWebAPI.Extensions.Seeders;
 
 public static class SeedExpiredActiveQuizExtension
 {
-    public static void SeedExpiredActiveQuizzes(this ApplicationDBContext context)
+    public static void SeedExpiredActiveQuizzes(this ApplicationDbContext context)
     {
-        if (context.ActiveQuizzes.Any(quiz=>quiz.Id == Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972451")))
+        if (context.ActiveQuizzes.Any(quiz => quiz.Id == Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972451")))
         {
             return;
         }
@@ -18,11 +18,11 @@ public static class SeedExpiredActiveQuizExtension
             Id = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972451"),
             Quiz = quiz,
             User = user,
-            StartedAt = DateTime.UtcNow.AddMinutes(-1*(quiz.TimeLimitMinutes+1)),
-            };
-        
-        
-        
+            StartedAt = DateTime.UtcNow.AddMinutes(-1 * (quiz.TimeLimitMinutes + 1)),
+        };
+
+
+
         context.ActiveQuizzes.Add(ActiveQuiz);
         context.SaveChanges();
     }

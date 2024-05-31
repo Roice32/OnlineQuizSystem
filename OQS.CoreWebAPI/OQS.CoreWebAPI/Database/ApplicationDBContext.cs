@@ -3,18 +3,23 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Entities.ActiveQuiz;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 
 namespace OQS.CoreWebAPI.Database
 {
-    public class ApplicationDBContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             
         }
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<QuizResultHeader>().HasKey(qrh => new { qrh.UserId, qrh.QuizId });
+            modelBuilder.Entity<QuestionResultBase>().HasKey(qr => new { qr.UserId, qr.QuestionId });
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<UserConnection>(entity=>
             {
@@ -50,5 +55,13 @@ namespace OQS.CoreWebAPI.Database
         public DbSet<UserConnection> UserConnections { get; set; }
 
         public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<QuizResultHeader> QuizResultHeaders { get; set; }
+
+        public DbSet<QuestionResultBase> QuestionResults { get; set; }
+        public DbSet<TrueFalseQuestionResult> TrueFalseQuestionResults { get; set; }
+        public DbSet<ChoiceQuestionResult> ChoiceQuestionResults { get; set; }
+        public DbSet<WrittenAnswerQuestionResult> WrittenAnswerQuestionResults { get; set; }
+        public DbSet<ReviewNeededQuestionResult> ReviewNeededQuestionResults { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 
-namespace OQS.CoreWebAPI.Extensions;
+namespace OQS.CoreWebAPI.Extensions.Seeders;
 
 public static class SeedLiveQuizzesExtension
 {
-    public static void SeedLiveQuizzes(this ApplicationDBContext context)
+    public static void SeedLiveQuizzes(this ApplicationDbContext context)
     {
         var liveQuizzes = context.LiveQuizzes.ToList();
         context.LiveQuizzes.RemoveRange(liveQuizzes);

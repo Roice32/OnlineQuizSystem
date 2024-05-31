@@ -13,10 +13,10 @@ public static class GetQuizById
 
     public class Handler : IRequestHandler<Query, Result<QuizResponse>>
     {
-        private readonly ApplicationDBContext context;
+        private readonly ApplicationDbContext context;
 
 
-        public Handler(ApplicationDBContext context)
+        public Handler(ApplicationDbContext context)
         {
             this.context = context;
         }

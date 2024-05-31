@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Extensions;
+using OQS.CoreWebAPI.Extensions.Seeders;
 
 namespace OQS.CoreWebAPI.Tests.SetUp
 {
@@ -22,8 +22,8 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             {
                 builder.ConfigureServices(services =>
                 {
-                    services.RemoveAll(typeof(DbContextOptions<ApplicationDBContext>));
-                    services.AddDbContext<ApplicationDBContext>(options =>
+                    services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
+                    services.AddDbContext<ApplicationDbContext>(options =>
                     {
                         options.UseInMemoryDatabase("OnlineQuizSystemDbForTesting");
                     });
@@ -32,7 +32,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     using var scope = serviceProvider.CreateScope();
                     {
                         var scopedServices = scope.ServiceProvider;
-                        var db = scopedServices.GetRequiredService<ApplicationDBContext>();
+                        var db = scopedServices.GetRequiredService<ApplicationDbContext>();
 
                         db.Database.EnsureDeleted();
                         db.Database.EnsureCreated();

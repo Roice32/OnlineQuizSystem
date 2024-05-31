@@ -17,11 +17,11 @@ namespace OQS.CoreWebAPI.Tests
         public async Task CancelLiveQuiz_Admin_Success()
         {
             // Arrange
-            var options = new DbContextOptionsBuilder<ApplicationDBContext>()
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            using (var dbContext = new ApplicationDBContext(options))
+            using (var dbContext = new ApplicationDbContext(options))
             {
                 var adminUser = new User { Id = Guid.NewGuid().ToString(), FirstName = "Admin", Email = "admin@example.com"};
                 var liveQuiz = new LiveQuizz
@@ -63,11 +63,11 @@ namespace OQS.CoreWebAPI.Tests
         public async Task CancelLiveQuiz_NotAdmin_Failure()
         {
             // Arrange
-            var options = new DbContextOptionsBuilder<ApplicationDBContext>()
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            using (var dbContext = new ApplicationDBContext(options))
+            using (var dbContext = new ApplicationDbContext(options))
             {
                 var adminUser = new User { Id = Guid.NewGuid().ToString(), FirstName = "Admin", Email = "admin@example.com"};
                 var nonAdminUser = new User { Id = Guid.NewGuid().ToString(), FirstName = "Non Admin", Email = "nonadmin@example.com" };

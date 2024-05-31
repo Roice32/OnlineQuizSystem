@@ -1,11 +1,11 @@
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 
-namespace OQS.CoreWebAPI.Extensions;
+namespace OQS.CoreWebAPI.Extensions.Seeders;
 
 public static class SeedQuizExtension
 {
-    public static void SeedQuizzez(this ApplicationDBContext dbContext)
+    public static void SeedQuizzez(this ApplicationDbContext dbContext)
     {
         if (dbContext.Quizzes.Any())
         {

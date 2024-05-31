@@ -19,9 +19,9 @@ public static class GetQuizzes
 
     public class Handler : IRequestHandler<Query, Result<QuizzesResponse>>
     {
-        private readonly ApplicationDBContext context;
+        private readonly ApplicationDbContext context;
 
-        public Handler(ApplicationDBContext context)
+        public Handler(ApplicationDbContext context)
         {
             this.context = context;
         }

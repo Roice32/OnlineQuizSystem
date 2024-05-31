@@ -1,13 +1,13 @@
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities.ActiveQuiz;
 
-namespace OQS.CoreWebAPI.Extensions;
+namespace OQS.CoreWebAPI.Extensions.Seeders;
 
 public static class SeedActiveQuizzesExtension
 {
-    public static void SeedActiveQuizzes(this ApplicationDBContext context)
+    public static void SeedActiveQuizzes(this ApplicationDbContext context)
     {
-        if (context.ActiveQuizzes.Any(quiz=>quiz.Id == Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450")))
+        if (context.ActiveQuizzes.Any(quiz => quiz.Id == Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450")))
         {
             return;
         }

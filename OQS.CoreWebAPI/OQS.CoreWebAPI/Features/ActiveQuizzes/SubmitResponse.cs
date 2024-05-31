@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             }
 
             using var scope = _serviceScopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var activeQuiz = await dbContext.ActiveQuizzes
                 .Include(aq => aq.Quiz)
                 .FirstOrDefaultAsync(aq => aq.Id == request.ActiveQuizId, cancellationToken);
@@ -68,7 +68,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
             // Check if the user matches the quiz
             using var scope = _serviceScopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var activeQuiz = await dbContext.ActiveQuizzes
                 .Include(aq => aq.User)
                 .FirstOrDefaultAsync(aq => aq.Id == request.ActiveQuizId, cancellationToken);
@@ -97,10 +97,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
     }
     public class SubmitResponseRequestHandler : IRequestHandler<SubmitResponseRequest, Result<string>>
     {
-        private readonly ApplicationDBContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IValidator<SubmitResponseRequest> _validator;
 
-        public SubmitResponseRequestHandler(ApplicationDBContext context, IValidator<SubmitResponseRequest> validator)
+        public SubmitResponseRequestHandler(ApplicationDbContext context, IValidator<SubmitResponseRequest> validator)
         {
             _context = context;
             _validator = validator;
@@ -134,7 +134,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/active-quizzes/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDBContext dbContext, HttpContext httpContext) =>
+            app.MapPost("api/active-quizzes/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDbContext dbContext, HttpContext httpContext) =>
             {
                 var handler = new SubmitResponseRequestHandler(dbContext, new SubmitResponseRequestValidator(httpContext.RequestServices.GetRequiredService<IServiceScopeFactory>(), httpContext.RequestServices.GetRequiredService<IHttpContextAccessor>()));
                 var result = await handler.Handle(request, CancellationToken.None);

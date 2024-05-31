@@ -2,13 +2,13 @@ using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
 
-namespace OQS.CoreWebAPI.Extensions;
+namespace OQS.CoreWebAPI.Extensions.Seeders;
 
 public static class SeedUsersExtension
 {
-  
 
-    public static void SeedUsers(this ApplicationDBContext dbContext)
+
+    public static void SeedUsers(this ApplicationDbContext dbContext)
     {
         if (dbContext.Users.Any())
         {
@@ -58,24 +58,24 @@ public static class SeedUsersExtension
 
         dbContext.Roles.Add(adminRole);
         dbContext.Roles.Add(userRole);
-        
+
         dbContext.Users.Add(user);
         dbContext.Users.Add(user2);
-        
+
         dbContext.SaveChanges();
-        
+
         dbContext.UserRoles.Add(new IdentityUserRole<string>()
         {
             RoleId = dbContext.Roles.First(x => x.Name == "Admin").Id,
             UserId = user.Id
         });
-        
+
         dbContext.UserRoles.Add(new IdentityUserRole<string>()
         {
             RoleId = dbContext.Roles.First(x => x.Name == "User").Id,
             UserId = user2.Id
         });
         dbContext.SaveChanges();
-        
+
     }
 }

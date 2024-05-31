@@ -6,14 +6,14 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 {
     public abstract class Seeder
     {
-        public static void SeedDb(ApplicationDBContext dbContext)
+        public static void SeedDb(ApplicationDbContext dbContext)
         {
             SeedUsers(dbContext);
             SeedQuizzes(dbContext);
             SeedTags(dbContext);
         }
 
-        private static void SeedQuizzes(ApplicationDBContext dbContext)
+        private static void SeedQuizzes(ApplicationDbContext dbContext)
         {
             Quiz quiz1 = new()
             {
@@ -59,7 +59,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             dbContext.SaveChanges();
         }
 
-        private static void SeedUsers(ApplicationDBContext dbContext)
+        private static void SeedUsers(ApplicationDbContext dbContext)
         {
             var users = new List<User>
             {
@@ -87,7 +87,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
             dbContext.SaveChanges();
         }
 
-        private static void SeedTags(ApplicationDBContext dbContext)
+        private static void SeedTags(ApplicationDbContext dbContext)
         {
             var tags = new List<Tag>
             {
