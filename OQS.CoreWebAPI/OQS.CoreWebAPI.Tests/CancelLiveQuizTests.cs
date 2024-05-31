@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Shared;
 using Xunit;
 
-namespace QQS.CoreWebAPI.Tests
+namespace OQS.CoreWebAPI.Tests
 {
    public class CancelLiveQuizTests
     {

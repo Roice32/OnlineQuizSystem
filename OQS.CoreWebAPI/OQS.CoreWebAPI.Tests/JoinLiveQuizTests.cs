@@ -5,7 +5,7 @@ using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
 using ConnectionRequest = OQS.CoreWebAPI.Contracts.LiveQuizzes.ConnectionRequest;
 
-namespace QQS.CoreWebAPI.Tests
+namespace OQS.CoreWebAPI.Tests
 {
     public class JoinLiveQuizTests : ApplicationContextForTesting
     {

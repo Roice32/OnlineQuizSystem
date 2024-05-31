@@ -6,7 +6,7 @@ using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
 using Xunit;
 
-namespace QQS.CoreWebAPI.Tests;
+namespace OQS.CoreWebAPI.Tests;
 
 public class ActiveQuizCreationTests: ApplicationContextForTesting
 {
