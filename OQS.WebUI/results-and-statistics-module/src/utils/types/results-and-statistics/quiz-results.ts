@@ -8,6 +8,7 @@ export type QuizResultHeader = {
     quizName: string;
     completionTime: string;
     score: number;
+    submittedAt: string;
     reviewPending: boolean;
   }
   

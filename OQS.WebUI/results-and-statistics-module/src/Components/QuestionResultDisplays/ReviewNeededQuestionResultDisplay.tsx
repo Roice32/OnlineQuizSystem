@@ -3,30 +3,21 @@ import axios from 'axios';
 import classNames from 'classnames';
 import { Question, QuestionResult, QuizResults } from '../../utils/types/results-and-statistics/quiz-results';
 import { AnswerResult, QuestionReview } from '../../utils/types/results-and-statistics/question-review';
-import QuizResultsDisplay from '../QuizResultsDisplay';
 import { QuestionType } from '../../utils/types/questions';
 
 interface ReviewNeededQuestionResultDisplayProps {
   question: Question;
   questionResult: QuestionResult;
+  refreshQuizResults: () => void; // New prop to refresh the quiz results
 }
 
-const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult }) => {
+const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult, refreshQuizResults }) => {
   const [needReview, setNeedReview] = useState(false);
   const [questionReview, setReviewResults] = useState<QuestionReview | null>(null);
-  const [showFullScreenResults, setShowFullScreenResults] = useState(false);
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const getQuizReview = async (userId: string, quizId: string, questionId: string, score: number) => {
-    try {
-      const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
-      setReviewResults(response.data);
-      setNeedReview(true);
-    } catch (error) {
-      console.error('Error fetching quiz result:', error);
-    }
-  };
+  const [score, setScore] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const getQuizResult = async (userId: string, quizId: string) => {
     setLoading(true);
@@ -35,7 +26,6 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
       response.data.userId = userId;
       response.data.quizId = quizId;
       setQuizResults(response.data);
-      setShowFullScreenResults(true);
     } catch (error) {
       console.error('Error fetching quiz result:', error);
     } finally {
@@ -43,46 +33,39 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
     }
   };
 
+  const handleGrade = async (userId: string, quizId: string, questionId: string, score: number) => {
+    if (score < 0 || score > question.allocatedPoints) {
+      setError(`Score must be between 0 and ${question.allocatedPoints}`);
+      return;
+    }
+
+    try {
+      const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
+      setReviewResults(response.data);
+      console.log('Review results:', response.data);
+      await getQuizResult(userId, quizId);
+      setNeedReview(false);
+      questionResult.reviewNeededResult = response.data.updatedQuestionResult.reviewNeededResult;
+      questionResult.score = score; 
+      setError(null);
+      setScore(score); // Update the score state
+      refreshQuizResults(); // Call the refresh function to update the header
+    } catch (error) {
+      console.error('Error grading the answer!');
+    }
+  };
+
   if (loading) {
     return (
       <div className="fixed inset-0 bg-white flex justify-center items-center">
+        <h1 className="text-2xl font-bold mb-4 text-center">Quiz Results</h1>
         <p>Loading quiz results...</p>
       </div>
     );
   }
 
-  if (showFullScreenResults && quizResults) {
-    return (
-      <div className="fixed inset-0 bg-teal-700 flex flex-col items-center overflow-auto p-6">
-        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 border-4 border-green-700">
-          <QuizResultsDisplay quizResults={quizResults} />
-          <button 
-            className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-            onClick={() => setShowFullScreenResults(false)}
-          >
-            Back
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (needReview) {
-    return (
-      <div className="border-4 border-green-700 p-4">
-        <button 
-          className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-          onClick={() => getQuizResult(questionResult.userId, question.quizId)}
-        >
-          Grade
-        </button>
-        <p>LLMResponse: {questionReview?.updatedQuestionResult.LLMReview}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-4 border-4 border-green-700 p-4">
+    <div className="space-y-4">
       <div className="flex items-center justify-center mb-2">
         <label
           className={classNames(
@@ -91,21 +74,72 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
               'bg-green-500 text-white border-4 border-solid border-green-700': questionResult.reviewNeededResult === AnswerResult.Correct,
               'bg-red-500 text-white border-4 border-solid border-red-700': questionResult.reviewNeededResult === AnswerResult.Wrong || questionResult.reviewNeededResult === AnswerResult.NotAnswered,
               'bg-yellow-300 text-black border-4 border-solid border-yellow-500': questionResult.reviewNeededResult === AnswerResult.PartiallyCorrect,
-              'bg-purple-500 text-white border-4 border-solid border-purple-700': questionResult.reviewNeededResult === AnswerResult.Pending,
+              'bg-teal-500 text-white border-4 border-solid border-teal-700': questionResult.reviewNeededResult === AnswerResult.Pending,
             }
           )}
         >
           Your Answer: {questionResult.reviewNeededAnswer}
         </label>
       </div>
-      {question.type === QuestionType.ReviewNeeded && questionResult.reviewNeededResult === AnswerResult.Pending &&
+      {needReview && (
+        <div className="space-y-4">
+          <label
+            className={classNames(
+              'p-2 full max-w-md text-left',
+              'bg-teal-300 text-white border-4 border-solid border-teal-500 rounded-md'
+            )}
+            style={{
+              display: 'grid',
+              width: '90%',
+              minHeight: '100px',
+              maxHeight: '200px', 
+              overflowY: 'auto',
+            }}
+          >
+            AI Review: {questionReview?.updatedQuestionResult.LLMReview}
+          </label>
+      
+          <input
+            type="number"
+            step="any"
+            inputMode="numeric"
+            value={score || ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              if ( parseFloat(value) >= 0 && parseFloat(value) <= question.allocatedPoints) {
+                setScore(parseFloat(value));
+                setError(null);
+              } else {
+                setError(`Score must be between 0 and ${question.allocatedPoints}`);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Backspace') {
+                setScore(null);
+              }
+            }}
+            className="block w-24 mx-auto p-2 border border-gray-300 rounded text-center"
+            placeholder="Score"
+            style={{ appearance: 'textfield', MozAppearance: 'textfield', WebkitAppearance: 'none' }}
+          />
+    
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          <button
+            className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
+            onClick={() => handleGrade(questionResult.userId, question.quizId, question.id, score || 0)}
+          >
+            Grade
+          </button>
+        </div>
+      )}
+      {!needReview && question.type === QuestionType.ReviewNeeded && questionResult.reviewNeededResult === AnswerResult.Pending && (
         <button
           className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-          onClick={() => getQuizReview(questionResult.userId, question.quizId, questionResult.questionId, questionResult.score)}
+          onClick={() => setNeedReview(true)}
         >
           Review
         </button>
-      }
+      )}
     </div>
   );
 };

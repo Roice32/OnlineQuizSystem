@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { QuizResults } from "../utils/types/results-and-statistics/quiz-results";
-import ReviewNeededQuestionResultDisplay from '../Components/QuestionResultDisplays/ReviewNeededQuestionResultDisplay';
+import QuestionResultDisplay from '../Components/QuestionResultDisplays/QuestionResultDisplay';
 
 const QuizResultsPage = () => {
   const { userId, quizId } = useParams<{ userId: string, quizId: string }>();
@@ -13,32 +13,24 @@ const QuizResultsPage = () => {
     window.history.back();
   };
 
-  const getQuizResult = async (userId: string, quizId: string) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
-      console.log(response.data);
-      response.data.userId = userId;
-      response.data.quizId = quizId;
-      setQuizResults(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching quiz result:', error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const getQuizResult = async (userId: string, quizId: string) => {
+      try {
+        const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
+        console.log(response.data);
+        response.data.userId = userId;
+        response.data.quizId = quizId;
+        setQuizResults(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching quiz result:', error);
+      }
+    };
+
     if (userId && quizId) {
       getQuizResult(userId, quizId);
     }
   }, [userId, quizId]);
-
-  const refreshQuizResults = () => {
-    if (userId && quizId) {
-      getQuizResult(userId, quizId);
-    }
-  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -65,7 +57,7 @@ const QuizResultsPage = () => {
               return (
                 <div key={index} className="flex items-center justify-center mb-2 mr-2">
                   {questionResult ? (
-                    <ReviewNeededQuestionResultDisplay question={header} questionResult={questionResult} refreshQuizResults={refreshQuizResults} />
+                    <QuestionResultDisplay question={header} questionResult={questionResult} />
                   ) : (
                     <p className="text-red-500">No result available for this question.</p>
                   )}
