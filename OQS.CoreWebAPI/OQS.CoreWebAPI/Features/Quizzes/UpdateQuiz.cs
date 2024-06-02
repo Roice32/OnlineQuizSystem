@@ -58,10 +58,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
         internal sealed class Handler : IRequestHandler<Command, Result<QuizResponse>>
         {
-            private readonly ApplicationDBContext context;
+            private readonly ApplicationDbContext context;
             private readonly IValidator<Command> validator;
 
-            public Handler(ApplicationDBContext context, IValidator<Command> validator)
+            public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
                 this.context = context;
                 this.validator = validator;
@@ -74,7 +74,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<QuizResponse>(
                         new Error(
-                            400, "validation failed"
+                            "400", "validation failed"
                         ));
                 }
 
@@ -86,7 +86,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<QuizResponse>(
                         new Error(
-                            404, "Tag not found"
+                            "404", "Tag not found"
                         ));
                 }
 
@@ -110,7 +110,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     return Result.Failure<QuizResponse>(
                         new Error(
-                            400, ex.Message
+                            "400", ex.Message
                         ));
                 }
 

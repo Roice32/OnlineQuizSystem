@@ -1,15 +1,9 @@
 using Carter;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Shared;
 using MediatR;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OQS.CoreWebAPI.Features.Tags
 {
@@ -29,9 +23,9 @@ namespace OQS.CoreWebAPI.Features.Tags
 
         internal sealed class Handler : IRequestHandler<Query, Result<TagsResponse>>
         {
-            private readonly ApplicationDBContext context;
+            private readonly ApplicationDbContext context;
 
-            public Handler(ApplicationDBContext context)
+            public Handler(ApplicationDbContext context)
             {
                 this.context = context;
             }
@@ -49,7 +43,7 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (tags == null || !tags.Any())
                 {
                     return Result.Failure<TagsResponse>(
-                        new Error(400, "No tags found"));
+                        new Error("400", "No tags found"));
                 }
 
                 var tagResponses = tags.Select(tag => new TagResponse(tag)).ToList();

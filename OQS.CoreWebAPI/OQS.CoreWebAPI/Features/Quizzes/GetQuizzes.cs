@@ -19,9 +19,9 @@ public static class GetQuizzes
 
     public class Handler : IRequestHandler<Query, Result<QuizzesResponse>>
     {
-        private readonly ApplicationDBContext context;
+        private readonly ApplicationDbContext context;
 
-        public Handler(ApplicationDBContext context)
+        public Handler(ApplicationDbContext context)
         {
             this.context = context;
         }
@@ -41,9 +41,10 @@ public static class GetQuizzes
                 {
                     Id = quiz.Id,
                     Name = quiz.Name,
-                    ImageUrl = quiz.ImageUrl,
                     Description = quiz.Description,
                     CreatedAt = quiz.CreatedAt,
+                    ImageUrl = quiz.ImageUrl,
+                    Language = quiz.Language,
                 }))
                 .ToList();
 

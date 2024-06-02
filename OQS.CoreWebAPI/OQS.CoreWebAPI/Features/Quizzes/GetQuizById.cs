@@ -13,10 +13,10 @@ public static class GetQuizById
 
     public class Handler : IRequestHandler<Query, Result<QuizResponse>>
     {
-        private readonly ApplicationDBContext context;
-     
+        private readonly ApplicationDbContext context;
 
-        public Handler(ApplicationDBContext context)
+
+        public Handler(ApplicationDbContext context)
         {
             this.context = context;
         }
@@ -24,12 +24,13 @@ public static class GetQuizById
         public async Task<Result<QuizResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
             var quiz = await context.Quizzes.Include(quiz => quiz.Questions)
-                .FirstOrDefaultAsync(quiz=> quiz.Id.ToString() == request.QuizId, cancellationToken: cancellationToken);
+                .FirstOrDefaultAsync(quiz => quiz.Id.ToString() == request.QuizId,
+                    cancellationToken: cancellationToken);
             if (quiz is null)
             {
-                return Result.Failure<QuizResponse>(new Error(404, "Quiz not found"));
+                return Result.Failure<QuizResponse>(new Error("404", "Quiz not found"));
             }
-            
+
             return Result<QuizResponse>.Success(new QuizResponse(quiz));
         }
     }

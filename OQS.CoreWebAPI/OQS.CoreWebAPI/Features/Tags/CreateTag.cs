@@ -30,10 +30,10 @@ namespace OQS.CoreWebAPI.Features.Tags
 
         public class Handler : IRequestHandler<Command, Result<Guid>>
         {
-            private readonly ApplicationDBContext dbContext;
+            private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
 
-            public Handler(ApplicationDBContext dbContext, IValidator<Command> validator)
+            public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
             {
                 this.dbContext = dbContext;
                 this.validator = validator;
@@ -45,9 +45,11 @@ namespace OQS.CoreWebAPI.Features.Tags
                 if (!validationResult.IsValid)
                 {
                     return Result.Failure<Guid>(
-                        new Error(400, 
-                        validationResult.ToString()));
+                        new Error(
+                            "400",
+                            validationResult.ToString()));
                 }
+
                 var tag = new Tag
                 {
                     Id = Guid.NewGuid(),
@@ -76,6 +78,7 @@ public class CreateTagEndPoint : ICarterModule
             {
                 return Results.BadRequest(result.Error);
             }
+
             return Results.Ok($"/api/tags/{result.Value}");
         });
     }

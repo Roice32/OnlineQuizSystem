@@ -28,9 +28,9 @@ namespace OQS.CoreWebAPI.Features.Tags
 
         internal sealed class Handler : IRequestHandler<Command, Result>
         {
-            private readonly ApplicationDBContext _dbContext;
+            private readonly ApplicationDbContext _dbContext;
 
-            public Handler(ApplicationDBContext dbContext)
+            public Handler(ApplicationDbContext dbContext)
             {
                 _dbContext = dbContext;
             }
@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Features.Tags
 
                 if (tag == null)
                 {
-                    return Result.Failure(new Error(404, "Tag not found."));
+                    return Result.Failure(new Error("404", "Tag not found."));
                 }
 
                 _dbContext.Tags.Remove(tag);

@@ -14,6 +14,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         {
             public Guid Id { get; init; }
         }
+
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
@@ -23,11 +24,12 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                     .NotEqual(Guid.Empty).WithMessage("Id cannot be empty.");
             }
         }
+
         internal sealed class Handler : IRequestHandler<Command, Result>
         {
-            private readonly ApplicationDBContext _dbContext;
+            private readonly ApplicationDbContext _dbContext;
 
-            public Handler(ApplicationDBContext dbContext)
+            public Handler(ApplicationDbContext dbContext)
             {
                 _dbContext = dbContext;
             }
@@ -38,7 +40,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
                 if (quiz == null)
                 {
-                    return Result.Failure(new Error(404, "Quiz not found."));
+                    return Result.Failure(new Error("404", "Quiz not found."));
                 }
 
                 _dbContext.Quizzes.Remove(quiz);
