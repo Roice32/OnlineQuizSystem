@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import classNames from 'classnames';
-import { useNavigate } from 'react-router-dom';
 import { Question, QuestionResult } from '../../../utils/types/results-and-statistics/quiz-results';
 import { AnswerResult, QuestionReview } from '../../../utils/types/results-and-statistics/question-review';
 import { QuestionType } from '../../../utils/types/questions';
@@ -13,7 +12,6 @@ interface ReviewNeededQuestionResultDisplayProps {
 
 const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult}) => {
   const [needReview, setNeedReview] = useState(false);
-  const [questionReview, setReviewResults] = useState<QuestionReview | null>(null);
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -23,21 +21,16 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
       setError(`Score must be between 0 and ${question.allocatedPoints}`);
       return;
     }
-
     setLoading(true);
-
     try {
-      const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
-      setReviewResults(response.data);
-      console.log('Review results:', response.data);
-      setNeedReview(false);
-      questionResult.reviewNeededResult = response.data.updatedQuestionResult.reviewNeededResult;
+      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
       setError(null);
+      setNeedReview(false);
       window.location.reload();
     } catch (error) {
       console.error('Error grading the answer!');
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -82,7 +75,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
               overflowY: 'auto',
             }}
           >
-            AI Review: {questionReview?.updatedQuestionResult.LLMReview}
+            AI Review: {questionResult?.LLMReview}
           </label>
           <input
             type="number"

@@ -1,3 +1,4 @@
+import { ReviewNeededQuestionResult } from "./review-needed-question-result";
 import { QuizResultHeader } from "./quiz-results"
 
 export enum AnswerResult
@@ -9,12 +10,6 @@ export enum AnswerResult
     NotAnswered,
     Pending,
     Other
-}
-
-export type ReviewNeededQuestionResult = {
-    reviewNeededAnswer: string;
-    LLMReview : string;
-    reviewNeededResult: AnswerResult;
 }
 
 export type QuestionReview= {
