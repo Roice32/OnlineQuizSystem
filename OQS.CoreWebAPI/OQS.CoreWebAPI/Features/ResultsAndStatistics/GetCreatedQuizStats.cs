@@ -29,7 +29,9 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     .FirstOrDefaultAsync(quiz => quiz.Id == request.QuizId, cancellationToken);
 
                 if (requestedQuiz is null)
-                {
+                { //here
+
+                    Console.WriteLine("Error: Quiz not found in database");
                     return Result.Failure<GetCreatedQuizStatsResponse>(Error.NullValue);
                 }
 

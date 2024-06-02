@@ -58,6 +58,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
+                    Console.WriteLine(validationResult.ToString());
                     return Result.Failure(
                         new Error("SendCreatedQuizResultsViaEmail.Validator",
                             validationResult.ToString()));
@@ -65,6 +66,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (request.StartDateLocal > request.EndDateLocal)
                 {
+                    Console.WriteLine("Error: Start Date cannot be greater than End Date");
                     return Result.Failure(new Error("InvalidDates", "Start Date cannot be greater than End Date"));
                 }
 
@@ -79,6 +81,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (quizResultHeaders is null || quizResultHeaders.Count == 0)
                 {
+                    Console.WriteLine("No results found for the specified quiz and date range");
                     return Result.Failure(Error.NullValue);
                 }
 
@@ -150,7 +153,9 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     return Result.Success("Email Sent Successfully");
                 }
                 catch (Exception ex)
-                {
+                { //here
+
+                    Console.WriteLine($"Error: {ex.Message}");
                     return Result.Failure<string>(new Error("EmailSenderError", ex.Message));
                 }
             }

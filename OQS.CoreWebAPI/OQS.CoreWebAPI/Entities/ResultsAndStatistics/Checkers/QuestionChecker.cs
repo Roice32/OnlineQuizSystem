@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
@@ -31,11 +32,9 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             {
                 return new TrueFalseQuestionResult(userId, qaPair.QuestionId, questionFromDb.AllocatedPoints, AnswerResult.Correct);
             }
-
-            return new TrueFalseQuestionResult(userId, qaPair.QuestionId, 0, AnswerResult.Wrong);
+            return new TrueFalseQuestionResult(userId, qaPair.QuestionId, 0, AnswerResult.Wrong);  
         }
     }
-
     public class MultipleChoiceQuestionChecker : IQuestionCheckerStrategy
     {
         public QuestionType GetQuestionType => QuestionType.MultipleChoice;
@@ -185,7 +184,9 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             var openAI = new OpenAIAPI("APIKeyGoesHere");
 
             if (question == null)
-            {
+            {//here
+
+                Console.WriteLine("Error: The question sent was null");
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
                         "The question sent was null"));
@@ -217,6 +218,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             }
             catch (HttpRequestException e)
             {
+                Console.WriteLine($"HttpRequestException caught: {e.Message}");
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
                         e.Message));
@@ -224,6 +226,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
             if (chatResponse is null)
             {
+                Console.WriteLine("Error: OpenAI API did not respond.");
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
                         "OpenAI API did not respond."));
@@ -237,6 +240,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             }
             catch (Exception)
             {
+                Console.WriteLine($"Exception caught during deserialization: {e.Message}");
                 return Result.Failure<AskLLMForReviewResponse>(
                         new Error("AskLLMForReview.Error",
                             "OpenAI API did not return a valid response."));

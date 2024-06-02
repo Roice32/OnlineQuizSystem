@@ -15,6 +15,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                 .AnyAsync(qrh => qrh.QuizId == toBeChecked.QuizId && qrh.UserId == toBeChecked.TakenBy);
             if (quizAlreadyTaken)
             {
+                Console.WriteLine("Error: Duplicate quiz submission");
                 return Result.Failure(Error.DuplicateEntity);
             }
 
@@ -23,6 +24,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                 .FirstOrDefaultAsync(q => q.Id == toBeChecked.QuizId);
             if (quizFromDb is null)
             {
+                Console.WriteLine("Error: Quiz not found in database");
                 return Result.Failure(Error.NullValue);
             }
 
@@ -34,6 +36,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             Result<List<QuestionResultBase>> questionsResults = await CheckAndStoreAllQuestionsAsync(toBeChecked, questions, dbContext);
             if (questionsResults.IsFailure)
             {
+                Console.WriteLine($"Error: {questionsResults.Error}");
                 return Result.Failure(questionsResults.Error);
             }
             return await BuildAndStoreQuizResultHeaderAsync(toBeChecked, questionsResults.Value, dbContext);
@@ -47,6 +50,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
             if (qaPairNotBelongingToQuiz)
             {
+                Console.WriteLine("Error: QuizSubmission contains answer to question not belonging to this quiz.");
                 return Result.Failure<List<QuestionResultBase>>(
                     new Error("QuizChecker.StrayAnswer",
                     "QuizSubmission contains answer to question not belonging to this quiz."));
@@ -85,7 +89,10 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception e)
-            {
+            { 
+                //here
+
+                Console.WriteLine($"Exception caught during result header building: {e.Message}");
                 return Result.Failure(new Error("QuizChecker.QuizResultHeaderSaveError", e.Message));
             }
             return Result.Success();

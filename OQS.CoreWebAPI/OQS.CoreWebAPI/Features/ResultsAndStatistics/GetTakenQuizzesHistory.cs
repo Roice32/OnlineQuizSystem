@@ -31,7 +31,9 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     .FirstOrDefaultAsync(user => user.Id == request.UserId.ToString(), cancellationToken);
 
                 if (requestedUser is null)
-                {
+                { //here
+
+                    Console.WriteLine("Error: User not found in database");
                     return Result.Failure<GetTakenQuizzesHistoryResponse>(Error.NullValue);
                 }
 

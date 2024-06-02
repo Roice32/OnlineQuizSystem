@@ -192,7 +192,9 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
-                {
+                { //here
+
+                    Console.WriteLine($"Validation failed: {validationResult.ToString()}");
                     return Result.Failure(new Error("EmailSender.Validator", validationResult.ToString()));
                 }
 
@@ -203,6 +205,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (quizResultHeader == null)
                 {
+                    Console.WriteLine("QuizResultHeader not found in database");
                     return Result.Failure<FetchQuizResultHeaderResponse>(Error.NullValue);
                 }
 

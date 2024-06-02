@@ -25,7 +25,9 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
                 .ToList();
 
             if (questions == null)
-            {
+            { //here
+
+                Console.WriteLine("Error: Questions not found in database");
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 
@@ -36,6 +38,7 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
 
             if (questions == null || questionResults == null)
             {
+                Console.WriteLine("Error: Questions or QuestionResults not found in database");
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 

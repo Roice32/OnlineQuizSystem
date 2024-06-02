@@ -21,7 +21,9 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders
                 .FirstOrDefaultAsync(qrh => qrh.UserId == userId && qrh.QuizId == quizId);
 
             if (quizResultHeader is null)
-            {
+            { //here
+
+                Console.WriteLine("Error: QuizResultHeader not found in database");
                 return Result.Failure(Error.NullValue);
             }
 

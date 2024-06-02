@@ -57,7 +57,9 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
-                {
+                { //here
+
+                    Console.WriteLine("Error: Invalid Command");
                     return Result.Failure(
                         new Error("ProcessQuizSubmission.Validator",
                         validationResult.ToString()));
@@ -72,6 +74,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (quizCheckerResult.IsFailure)
                 {
+                    Console.WriteLine($"Error: {quizCheckerResult.Error}");
                     return Result.Failure(quizCheckerResult.Error);
                 }
 
