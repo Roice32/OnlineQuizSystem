@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Shared;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
@@ -37,6 +38,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                     .AsNoTracking()
                     .Where(quiz => quiz.QuizId == request.QuizId)
+                    .OrderByDescending(quiz => quiz.SubmittedAtUtc)
                     .ToListAsync(cancellationToken);
 
                 if (quizResultHeaders is null)
