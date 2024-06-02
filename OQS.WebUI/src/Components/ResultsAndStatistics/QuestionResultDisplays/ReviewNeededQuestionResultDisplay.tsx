@@ -82,10 +82,13 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
             type="number"
             step="any"
             inputMode="numeric"
-            value={score || '0'}
+            value={score !== null ? score : ''}
             onChange={(e) => {
               const value = e.target.value;
-              if (parseFloat(value) >= 0 && parseFloat(value) <= question.allocatedPoints) {
+              if (value === '') {
+                setScore(null);
+                setError(null);
+              } else if (parseFloat(value) >= 0 && parseFloat(value) <= question.allocatedPoints) {
                 setScore(parseFloat(value));
                 setError(null);
               } else {
