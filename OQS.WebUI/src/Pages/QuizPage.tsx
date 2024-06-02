@@ -59,7 +59,7 @@ export default function QuizPage() {
       <ul>
         {quizzes.map((quiz) => (
           <li key={quiz.id}>
-            <Link to={`/quiz/${quiz.id}`} key={quiz.id}>
+            <Link to={`/quizzes/${quiz.id}`} key={quiz.id}>
               {quiz.name}
             </Link>
           </li>

@@ -38,7 +38,7 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link className="no-underline text-slate-50" to="/quiz">
+          <Link className="no-underline text-slate-50" to="/quizzes">
             Quiz
           </Link>
         </li>

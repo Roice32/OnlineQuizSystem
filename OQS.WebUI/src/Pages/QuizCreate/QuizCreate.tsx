@@ -52,7 +52,7 @@ enum QuestionType {
     WrittenAnswer = 3,
 }
 
-let QuestionTypeString = {
+const QuestionTypeString = {
     0: 'True/False',
     1: 'Multiple Choice',
     2: 'Single Choice',
@@ -89,10 +89,10 @@ function QuestionComponent({id, setQuiz, quiz}) {
 
     const question = quiz.questions.find((q) => q.id === id)
 
-    let questionType = quiz.questions.find((q) => q.id === question.id).type
-    let questionText = quiz.questions.find((q) => q.id === question.id).text
-    let questionAllocatedPoints = quiz.questions.find((q) => q.id === question.id).allocatedPoints
-    let questionTimeLimit = quiz.questions.find((q) => q.id === question.id).timeLimit
+    const questionType = quiz.questions.find((q) => q.id === question.id).type
+    const questionText = quiz.questions.find((q) => q.id === question.id).text
+    const questionAllocatedPoints = quiz.questions.find((q) => q.id === question.id).allocatedPoints
+    const questionTimeLimit = quiz.questions.find((q) => q.id === question.id).timeLimit
 
     // const [optionsSingleChoice, setOptionsSingleChoice] = useState<OptionChoice[]>([])
     const [addOptionSingleChoice, setAddOptionSingleChoice] = useState(false)
@@ -123,7 +123,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
     }
 
     const onChangeQuestionType = (questionTypeValue) => {
-        let currentQuestion = quiz.questions.find((q) => q.id === question.id)
+        const currentQuestion = quiz.questions.find((q) => q.id === question.id)
         // set the type of current question in quiz
         setQuiz({
             ...quiz,
@@ -142,8 +142,10 @@ function QuestionComponent({id, setQuiz, quiz}) {
     const renderQuestionTypeOptions = () => {
         switch (questionType) {
             case QuestionType.TrueFalse:
+                // eslint-disable-next-line no-case-declarations
                 const correctAnswerTrueFalse = quiz.questions.find((q) => q.id === question.id).trueFalseAnswer.toString()
 
+                // eslint-disable-next-line no-case-declarations
                 const setCorrectAnswerTrueFalse = (value) => {
                     setQuiz({
                         ...quiz,
@@ -171,9 +173,12 @@ function QuestionComponent({id, setQuiz, quiz}) {
                 )
             case QuestionType.MultipleChoice:
                 // find the current question in the quiz
-                let currentQuestion = quiz.questions.find((q) => q.id === question.id)
-                let correctAnswers = currentQuestion.multipleChoiceAnswers
+                // eslint-disable-next-line no-case-declarations
+                const currentQuestion = quiz.questions.find((q) => q.id === question.id)
+                // eslint-disable-next-line no-case-declarations
+                const correctAnswers = currentQuestion.multipleChoiceAnswers
 
+                // eslint-disable-next-line no-case-declarations
                 const setCorrectAnswerMultipleChoice = (value) => {
                     setQuiz({
                         ...quiz,
@@ -201,7 +206,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                           onChange={(event) => setNewOptionMultipleChoice(event.target.value)}/>
                                 <Flex justify="between">
                                     <Button mb="20px" onClick={() => {
-                                        let newOptionsMultipleChoice = [...question.multipleChoiceAnswers, newOptionMultipleChoice]
+                                        const newOptionsMultipleChoice = [...question.choices, newOptionMultipleChoice]
                                         setQuiz({
                                             ...quiz,
                                             questions: quiz.questions.map((q) => {
@@ -250,7 +255,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                           onChange={(event) => setNewOptionSingleChoice(event.target.value)}/>
                                 <Flex justify="between">
                                     <Button mb="20px" onClick={() => {
-                                        let newOptionsSingleChoice = [...question.choices,
+                                        const newOptionsSingleChoice = [...question.choices,
                                             newOptionSingleChoice,
                                         ]
 
@@ -296,7 +301,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                             <>
                                 {question.choices.map((answer, index) => (
                                     <Flex direction="column" mb="10px">
-                                        <Text mb="5px">{answer.value}</Text>
+                                        <Text mb="5px">{answer}</Text>
                                         <Button onClick={() => {
                                             setQuiz({
                                                 ...quiz,
@@ -304,7 +309,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                                     if (q.id === question.id) {
                                                         return {
                                                             ...q,
-                                                            choices: q.choices.filter((a) => a.value !== answer.value),
+                                                            choices: q.choices.filter((a) => a !== answer),
                                                         }
                                                     }
                                                     return q
@@ -323,7 +328,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                           onChange={(event) => setNewOptionWrittenAnswer(event.target.value)}/>
                                 <Flex justify="between">
                                     <Button mb="20px" onClick={() => {
-                                        let newOptionsWrittenAnswer = [...question.choices,
+                                        const newOptionsWrittenAnswer = [...question.choices,
                                             newOptionWrittenAnswer,
                                         ]
 
@@ -454,7 +459,7 @@ type QuizCreateProps = {
     description?: string
     timeLimit?: number | ''
     language?: string
-    questions?: Question[]
+    questions: Question[]
 }
 
 type ErrorMessagesQuizCreate = {
@@ -466,14 +471,14 @@ type ErrorMessagesQuizCreate = {
     questions?: string
 }
 
-let ErrorMessagesQuizCreateString = [
+const ErrorMessagesQuizCreateString = [
     'name', 'imageUrl', 'description', 'timeLimit', 'language', 'questions',
 ]
 
 
 export default function QuizCreate() {
     const navigate = useNavigate()
-    const [quiz, setQuiz] = useState<QuizCreateProps>({language: 'romanian'})
+    const [quiz, setQuiz] = useState<QuizCreateProps>({language: 'romanian', questions: []})
     const [errorMessages, setErrorMessages] = useState<ErrorMessagesQuizCreate>({})
 
     const [open, setOpen] = React.useState(false)
@@ -491,7 +496,6 @@ export default function QuizCreate() {
         <>
             <Toast.Provider swipeDirection="right">
                 <Dialog.Root>
-                    <Navbar/>
                     <Container p="30px">
                         <Tabs.Root value={currentElement} onValueChange={setCurrentElement}>
                             <Flex justify="between">
@@ -687,7 +691,7 @@ export default function QuizCreate() {
                                         <Flex direction="column" justify="center" maxWidth="500px">
                                             <Text mb="20px">If you are ready you can submit your quiz</Text>
                                             <Button onClick={() => {
-                                                let quizRequest = {
+                                                const quizRequest = {
                                                     name: quiz.name,
                                                     imageUrl: quiz.imageUrl,
                                                     timeLimitMinutes: quiz.timeLimit,
@@ -720,9 +724,9 @@ export default function QuizCreate() {
                                                             setMessageToast(data.message)
                                                             setTitleToast('Error at creating the quiz')
                                                             console.log(data.message)
-                                                            let errorMessagesStrings = data?.message.split('\n')
+                                                            const errorMessagesStrings = data?.message.split('\n')
                                                             let errorMessages = {}
-                                                            for (let error of errorMessagesStrings) {
+                                                            for (const error of errorMessagesStrings) {
                                                                 if (error.toLowerCase().includes('name')) {
                                                                     errorMessages = {...errorMessages, 'name': error}
                                                                 }
@@ -821,7 +825,7 @@ export default function QuizCreate() {
                                 onClick={async () => {
                                     setLoadingAI(true)
 
-                                    let currentElementNumber = currentElement.substring(8)
+                                    const currentElementNumber = currentElement.substring(8)
                                     // verify if current element is number
                                     if (isNaN(Number(currentElementNumber))) {
                                         setLoadingAI(false)
@@ -831,7 +835,7 @@ export default function QuizCreate() {
                                         return
                                     }
 
-                                    let mesaj = `Vreau să creezi 1 întrebări de dificultate medie, fiecare având 4 variante de răspuns, una corectă și 3 greșite, pentru un quiz cu tema "${prompt}". Vei returna raspunsul sub forma de json, unde intrebarea va fi un string, iar variantele de raspuns vor fi un array de stringuri. Varianta corecta va fi prima varianta posibila.
+                                    const mesaj = `Vreau să creezi 1 întrebări de dificultate medie, fiecare având 4 variante de răspuns, una corectă și 3 greșite, pentru un quiz cu tema "${prompt}". Vei returna raspunsul sub forma de json, unde intrebarea va fi un string, iar variantele de raspuns vor fi un array de stringuri. Varianta corecta va fi prima varianta posibila.
                 Exemplu: {
                     "1": {
                         "intrebare": "Cine a fost primul rege al Angliei?",
@@ -869,21 +873,19 @@ export default function QuizCreate() {
                                     } else {
                                         const responseData = await response.json()
                                         console.log('Răspunsul API:', responseData)
-                                        let raspunsAI = responseData.data.outputs[0].text
-                                        let responseObject = JSON.parse(raspunsAI)
+                                        const raspunsAI = responseData.data.outputs[0].text
+                                        const responseObject = JSON.parse(raspunsAI)
 
-                                        let correctAnswer = responseObject['1'].variante[0]
-                                        let text = responseObject['1'].intrebare
-                                        let choices = responseObject['1'].variante
+                                        const correctAnswer = responseObject['1'].variante[0]
+                                        const text = responseObject['1'].intrebare
+                                        const choices = responseObject['1'].variante
                                         console.log(choices)
 
-                                        // @ts-ignore
-                                        let currentQuestion = quiz.questions.find((q) => q.id === quiz.questions[Number(currentElementNumber)].id) || {'id': 3};
+                                        const currentQuestion = quiz.questions?.find((q) => q.id === quiz.questions[Number(currentElementNumber)].id) || {'id': 3};
 
                                         setQuiz({
                                             ...quiz,
                                             questions: quiz.questions?.map((q) => {
-                                                // @ts-ignore
                                                 if (q.id === currentQuestion?.id) {
                                                     return {
                                                         ...q,
