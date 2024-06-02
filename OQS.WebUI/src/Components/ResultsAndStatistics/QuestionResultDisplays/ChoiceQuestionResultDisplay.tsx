@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import { Question, QuestionResult } from '../../../utils/types/results-and-statistics/quiz-results';
+import { QuestionResult } from "../../../utils/types/results-and-statistics/question-result";
+import { Question } from "../../../utils/types/results-and-statistics/question";
 import { AnswerResult } from '../../../utils/types/results-and-statistics/question-review';
 
 interface ChoiceQuestionResultDisplayProps {

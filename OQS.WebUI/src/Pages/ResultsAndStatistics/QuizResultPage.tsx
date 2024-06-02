@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { QuizResults } from "../../utils/types/results-and-statistics/quiz-results";
+import { QuizResult } from "../../utils/types/results-and-statistics/quiz-results";
 import QuestionResultDisplay from '../../Components/ResultsAndStatistics/QuestionResultDisplays/QuestionResultDisplay';
 
 const QuizResultsPage = () => {
   const { userId, quizId } = useParams<{ userId: string, quizId: string }>();
-  const [quizResult, setQuizResult] = useState<QuizResults | null>(null);
+  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [recipientEmail, setRecipientEmail] = useState('');
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import classNames from 'classnames';
-import { Question, QuestionResult } from '../../../utils/types/results-and-statistics/quiz-results';
-import { AnswerResult, QuestionReview } from '../../../utils/types/results-and-statistics/question-review';
+import { QuestionResult } from "../../../utils/types/results-and-statistics/question-result";
+import { Question } from "../../../utils/types/results-and-statistics/question";
+import { AnswerResult } from '../../../utils/types/results-and-statistics/question-review';
 import { QuestionType } from '../../../utils/types/questions';
 
 interface ReviewNeededQuestionResultDisplayProps {

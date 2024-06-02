@@ -1,5 +1,6 @@
 import { QuestionType } from "../../../utils/types/questions";
-import { Question, QuestionResult } from '../../../utils/types/results-and-statistics/quiz-results';
+import { QuestionResult } from "../../../utils/types/results-and-statistics/question-result";
+import { Question } from "../../../utils/types/results-and-statistics/question";
 import TrueFalseQuestionResultDisplay from './TrueFalseQuestionResultDisplay';
 import ChoiceQuestionResultDisplay from "./ChoiceQuestionResultDisplay";
 import WrittenQuestionResultDisplay from "./WrittenQuestionResultDisplay";
