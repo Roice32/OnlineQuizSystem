@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using OQS.CoreWebAPI.Features.Profile;
 using OQS.CoreWebAPI.Contracts.Models;
+using QOS.CoreWebAPI.Features.Profile;
 
 
 namespace OQS.CoreWebAPI.Tests.Profile
 {
     public class GetUserIdTest
     {
-        /*  [Fact]
+          /*[Fact]
           public async Task Handle_ValidJwt_ReturnsUserId()
           {
               // Arrange
@@ -34,7 +35,7 @@ namespace OQS.CoreWebAPI.Tests.Profile
               Assert.NotNull(result.Value);
               Assert.Equal("username_claim_value", result.Value.Id);
               Assert.Equal("role_claim_value", result.Value.Role);
-          }
+          }*/
 
         [Fact]
         public async Task Handle_InvalidJwt_ReturnsFailure()
@@ -58,6 +59,6 @@ namespace OQS.CoreWebAPI.Tests.Profile
             Assert.False(result.IsSuccess);
             Assert.NotNull(result.Error);
             Assert.Equal("Invalid Jwt", result.Error.Message);
-        }*/
+        }
     }
 }
