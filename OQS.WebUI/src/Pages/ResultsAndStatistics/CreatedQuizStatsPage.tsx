@@ -62,19 +62,17 @@ const QuizStatsPage = () => {
             <p className="text-lg text-center mb-4">Quiz Name: {quizStats.quizName}</p>
             <h2 className="text-lg font-bold mb-2">Results:</h2>
             <div>
-              {quizStats.quizResultHeaders.map((header, index) => {
-                return (
-                  <div key={index} className="mb-2 p-5 rounded-[50px] border-2 border-gray-500">
-                    <p>Username: {quizStats.userNames[header.userId]}</p>
-                    <p>Score: {header.score}</p>
-                    <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
-                    <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
+              {quizStats.quizResultHeaders.map((header, index) => (
+                <div key={index} className="mb-2 p-4 rounded-[50px] border-2 border-gray-500">
+                  <p>Username: {quizStats.userNames[header.userId]}</p>
+                  <p>Score: {header.score}</p>
+                  <p>Submitted at: {formatDate(header.submittedAtUtc)}</p>
+                  <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
                   <button className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4">
                     <Link className="no-underline" to={`/quiz-result/${header.userId}/${quizId}`}>View more details</Link>
                   </button>
-                  </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
             <div className="mt-6">
               <label className="block mb-2">

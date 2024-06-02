@@ -1,4 +1,4 @@
-import { ReviewNeededQuestionResult } from "./review-needed-question-result";
+
 import { QuizResultHeader } from "./quiz-result-header";
 
 export enum AnswerResult
@@ -14,6 +14,5 @@ export enum AnswerResult
 
 export type QuestionReview= {
     updatedQuizResultHeader: QuizResultHeader;
-    updatedQuestionResult: ReviewNeededQuestionResult;
 }
 

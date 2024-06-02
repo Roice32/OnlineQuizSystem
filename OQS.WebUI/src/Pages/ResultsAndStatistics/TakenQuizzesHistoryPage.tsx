@@ -54,7 +54,7 @@ const TakenQuizzesHistoryPage = () => {
                 <div key={index} className="mb-2 p-5 rounded-[50px] border-2 border-gray-500">
                   <p>Quiz Name: {quizHistory.quizNames[header.quizId]}</p>
                   <p>Score: {header.score}</p>
-                  <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
+                  <p>Submitted at: {formatDate(header.submittedAtUtc)}</p>
                   <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
                   <button className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4">
                     <Link className="no-underline" to={`/quiz-result/${userId}/${header.quizId}`}>View more details</Link>
