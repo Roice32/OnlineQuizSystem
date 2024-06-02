@@ -3,7 +3,8 @@ import ProfilePage from "../../Pages/ProfilePage";
 import ErrorPage from "../../Pages/ErrorPage";
 import EditProfile from "../../Pages/EditProfile";
 import ResetPassword from "../../Pages/UpdatePasswordPage";
-
+import AddAdmin from "../../Pages/AddAdminPage";
+import ViewUsers from "../../Pages/ViewUsersPage";
 
 
 export const ProfileRoute: RouteObject = {
@@ -23,6 +24,16 @@ export const ProfileRoute: RouteObject = {
       {
         path: "reset-password",
         element: <ResetPassword />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "add-admin",
+        element: <AddAdmin />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "view-users",
+        element: <ViewUsers />,
         errorElement: <ErrorPage />,
       }
     ],

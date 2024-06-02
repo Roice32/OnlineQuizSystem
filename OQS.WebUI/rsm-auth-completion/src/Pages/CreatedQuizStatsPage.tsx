@@ -22,9 +22,10 @@ const QuizStatsPage = () => {
         const response = await axios.get(`http://localhost:5276/api/quizResults/getCreatedQuizStats/${quizId}`);
         console.log(response.data);
         setQuizStats(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching created quiz stats:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -92,12 +93,12 @@ const QuizStatsPage = () => {
         <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Created Quiz Stats</h1>
         {loading ? (
           <p>Loading...</p>
-        ) : (
+        ) : quizStats ? (
           <>
-            <p className="text-lg text-center mb-4">Quiz Name: {quizStats?.quizName}</p>
+            <p className="text-lg text-center mb-4">Quiz Name: {quizStats.quizName}</p>
             <h2 className="text-lg font-bold mb-2">Results:</h2>
             <div>
-              {quizStats?.quizResultHeaders.map((header, index) => {
+              {quizStats.quizResultHeaders.map((header, index) => {
                 console.log(quizStats.userNames[header.userId]);
                 return (
                   <div key={index} className="mb-2" style={borderStyle}>
@@ -151,6 +152,8 @@ const QuizStatsPage = () => {
               </button>
             </div>
           </>
+        ) : (
+          <p className="text-lg text-center mb-4">No quizzes created.</p>
         )}
         <button
           className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"

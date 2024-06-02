@@ -59,6 +59,12 @@ namespace OQS.CoreWebAPI.Features.Profile
                         new Error("Authentication", "Invalid Jwt"));
                 }
 
+                if (!jwtValidator.IsAdmin())
+                {
+                    return Result.Failure<Guid>(
+                                               new Error("Authentication", "You are not an admin."));
+                }
+
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
