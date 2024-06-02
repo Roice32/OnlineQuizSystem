@@ -30,6 +30,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (requestedQuiz is null)
                 {
+                    Console.WriteLine("Error: Quiz not found in database");
                     return Result.Failure<GetCreatedQuizStatsResponse>(Error.NullValue);
                 }
 

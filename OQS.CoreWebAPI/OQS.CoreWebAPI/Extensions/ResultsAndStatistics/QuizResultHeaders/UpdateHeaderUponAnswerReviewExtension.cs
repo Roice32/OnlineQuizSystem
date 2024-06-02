@@ -22,6 +22,7 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders
 
             if (quizResultHeader is null)
             {
+                Console.WriteLine("Error: QuizResultHeader not found in database");
                 return Result.Failure(Error.NullValue);
             }
 

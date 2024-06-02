@@ -32,6 +32,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (requestedUser is null)
                 {
+                    Console.WriteLine("Error: User not found in database");
                     return Result.Failure<GetTakenQuizzesHistoryResponse>(Error.NullValue);
                 }
 

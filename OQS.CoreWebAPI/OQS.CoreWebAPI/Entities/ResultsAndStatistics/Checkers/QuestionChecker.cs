@@ -186,6 +186,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
             if (question == null)
             {
+                Console.WriteLine("Error: The question sent was null");
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
                         "The question sent was null"));
@@ -193,7 +194,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
             var chatRequest = new ChatRequest
             {
-                Model = Model.ChatGPTTurbo, // Use the appropriate model identifier for gpt-3.5-turbo
+                Model = Model.ChatGPTTurbo,
                 Messages = new[]
                 {
                     new ChatMessage(ChatMessageRole.System, "You are a helpful assistant."),
@@ -217,6 +218,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             }
             catch (HttpRequestException e)
             {
+                Console.WriteLine($"HttpRequestException caught: {e.Message}");
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
                         e.Message));
@@ -224,6 +226,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 
             if (chatResponse is null)
             {
+                Console.WriteLine("Error: OpenAI API did not respond.");
                 return Result.Failure<AskLLMForReviewResponse>(
                     new Error("AskLLMForReview.Error",
                         "OpenAI API did not respond."));
@@ -235,8 +238,9 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                     .DeserializeObject<AskLLMForReviewResponse>(chatResponse.Choices[0].Message.Content);
                 return askLLMForReviewResponse;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine($"Exception caught during deserialization: {e.Message}");
                 return Result.Failure<AskLLMForReviewResponse>(
                         new Error("AskLLMForReview.Error",
                             "OpenAI API did not return a valid response."));

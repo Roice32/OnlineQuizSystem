@@ -57,6 +57,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
+                    Console.WriteLine("Error: Invalid command");
                     return Result.Failure<ReviewAnswerResponse>(
                         new Error("ReviewAnswer.Validator",
                             validationResult.ToString()));
@@ -70,6 +71,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (!quizAndQuestionMatch)
                 {
+                    Console.WriteLine("Error: QuizId and QuestionId correspondence does not exist.");
                     return Result.Failure<ReviewAnswerResponse>(
                         new Error("ReviewAnswer.QuizAndQuestionMisMatch",
                             "QuizId and QuestionId correspondence does not exist."));
@@ -80,6 +82,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (updateResultStatus.IsFailure)
                 {
+                    Console.WriteLine("Error: UpdateQuestionResult failed.");
                     return Result.Failure<ReviewAnswerResponse>(
                         new Error("ReviewAnswer.UpdateResult",
                             updateResultStatus.Error.Message));

@@ -20,11 +20,13 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuestionResults
             var uncastedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId);
             if (uncastedQuestionResult is null)
             {
+                Console.WriteLine("Error: Question result not found");
                 return Result.Failure(Error.NullValue);
             }
 
             if (uncastedQuestionResult is not ReviewNeededQuestionResult)
             {
+                Console.WriteLine("Error: Invalid question result type");
                 return Result.Failure(Error.InvalidType);
             }
 
@@ -36,11 +38,13 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuestionResults
 
             if (score < 0 || score > questionFromDb.AllocatedPoints)
             {
+                Console.WriteLine("Error: Score out of bounds");
                 return Result.Failure(Error.OutOfBoundsValue);
             }
 
             if (questionResult.ReviewNeededResult != AnswerResult.Pending)
             {
+                Console.WriteLine("Error: Review not pending");
                 return Result.Failure(Error.ConditionNotMet);
             }
 

@@ -34,9 +34,12 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     await FetchQuizResultBodyExtension.FetchQuizResultBodyAsync(dbContext, request.QuizId, request.UserId);
 
                 if (quizResultHeader.IsFailure || quizResultBody.IsFailure)
+                {
+                    Console.WriteLine("Error: Quiz header and/or body returned null value");
                     return Result.Failure<GetQuizResultResponse>(
                         new Error("GetQuizResult.Handler",
                         "Quiz header and/or body returned null value"));
+                }
 
                 return new GetQuizResultResponse
                 {

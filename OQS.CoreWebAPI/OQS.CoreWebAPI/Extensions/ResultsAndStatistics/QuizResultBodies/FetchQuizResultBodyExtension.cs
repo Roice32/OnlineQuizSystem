@@ -24,8 +24,9 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
                 .Where(q => q.QuizId == quizId)
                 .ToList();
 
-            if (questions == null)
+            if (questions == null || questions.Count == 0)
             {
+                Console.WriteLine("Error: Questions not found in database");
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 
@@ -34,8 +35,9 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
                 .Where(q => questions.Select(q => q.Id).Contains(q.QuestionId) && q.UserId == userId)
                 .ToListAsync();
 
-            if (questions == null || questionResults == null)
+            if (questionResults == null || questionResults.Count == 0)
             {
+                Console.WriteLine("Error: QuestionResults not found in database");
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 
