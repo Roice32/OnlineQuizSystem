@@ -1,5 +1,4 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using Carter;
 using OQS.CoreWebAPI.Contracts;
 using FluentValidation;
@@ -7,7 +6,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Shared;
-using Microsoft.AspNetCore.Http;
 
 namespace OQS.CoreWebAPI.Features.Quizzes
 {

@@ -1,12 +1,3 @@
-using Carter;
-using MediatR;
-using Newtonsoft.Json;
-using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
-using OQS.CoreWebAPI.Entities;
-using Microsoft.AspNetCore.Identity;
-
 namespace OQS.CoreWebAPI.Extensions.Seeders
 {
     public static class SeedRSMComplete

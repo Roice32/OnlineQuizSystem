@@ -1,5 +1,4 @@
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Contracts.CRUD
 {

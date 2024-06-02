@@ -1,6 +1,4 @@
-﻿using Carter;
-using MediatR;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;

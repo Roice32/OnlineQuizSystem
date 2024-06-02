@@ -89,9 +89,9 @@ public class DeleteAccountEndpoint : ICarterModule
             var result = await sender.Send(command);
             if (result.IsFailure)
             {
-                return Results.NotFound(result.Error);
+                return Results.Ok(new { message = result.Error.Message });
             }
-            return Results.Ok(result.Value);
+            return Results.Ok(new { message = "Account deleted successfully!" });
         });
     }
 }

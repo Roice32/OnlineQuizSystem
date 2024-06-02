@@ -1,4 +1,3 @@
-using System.Data;
 using MediatR;
 using FluentValidation;
 using OQS.CoreWebAPI.Shared;

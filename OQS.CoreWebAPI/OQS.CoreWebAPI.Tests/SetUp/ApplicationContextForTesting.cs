@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Extensions.Seeders;
 
 namespace OQS.CoreWebAPI.Tests.SetUp

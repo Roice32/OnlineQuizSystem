@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
 using Xunit;
