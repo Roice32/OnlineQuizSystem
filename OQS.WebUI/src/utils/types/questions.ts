@@ -3,7 +3,7 @@ export enum QuestionType{
     TrueFalse,
     MultipleChoice,
     SingleChoice,
-    WriteAnswer,
+    WrittenAnswer,
     ReviewNeeded
 }
 

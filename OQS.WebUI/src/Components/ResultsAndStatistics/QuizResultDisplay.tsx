@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { QuestionResult, QuizResults } from "../utils/types/results-and-statistics/quiz-results";
-import { QuestionReview } from "../utils/types/results-and-statistics/question-review";
+import { QuestionResult, QuizResults } from "../../utils/types/results-and-statistics/quiz-results";
+import { QuestionReview } from "../../utils/types/results-and-statistics/question-review";
 import QuestionResultDisplay from './QuestionResultDisplays/QuestionResultDisplay';
 
 export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizResults }) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import QuizResultsDisplay from "../Components/QuizResultsDisplay";
+import QuizResultsDisplay from "./ResultsAndStatistics/QuizResultDisplay";
 import { QuizResults } from "../utils/types/results-and-statistics/quiz-results";
 
 const ParentComponent = ({ quizId }: { quizId: string }) => {

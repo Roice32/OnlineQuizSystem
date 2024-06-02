@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { CreatedQuizStats } from "../utils/types/results-and-statistics/created-quiz-stats";
-import { TakenQuizStats } from "../utils/types/results-and-statistics/taken-quizzes-history";
+import { CreatedQuizStats } from "../../utils/types/results-and-statistics/created-quiz-stats";
+import { TakenQuizStats } from "../../utils/types/results-and-statistics/taken-quizzes-history";
 import axios from "axios";
-import { QuizResults } from "../utils/types/results-and-statistics/quiz-results";
-import QuizResultsDisplay from "./QuizResultsDisplay";
+import { QuizResults } from "../../utils/types/results-and-statistics/quiz-results";
+import QuizResultsDisplay from "./QuizResultDisplay";
 
 export default function CreatedQuizStatsDisplay({ quizStats }: { quizStats: CreatedQuizStats }) {
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null);
@@ -48,7 +48,7 @@ export default function CreatedQuizStatsDisplay({ quizStats }: { quizStats: Crea
         <h2 className="text-lg font-bold mb-2">Results:</h2>
         <div>
           {quizStats.quizResultHeaders.map((header, index) => (
-            <div key={index} className="mb-2"  style={borderStyle}>
+            <div key={index} className="mb-2 p-5 rounded-[50px] border-2 border-gray-500">
               <p>Username: {quizStats.userNames[header.userId].username}</p>
               <p>Score: {header.score}</p>
               <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
@@ -61,9 +61,3 @@ export default function CreatedQuizStatsDisplay({ quizStats }: { quizStats: Crea
     </div>
   );
 }
-
-const borderStyle = {
-  borderRadius: '50px',
-  border: '1px solid gray',
-  padding: '20px',
-};

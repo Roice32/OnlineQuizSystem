@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CreatedQuizStats } from '../utils/types/results-and-statistics/created-quiz-stats';
-import { QuizResults } from '../utils/types/results-and-statistics/quiz-results';
+import { CreatedQuizStats } from '../../utils/types/results-and-statistics/created-quiz-stats';
+import { QuizResults } from '../../utils/types/results-and-statistics/quiz-results';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
@@ -48,7 +48,7 @@ const QuizStatsPage = () => {
       response.data.userId = userId;
       response.data.quizId = quizId;
       setQuizResults(response.data);
-      navigate(`/quizResults/${userId}/${quizId}`);
+      navigate(`/quiz-result/${userId}/${quizId}`);
     } catch (error) {
       console.error('Error fetching quiz result:', error);
     }
@@ -56,14 +56,8 @@ const QuizStatsPage = () => {
 
   const sendQuizStatsViaEmail = async () => {
     try {
-      await axios.post(`http://localhost:5276/api/email/sendCreatedQuizStatsViaEmail`, {
-        recipientEmail: recipientEmail,
-        quizId: quizId,
-        startDateLocal: startDate,
-        endDateLocal: endDate
-      });
+      await axios.get(`http://localhost:5276/api/email/sendCreatedQuizStatsViaEmail?quizId=${quizId}&recipientEmail=${recipientEmail}&startDate=${startDate}&endDate=${endDate}`, {});
       alert('Quiz stats have been sent via email successfully.');
-      console.log(recipientEmail, quizId, startDate, endDate);
     } catch (error) {
       console.error('Error sending quiz stats via email:', error);
       alert('Failed to send quiz stats via email.');
@@ -89,7 +83,7 @@ const QuizStatsPage = () => {
 
   return (
     <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
-      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
+      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Created Quiz Stats</h1>
         {loading ? (
           <p>Loading...</p>
@@ -101,16 +95,15 @@ const QuizStatsPage = () => {
               {quizStats.quizResultHeaders.map((header, index) => {
                 console.log(quizStats.userNames[header.userId]);
                 return (
-                  <div key={index} className="mb-2" style={borderStyle}>
+                  <div key={index} className="mb-2 p-5 rounded-[50px] border-2 border-gray-500">
                     <p>Username: {quizStats.userNames[header.userId]}</p>
                     <p>Score: {header.score}</p>
                     <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
                     <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
                     <button
-                      className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-                      onClick={() => getQuizResult(header.userId, header.quizId)}
-                    >
-                      Show more details about the quiz
+                      className="p-2 block w-72 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
+                      onClick={() => getQuizResult(header.userId, header.quizId)}>
+                      View more details
                     </button>
                   </div>
                 );
@@ -164,12 +157,6 @@ const QuizStatsPage = () => {
       </div>
     </div>
   );
-};
-
-const borderStyle = {
-  borderRadius: '50px',
-  border: '1px solid gray',
-  padding: '20px',
 };
 
 export default QuizStatsPage;

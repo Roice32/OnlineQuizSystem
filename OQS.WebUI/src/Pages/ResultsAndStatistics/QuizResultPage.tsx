@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { QuizResults } from "../utils/types/results-and-statistics/quiz-results";
-import QuestionResultDisplay from '../Components/QuestionResultDisplays/QuestionResultDisplay';
+import { QuizResults } from "../../utils/types/results-and-statistics/quiz-results";
+import QuestionResultDisplay from '../../Components/ResultsAndStatistics/QuestionResultDisplays/QuestionResultDisplay';
 
 const QuizResultsPage = () => {
   const { userId, quizId } = useParams<{ userId: string, quizId: string }>();
@@ -35,7 +35,7 @@ const QuizResultsPage = () => {
 
   const sendQuizResultViaEmail = async () => {
     try {
-      await axios.post(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`);
+      await axios.get(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`);
       alert('Quiz results have been sent via email successfully.');
     } catch (error) {
       console.error('Error sending quiz results via email:', error);
@@ -87,7 +87,7 @@ const QuizResultsPage = () => {
             className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
             onClick={sendQuizResultViaEmail}
           >
-            Send Quiz Results Via Email
+            Send Quiz Result Via Email
           </button>
         </div>
         <button

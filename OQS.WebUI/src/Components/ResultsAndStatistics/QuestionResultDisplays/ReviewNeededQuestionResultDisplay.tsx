@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
-import { Question, QuestionResult } from '../../utils/types/results-and-statistics/quiz-results';
-import { AnswerResult, QuestionReview } from '../../utils/types/results-and-statistics/question-review';
-import { QuestionType } from '../../utils/types/questions';
+import { Question, QuestionResult } from '../../../utils/types/results-and-statistics/quiz-results';
+import { AnswerResult, QuestionReview } from '../../../utils/types/results-and-statistics/question-review';
+import { QuestionType } from '../../../utils/types/questions';
 
 interface ReviewNeededQuestionResultDisplayProps {
   question: Question;
   questionResult: QuestionResult;
-  onGradeComplete: () => void; 
 }
 
-const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult, onGradeComplete }) => {
+const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult}) => {
   const [needReview, setNeedReview] = useState(false);
   const [questionReview, setReviewResults] = useState<QuestionReview | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,7 +33,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
       setNeedReview(false);
       questionResult.reviewNeededResult = response.data.updatedQuestionResult.reviewNeededResult;
       setError(null);
-      onGradeComplete();
+      window.location.reload();
     } catch (error) {
       console.error('Error grading the answer!');
     } finally {
@@ -65,7 +64,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
             }
           )}
         >
-          Your Answer: {questionResult.reviewNeededAnswer}
+          Answer: {questionResult.reviewNeededAnswer}
         </label>
       </div>
       {needReview && (

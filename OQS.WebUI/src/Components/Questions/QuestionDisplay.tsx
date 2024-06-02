@@ -32,7 +32,7 @@ export default function QuestionDisplay({
       {question.type === QuestionType.MultipleChoice && (
         <MultipleChoiceQuestionDisplay {...props} />
       )}
-      {(question.type === QuestionType.WriteAnswer ||
+      {(question.type === QuestionType.WrittenAnswer ||
         question.type === QuestionType.ReviewNeeded) && (
         <WrittenQuestionDisplay {...props} />
       )}

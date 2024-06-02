@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Question, QuestionResult } from '../../utils/types/results-and-statistics/quiz-results';
-import { AnswerResult } from '../../utils/types/results-and-statistics/question-review';
+import { Question, QuestionResult } from '../../../utils/types/results-and-statistics/quiz-results';
+import { AnswerResult } from '../../../utils/types/results-and-statistics/question-review';
 
 interface TrueFalseQuestionResultDisplayProps {
   question: Question;
