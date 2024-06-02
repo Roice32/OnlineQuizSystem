@@ -6,6 +6,7 @@ using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {
@@ -53,11 +54,11 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var result4 = await Client.PostAsync(requestUri4, null);
 
             // Assert
-            result1.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString1 = await result1.Content.ReadAsStringAsync();
             resultString1.Should().Contain("Failed to bind parameter \"Guid quizId\" from \"\"");
 
-            result2.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString2 = await result2.Content.ReadAsStringAsync();
             resultString2.Should().Contain("Failed to bind parameter \"Guid takenBy\" from \"\"");
 
@@ -65,7 +66,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var resultString3 = await result3.Content.ReadAsStringAsync();
             resultString3.Should().Contain("QuestionAnswerPairs is required.");
 
-            result4.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result4.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString4 = await result4.Content.ReadAsStringAsync();
             resultString4.Should().Contain("Failed to bind parameter \"int timeElapsed\" from \"\"");
         }

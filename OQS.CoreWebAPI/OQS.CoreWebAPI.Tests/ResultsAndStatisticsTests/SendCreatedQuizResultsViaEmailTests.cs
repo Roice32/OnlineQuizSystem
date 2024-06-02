@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using FluentAssertions;
 using OQS.CoreWebAPI.Tests.SetUp;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {
@@ -49,7 +50,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var result = await Client.GetAsync(requestUri);
 
             // Assert
-            result.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
 }

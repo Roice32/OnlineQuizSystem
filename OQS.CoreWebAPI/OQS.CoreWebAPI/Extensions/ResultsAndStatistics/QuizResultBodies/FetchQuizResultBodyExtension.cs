@@ -3,8 +3,8 @@ using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-using OQS.CoreWebAPI.Temp;
-using OQS.CoreWebAPI.Contracts;
+using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Contracts.CRUD;
 
 namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
 {

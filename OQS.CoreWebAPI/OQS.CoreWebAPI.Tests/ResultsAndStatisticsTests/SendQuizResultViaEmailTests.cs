@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using FluentAssertions;
 using OQS.CoreWebAPI.Tests.SetUp;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {

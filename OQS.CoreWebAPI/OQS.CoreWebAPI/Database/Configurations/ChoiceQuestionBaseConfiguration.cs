@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
-using OQS.CoreWebAPI.Temp;
+using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Database.Configurations;
 
-public class ChoiceQuestionBaseConfiguration : IEntityTypeConfiguration<ChoiceQuestionBase>
+public class ChoiceQuestionBaseConfiguration:IEntityTypeConfiguration<ChoiceQuestionBase>
 {
     public void Configure(EntityTypeBuilder<ChoiceQuestionBase> builder)
     {

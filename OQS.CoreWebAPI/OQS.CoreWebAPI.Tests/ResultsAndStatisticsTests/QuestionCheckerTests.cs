@@ -7,8 +7,9 @@ using OQS.CoreWebAPI.Tests.SetUp;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-using OQS.CoreWebAPI.Temp;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionAnswerPairs;
+using Xunit;
+using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {
@@ -318,7 +319,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 
 
             ReviewNeededQuestion question = new ReviewNeededQuestion
-                (questionId, "Cat face 5 + 5?", 6, quizId);
+                (questionId, "Cat face 5 + 5?", quizId, 6, 3);
 
             // Act
             var result = await ReviewNeededQuestionChecker.AskLLMForReviewAsync(question, "10");

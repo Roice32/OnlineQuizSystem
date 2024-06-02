@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
-using OQS.CoreWebAPI.Temp;
+using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Database.Configurations;
 
-public class WrittenAnswerQuestionConfiguration : IEntityTypeConfiguration<WrittenAnswerQuestion>
+public class WrittenAnswerQuestionConfiguration:IEntityTypeConfiguration<WrittenAnswerQuestion>
 {
     public void Configure(EntityTypeBuilder<WrittenAnswerQuestion> builder)
     {

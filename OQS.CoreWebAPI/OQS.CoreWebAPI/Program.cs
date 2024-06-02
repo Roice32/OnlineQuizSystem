@@ -1,34 +1,84 @@
+using System.Runtime.InteropServices;
 using Carter;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Extensions;
+using OQS.CoreWebAPI.Features.Authentication;
+using System.Text;
+using Microsoft.OpenApi.Models;
+using OQS.CoreWebAPI.Features.LiveQuizzes;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
+using OQS.CoreWebAPI.Extensions.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDbContext>(db =>
-    db.UseSqlServer(builder.Configuration.GetConnectionString("OnlineQuizSystemDatabase")));
-var assembly = typeof(Program).Assembly;
-builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies(assembly));
-builder.Services.AddValidatorsFromAssembly(assembly);
-builder.Services.AddCarter();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "QQS WEB API v1", Version = "v1" });
+    options.AddSignalRSwaggerGen();
+    
+});
 
-builder.Services.AddControllers();
+// check if platform is linux
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(db =>
+        db.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseLinux")));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(db =>
+        db.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+}
+
+
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:5173")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
+builder.Services.AddSwaggerGen();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+var assembly = typeof(Program).Assembly;
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
+builder.Services.AddValidatorsFromAssembly(assembly);
+
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = "https://localhost:7117",
+                ValidAudience = null,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("7567693c464441e000f6f4150eb7ff2db7449baa25e8b369dead88967e2f841b"))
+            };
+        });
+
+builder.Services.AddCarter();
+builder.Services.AddAuthorization();
+
+// Pentru trimiterea email-urilor
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 DependencyInjector.AddQuestionCheckersFromAssembly(builder.Services);
 var serviceProvider = builder.Services.BuildServiceProvider();
@@ -37,24 +87,37 @@ DependencyInjector.AddEmailSenderStrategiesFromAssembly(builder.Services);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.ApplyMigrations();
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    if (dbContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+    {
+        app.ApplyMigrations();
+    }
 }
 
-app.MapCarter();
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
 app.UseCors("AllowSpecificOrigin");
+
+// Used only for testing RSM's features.
+dbContext.SeedDbForRSMComplete();
+
+/*dbContext.SeedQuizzez();
+dbContext.SeedUsers();
+dbContext.SeedActiveQuizzes();
+dbContext.SeedLiveQuizzes();*/
+
+app.MapCarter();
+app.MapHub<LiveQuizzesHub>("/ws/live-quizzes");
+app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
+
 
 app.Run();
+public partial class Program { };
 
-public partial class Program { }

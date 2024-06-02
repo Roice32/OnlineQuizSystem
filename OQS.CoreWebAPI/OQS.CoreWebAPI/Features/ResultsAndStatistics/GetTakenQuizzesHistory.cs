@@ -28,7 +28,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             {
                 var requestedUser = await dbContext.Users
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
+                    .FirstOrDefaultAsync(user => user.Id == request.UserId.ToString(), cancellationToken);
 
                 if (requestedUser is null)
                 {

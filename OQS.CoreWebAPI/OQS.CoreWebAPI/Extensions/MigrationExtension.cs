@@ -1,18 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 
-namespace OQS.CoreWebAPI.Extensions
+namespace OQS.CoreWebAPI.Extensions;
+
+public static class MigrationExtensions
 {
-    public static class MigrationExtension
+    public static void ApplyMigrations(this WebApplication application) 
     {
-        public static void ApplyMigrations(this WebApplication application)
-        {
-            using var scope = application.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
-            {
-                context.Database.Migrate();
-            }
-        }
+        using var scope = application.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>(); 
+        dbContext.Database.Migrate();
     }
 }

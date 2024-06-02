@@ -2,9 +2,8 @@
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-using OQS.CoreWebAPI.Temp;
-using OQS.CoreWebAPI.Contracts;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
+using OQS.CoreWebAPI.Contracts.CRUD;
 
 namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics
 {

@@ -5,7 +5,6 @@ using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.Temp;
 using Model = OpenAI_API.Models.Model;
 
 namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
@@ -183,7 +182,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
         }
         public static async Task<Result<AskLLMForReviewResponse>> AskLLMForReviewAsync(ReviewNeededQuestion question, string answer)
         {
-            var openAI = new OpenAIAPI("sk-proj-Veae6HeSELVq583vloxnT3BlbkFJTgE0zPNVjaCXL0QoSQGh");
+            var openAI = new OpenAIAPI("APIKeyGoesHere");
 
             if (question == null)
             {

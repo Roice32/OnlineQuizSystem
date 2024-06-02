@@ -5,6 +5,7 @@ using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {
@@ -47,19 +48,19 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var result4 = await Client.PutAsync(requestUri4, null);
 
             // Assert
-            result1.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString1 = await result1.Content.ReadAsStringAsync();
             resultString1.Should().Contain("Failed to bind parameter \"Guid userId\" from \"\"");
 
-            result2.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString2 = await result2.Content.ReadAsStringAsync();
             resultString2.Should().Contain("Failed to bind parameter \"Guid quizId\" from \"\"");
 
-            result3.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result3.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString3 = await result3.Content.ReadAsStringAsync();
             resultString3.Should().Contain("Failed to bind parameter \"Guid questionId\" from \"\"");
 
-            result4.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            result4.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString4 = await result4.Content.ReadAsStringAsync();
             resultString4.Should().Contain("Failed to bind parameter \"float finalScore\" from \"\"");
         }

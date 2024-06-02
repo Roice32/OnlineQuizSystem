@@ -7,6 +7,7 @@ using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {

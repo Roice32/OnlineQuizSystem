@@ -35,8 +35,8 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders
             var userName = await dbContext
                 .Users
                 .AsNoTracking()
-                .Where(u => u.Id == UserId)
-                .Select(u => u.Name)
+                .Where(u => u.Id == UserId.ToString())
+                .Select(u => u.FirstName + ' ' + u.LastName)
                 .FirstOrDefaultAsync();
 
 

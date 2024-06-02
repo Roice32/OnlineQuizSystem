@@ -1,6 +1,6 @@
-﻿using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
+﻿using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-using OQS.CoreWebAPI.Temp;
 
 namespace OQS.CoreWebAPI.Contracts.ResultsAndStatistics
 {

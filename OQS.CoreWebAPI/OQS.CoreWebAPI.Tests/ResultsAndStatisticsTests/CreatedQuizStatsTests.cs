@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {

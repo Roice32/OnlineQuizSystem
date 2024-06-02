@@ -53,8 +53,8 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 {
                     string userName = await dbContext.Users
                         .AsNoTracking()
-                        .Where(user => user.Id == quiz.UserId)
-                        .Select(user => user.Name)
+                        .Where(user => user.Id == quiz.UserId.ToString())
+                        .Select(user => user.UserName)
                         .FirstOrDefaultAsync(cancellationToken);
                     userNames.Add(quiz.UserId, userName);
                 }

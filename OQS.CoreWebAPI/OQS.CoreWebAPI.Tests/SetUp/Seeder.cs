@@ -1,14 +1,8 @@
-﻿using Newtonsoft.Json;
-using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-using OQS.CoreWebAPI.Temp;
-
-namespace OQS.CoreWebAPI.Tests.SetUp
+namespace OQS.CoreWebAPI.Extensions.Seeders
 {
-    public abstract class Seeder
+    public static class SeedRSMComplete
     {
-        public static void SeedDb(ApplicationDbContext dbContext)
+        /*public static void SeedDbForRSMComplete(this ApplicationDbContext dbContext)
         {
             SeedUsers(dbContext);
             SeedQuizzes(dbContext);
@@ -19,37 +13,101 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         private static void SeedUsers(ApplicationDbContext dbContext)
         {
+            if (dbContext.Users.Any())
+            {
+                return;
+            }
+
+            // password: User@123
+            // token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjViMDQ4OTEzLTVkZjAtNDI5Zi1hNDJiLTA1MTkwNDY3MmU0ZCIsInJvbGUiOiJBZG1pbiIsImp0aSI6ImJiZTUwYzRjLTAyOGMtNDdhZC05NTMwLTUyMjU5NzQxMWQxZCIsIm5iZiI6MTcxNjgyMzA5NCwiZXhwIjoxNzE2ODMzODk0LCJpYXQiOjE3MTY4MjMwOTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMTciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTE3In0.i2qkqt6JOJ9b54gegycNQZtuwqplPjPKdYMm7x-dfhw
             var users = new List<User>
             {
-                new User
+                new User()
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000001"),
-                    Name = "Name1",
-                    Type = UserType.Member,
-                    Email = "email1@email.com"
+                    Id = "00000000-0000-0000-0001-000000000001",
+                    UserName = "User1",
+                    NormalizedUserName = "USER1",
+                    FirstName = "FirstName1",
+                    LastName = "LastName1",
+                    Email = "email1@email.com",
+                    NormalizedEmail = "EMAIL1@EMAIL.COM",
+                    PasswordHash = "AQAAAAIAAYagAAAAEO7lt8EaOiPZBD7qdQasSo4hFJNZ+j/bg7L0wP9jwan7XJ/fzlIVdU6omYy6//AzLQ==",
+                    SecurityStamp = "HDZTMBTHU4COEJH5OAXUUC5NFEZFTPNT",
+                    EmailConfirmed = true
                 },
-                new User
+                new User()
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000002"),
-                    Name = "Name2",
-                    Type = UserType.Admin,
-                    Email = "email2@email.com"
+                    Id = "00000000-0000-0000-0001-000000000002",
+                    UserName = "User2",
+                    NormalizedUserName = "USER2",
+                    FirstName = "FirstName2",
+                    LastName = "LastName2",
+                    Email = "email2@email.com",
+                    NormalizedEmail = "EMAIL2@EMAIL.COM",
+                    PasswordHash = "AQAAAAIAAYagAAAAEO7lt8EaOiPZBD7qdQasSo4hFJNZ+j/bg7L0wP9jwan7XJ/fzlIVdU6omYy6//AzLQ==",
+                    SecurityStamp = "HDZTMBTHU4COEJH5OAXUUC5NFEZFTPNT",
+                    EmailConfirmed = true
                 },
-                new User
+                new User()
                 {
-                    Id = Guid.Parse("00000000-0000-0000-0001-000000000003"),
-                    Name = "Name3",
-                    Type = UserType.Member,
-                    Email = "emai3@email.com"
-                }
+                    Id = "00000000-0000-0000-0001-000000000003",
+                    UserName = "User3",
+                    NormalizedUserName = "USER3",
+                    FirstName = "FirstName3",
+                    LastName = "LastName3",
+                    Email = "email3@email.com",
+                    NormalizedEmail = "EMAIL3@EMAIL.COM",
+                    PasswordHash = "AQAAAAIAAYagAAAAEO7lt8EaOiPZBD7qdQasSo4hFJNZ+j/bg7L0wP9jwan7XJ/fzlIVdU6omYy6//AzLQ==",
+                    SecurityStamp = "HDZTMBTHU4COEJH5OAXUUC5NFEZFTPNT",
+                    EmailConfirmed = true
+                },
             };
 
+            var adminRole = new IdentityRole("Admin")
+            {
+                Name = "Admin",
+                NormalizedName = "ADMIN"
+            };
+
+            var userRole = new IdentityRole("User")
+            {
+                Name = "User",
+                NormalizedName = "USER"
+            };
+
+            dbContext.Roles.Add(adminRole);
+            dbContext.Roles.Add(userRole);
+
             dbContext.Users.AddRange(users);
+
+            dbContext.SaveChanges();
+
+            dbContext.UserRoles.Add(new IdentityUserRole<string>()
+            {
+                RoleId = dbContext.Roles.First(x => x.Name == "User").Id,
+                UserId = users[0].Id
+            });
+            dbContext.UserRoles.Add(new IdentityUserRole<string>()
+            {
+                RoleId = dbContext.Roles.First(x => x.Name == "Admin").Id,
+                UserId = users[1].Id
+            });
+            dbContext.UserRoles.Add(new IdentityUserRole<string>()
+            {
+                RoleId = dbContext.Roles.First(x => x.Name == "User").Id,
+                UserId = users[2].Id
+            });
+
             dbContext.SaveChanges();
         }
 
         private static void SeedQuizzes(ApplicationDbContext dbContext)
         {
+            if (dbContext.Quizzes.Any())
+            {
+                return;
+            }
+
             var quizzes = new List<Quiz>
             {
                 new Quiz
@@ -58,7 +116,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Name = "Quiz1",
                     Description = "Description1",
                     TimeLimitMinutes = 20,
-                    CreatedAtUtc = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
                 },
                 new Quiz
@@ -67,7 +125,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Name = "Quiz2",
                     Description = "Description2",
                     TimeLimitMinutes = 2,
-                    CreatedAtUtc = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000001")
                 },
                 new Quiz
@@ -76,7 +134,7 @@ namespace OQS.CoreWebAPI.Tests.SetUp
                     Name = "Quiz3",
                     Description = "Description3",
                     TimeLimitMinutes = 10,
-                    CreatedAtUtc = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
                 }
             };
@@ -87,72 +145,85 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         private static void SeedQuestions(ApplicationDbContext dbContext)
         {
+            if (dbContext.Questions.Any())
+            {
+                return;
+            }
+
             var questions = new List<QuestionBase>
             {
                 new TrueFalseQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000001"),
                     text: "TrueFalseQuestion1",
-                    trueFalseAnswer: true,
-                    allocatedPoints: 2,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
+                    AllocatedPoints: 2,
+                    TimeLimit: 2,
+                    trueFalseAnswer: true
                 ),
                 new SingleChoiceQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000002"),
                     text: "SingleChoiceQuestion1",
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
+                    AllocatedPoints: 3,
+                    TimeLimit: 3,
                     choices: new List<string> { "Option1", "Option2", "Option3" },
-                    singleChoiceAnswer: "Option2",
-                    allocatedPoints: 3,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
+                    singleChoiceAnswer: "Option2"
                 ),
                 new MultipleChoiceQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000003"),
                     text: "MultipleChoiceQuestion1",
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
+                    AllocatedPoints: 4,
+                    TimeLimit: 4,
                     choices: new List<string> { "Option1", "Option2", "Option3", "Option4" },
-                    multipleChoiceAnswers: new List<string> { "Option2", "Option4" },
-                    allocatedPoints: 4,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
+                    multipleChoiceAnswers: new List<string> { "Option2", "Option4" }
                 ),
                 new WrittenAnswerQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000004"),
                     text: "WrittenAnswerQuestion1",
-                    writtenAcceptedAnswers: new List<string> { "AcceptedAnswer1", "AcceptedAnswer2" },
-                    allocatedPoints: 5,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
+                    AllocatedPoints: 5,
+                    TimeLimit: 5,
+                    writtenAcceptedAnswers: new List<string> { "AcceptedAnswer1", "AcceptedAnswer2" }
                 ),
                 new ReviewNeededQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000005"),
                     text: "ReviewNeededQuestion1",
-                    allocatedPoints: 6,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000001")
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
+                    AllocatedPoints: 6,
+                    TimeLimit: 6
                 ),
 
                 new TrueFalseQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000006"),
                     text: "TrueFalseQuestion2",
-                    trueFalseAnswer: false,
-                    allocatedPoints: 2,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000002")
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000002"),
+                    AllocatedPoints: 2,
+                    TimeLimit: 2,
+                    trueFalseAnswer: false
                 ),
 
                 new ReviewNeededQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000007"),
                     text: "ReviewNeededQuestion2",
-                    allocatedPoints: 5,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000003")
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000003"),
+                    AllocatedPoints: 5,
+                    TimeLimit: 5
                 ),
                 new ReviewNeededQuestion
                 (
                     id: Guid.Parse("00000000-0000-0000-0003-000000000008"),
                     text: "ReviewNeededQuestion3",
-                    allocatedPoints: 5,
-                    quizId: Guid.Parse("00000000-0000-0000-0002-000000000003")
+                    QuizId: Guid.Parse("00000000-0000-0000-0002-000000000003"),
+                    AllocatedPoints: 5,
+                    TimeLimit: 5
                 ),
             };
 
@@ -162,6 +233,11 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         private static void SeedQuestionResults(ApplicationDbContext dbContext)
         {
+            if (dbContext.QuestionResults.Any())
+            {
+                return;
+            }
+
             var ChoicesResultsForQuestion2 = new Dictionary<string, AnswerResult>
             {
                 { "Option1", AnswerResult.Other },
@@ -240,6 +316,11 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
         private static void SeedQuizResultHeaders(ApplicationDbContext dbContext)
         {
+            if (dbContext.QuizResultHeaders.Any())
+            {
+                return;
+            }
+
             var quizResultHeaders = new List<QuizResultHeader>
             {
                 new QuizResultHeader
@@ -263,6 +344,6 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
             dbContext.QuizResultHeaders.AddRange(quizResultHeaders);
             dbContext.SaveChanges();
-        }
+        }*/
     }
 }

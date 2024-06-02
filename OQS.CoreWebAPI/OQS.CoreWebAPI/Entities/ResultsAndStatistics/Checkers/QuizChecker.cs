@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionAnswerPairs;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Shared;
-using OQS.CoreWebAPI.Temp;
 
 namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
 {

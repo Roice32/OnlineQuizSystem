@@ -7,6 +7,7 @@ using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
+using Xunit;
 
 namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {
@@ -29,7 +30,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             result.Should().NotBeNull();
             result.Should().BeOfType<FetchQuizResultHeaderResponse>();
             result.QuizName.Should().Be("Quiz1");
-            result.UserName.Should().Be("Name1");
+            result.UserName.Should().Be("FirstName1 LastName1");
             result.Score.Should().Be(13);
             result.ReviewPending.Should().BeFalse();
             result.CompletionTime.Should().Be(15);

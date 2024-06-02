@@ -8,10 +8,10 @@ using System.Text;
 using Newtonsoft.Json;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-using OQS.CoreWebAPI.Temp;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
+using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {

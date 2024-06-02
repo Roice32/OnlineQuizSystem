@@ -17,12 +17,265 @@ namespace OQS.CoreWebAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ActiveQuiz.ActiveQuiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ActiveQuizzes");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.LiveQuizz", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Code");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("LiveQuizzes");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.QuestionBase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AllocatedPoints")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TimeLimit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("Questions");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("QuestionBase");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.Quiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TimeLimitMinutes")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Quizzes");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -47,7 +300,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuizResultHeader", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuizResultHeader", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -72,67 +325,7 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("QuizResultHeaders");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AllocatedPoints")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("nvarchar(34)");
-
-                    b.Property<Guid>("QuizId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Questions");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("QuestionBase");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Quiz", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TimeLimitMinutes")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Quizzes");
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.Tag", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,34 +343,143 @@ namespace OQS.CoreWebAPI.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.User", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.ChoiceQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.UserConnection", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LiveQuizzCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("LiveQuizzCode");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserConnections");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ChoiceQuestionBase", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
+
+                    b.Property<string>("Choices")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("ChoiceQuestionBase");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ReviewNeededQuestion", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
+
+                    b.HasDiscriminator().HasValue("ReviewNeededQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.TrueFalseQuestion", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
+
+                    b.Property<bool>("TrueFalseAnswer")
+                        .HasColumnType("bit");
+
+                    b.HasDiscriminator().HasValue("TrueFalseQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.WrittenAnswerQuestion", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.QuestionBase");
+
+                    b.Property<string>("WrittenAcceptedAnswers")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("WrittenAnswerQuestion");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.ChoiceQuestionResult", b =>
+                {
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<string>("PseudoDictionaryChoicesResults")
                         .IsRequired()
@@ -186,9 +488,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("ChoiceQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.ReviewNeededQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.ReviewNeededQuestionResult", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<string>("LLMReview")
                         .IsRequired()
@@ -204,9 +506,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("ReviewNeededQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.TrueFalseQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.TrueFalseQuestionResult", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<int>("TrueFalseAnswerResult")
                         .HasColumnType("int");
@@ -214,9 +516,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("TrueFalseQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.WrittenAnswerQuestionResult", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.WrittenAnswerQuestionResult", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Entities.QuestionResults.QuestionResultBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults.QuestionResultBase");
 
                     b.Property<string>("WrittenAnswer")
                         .IsRequired()
@@ -228,48 +530,9 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("WrittenAnswerQuestionResult");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ChoiceQuestionBase", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.MultipleChoiceQuestion", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
-
-                    b.Property<string>("Choices")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("ChoiceQuestionBase");
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ReviewNeededQuestion", b =>
-                {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
-
-                    b.HasDiscriminator().HasValue("ReviewNeededQuestion");
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.TrueFalseQuestion", b =>
-                {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
-
-                    b.Property<bool>("TrueFalseAnswer")
-                        .HasColumnType("bit");
-
-                    b.HasDiscriminator().HasValue("TrueFalseQuestion");
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.WrittenAnswerQuestion", b =>
-                {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.QuestionBase");
-
-                    b.Property<string>("WrittenAcceptedAnswers")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("WrittenAnswerQuestion");
-                });
-
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.MultipleChoiceQuestion", b =>
-                {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ChoiceQuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ChoiceQuestionBase");
 
                     b.Property<string>("MultipleChoiceAnswers")
                         .IsRequired()
@@ -278,15 +541,143 @@ namespace OQS.CoreWebAPI.Migrations
                     b.HasDiscriminator().HasValue("MultipleChoiceQuestion");
                 });
 
-            modelBuilder.Entity("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.SingleChoiceQuestion", b =>
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.SingleChoiceQuestion", b =>
                 {
-                    b.HasBaseType("OQS.CoreWebAPI.ResultsAndStatisticsModule.Temp.ChoiceQuestionBase");
+                    b.HasBaseType("OQS.CoreWebAPI.Entities.ChoiceQuestionBase");
 
                     b.Property<string>("SingleChoiceAnswer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("SingleChoiceQuestion");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.ActiveQuiz.ActiveQuiz", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.Quiz", "Quiz")
+                        .WithMany()
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.LiveQuizz", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("OQS.CoreWebAPI.Entities.Quiz", "Quiz")
+                        .WithMany()
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.QuestionBase", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.Quiz", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.UserConnection", b =>
+                {
+                    b.HasOne("OQS.CoreWebAPI.Entities.LiveQuizz", "LiveQuizz")
+                        .WithMany("Connections")
+                        .HasForeignKey("LiveQuizzCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OQS.CoreWebAPI.Entities.User", "User")
+                        .WithMany("Connections")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("LiveQuizz");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.LiveQuizz", b =>
+                {
+                    b.Navigation("Connections");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.Quiz", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("OQS.CoreWebAPI.Entities.User", b =>
+                {
+                    b.Navigation("Connections");
                 });
 #pragma warning restore 612, 618
         }
