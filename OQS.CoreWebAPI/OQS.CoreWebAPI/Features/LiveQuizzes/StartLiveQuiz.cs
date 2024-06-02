@@ -27,7 +27,7 @@ public class StartLiveQuiz
         private async Task<bool> AdminConnectionIdMatches(string connectionId, CancellationToken cancellationToken)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var liveQuiz = await context.LiveQuizzes.Include(q => q.Connections).Include(q=>q.CreatedBy)
                 .FirstOrDefaultAsync(q => q.Connections.Any(c => c.ConnectionId == connectionId));
             if (liveQuiz == null)
@@ -41,12 +41,12 @@ public class StartLiveQuiz
     }
     public sealed class Handler : IRequestHandler<StartQuizCommand, Result<string>>
     {
-        private readonly ApplicationDBContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly StartLiveQuizValidator _validator;
         private readonly IHubContext<LiveQuizzesHub> _hubContext;
         private readonly ISender _sender;
 
-        public Handler(ApplicationDBContext context, StartLiveQuizValidator validator, IHubContext<LiveQuizzesHub> hubContext, ISender sender)
+        public Handler(ApplicationDbContext context, StartLiveQuizValidator validator, IHubContext<LiveQuizzesHub> hubContext, ISender sender)
         {
             _context = context;
             _validator = validator;

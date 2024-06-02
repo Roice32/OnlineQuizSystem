@@ -27,9 +27,9 @@ namespace OQS.CoreWebAPI.Features.Tags
 
         public class Handler : IRequestHandler<Query, Result<TagResponse>>
         {
-            private readonly ApplicationDBContext context;
+            private readonly ApplicationDbContext context;
 
-            public Handler(ApplicationDBContext context)
+            public Handler(ApplicationDbContext context)
             {
                 this.context = context;
             }

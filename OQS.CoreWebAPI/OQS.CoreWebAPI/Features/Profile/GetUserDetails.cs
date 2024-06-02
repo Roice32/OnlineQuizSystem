@@ -1,5 +1,4 @@
 ﻿using Carter;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using OQS.CoreWebAPI.Contracts.Models;

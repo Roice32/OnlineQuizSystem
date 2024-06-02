@@ -7,7 +7,7 @@ namespace OQS.CoreWebAPI.Contracts
         public Guid QuizId { get; set; }
         public string Text { get; set; } = string.Empty;
         public QuestionType Type { get; set; }
-        public int AlocatedPoints { get; set; }
+        public int AllocatedPoints { get; set; }
         public int TimeLimit { get; set; }
         public List<string>? Choices { get; set; }
         public bool? TrueFalseAnswer { get; set; }

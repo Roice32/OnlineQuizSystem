@@ -1,4 +1,3 @@
-using System.Data;
 using MediatR;
 using FluentValidation;
 using OQS.CoreWebAPI.Shared;
@@ -29,18 +28,18 @@ public class CancelLiveQuiz
         private async Task<bool> ConnectionExists(string connectionId, CancellationToken cancellationToken)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             return await context.UserConnections.AnyAsync(c => c.ConnectionId == connectionId, cancellationToken);
         }
     }
 
     public class Handler : IRequestHandler<Command, Result>
     {
-        private readonly ApplicationDBContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IHubContext<LiveQuizzesHub> _hubContext;
         private readonly IValidator<Command> _validator;
         
-        public Handler(ApplicationDBContext context, IHubContext<LiveQuizzesHub> hubContext, IValidator<Command> validator)
+        public Handler(ApplicationDbContext context, IHubContext<LiveQuizzesHub> hubContext, IValidator<Command> validator)
         {
             _context = context;
             _hubContext = hubContext;

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using OQS.CoreWebAPI.Features.Authentication;
+﻿using OQS.CoreWebAPI.Features.Authentication;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
 
 public class EmailSender : IEmailSender
 {

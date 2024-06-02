@@ -23,7 +23,7 @@ public class DisconnectClient
         private async Task<bool> ConnectionExists(string connectionId, CancellationToken cancellationToken)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             return await context.UserConnections.AnyAsync(c => c.ConnectionId == connectionId, cancellationToken);
         }
         
@@ -31,11 +31,11 @@ public class DisconnectClient
     
     public class Handler: IRequestHandler<DisconnectClientCommand, Result>
     {
-        private readonly ApplicationDBContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IValidator<DisconnectClientCommand> _validator;
         private readonly IHubContext<LiveQuizzesHub> _hubContext;
         private readonly ISender _sender;
-        public Handler(ApplicationDBContext context, IValidator<DisconnectClientCommand> validator, IHubContext<LiveQuizzesHub> hubContext, ISender sender)
+        public Handler(ApplicationDbContext context, IValidator<DisconnectClientCommand> validator, IHubContext<LiveQuizzesHub> hubContext, ISender sender)
         {
             _context = context;
             _validator = validator;
