@@ -81,7 +81,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
             type="number"
             step="any"
             inputMode="numeric"
-            value={score || ''}
+            value={score || '0'}
             onChange={(e) => {
               const value = e.target.value;
               if (parseFloat(value) >= 0 && parseFloat(value) <= question.allocatedPoints) {
