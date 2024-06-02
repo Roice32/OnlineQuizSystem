@@ -273,7 +273,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 try
                 {
                     var message = new MimeMessage();
-                    message.From.Add(MailboxAddress.Parse("echipafacultate@yahoo.com"));
+                    message.From.Add(MailboxAddress.Parse("Online.Quiz@outlook.com"));
                     message.To.Add(MailboxAddress.Parse(request.RecipientEmail));
                     message.Subject = "Quiz Score";
                     message.Body = new TextPart("html")
@@ -282,8 +282,8 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     };
 
                     using var smtp = new SmtpClient();
-                    smtp.Connect("smtp.mail.yahoo.com", 587, false);
-                    smtp.Authenticate("echipafacultate@yahoo.com", "onhqcvgwqodblrtv");
+                    smtp.Connect("smtp.outlook.com", 587, false);
+                    smtp.Authenticate("Online.Quiz@outlook.com", "OnlineQuizSystem12");
                     smtp.Send(message);
                     smtp.Disconnect(true);
 

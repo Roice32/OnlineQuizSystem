@@ -85,7 +85,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 try
                 {
                     var message = new MimeMessage();
-                    message.From.Add(MailboxAddress.Parse("echipafacultate@yahoo.com"));
+                    message.From.Add(MailboxAddress.Parse("Online.Quiz@outlook.com"));
                     message.To.Add(MailboxAddress.Parse(request.RecipientEmail));
                     message.Subject = "Tests submitted";
                     var quiz = await dbContext.Quizzes.FindAsync(request.QuizId);
@@ -142,8 +142,8 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     };
 
                     using var smtp = new SmtpClient();
-                    await smtp.ConnectAsync("smtp.mail.yahoo.com", 587, false);
-                    await smtp.AuthenticateAsync("echipafacultate@yahoo.com", "onhqcvgwqodblrtv");
+                    await smtp.ConnectAsync("smtp.outlook.com", 587, false);
+                    await smtp.AuthenticateAsync("Online.Quiz@outlook.com", "OnlineQuizSystem12");
                     await smtp.SendAsync(message);
                     await smtp.DisconnectAsync(true);
 
