@@ -27,9 +27,8 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             (
                 quizId: Guid.Parse("00000000-0000-0000-0002-000000000009"),
                 takenBy: Guid.Parse("00000000-0000-0000-0001-000000000001"),
-                questionAnswerPairs: [],
-                timeElapsed: 2
-            );
+                questionAnswerPairs: []
+                );
 
             // Act
             var result = await QuizChecker.CheckQuizAsync(quizSubmission, dbContext);
@@ -50,9 +49,8 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             (
                 quizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
                 takenBy: Guid.Parse("00000000-0000-0000-0001-000000000001"),
-                questionAnswerPairs: [],
-                timeElapsed: 2
-            );
+                questionAnswerPairs: []
+                );
 
             // Act
             var result = await QuizChecker.CheckQuizAsync(quizSubmission, dbContext);
@@ -75,8 +73,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             (
                 quizId: quizId,
                 takenBy: userId,
-                questionAnswerPairs: [],
-                timeElapsed: 2
+                questionAnswerPairs: []
             );
 
             // Act
@@ -152,8 +149,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
                         questionId: Guid.Parse("00000000-0000-0000-0003-000000000009"),
                         answer: "Answer"
                     ),
-                ],
-                timeElapsed: 2
+                ]
             );
 
             // Act

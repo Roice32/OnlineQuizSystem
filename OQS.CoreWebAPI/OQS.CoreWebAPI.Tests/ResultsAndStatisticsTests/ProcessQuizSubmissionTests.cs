@@ -20,38 +20,26 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var takenBy = Guid.Parse("00000000-0000-0000-0001-000000000003");
             List<QuestionAnswerPairBase> questionAnswerPairs = [new WrittenQAPair(Guid.Parse("00000000-0000-0000-0003-000000000007"), "SomeReviewNeededAnswer")];
             string questionAnswerPairsJson = JsonConvert.SerializeObject(questionAnswerPairs);
-            int timeElapsed = 10;
 
             var requestUri1 = $"api/quizResults/processQuizSubmission?" +
                 $"quizId=&" +
                 $"takenBy={takenBy}&" +
-                $"questionAnswerPairsJSON={questionAnswerPairsJson}&" +
-                $"timeElapsed={timeElapsed}";
+                $"questionAnswerPairsJSON={questionAnswerPairsJson}&";
 
             var requestUri2 = $"api/quizResults/processQuizSubmission?" +
                 $"quizId={quizId}&" +
                 $"takenBy=&" +
-                $"questionAnswerPairsJSON={questionAnswerPairsJson}&" +
-                $"timeElapsed={timeElapsed}";
+                $"questionAnswerPairsJSON={questionAnswerPairsJson}&";
 
             var requestUri3 = $"api/quizResults/processQuizSubmission?" +
                 $"quizId={quizId}&" +
                 $"takenBy={takenBy}&" +
-                $"questionAnswerPairsJSON=&" +
-                $"timeElapsed={timeElapsed}";
-
-
-            var requestUri4 = $"api/quizResults/processQuizSubmission?" +
-                $"quizId={quizId}&" +
-                $"takenBy={takenBy}&" +
-                $"questionAnswerPairsJSON={questionAnswerPairsJson}&" +
-                $"timeElapsed=";
+                $"questionAnswerPairsJSON=&";
 
             // Act
             var result1 = await Client.PostAsync(requestUri1, null);
             var result2 = await Client.PostAsync(requestUri2, null);
             var result3 = await Client.PostAsync(requestUri3, null);
-            var result4 = await Client.PostAsync(requestUri4, null);
 
             // Assert
             result1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -65,10 +53,6 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             result3.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var resultString3 = await result3.Content.ReadAsStringAsync();
             resultString3.Should().Contain("QuestionAnswerPairs is required.");
-
-            result4.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            var resultString4 = await result4.Content.ReadAsStringAsync();
-            resultString4.Should().Contain("Failed to bind parameter \"int timeElapsed\" from \"\"");
         }
 
         [Fact]
@@ -85,14 +69,11 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
                 new TrueFalseQAPair(Guid.Parse("00000000-0000-0000-0003-000000000006"), false),
             ];
             string questionAnswerPairsJson = JsonConvert.SerializeObject(questionAnswerPairs);
-            int timeElapsed = 1;
 
             var requestUri = $"api/quizResults/processQuizSubmission?" +
                 $"quizId={quizId}&" +
                 $"takenBy={takenBy}&" +
-                $"questionAnswerPairsJSON={questionAnswerPairsJson}&" +
-                $"timeElapsed={timeElapsed}";
-
+                $"questionAnswerPairsJSON={questionAnswerPairsJson}&";
             // Act
             var result = await Client.PostAsync(requestUri, null);
 
@@ -103,7 +84,6 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             resultHeader.IsSuccess.Should().BeTrue();
             resultHeader.Value.QuizId.Should().Be(quizId);
             resultHeader.Value.UserId.Should().Be(takenBy);
-            resultHeader.Value.CompletionTime.Should().Be(timeElapsed);
             resultHeader.Value.Score.Should().Be(2);
         }
     }

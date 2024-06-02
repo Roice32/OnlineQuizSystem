@@ -17,7 +17,6 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             public Guid QuizId { get; set; }
             public Guid TakenBy { get; set; }
             public List<QuestionAnswerPairBase> QuestionAnswerPairs { get; set; }
-            public int TimeElapsed { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -36,9 +35,6 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     .NotEmpty()
                     .WithMessage("QuestionAnswerPairs is required.");
 
-                RuleFor(x => x.TimeElapsed)
-                    .NotEmpty()
-                    .WithMessage("TimeElapsed is required.");
             }
         }
 
@@ -67,8 +63,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 var quizCheckerResult = await QuizChecker
                     .CheckQuizAsync(new QuizSubmission(request.QuizId,
                             request.TakenBy,
-                            request.QuestionAnswerPairs,
-                            request.TimeElapsed),
+                            request.QuestionAnswerPairs),
                         dbContext);
 
                 if (quizCheckerResult.IsFailure)
@@ -90,7 +85,6 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 async (Guid quizId,
                     Guid takenBy,
                     string questionAnswerPairsJSON,
-                    int timeElapsed,
                     ISender sender) =>
             {
                 var questionAnswerPairs = JsonConvert
@@ -101,8 +95,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 {
                     QuizId = quizId,
                     TakenBy = takenBy,
-                    QuestionAnswerPairs = questionAnswerPairs,
-                    TimeElapsed = timeElapsed
+                    QuestionAnswerPairs = questionAnswerPairs
                 };
 
                 var result = await sender.Send(command);
