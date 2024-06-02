@@ -8,6 +8,7 @@ const QuizResultsPage = () => {
   const { userId, quizId } = useParams<{ userId: string, quizId: string }>();
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null);
   const [loading, setLoading] = useState(true);
+  const [recipientEmail, setRecipientEmail] = useState('');
 
   const handleBackClick = () => {
     window.history.back();
@@ -15,22 +16,32 @@ const QuizResultsPage = () => {
 
   useEffect(() => {
     const getQuizResult = async (userId: string, quizId: string) => {
-        try {
-          const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
-          console.log(response.data);
-          response.data.userId = userId;
-          response.data.quizId = quizId;
-          setQuizResults(response.data);
-          setLoading(false);
-        } catch (error) {
-          console.error('Error fetching quiz result:', error);
-        }
-      };
-
-      if (userId && quizId) {
-        getQuizResult(userId, quizId);
+      try {
+        const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
+        console.log(response.data);
+        response.data.userId = userId;
+        response.data.quizId = quizId;
+        setQuizResults(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching quiz result:', error);
       }
+    };
+
+    if (userId && quizId) {
+      getQuizResult(userId, quizId);
+    }
   }, [userId, quizId]);
+
+  const sendQuizResultViaEmail = async () => {
+    try {
+      await axios.post(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`);
+      alert('Quiz results have been sent via email successfully.');
+    } catch (error) {
+      console.error('Error sending quiz results via email:', error);
+      alert('Failed to send quiz results via email.');
+    }
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -61,6 +72,23 @@ const QuizResultsPage = () => {
               );
             })}
           </ul>
+        </div>
+        <div className="mt-6">
+          <label className="block mb-2">
+            Recipient Email:
+            <input
+              type="email"
+              className="block w-full mt-1 p-2 border border-gray-300 rounded"
+              value={recipientEmail}
+              onChange={(e) => setRecipientEmail(e.target.value)}
+            />
+          </label>
+          <button
+            className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
+            onClick={sendQuizResultViaEmail}
+          >
+            Send Quiz Results Via Email
+          </button>
         </div>
         <button
           className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
