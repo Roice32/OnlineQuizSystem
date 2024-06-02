@@ -5,7 +5,7 @@ import TrueFalseQuestionResultDisplay from './TrueFalseQuestionResultDisplay';
 import ChoiceQuestionResultDisplay from "./ChoiceQuestionResultDisplay";
 import WrittenQuestionResultDisplay from "./WrittenQuestionResultDisplay";
 import ReviewNeededQuestionResultDisplay from "./ReviewNeededQuestionResultDisplay";
-import { AnswerResult } from "../../../utils/types/results-and-statistics/question-review";
+import { AnswerResult } from "../../../utils/types/results-and-statistics/answer-result";
 
 interface CommonQuestionResultDisplayProps {
   question: Question;

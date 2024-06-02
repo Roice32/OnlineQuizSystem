@@ -3,7 +3,7 @@ import axios from 'axios';
 import classNames from 'classnames';
 import { QuestionResult } from "../../../utils/types/results-and-statistics/question-result";
 import { Question } from "../../../utils/types/results-and-statistics/question";
-import { AnswerResult } from '../../../utils/types/results-and-statistics/question-review';
+import { AnswerResult } from '../../../utils/types/results-and-statistics/answer-result';
 import { QuestionType } from '../../../utils/types/questions';
 
 interface ReviewNeededQuestionResultDisplayProps {
@@ -38,8 +38,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
   if (loading) {
     return (
       <div className="fixed inset-0 bg-white flex justify-center items-center">
-        <h1 className="text-2xl font-bold mb-4 text-center">Quiz Results</h1>
-        <p>Loading quiz results...</p>
+        <h1 className="text-2xl font-bold mb-4 text-center">Processing your review...</h1>
       </div>
     );
   }

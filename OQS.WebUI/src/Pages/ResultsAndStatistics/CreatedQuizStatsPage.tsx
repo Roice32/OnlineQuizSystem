@@ -64,7 +64,7 @@ const QuizStatsPage = () => {
             <div>
               {quizStats.quizResultHeaders.map((header, index) => {
                 return (
-                  <div key={index} className="mb-2 p-5 rounded-[50px] border-2 border-gray-500">
+                  <div key={index} className="mb-2 p-4 rounded-[50px] border-2 border-gray-500">
                     <p>Username: {quizStats.userNames[header.userId]}</p>
                     <p>Score: {header.score}</p>
                     <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>

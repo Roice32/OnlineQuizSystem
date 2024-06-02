@@ -130,7 +130,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     foreach (var header in quizResultHeaders)
                     {
                         var user = await dbContext.Users.FindAsync(header.UserId.ToString());
-                        results += $"User Name: {user.UserName}<br> Submitted At: {header.SubmittedAtUtc.ToLocalTime()}<br> Completion Time: {header.CompletionTime}<br> Score: {header.Score}<br> Review Pending: {header.ReviewPending}<br><br>";
+                        results += $"User Name: {user.UserName}<br> Submitted At: {header.SubmittedAtUtc.ToLocalTime()}<br>Score: {header.Score}<br> Review Pending: {header.ReviewPending}<br><br>";
                     }
 
                     emailBody = emailBody.Replace("usernameToBeReplaced", request.RecipientEmail)

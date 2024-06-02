@@ -37,6 +37,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                     .AsNoTracking()
                     .Where(quiz => quiz.QuizId == request.QuizId)
+                    .OrderByDescending(quiz => quiz.SubmittedAtUtc)
                     .ToListAsync(cancellationToken);
 
                 if (quizResultHeaders is null)
