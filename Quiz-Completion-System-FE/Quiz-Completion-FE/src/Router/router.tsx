@@ -5,6 +5,7 @@ import Root from "../Pages/Root";
 import { ActiveQuizRoute } from "./Routes/ActiveQuizRoute";
 import { LiveQuizRoute } from "./Routes/LiveQuizRoute";
 import { AuthRoute } from "./Routes/AuthRoute";
+import { ProfileRoute } from "./Routes/ProfileRoute";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
       ActiveQuizRoute,
       LiveQuizRoute,
       AuthRoute,
+      ProfileRoute,
     ],
   },
 ]);

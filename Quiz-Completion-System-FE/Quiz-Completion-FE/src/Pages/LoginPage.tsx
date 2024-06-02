@@ -113,7 +113,7 @@ function LoginPage() {
             onChange={onChange}
           />
         ))}
-        <Link className="text-m no-underline text-[#a49e97]" to="/auth/forgot_password">
+        <Link className="text-m no-underline text-[#a49e97]" to="/auth/forgot-password">
           Forgot Password?
         </Link>
         <button className="w-3/4 h-10 px-2 ml-7 bg-[#0a2d2e] text-[#efd7cf] border-none rounded-md font-bold text-lg cursor-pointer mt-5 hover:bg-[#879693] mb-2.5">Submit</button>

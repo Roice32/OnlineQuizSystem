@@ -22,7 +22,6 @@ export default function ProfileNavbar() {
                 headers: { Authorization: userState.user?.token },
               })
           ).data;
-          console.log(response);
           if (response.message === "User logged out successfully!") {
             removeCookie("token");
             dispatch(clearUser());
@@ -37,7 +36,7 @@ export default function ProfileNavbar() {
       };
 
     return (
-        <div className="bg-[#0a2d2e] w-72 min-h-screen top-0 left-0 flex flex-col rounded-tr-lg rounded-br-lg list-none">
+        <div className="bg-[#0a2d2e] w-72 h-full min-h-screen top-0 left-0 flex flex-col rounded-tr-lg rounded-br-lg list-none">
             <div >
           <div className="p-2 mb-20 text-center">
             <Link className="no-underline text-[#efd7cf] text-3xl" to={`/profile`}>Profile</Link>
@@ -56,13 +55,10 @@ export default function ProfileNavbar() {
             {role === 'Admin' && (
               <>
                 <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
-                  <Link className="no-underline text-[#efd7cf] text-2xl" to="/add_admin">Add Admin</Link>
+                  <Link className="no-underline text-[#efd7cf] text-2xl" to="/profile/add-admin">Add Admin</Link>
                 </li>
                 <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
-                  <Link className="no-underline text-[#efd7cf] text-2xl" to="/profile/get_users">View Users</Link>
-                </li>
-                <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
-                  <Link className="no-underline text-[#efd7cf] text-2xl" to="/profile/delete_user">Delete User</Link>
+                  <Link className="no-underline text-[#efd7cf] text-2xl" to="/profile/view-users">View Users</Link>
                 </li>
               </>
             )}

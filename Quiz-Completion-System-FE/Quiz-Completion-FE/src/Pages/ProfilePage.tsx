@@ -3,11 +3,16 @@ import { RootState } from "../redux/store";
 import useAuth from "../hooks/UseAuth";
 import ProfileNavbar from "../Components/ProfileNavbar";
 import { useNavigate } from "react-router-dom";
+import axios from "../utils/axios-service";
+import { useDispatch } from "react-redux";
+import { openSnackbar } from "../redux/Snackbar/SnackbarState";
+
 function ProfilePage() {
 
     const user = useAuth();
     const userState = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const editProfile = () => {
       navigate("/profile/edit-profile")
@@ -15,6 +20,40 @@ function ProfilePage() {
 
     const resetPassword = () => {
       navigate("/profile/reset-password")
+    }
+
+    const deleteAccount = async () => {
+      try{
+        const token = userState.user?.token;
+        const response = await axios.delete(`/api/profile/${userState.user?.id}/delete_account`,
+        {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+        }
+        );
+
+        if(response.data.message === "Account deleted successfully!")
+        {
+          dispatch(
+            openSnackbar({
+                message: " Your account has been successfully deleted.",
+                severity: "success",
+            })
+        );
+      } else {
+        dispatch(
+            openSnackbar({
+                message: response.data.message,
+                severity: "error",
+            })
+        );
+    }
+      }
+      catch(error)
+      {
+        console.error(error);
+      }
     }
 
     return (
@@ -53,7 +92,7 @@ function ProfilePage() {
             <div className = "flex justify-center mt-5 mr-7.5 p-5">
             <button className="m-2.5 bg-[#0a2d2e] text-[#efd7cf] px-10 py-2 rounded-lg font-bold hover:bg-[#697e7a]" onClick={editProfile}>Edit Profile</button>
             <button className="m-2.5 bg-[#0a2d2e] text-[#efd7cf] px-10 py-2 rounded-lg font-bold hover:bg-[#697e7a]" onClick ={resetPassword}>Reset Password</button>
-            <button className="m-2.5 bg-[#0a2d2e] text-[#efd7cf] px-10 py-2 rounded-lg font-bold hover:bg-[#697e7a]" >Delete Account</button>
+            <button className="m-2.5 bg-[#0a2d2e] text-[#efd7cf] px-10 py-2 rounded-lg font-bold hover:bg-[#697e7a]" onClick ={deleteAccount}> Delete Account</button>
             </div>
           </div>
         </div>

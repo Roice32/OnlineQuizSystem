@@ -1,7 +1,8 @@
 import { Outlet, RouteObject } from "react-router-dom";
-import LoginPage from "../../Pages/LoginPage/LoginPage";
-import RegisterPage from "../../Pages/RegisterPage/RegisterPage";
+import LoginPage from "../../Pages/LoginPage";
+import RegisterPage from "../../Pages/RegisterPage";
 import ErrorPage from "../../Pages/ErrorPage";
+import ForgotPasswordPagse from "../../Pages/ForgotPasswordPage";
 
 export const AuthRoute: RouteObject = {
   path: "auth",
@@ -17,5 +18,10 @@ export const AuthRoute: RouteObject = {
       element: <RegisterPage />,
       errorElement: <ErrorPage />,
     },
+    {
+      path: "forgot-password",
+      element: <ForgotPasswordPagse />,
+      errorElement: <ErrorPage />,
+    }
   ],
 };

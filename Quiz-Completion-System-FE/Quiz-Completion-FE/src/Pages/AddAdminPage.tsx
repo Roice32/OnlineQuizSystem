@@ -1,14 +1,16 @@
-import { useRef, useState } from "react";
-import "./SignUp.css";
-import axios from "../../utils/axios-service";
-import FormInput from "../../Components/Reusable/FormInput/FormInput";
+import { useState } from "react";
+import axios from "../utils/axios-service";
+import FormInput from "../Components/Reusable/FormInput";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useCookies } from "react-cookie";
-import { openSnackbar } from "../../redux/Snackbar/SnackbarState";
+import { openSnackbar } from "../redux/Snackbar/SnackbarState";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import useAuth from "../hooks/UseAuth";
+import ProfileNavbar from "../Components/ProfileNavbar";
 
 function RegisterPage() {
-  const [userValues, setUserValues] = useState({
+  const [adminValues, setUserValues] = useState({
     firstName: "",
     lastName: "",
     username: "",
@@ -18,6 +20,8 @@ function RegisterPage() {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useAuth();
+    const userState = useSelector((state: RootState) => state.user);
 
   const inputs = [
     {
@@ -82,25 +86,30 @@ function RegisterPage() {
       placeholder: "confirm password",
       errorMessage: "Password confirmation does not match!",
       label: "Confirm Password",
-      pattern: userValues.password || "",
+      pattern: adminValues.password || "",
       required: true,
     },
   ];
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setUserValues({ ...userValues, [name]: value });
+    setUserValues({ ...adminValues, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/registration", userValues);
-      console.log(response.data);
-      if (response.data.message === "User created successfully!") {
+        const token = userState.user?.token;
+        const response = await axios.post("api/add_admin", adminValues, 
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+      });
+      if (response.data.message === "Admin created successfully!") {
         dispatch(
           openSnackbar({
-            message: "Account created successfully! Please login to continue.",
+            message: "Admin created successfully!",
             severity: "success",
           })
         );
@@ -119,19 +128,24 @@ function RegisterPage() {
   };
 
   return (
-    <div className="App">
-      <form onSubmit={handleSubmit}>
-        <h1>Sign Up</h1>
-        {inputs.map((input) => (
-          <FormInput
-            key={input.id}
-            {...input}
-            value={userValues[input.name]}
-            onChange={onChange}
-          />
-        ))}
-        <button>Submit</button>
-      </form>
+    <div className="flex flex-row bg-[#6a8e8f]">
+      <div>
+        <ProfileNavbar />
+      </div>
+    <div className="flex flex-col justify-center items-center w-full text-xl text-[#0a2d2e] py-10">
+        <form className="bg-[#f7ebe7] px-24 py-5 rounded-3xl shadow-lg border-2 border-[#6a8e8f]" onSubmit={handleSubmit}>
+            <h1 className="text-center text-[#1c4e4f] text-5xl pb-10 pt-5 font-bold">Add Admin</h1>
+            {inputs.map((input) => (
+              <FormInput
+                key={input.id}
+                {...input}
+                value={adminValues[input.name]}
+                onChange={onChange}
+              />
+            ))}
+            <button className="w-3/4 h-10 px-2 ml-7 bg-[#0a2d2e] text-[#efd7cf] border-none rounded-md font-bold text-lg cursor-pointer mt-5 hover:bg-[#879693] mb-2.5">Submit</button>
+          </form>
+        </div>
     </div>
   );
 }
