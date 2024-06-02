@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import classNames from 'classnames';
 import { Question, QuestionResult, QuizResults } from '../../utils/types/results-and-statistics/quiz-results';
@@ -18,6 +18,12 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
   const [score, setScore] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (score !== null) {
+      console.log(`Score updated: ${score}`);
+    }
+  }, [score]);
+
   const getQuizResult = async (userId: string, quizId: string) => {
     setLoading(true);
     try {
@@ -25,6 +31,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
       response.data.userId = userId;
       response.data.quizId = quizId;
       setQuizResults(response.data);
+      console.log('Quiz results:', response.data);
     } catch (error) {
       console.error('Error fetching quiz result:', error);
     } finally {
@@ -80,50 +87,50 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
       {needReview && (
         <div className="space-y-4">
           <label
-          className={classNames(
+            className={classNames(
               'p-2 full max-w-md text-left',
               'bg-purple-400 text-white border-4 border-solid border-purple-500'
-          )}
-          style={{
-            display: 'grid',
-            width: '90%',
-            minHeight: '100px',
-            maxHeight: '200px', 
-            overflowY: 'auto',
-          }}
-      >
-          AI Review: {questionReview?.updatedQuestionResult.LLMReview}
-      </label>
+            )}
+            style={{
+              display: 'grid',
+              width: '90%',
+              minHeight: '100px',
+              maxHeight: '200px',
+              overflowY: 'auto',
+            }}
+          >
+            AI Review: {questionReview?.updatedQuestionResult.LLMReview}
+          </label>
       
           <input
-    type="number"
-    step="any"
-    inputMode="numeric"
-    value={score || ''}
-    onChange={(e) => {
-        const value = e.target.value;
-        if ( parseFloat(value) >= 0 && parseFloat(value) <= question.allocatedPoints) {
-            setScore(parseFloat(value));
-            setError(null);
-        } else {
-            setError(`Score must be between 0 and ${question.allocatedPoints}`);
-        }
-    }}
-    onKeyDown={(e) => {
-        if (e.key === 'Backspace') {
-            setScore(null);
-        }
-    }}
-    className="block w-24 mx-auto p-2 border border-gray-300 rounded text-center"
-    placeholder="Score"
-    style={{ appearance: 'textfield', MozAppearance: 'textfield', WebkitAppearance: 'none' }}
-/>
-
+            type="number"
+            step="any"
+            inputMode="numeric"
+            value={score !== null ? score : ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              const parsedValue = parseFloat(value);
+              if (parsedValue >= 0 && parsedValue <= question.allocatedPoints) {
+                setScore(parsedValue);
+                setError(null);
+              } else {
+                setError(`Score must be between 0 and ${question.allocatedPoints}`);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Backspace') {
+                setScore(null);
+              }
+            }}
+            className="block w-24 mx-auto p-2 border border-gray-300 rounded text-center"
+            placeholder="Score"
+            style={{ appearance: 'textfield', MozAppearance: 'textfield', WebkitAppearance: 'none' }}
+          />
     
           {error && <p className="text-red-500 text-center">{error}</p>}
           <button
             className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-            onClick={() => handleGrade(questionResult.userId, question.quizId, question.id, score||0)}
+            onClick={() => handleGrade(questionResult.userId, question.quizId, question.id, score || 0)}
           >
             Grade
           </button>

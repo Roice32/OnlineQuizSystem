@@ -26,24 +26,6 @@ export default function QuizResultsDisplay({ quizResults }: { quizResults: QuizR
     return isoString.replace('T', ' ').split('.')[0];
   };
 
-  const getReview = async (userId: string, quizId: string, questionId?: string, score?: number) => {
-    setShowMessage3(true);
-    setShowMessage1(false);
-    setShowMessage2(false);
-    try {
-      console.log(`Fetching review for user ID: ${userId} quizId: ${quizId} questionId: ${questionId} score: ${score}`);
-      const response = await axios.put(`http://localhost:5276/api/quizResults/reviewResult/`, {
-        userId: userId,
-        quizId: quizId,
-        questionId: questionId,
-        score: score,
-      });
-      console.log(response.data);
-      setReviewResults(response.data);
-    } catch (error) {
-      console.error('Error fetching quiz result:', error);
-    }
-  };
 
   useEffect(() => {
     console.log("QuizResults props:", quizResults);
