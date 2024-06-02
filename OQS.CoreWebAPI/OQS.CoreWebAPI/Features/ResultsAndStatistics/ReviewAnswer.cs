@@ -14,7 +14,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
     public class ReviewAnswer
     {
-        public record Command : IRequest<Result<ReviewAnswerResponse>>
+        public record Command : IRequest<Result>
         {
             public Guid UserId { get; set; }
             public Guid QuizId { get; set; }
@@ -41,7 +41,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         }
 
 
-        public class Handler : IRequestHandler<Command, Result<ReviewAnswerResponse>>
+        public class Handler : IRequestHandler<Command, Result>
         {
             private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
@@ -52,16 +52,17 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 this.validator = validator;
             }
 
-            public async Task<Result<ReviewAnswerResponse>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
-                    Console.WriteLine("Error: Invalid command");
-                    return Result.Failure<ReviewAnswerResponse>(
+                    Console.WriteLine("Error: Invalid command: " + validationResult);
+                    return Result.Failure(
                         new Error("ReviewAnswer.Validator",
                             validationResult.ToString()));
                 }
+
 
                 var quizAndQuestionMatch = await dbContext
                     .Questions
@@ -91,31 +92,18 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 var updatedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync
                     (dbContext, request.UserId, request.QuestionId) as ReviewNeededQuestionResult;
 
-                await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync
+                var updatedQuizResultHeaderResult = await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync
                     (dbContext, request.UserId, request.QuizId);
-                var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync
-                    (dbContext, request.QuizId, request.UserId);
 
-                var newReviewNeededQuestionResult = new ReviewNeededQuestionResult
-                    (request.UserId,
-                    request.QuestionId,
-                    request.FinalScore,
-                    updatedQuestionResult.ReviewNeededAnswer,
-                    updatedQuestionResult.ReviewNeededResult);
-
-                var newQuizResultHeader = new QuizResultHeader
-                    (updatedHeader.Value.QuizId,
-                    updatedHeader.Value.UserId,
-                    updatedHeader.Value.CompletionTime);
-                newQuizResultHeader.SubmittedAtUtc = updatedHeader.Value.SubmittedAtUtc;
-                newQuizResultHeader.Score = updatedHeader.Value.Score;
-                newQuizResultHeader.ReviewPending = updatedHeader.Value.ReviewPending;
-
-                return new ReviewAnswerResponse
+                if (updatedQuizResultHeaderResult.IsFailure)
                 {
-                    UpdatedQuizResultHeader = newQuizResultHeader,
-                    UpdatedQuestionResult = newReviewNeededQuestionResult
-                };
+                    Console.WriteLine("Error: UpdateHeaderUponAnswerReview failed.");
+                    return Result.Failure<ReviewAnswerResponse>(
+                        new Error("ReviewAnswer.UpdateHeader",
+                            updatedQuizResultHeaderResult.Error.Message));
+                }
+
+                return Result.Success();
             }
         }
     }
@@ -126,24 +114,23 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         {
             app.MapPut("api/quizResults/reviewResult",
                 async (Guid userId, Guid quizId, Guid questionId, float finalScore, ISender sender) =>
-            {
-                var command = new ReviewAnswer.Command
                 {
-                    UserId = userId,
-                    QuizId = quizId,
-                    QuestionId = questionId,
-                    FinalScore = finalScore
-                };
+                    var command = new ReviewAnswer.Command
+                    {
+                        UserId = userId,
+                        QuizId = quizId,
+                        QuestionId = questionId,
+                        FinalScore = finalScore
+                    };
 
-                var result = await sender.Send(command);
-                if (result.IsFailure)
-                {
-                    return Results.BadRequest(result.Error);
-                }
+                    var result = await sender.Send(command);
+                    if (result.IsFailure)
+                    {
+                        return Results.BadRequest(result.Error);
+                    }
 
-                return Results.Ok(result.Value);
-            });
+                    return Results.Ok();
+                });
         }
     }
-
 }
