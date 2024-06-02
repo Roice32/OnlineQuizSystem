@@ -14,7 +14,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
     public class ReviewAnswer
     {
-        public record Command : IRequest<Result<ReviewAnswerResponse>>
+        public record Command : IRequest<Result>
         {
             public Guid UserId { get; set; }
             public Guid QuizId { get; set; }
@@ -41,28 +41,28 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         }
 
 
-        public class Handler : IRequestHandler<Command, Result<ReviewAnswerResponse>>
-        {
-            private readonly ApplicationDbContext dbContext;
-            private readonly IValidator<Command> validator;
+        public class Handler : IRequestHandler<Command, Result>
+    {
+        private readonly ApplicationDbContext dbContext;
+        private readonly IValidator<Command> validator;
 
-            public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
+        public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
+        {
+            this.dbContext = dbContext;
+            this.validator = validator;
+        }
+
+        public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
+        {
+            var validationResult = validator.Validate(request);
+            if (!validationResult.IsValid)
             {
-                this.dbContext = dbContext;
-                this.validator = validator;
+                Console.WriteLine("Error: Invalid command");
+                return Result.Failure(
+                    new Error("ReviewAnswer.Validator",
+                        validationResult.ToString()));
             }
 
-            public async Task<Result<ReviewAnswerResponse>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var validationResult = validator.Validate(request);
-                if (!validationResult.IsValid)
-                { //here
-
-                    Console.WriteLine("Error: Invalid command");
-                    return Result.Failure<ReviewAnswerResponse>(
-                        new Error("ReviewAnswer.Validator",
-                            validationResult.ToString()));
-                }
 
                 var quizAndQuestionMatch = await dbContext
                     .Questions
@@ -112,11 +112,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 newQuizResultHeader.Score = updatedHeader.Value.Score;
                 newQuizResultHeader.ReviewPending = updatedHeader.Value.ReviewPending;
 
-                return new ReviewAnswerResponse
-                {
-                    UpdatedQuizResultHeader = newQuizResultHeader,
-                    UpdatedQuestionResult = newReviewNeededQuestionResult
-                };
+                return Result.Success();
             }
         }
     }
@@ -142,7 +138,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     return Results.BadRequest(result.Error);
                 }
 
-                return Results.Ok(result.Value);
+                return Results.Ok();
             });
         }
     }
