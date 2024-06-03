@@ -25,7 +25,6 @@ const TakenQuizzesHistoryPage = () => {
         }
         );
         setQuizHistory(response.data);
-        setLoading(false);
       } catch (error) {
         setErrorOccured("An unexpected error occured.");
         if (axios.isAxiosError(error)) {
@@ -37,6 +36,7 @@ const TakenQuizzesHistoryPage = () => {
             setErrorOccured("Invalid JWT token provided.");
           }
         }
+      } finally {
         setLoading(false);
       }
     };
@@ -82,7 +82,7 @@ const TakenQuizzesHistoryPage = () => {
         <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Taken Quizzes History</h1>
         {!quizHistory || quizHistory.quizResultHeaders.length === 0 ? (
             <div className="text-center">
-              <p className="text-lg">No quiz history found.</p>
+              <p className="text-lg">No quizzes taken yet.</p>
             </div>
           ) : (
             <div>

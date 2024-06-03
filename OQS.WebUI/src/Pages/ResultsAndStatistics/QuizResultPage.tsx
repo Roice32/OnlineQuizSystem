@@ -38,7 +38,6 @@ const QuizResultsPage = () => {
           }
         );
         setQuizResult(response.data);
-        setLoading(false);
       } catch (error) {
         setErrorOccured("An unexpected error occured.");
         if (axios.isAxiosError(error)) {
@@ -50,6 +49,7 @@ const QuizResultsPage = () => {
             setErrorOccured("Invalid JWT token provided.");
           }
         }
+      } finally {
         setLoading(false);
       }
     };

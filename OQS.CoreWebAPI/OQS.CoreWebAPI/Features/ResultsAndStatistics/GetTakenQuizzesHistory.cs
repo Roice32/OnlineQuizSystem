@@ -69,7 +69,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     Console.WriteLine("Error: User is not authorized to view another's quizzes history.");
                     return Result.Failure<GetTakenQuizzesHistoryResponse>(
                         new Error("GetQuizResult.Handler",
-                            "You do not have permission to view another user's history."));
+                            "User does not have permission to view another user's history."));
                 }
 
                 var quizResultHeaders = await dbContext.QuizResultHeaders
@@ -82,8 +82,8 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 {
                     return new GetTakenQuizzesHistoryResponse
                     {
-                        QuizNames = null,
-                        QuizResultHeaders = null
+                        QuizNames = [],
+                        QuizResultHeaders = []
                     };
                 }
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Shared;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
@@ -11,6 +12,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public class Query : IRequest<Result<GetCreatedQuizStatsResponse>>
         {
+            public HttpContext Context;
             public Guid QuizId { get; set; }
         }
 
@@ -21,9 +23,35 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             {
                 dbContext = context;
             }
+            private string GetUserIdFromToken(HttpContext context)
+            {
+                if (context == null)
+                {
+                    return null;
+                }
+
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                return jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            }
 
             public async Task<Result<GetCreatedQuizStatsResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
+                string requestingUserId = GetUserIdFromToken(request.Context);
+                if (requestingUserId == null)
+                {
+                    Console.WriteLine("Error: Unable to extract user ID from provided token");
+                    return Result.Failure<GetCreatedQuizStatsResponse>(
+                        new Error("GetQuizResult.Handler",
+                            "Unable to extract user ID from provided token"));
+                }
+
                 var requestedQuiz = await dbContext.Quizzes
                     .AsNoTracking()
                     .FirstOrDefaultAsync(quiz => quiz.Id == request.QuizId, cancellationToken);
@@ -32,6 +60,14 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 {
                     Console.WriteLine("Error: Quiz not found in database");
                     return Result.Failure<GetCreatedQuizStatsResponse>(Error.NullValue);
+                }
+
+                if (requestingUserId != requestedQuiz.CreatorId.ToString())
+                {
+                    Console.WriteLine("Error: User is not the creator of the quiz");
+                    return Result.Failure<GetCreatedQuizStatsResponse>(
+                        new Error ("GetQuizResult.Handler",
+                            "User does not have permission to see stats for quiz they did not create"));
                 }
 
                 var quizResultHeaders = await dbContext.QuizResultHeaders
@@ -75,10 +111,11 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/quizResults/getCreatedQuizStats/{quizId}", async (Guid quizId, ISender sender) =>
+            app.MapGet("api/quizResults/getCreatedQuizStats/{quizId}", async (HttpContext context, Guid quizId, ISender sender) =>
             {
                 var query = new GetCreatedQuizStats.Query
                 {
+                    Context = context,
                     QuizId = quizId
                 };
 
@@ -86,7 +123,15 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (result.IsFailure)
                 {
-                    return Results.NotFound(result.Error);
+                    if (result.Error == Error.NullValue)
+                    {
+                        return Results.NotFound();
+                    }
+                    if (result.Error.Message.Contains("permission"))
+                    {
+                        return Results.Unauthorized();
+                    }
+                    return Results.BadRequest(result.Error.Message);
                 }
 
                 return Results.Ok(result.Value);

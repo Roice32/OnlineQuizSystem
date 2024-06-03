@@ -142,7 +142,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                     Description = "Description3",
                     TimeLimitMinutes = 10,
                     CreatedAt = DateTime.Now,
-                    CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
+                    CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000001")
                 }
             };
 
