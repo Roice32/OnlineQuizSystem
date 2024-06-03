@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
-
+import { useParams } from 'react-router-dom';
 //import ModifyQuizPage from "./ModifyQuizPage";
 //<Route path="/:id/modify" component={ModifyQuizPage} />
 type Quiz = {
@@ -141,11 +141,11 @@ function useQuizzes(userId: string, limit: number, offset: number) {
 }
 
 const MyQuizzesPage: React.FC = () => {
-    //const { id } = useParams<{ id: string }>(); 
-    const userId = "00000000-0000-0000-0001-000000000002"; // Înlocuiește acest ID cu ID-ul real al utilizatorului
+    //const userId = "00000000-0000-0000-0001-000000000002"; // Înlocuiește acest ID cu ID-ul real al utilizatorului
+    const { userId } = useParams<{ userId: string }>();
     const [limit, setLimit] = useState<number>(10);
     const [offset, setOffset] = useState<number>(0);
-    const { data, error, isLoading, reloadQuizzes } = useQuizzes(userId, limit, offset);
+    const { data, error, isLoading, reloadQuizzes } = useQuizzes(userId || "00000000-0000-0000-0001-000000000002", limit, offset);
     const navigate= useNavigate();
 
     const handleDelete = (id: string) => {

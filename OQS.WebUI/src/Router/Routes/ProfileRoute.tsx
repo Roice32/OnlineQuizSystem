@@ -33,7 +33,7 @@ export const ProfileRoute: RouteObject = {
         errorElement: <ErrorPage />,
       },
       {
-        path: "view-my-quizzes",
+        path: "view-my-quizzes/:userId",
         element: <MyQuizzesPage />,
         errorElement: <ErrorPage />,
       },
