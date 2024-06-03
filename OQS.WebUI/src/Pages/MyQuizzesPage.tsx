@@ -42,11 +42,11 @@ const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, onDelete, onModify }
         <ul className="list-none w-full max-w-2xl">
             {sortedQuizzes.map((quiz) => (
                 <li key={quiz.id} className="flex flex-col py-2">
-                    <div className="w-full border-t border-b border-[#efd7cf] border-solid border-2">
+                    <div className="w-full border-t border-b border-[#deae9f] border-solid border-2 bg-[#efd7cf] shadow-md">
                         <div className="flex flex-col py-2 px-4">
                             <span className="text-[#1c4e4f] text-2xl font-bold">{quiz.name}</span>
                             <div className="flex items-center">
-                                <p className="ml-4 text-sm text-[#1c4e4f]">Created at: {new Date(quiz.createdAt).toLocaleDateString()}</p>
+                                <p className="ml-4 flex items-center rounded-full bg-[#f7ebe7] text-[#1c4e4f] px-4 py-0s">Created at: {new Date(quiz.createdAt).toLocaleDateString()}</p>
                                 <div className="ml-auto">
                                     <button 
                                         onClick={() => onModify(quiz.id)} 
@@ -56,7 +56,7 @@ const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, onDelete, onModify }
                                     </button>
                                     <button 
                                         onClick={() => onDelete(quiz.id)} 
-                                        className="bg-[#efd7cf] text-[#1c4e4f] px-4 py-2 rounded"
+                                        className="bg-[#deae9f] text-[#1c4e4f] px-4 py-2 rounded"
                                     >
                                         <FontAwesomeIcon icon={faTrashAlt} />
                                     </button>
@@ -145,7 +145,7 @@ const MyQuizzesPage: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
     const [limit, setLimit] = useState<number>(10);
     const [offset, setOffset] = useState<number>(0);
-    const { data, error, isLoading, reloadQuizzes } = useQuizzes(userId || "00000000-0000-0000-0001-000000000002", limit, offset);
+    const { data, error, isLoading, reloadQuizzes } = useQuizzes(userId || "", limit, offset);
     const navigate= useNavigate();
 
     const handleDelete = (id: string) => {
