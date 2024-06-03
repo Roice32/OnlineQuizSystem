@@ -3,6 +3,7 @@ import QuizPage, { QuizzesLoader } from "../../Pages/QuizPage";
 import QuizDetailsPage, {
   QuizDetailsLoader,
 } from "../../Pages/QuizDetailsPage";
+import QuizzesPage from "../../Pages/QuizzesPage";
 import ErrorPage from "../../Pages/ErrorPage";
 import QuizCreate from "../../Pages/QuizCreate/QuizCreate.tsx";
 
@@ -26,6 +27,11 @@ export const QuizRoute: RouteObject = {
       path: "create",
       errorElement: <ErrorPage />,
       element: <QuizCreate />,
+    },
+    {
+      path: "play",
+      errorElement: <ErrorPage />,
+      element: <QuizzesPage />,
     },
   ],
 };

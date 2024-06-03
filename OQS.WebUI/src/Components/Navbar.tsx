@@ -30,7 +30,7 @@ export default function Navbar() {
     }
   };
   return (
-    <nav className="flex flex-row items-center bg-slate-600">
+    <nav className="flex flex-row items-center bg-[#1c4e4f]">
       <ul className="flex flex-row justify-evenly items-center space-x-3 w-full text-stone-50">
         <li>
           <Link className="no-underline text-slate-50" to="/">
@@ -40,6 +40,11 @@ export default function Navbar() {
         <li>
           <Link className="no-underline text-slate-50" to="/quizzes">
             Quiz
+          </Link>
+        </li>
+        <li>
+          <Link className="no-underline text-slate-50" to="/quizzes/play">
+            Play Quizzes
           </Link>
         </li>
 
@@ -65,6 +70,12 @@ export default function Navbar() {
                 {userState.user?.username}
               </Link>
             </li>
+            <li>
+              <Link className="no-underline text-slate-50" to="/quizzes/create">
+                Create Quiz
+              </Link>
+            </li>
+
             <li>
               <Button variant="outlined" color="error" onClick={signOut}>
                 Sign out
