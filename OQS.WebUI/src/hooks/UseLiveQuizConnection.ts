@@ -44,7 +44,7 @@ export default function UseLiveQuizConnection() {
             await connection?.stop();
             setConnection(null);
             dispatch(disconnect());
-            navigate("/quiz");
+            navigate("/quizzes");
         }
     };
 
@@ -58,7 +58,7 @@ export default function UseLiveQuizConnection() {
             connection.on("Error", (error:Error) => {
                 dispatch(openSnackbar({message:error.message,severity:"error"}));
                 if(error.code==='JoinRoom.BadRequest'){
-                    navigate("/quiz");
+                    navigate("/quizzes");
                 }
             });
 
@@ -75,7 +75,7 @@ export default function UseLiveQuizConnection() {
                 if(res.isSuccess){
                    
                         await connection.stop();
-                        navigate(`/active-quiz/${res.value}`);
+                        navigate(`/active-quizzes/${res.value}`);
                         dispatch(disconnect());
                         setConnection(null);
                         
@@ -89,7 +89,7 @@ export default function UseLiveQuizConnection() {
                    
                         await connection.stop();
                    
-                        navigate(`/quiz/${res.value}`);
+                        navigate(`/quizzes/${res.value}`);
                         setConnection(null);
                         dispatch(disconnect());
                      dispatch(openSnackbar({message:"The quiz has started",severity:"success"}));
@@ -107,7 +107,7 @@ export default function UseLiveQuizConnection() {
                 await connection.stop();
                 setConnection(null);
                 dispatch(disconnect());
-                navigate("/quiz");
+                navigate("/quizzes");
             });
             await connection.start();
             connection.invoke("JoinQuiz", connectionRequest);

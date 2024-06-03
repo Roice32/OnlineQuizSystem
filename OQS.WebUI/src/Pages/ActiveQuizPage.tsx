@@ -116,7 +116,7 @@ export default function ActiveQuizPage() {
         );
         /* console.log("Submission", JSON.stringify(Object.values(answers))); */
         // redirect to quiz page
-        nav(`/quiz`);
+        nav(`/quizzes`);
         dispatch(deleteActiveQuiz(activeQuizId));
       }
     } catch (error) {
