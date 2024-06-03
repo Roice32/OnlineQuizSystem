@@ -252,7 +252,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
     {
         private static readonly Dictionary<QuestionType, IQuestionCheckerStrategy> _strategies = new();
 
-        static QuestionChecker() {}
+        static QuestionChecker() { }
 
         public QuestionChecker(IEnumerable<IQuestionCheckerStrategy> strategies)
         {

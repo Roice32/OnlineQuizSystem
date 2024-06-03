@@ -66,7 +66,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 {
                     Console.WriteLine("Error: User is not the creator of the quiz");
                     return Result.Failure<GetCreatedQuizStatsResponse>(
-                        new Error ("GetQuizResult.Handler",
+                        new Error("GetQuizResult.Handler",
                             "User does not have permission to see stats for quiz they did not create"));
                 }
 

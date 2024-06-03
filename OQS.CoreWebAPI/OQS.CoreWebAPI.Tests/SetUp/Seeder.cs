@@ -1,10 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
-using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
-
 namespace OQS.CoreWebAPI.Extensions.Seeders
 {
     public static class SeedRSMComplete

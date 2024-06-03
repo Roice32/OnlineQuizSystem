@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "QQS WEB API v1", Version = "v1" });
     options.AddSignalRSwaggerGen();
-    
+
 });
 
 // check if platform is linux

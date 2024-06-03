@@ -80,7 +80,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 {
                     Console.WriteLine("Error: Unable to extract user ID from provided token");
                     return Result.Failure(
-                        new Error("GetQuizResult.Handler", 
+                        new Error("GetQuizResult.Handler",
                             "Unable to extract user ID from provided token"));
                 }
 
@@ -112,7 +112,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 if (quiz is null)
                 {
                     Console.WriteLine("Error: Quiz not found");
-                        return Result.Failure(new Error("QuizNotFound", "Quiz not found"));
+                    return Result.Failure(new Error("QuizNotFound", "Quiz not found"));
                 }
                 if (quiz.CreatorId.ToString() != requestingUserId)
                 {

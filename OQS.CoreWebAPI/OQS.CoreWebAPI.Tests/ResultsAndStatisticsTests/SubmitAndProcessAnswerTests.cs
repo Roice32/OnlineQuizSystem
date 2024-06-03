@@ -10,7 +10,6 @@ using OQS.CoreWebAPI.Entities;
 using System.Net.Http.Json;
 using System.Net;
 using Newtonsoft.Json;
-using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
@@ -125,7 +124,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             responseContent.Should().Be("\"Quiz submitted successfully\"");
 
             var dbContext = Application.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            
+
             // ActiveQuiz deleted
             var activeQuizDeleted = await dbContext.ActiveQuizzes
                 .FirstOrDefaultAsync(aq => aq.Id == Guid.Parse("00000000-0000-0000-0004-000000000001"));
@@ -134,7 +133,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             // QuizResultHeader stored
             var quizResultHeader = await dbContext.QuizResultHeaders
                 .FirstOrDefaultAsync(qrh => qrh.QuizId == Guid.Parse("00000000-0000-0000-0002-000000000001")
-                    && qrh.UserId==Guid.Parse("00000000-0000-0000-0001-000000000002"));
+                    && qrh.UserId == Guid.Parse("00000000-0000-0000-0001-000000000002"));
             quizResultHeader.Should().NotBeNull();
             quizResultHeader.Score.Should().Be(6);
             quizResultHeader.ReviewPending.Should().BeTrue();
