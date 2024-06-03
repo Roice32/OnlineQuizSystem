@@ -72,7 +72,7 @@ const QuizResultsPage = () => {
     return (
       <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
         <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
-          <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Taken Quizzes History</h1>
+          <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Quiz Result</h1>
           <div className="text-center">
             <p className="text-lg">Loading...</p>
           </div>

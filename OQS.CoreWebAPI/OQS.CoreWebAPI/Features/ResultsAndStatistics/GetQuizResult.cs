@@ -13,7 +13,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public class Query : IRequest<Result<GetQuizResultResponse>>
         {
-            public HttpContext context { get; set; }
+            public HttpContext Context { get; set; }
             public Guid QuizId { get; set; }
             public Guid UserId { get; set; }
         }
@@ -47,7 +47,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
             public async Task<Result<GetQuizResultResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                string requestingUserId = GetUserIdFromToken(request.context);
+                string requestingUserId = GetUserIdFromToken(request.Context);
                 if (requestingUserId == null)
                 {
                     Console.WriteLine("Error: Unable to extract user ID from provided token");
@@ -114,7 +114,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             {
                 var query = new GetQuizResult.Query
                 {
-                    context = context,
+                    Context = context,
                     UserId = userId,
                     QuizId = quizId
                 };

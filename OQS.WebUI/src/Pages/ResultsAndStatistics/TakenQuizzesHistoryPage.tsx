@@ -2,20 +2,42 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { TakenQuizStats } from "../../utils/types/results-and-statistics/taken-quizzes-history";
+import ErrorComponent from "../../Components/ResultsAndStatistics/ErrorComponent";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const TakenQuizzesHistoryPage = () => {
   const { userId } = useParams<{ userId: string }>();
+  const userState = useSelector((state: RootState) => state.user);
   const [quizHistory, setQuizHistory] = useState<TakenQuizStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [errorOccured, setErrorOccured] = useState('');
 
   useEffect(() => {
     const getTakenQuizzesHistory = async (userId: string) => {
       try {
-        const response = await axios.get(`http://localhost:5276/api/quizResults/getTakenQuizzesHistory/${userId}`);
+        const token = userState.user?.token;
+        const response = await axios.get(`http://localhost:5276/api/quizResults/getTakenQuizzesHistory/${userId}`,
+        {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+        }
+        );
         setQuizHistory(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching created quiz stats:', error);
+        setErrorOccured("An unexpected error occured.");
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 404) {
+            setErrorOccured("Could not find the requested user.");
+          } else if (error.response?.status === 401) {
+            setErrorOccured("You do not have permission to view another user's history.");
+          } else {
+            setErrorOccured("Invalid JWT token provided.");
+          }
+        }
+        setLoading(false);
       }
     };
     if (userId)
@@ -35,16 +57,30 @@ const TakenQuizzesHistoryPage = () => {
     window.history.back();
   };
 
+  if(loading) {
+    return (
+      <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+          <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Taken Quizzes History</h1>
+          <div className="text-center">
+            <p className="text-lg">Loading...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (errorOccured !== '') {
+    return (
+      <ErrorComponent err={errorOccured} />
+    )
+  }
+
   return (
     <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
       <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Taken Quizzes History</h1>
-        {loading ? (
-          <div className="text-center">
-            <p className="text-lg">Loading...</p>
-          </div>
-        ) : (
-          !quizHistory || quizHistory.quizResultHeaders.length === 0 ? (
+        {!quizHistory || quizHistory.quizResultHeaders.length === 0 ? (
             <div className="text-center">
               <p className="text-lg">No quiz history found.</p>
             </div>
@@ -62,8 +98,7 @@ const TakenQuizzesHistoryPage = () => {
                 </div>
               ))}
             </div>
-          )
-        )}
+          )}
         <button
           className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
           onClick={handleBackClick}
