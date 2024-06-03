@@ -99,7 +99,6 @@ export default function ActiveQuizPage() {
       const response = await axios.post(`/api/active-quizzes/${activeQuizId}`, {
         activeQuizId: activeQuizId,
         answers: Object.values(answers),
-        userId: cookies["userId"],
       });
       console.log("Response", response);
 
@@ -117,7 +116,7 @@ export default function ActiveQuizPage() {
         );
         /* console.log("Submission", JSON.stringify(Object.values(answers))); */
         // redirect to quiz page
-        nav(`/quiz`);
+        nav(`/quizzes`);
         dispatch(deleteActiveQuiz(activeQuizId));
       }
     } catch (error) {

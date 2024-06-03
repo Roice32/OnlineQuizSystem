@@ -6,18 +6,18 @@ export default function HomePage() {
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/quiz");
+      navigate("/quizzes");
     }, 3000); // Adding a 3-second delay for demonstration purposes
 
     return () => clearTimeout(timer); // Cleanup timer on component unmount
   }, [navigate]);
 
   // State for the animated dots
-  const [dots, setDots] = useState('');
+  const [dots, setDots] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDots(prevDots => (prevDots.length < 3 ? prevDots + '.' : ''));
+      setDots((prevDots) => (prevDots.length < 3 ? prevDots + "." : ""));
     }, 500); // Change the dot every 500ms
 
     return () => clearInterval(interval);
@@ -26,8 +26,12 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#1c4e4f] p-6">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-white mb-4">Welcome to the Quiz App</h1>
-        <p className="text-xl text-gray-200">Redirecting you to the quiz{dots}</p>
+        <h1 className="text-4xl font-bold text-white mb-4">
+          Welcome to the Quiz App
+        </h1>
+        <p className="text-xl text-gray-200">
+          Redirecting you to the quiz{dots}
+        </p>
       </div>
       <div className="spinner"></div>
       <style>{`

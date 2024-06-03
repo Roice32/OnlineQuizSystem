@@ -24,9 +24,11 @@ export default function Navbar() {
         throw new Error("Could not sign you out");
       }
     } catch (e) {
-      dispatch(
+      /*  dispatch(
         openSnackbar({ message: "Could not sign you out", severity: "error" })
-      );
+      ); */
+      removeCookie("token");
+      dispatch(clearUser());
     }
   };
   return (

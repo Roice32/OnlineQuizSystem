@@ -33,7 +33,7 @@ export default function QuizPage() {
 
   const handleModalSubmit = async () => {
     if (quizCode) {
-      navigate(`/live-quiz/${quizCode}`);
+      navigate(`/live-quizzes/${quizCode}`);
       setIsModalOpen(false);
     }
   };

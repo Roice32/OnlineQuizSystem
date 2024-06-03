@@ -69,7 +69,7 @@ const activeQuizSlice = createSlice({
 
     clearExpiredActiveQuizzes: (state) => {
       const now=new Date();
-      console.log(now);
+      /* console.log(now); */
       return state.filter((quizState) => new Date(quizState.activeQuiz.deadline) > now);
     }
   },
