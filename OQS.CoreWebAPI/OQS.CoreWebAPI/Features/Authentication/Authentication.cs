@@ -90,7 +90,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
                 {
                     Issuer = configuration["JWT:ValidIssuer"]!,
                     Audience = configuration["JWT:ValidAudience"]!,
-                    Expires = DateTime.UtcNow.AddHours(24),
+                    Expires = DateTime.UtcNow.AddDays(7),
                     SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
                     Subject = new ClaimsIdentity(claims)
                 };
