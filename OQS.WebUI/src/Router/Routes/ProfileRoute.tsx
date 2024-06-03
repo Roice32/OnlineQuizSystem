@@ -5,6 +5,7 @@ import EditProfile from "../../Pages/EditProfile";
 import ResetPassword from "../../Pages/UpdatePasswordPage";
 import AddAdmin from "../../Pages/AddAdminPage";
 import ViewUsers from "../../Pages/ViewUsersPage";
+import MyQuizzesPage from "../../Pages/MyQuizzesPage";
 
 
 export const ProfileRoute: RouteObject = {
@@ -32,9 +33,14 @@ export const ProfileRoute: RouteObject = {
         errorElement: <ErrorPage />,
       },
       {
+        path: "view-my-quizzes",
+        element: <MyQuizzesPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
         path: "view-users",
         element: <ViewUsers />,
         errorElement: <ErrorPage />,
-      }
+      },
     ],
   };
