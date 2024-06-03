@@ -5,6 +5,9 @@ import { QuestionResult } from "../../../utils/types/results-and-statistics/ques
 import { Question } from "../../../utils/types/results-and-statistics/question";
 import { AnswerResult } from '../../../utils/types/results-and-statistics/answer-result';
 import { QuestionType } from '../../../utils/types/questions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import ErrorComponent from '../ErrorComponent';
 
 interface ReviewNeededQuestionResultDisplayProps {
   question: Question;
@@ -13,10 +16,12 @@ interface ReviewNeededQuestionResultDisplayProps {
 }
 
 const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult, asQuizCreator}) => {
+  const userState = useSelector((state: RootState) => state.user);
   const [needReview, setNeedReview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [errorOccured, setErrorOccured] = useState('');
 
   const handleGrade = async (userId: string, quizId: string, questionId: string, score: number) => {
     if (score < 0 || score > question.allocatedPoints) {
@@ -25,12 +30,28 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
     }
     setLoading(true);
     try {
-      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
+      const token = userState.user?.token;
+      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`, {},
+        {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+        });
       setError(null);
       setNeedReview(false);
       window.location.reload();
     } catch (error) {
-      console.error('Error grading the answer!');
+      console.error(error);
+      setErrorOccured("An unexpected error occured.");
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          setErrorOccured("Could not find the requested answer.");
+        } else if (error.response?.status === 401) {
+          setErrorOccured("You do not have permission to grade that answer.");
+        } else {
+          setErrorOccured("Invalid JWT token provided.");
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -46,6 +67,12 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
     );
   }
 
+  if (errorOccured !== '') {
+    return (
+      <ErrorComponent err={errorOccured} />
+    )
+  }
+  
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center mb-2">
