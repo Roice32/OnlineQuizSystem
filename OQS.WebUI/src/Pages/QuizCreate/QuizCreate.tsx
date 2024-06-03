@@ -31,9 +31,23 @@ const steps = [
     },
 ]
 
+type QuestionRequest = {
+    id: string
+    text: string
+    type: number
+    allocatedPoints: number
+    timeLimit: number
+    quizId: string
+    trueFalseAnswer?: boolean
+    choices?: string[]
+    multipleChoiceAnswers?: string[]
+    singleChoiceAnswer?: string
+    writtenAcceptedAnswers?: string[]
+}
+
 type Question = {
     inDatabase?: boolean
-    id?: string
+    id: string
     text: string
     type: number
     allocatedPoints: number | ''
@@ -97,15 +111,6 @@ function QuestionComponent({id, setQuiz, quiz}) {
     // const [optionsSingleChoice, setOptionsSingleChoice] = useState<OptionChoice[]>([])
     const [addOptionSingleChoice, setAddOptionSingleChoice] = useState(false)
     const [newOptionSingleChoice, setNewOptionSingleChoice] = useState('')
-    const [correctAnswerSingleChoice, setCorrectAnswerSingleChoice] = useState('')
-
-
-    const submitQuestion = (event) => {
-        const data = Object.fromEntries(new FormData(event.currentTarget))
-        console.log(data)
-
-        event.preventDefault()
-    }
 
     const onChangeQuestion = (event) => {
         setQuiz({
@@ -243,6 +248,26 @@ function QuestionComponent({id, setQuiz, quiz}) {
                     </>
                 )
             case QuestionType.SingleChoice:
+                // eslint-disable-next-line no-case-declarations
+                const correctAnswerSingleChoice = question.singleChoiceAnswer;
+                console.log("DEEE aici", correctAnswerSingleChoice)
+
+                // eslint-disable-next-line no-case-declarations
+                const setCorrectAnswerSingleChoice = (value) => {
+                    setQuiz({
+                        ...quiz,
+                        questions: quiz.questions.map((q) => {
+                            if (q.id === question.id) {
+                                return {
+                                    ...q,
+                                    singleChoiceAnswer: value,
+                                }
+                            }
+                            return q
+                        }),
+                    })
+                }
+
                 return (
                     <>
                         <RadioGroup.Root value={correctAnswerSingleChoice} onValueChange={setCorrectAnswerSingleChoice}
@@ -490,6 +515,8 @@ export default function QuizCreate() {
     const [doneAI, setDoneAI] = React.useState(false)
     const [prompt, setPrompt] = React.useState('')
 
+    const [editPate, setEditPage] = React.useState(false)
+
     const [currentElement, setCurrentElement] = React.useState('quiz-details')
 
     return (
@@ -690,7 +717,7 @@ export default function QuizCreate() {
                                     <Flex justify="center">
                                         <Flex direction="column" justify="center" maxWidth="500px">
                                             <Text mb="20px">If you are ready you can submit your quiz</Text>
-                                            <Button onClick={() => {
+                                            <Button onClick={async () => {
                                                 const quizRequest = {
                                                     name: quiz.name,
                                                     imageUrl: quiz.imageUrl,
@@ -700,76 +727,148 @@ export default function QuizCreate() {
                                                     creatorId: '822c13a0-8872-431e-ad64-00f5249db11f',
                                                 }
 
-                                                console.log(quiz)
-                                                console.log(quizRequest)
-                                                fetch('http://localhost:5276/api/quizzes', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
-                                                    },
-                                                    body: JSON.stringify(quizRequest),
-                                                })
-                                                    .then((response) => {
-                                                            return response.json()
+                                                try {
+                                                    const response = await fetch('http://localhost:5276/api/quizzes', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
                                                         },
-                                                    )
-                                                    .then((data) => {
-                                                        if (typeof data === 'string') {
-                                                            return navigate(data.substring(4, data.length))
-                                                        }
+                                                        body: JSON.stringify(quizRequest),
+                                                    })
 
-                                                        console.log(data)
-                                                        if (data.code !== 200) {
-                                                            setOpen(true)
-                                                            setMessageToast(data.message)
-                                                            setTitleToast('Error at creating the quiz')
-                                                            console.log(data.message)
-                                                            const errorMessagesStrings = data?.message.split('\n')
-                                                            let errorMessages = {}
-                                                            for (const error of errorMessagesStrings) {
-                                                                if (error.toLowerCase().includes('name')) {
-                                                                    errorMessages = {...errorMessages, 'name': error}
+                                                    const data = await response.json()
+                                                    let quizId: string | undefined = undefined
+
+                                                    if (typeof data === 'string') {
+                                                        setEditPage(true);
+                                                        quizId = data.substring(13, data.length);
+                                                    }
+
+                                                    if (quizId !== undefined) {
+                                                        for (const question of quiz.questions) {
+                                                            const indexQuestion = quiz.questions.indexOf(question)
+
+                                                            console.log("Questiiooonn", question)
+
+                                                            let questionRequest: QuestionRequest = {
+                                                                id: question.id,
+                                                                text: question.text,
+                                                                type: question.type,
+                                                                allocatedPoints: question.allocatedPoints || 0,
+                                                                timeLimit: question.timeLimit || 0,
+                                                                quizId: quizId,
+                                                            }
+
+                                                            if (question.type == QuestionType.TrueFalse) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    trueFalseAnswer: question.trueFalseAnswer,
                                                                 }
-                                                                if (error.toLowerCase().includes('image')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'imageUrl': error
-                                                                    }
+                                                            } else if (question.type == QuestionType.MultipleChoice) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    choices: question.choices,
+                                                                    multipleChoiceAnswers: question.multipleChoiceAnswers,
                                                                 }
-                                                                if (error.toLowerCase().includes('description')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'description': error
-                                                                    }
+                                                            } else if (question.type == QuestionType.SingleChoice) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    choices: question.choices,
+                                                                    singleChoiceAnswer: question.singleChoiceAnswer,
                                                                 }
-                                                                if (error.toLowerCase().includes('time')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'timeLimit': error
-                                                                    }
-                                                                }
-                                                                if (error.toLowerCase().includes('language')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'language': error
-                                                                    }
+                                                            } else if (question.type == QuestionType.WrittenAnswer) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    choices: question.choices,
+                                                                    writtenAcceptedAnswers: question.writtenAcceptedAnswers,
                                                                 }
                                                             }
 
-                                                            setErrorMessages({...errorMessages})
+
+                                                            const response = await fetch(`http://localhost:5276/api/quizzes/${quizId}/questions`, {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                },
+                                                                body: JSON.stringify(questionRequest),
+                                                            })
+
+                                                            const data = await response.json()
+                                                            console.log("intrebaaaarreee", data)
+
+                                                            if (response.status !== 200) {
+                                                                setOpen(true)
+                                                                setMessageToast(data.message)
+                                                                setTitleToast(`Error at the question ${indexQuestion + 1}`)
+                                                                console.log(data.message)
+                                                                return;
+                                                                // const errorMessagesStrings = data?.message.split('\n')
+                                                                // let errorMessages = {}
+                                                                // for (const error of errorMessagesStrings) {
+                                                                // }
+                                                                // setErrorMessages({...errorMessages})
+                                                            }
                                                         }
 
-                                                        console.log('Success:', data)
-                                                    })
-                                                    .catch((error) => {
-                                                        if (error instanceof SyntaxError) {
-                                                            setOpen(true)
-                                                            setMessageToast('Review the quiz details and the questions!')
-                                                            setTitleToast('Error at creating the quiz')
-                                                        } else {
-                                                            console.error('Error:', error)
+                                                        if (typeof data === 'string') {
+                                                            setEditPage(true);
+                                                            return navigate(data.substring(4, data.length))
                                                         }
-                                                    })
+                                                    }
+
+
+                                                    console.log(data)
+                                                    if (data.code !== 200) {
+                                                        setOpen(true)
+                                                        setMessageToast(data.message)
+                                                        setTitleToast('Error at creating the quiz')
+                                                        console.log(data.message)
+                                                        const errorMessagesStrings = data?.message.split('\n')
+                                                        let errorMessages = {}
+                                                        for (const error of errorMessagesStrings) {
+                                                            if (error.toLowerCase().includes('name')) {
+                                                                errorMessages = {...errorMessages, 'name': error}
+                                                            }
+                                                            if (error.toLowerCase().includes('image')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'imageUrl': error
+                                                                }
+                                                            }
+                                                            if (error.toLowerCase().includes('description')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'description': error
+                                                                }
+                                                            }
+                                                            if (error.toLowerCase().includes('time')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'timeLimit': error
+                                                                }
+                                                            }
+                                                            if (error.toLowerCase().includes('language')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'language': error
+                                                                }
+                                                            }
+                                                        }
+
+                                                        setErrorMessages({...errorMessages})
+                                                    }
+
+
+                                                    console.log('Success:', data)
+                                                } catch (error) {
+                                                    if (error instanceof SyntaxError) {
+                                                        setOpen(true)
+                                                        setMessageToast('Review the quiz details and the questions!')
+                                                        setTitleToast('Error at creating the quiz')
+                                                    } else {
+                                                        console.error('Error:', error)
+                                                    }
+                                                }
                                             }}>
                                                 Submit Quiz
                                             </Button>
