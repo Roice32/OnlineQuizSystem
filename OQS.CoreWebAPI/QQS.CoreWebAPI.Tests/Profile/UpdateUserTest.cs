@@ -38,8 +38,8 @@ namespace OQS.CoreWebAPI.Feautures.Tests.Profile
 
             var claims = new[]
             {
-        new System.Security.Claims.Claim("sub", userId), // ID-ul utilizatorului
-        new System.Security.Claims.Claim("role", role)   // Rolul utilizatorului
+        new System.Security.Claims.Claim("sub", userId), 
+        new System.Security.Claims.Claim("role", role)  
     };
 
             var token = new JwtSecurityToken(
@@ -61,10 +61,10 @@ namespace OQS.CoreWebAPI.Feautures.Tests.Profile
 
             // Mock the expected behavior of UserManager
             userManagerMock.FindByIdAsync(Arg.Any<string>())
-                .Returns(Task.FromResult(new User())); // Mock finding the user
+                .Returns(Task.FromResult(new User())); 
 
             userManagerMock.UpdateAsync(Arg.Any<User>())
-                .Returns(Task.FromResult(IdentityResult.Success)); // Mock successful update
+                .Returns(Task.FromResult(IdentityResult.Success)); 
 
             var jwt = GenerateJwtToken("valid_issuer", "valid_audience", "test_secret_12345678901234567890123456789012", "testUser", "Admin");
 
@@ -77,7 +77,7 @@ namespace OQS.CoreWebAPI.Feautures.Tests.Profile
                 LastName = "NewLastName",
                 Username = "NewUsername",
                 Email = "newemail@example.com",
-                Jwt = jwt // Provide the generated JWT token
+                Jwt = jwt 
             };
 
             // Act

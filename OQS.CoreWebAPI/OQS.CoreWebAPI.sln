@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OQS.CoreWebAPI", "OQS.CoreW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQS.CoreWebAPI.Tests", "QQS.CoreWebAPI.Tests\QQS.CoreWebAPI.Tests.csproj", "{45C346D1-2A63-4444-9F33-854CF24D9959}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OQS.CoreWebAPI.Features.Tests", "OQS.CoreWebAPI.Features.Tests\OQS.CoreWebAPI.Features.Tests.csproj", "{17EB5846-197C-49AC-A8E1-439C1B55955A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{45C346D1-2A63-4444-9F33-854CF24D9959}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45C346D1-2A63-4444-9F33-854CF24D9959}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45C346D1-2A63-4444-9F33-854CF24D9959}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17EB5846-197C-49AC-A8E1-439C1B55955A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17EB5846-197C-49AC-A8E1-439C1B55955A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17EB5846-197C-49AC-A8E1-439C1B55955A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17EB5846-197C-49AC-A8E1-439C1B55955A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
