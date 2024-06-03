@@ -62,7 +62,14 @@ const QuizStatsPage = () => {
 
   const sendQuizStatsViaEmail = async () => {
     try {
-      await axios.get(`http://localhost:5276/api/email/sendCreatedQuizStatsViaEmail?quizId=${quizId}&recipientEmail=${recipientEmail}&startDate=${startDate}&endDate=${endDate}`, {});
+      const token = userState.user?.token;
+      await axios.get(`http://localhost:5276/api/email/sendCreatedQuizStatsViaEmail?quizId=${quizId}&recipientEmail=${recipientEmail}&startDate=${startDate}&endDate=${endDate}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
       dispatch(
         openSnackbar({ message: "Quiz stats for given time period successfully sent to specified email.", severity: "success" })
       );

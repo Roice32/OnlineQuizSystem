@@ -63,7 +63,14 @@ const QuizResultsPage = () => {
 
   const sendQuizResultViaEmail = async () => {
     try {
-      await axios.get(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`);
+      const token = userState.user?.token;
+      await axios.get(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
       dispatch(
         openSnackbar({ message: "Quiz result successfully sent to specified email.", severity: "success" })
       );
