@@ -16,7 +16,7 @@ public class CreateLiveQuizTest : ApplicationContextForTesting
     {
         var newLiveQuiz = new CreateLiveQuizRequest()
         {
-            QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13b"),
+            QuizId = Guid.Parse("00000000-0000-0000-0002-000000000001"),
         };
         var response = await Client.PostAsJsonAsync("api/live-quizzes", newLiveQuiz);
       
@@ -48,14 +48,17 @@ public class CreateLiveQuizTest : ApplicationContextForTesting
     {
         var newLiveQuiz = new CreateLiveQuizRequest()
         {
-            QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13b"),
+            QuizId = Guid.Parse("00000000-0000-0000-0002-000000000001"),
         };
-        var response = await Client.PostAsJsonAsync("api/live-quizzes", newLiveQuiz);
         
         Client.DefaultRequestHeaders.Remove("Authorization");
         Client.DefaultRequestHeaders.Add("Authorization", "Bearer  eyJhbGciOi");
-
+        
+        
+        var response = await Client.PostAsJsonAsync("api/live-quizzes", newLiveQuiz);
         var result = await response.Content.ReadFromJsonAsync<Result<String>>();
+        
+        
         Assert.NotNull(result);
         Assert.True(result.IsFailure);
         Assert.Equal("CreateLiveQuiz.BadRequest", result.Error.Code); 

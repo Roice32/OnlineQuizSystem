@@ -1,9 +1,15 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
+using Microsoft.IdentityModel.Tokens;
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Extensions.Seeders;
 
 namespace OQS.CoreWebAPI.Tests.SetUp
@@ -37,26 +43,46 @@ namespace OQS.CoreWebAPI.Tests.SetUp
 
                         // Used by RSM for temporary testing. Will need merging and / or specialization.
                         db.SeedDbForRSMComplete();
-
-                        /*db.SeedQuestions();
-                        db.SeedQuizzez();
-                        db.SeedUsers();
-                        db.SeedQuizzez();
+                        
                         db.SeedActiveQuizzes();
                         db.SeedExpiredActiveQuizzes();
-                        db.SeedLiveQuizzes();*/
+                        db.SeedLiveQuizzes();
                     }
                 });
             });
             Client = Application.CreateClient();
-            Client.DefaultRequestHeaders.Add("Authorization",
-                "Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjViMDQ4OTEzLTVkZjAtNDI5Zi1hNDJiLTA1MTkwNDY3MmU0ZCIsInJvbGUiOiJBZG1pbiIsImp0aSI6ImFhNjRkMjUwLTAxNmUtNDM1Mi04NTUwLTcwNzk2ZTk5Zjc0MyIsIm5iZiI6MTcxNjgwNzMwOSwiZXhwIjoxNzE2ODE4MTA5LCJpYXQiOjE3MTY4MDczMDksImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMTciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTE3In0.-YHqzQDX_hyHFgIAnK5OyLgnWCiN0cY-bgxPk54w8I0");
+            var token = GenerateToken("00000000-0000-0000-0001-000000000003", Application.Services.GetRequiredService<IConfiguration>());
+            Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            
         }
 
         public async ValueTask DisposeAsync()
         {
             GC.SuppressFinalize(this);
             await Application.DisposeAsync();
+        }
+        
+        private string GenerateToken(string id, IConfiguration configuration)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!));
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, id),
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Issuer = configuration["JWT:ValidIssuer"]!,
+                Audience = configuration["JWT:ValidAudience"]!,
+                Expires = DateTime.UtcNow.AddHours(3),
+                SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
+                Subject = new ClaimsIdentity(authClaims)
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
