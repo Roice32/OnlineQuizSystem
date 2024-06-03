@@ -63,6 +63,9 @@ const QuizResultsPage = () => {
 
   const sendQuizResultViaEmail = async () => {
     try {
+      dispatch(
+        openSnackbar({ message: "Sending...", severity: "info" })
+      );
       const token = userState.user?.token;
       await axios.get(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`,
         {
