@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { QuestionResult } from "../../../utils/types/results-and-statistics/question-result";
 import { Question } from "../../../utils/types/results-and-statistics/question";
-import { AnswerResult } from '../../../utils/types/results-and-statistics/question-review';
+import { AnswerResult } from '../../../utils/types/results-and-statistics/answer-result';
 
 interface TrueFalseQuestionResultDisplayProps {
   question: Question;

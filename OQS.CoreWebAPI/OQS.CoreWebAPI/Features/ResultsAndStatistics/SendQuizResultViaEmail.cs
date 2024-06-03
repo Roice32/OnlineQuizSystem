@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
@@ -142,7 +143,19 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             if (reviewNeededQuestion != null && reviewNeededResult != null)
             {
                 result += $"Your answer: {reviewNeededResult.ReviewNeededAnswer}<br>";
-                result += $"Your answer is {reviewNeededResult.ReviewNeededResult}.";
+                result += $"Your answer is ";
+                if (reviewNeededResult.ReviewNeededResult == AnswerResult.Correct)
+                {
+                    result += "Correct!";
+                }
+                else if (reviewNeededResult.ReviewNeededResult == AnswerResult.Wrong)
+                {
+                    result += "Incorrect.";
+                }
+                else
+                {
+                    result += "Pending review.";
+                }
             }
             return result;
         }
@@ -151,6 +164,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public class Command : IRequest<Result>
         {
+            public HttpContext Context { get; set; }
             public string RecipientEmail { get; set; }
             public Guid QuizId { get; set; }
             public Guid UserId { get; set; }
@@ -188,6 +202,24 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     strategy => strategy.GetHandledQuestionType(), strategy => strategy);
             }
 
+            private string GetUserIdFromToken(HttpContext context)
+            {
+                if (context == null)
+                {
+                    return null;
+                }
+
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                return jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            }
+
             public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
                 var validationResult = validator.Validate(request);
@@ -197,6 +229,21 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     return Result.Failure(new Error("EmailSender.Validator", validationResult.ToString()));
                 }
 
+                string requestingUserId = GetUserIdFromToken(request.Context);
+                if (requestingUserId == null)
+                {
+                    Console.WriteLine("Error: Unable to extract user ID from provided token");
+                    return Result.Failure(
+                        new Error("EmailSender.Handler",
+                            "Unable to extract user ID from provided token"));
+                }
+                if (requestingUserId != request.UserId.ToString())
+                {
+                    Console.WriteLine("Error: User is not authorized to view this quiz result");
+                    return Result.Failure(
+                        new Error("EmailSender.Handler",
+                            "User does not have permission to view this quiz result"));
+                }
 
                 var quizResultHeader = await dbContext.QuizResultHeaders
                .AsNoTracking()
@@ -267,7 +314,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     $"<p>Dear {request.RecipientEmail},<br><br>\r\n" +
                     $"Here are your quiz results:<br><br>\r\n" +
                     $"<br>{resultsBuilder}<br><br>\r\n" +
-                    "If you have any questions or need assistance, don't hesitate to contact us at echipafacultate@yahoo.com.<br>\r\n" +
+                    "If you have any questions or need assistance, don't hesitate to contact us at Online.Quiz@outlook.com.<br>\r\n" +
                     "Best regards,<br>\r\n" +
                     "Online Quiz Application Team</p>\r\n" +
                     "</div>\r\n</body>\r\n</html>";
@@ -304,10 +351,11 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/email/sendQuizResultViaEmail", async (string recipientEmail, Guid quizId, Guid userId, ISender sender) =>
+            app.MapGet("api/email/sendQuizResultViaEmail", async (HttpContext context, string recipientEmail, Guid quizId, Guid userId, ISender sender) =>
             {
                 var command = new SendQuizResultViaEmail.Command
                 {
+                    Context = context,
                     RecipientEmail = recipientEmail,
                     QuizId = quizId,
                     UserId = userId,
@@ -316,7 +364,15 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (result.IsFailure)
                 {
-                    return Results.BadRequest(result.Error);
+                    if (result.Error.Message.Contains("not found"))
+                    {
+                        return Results.NotFound();
+                    }
+                    if (result.Error.Message.Contains("permission"))
+                    {
+                        return Results.Unauthorized();
+                    }
+                    return Results.BadRequest(result.Error.Message);
                 }
 
                 return Results.Ok(result);
