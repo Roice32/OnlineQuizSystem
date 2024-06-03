@@ -9,9 +9,10 @@ import { QuestionType } from '../../../utils/types/questions';
 interface ReviewNeededQuestionResultDisplayProps {
   question: Question;
   questionResult: QuestionResult;
+  asQuizCreator: boolean;
 }
 
-const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult}) => {
+const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult, asQuizCreator}) => {
   const [needReview, setNeedReview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState<number | null>(null);
@@ -37,8 +38,10 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-white flex justify-center items-center">
-        <h1 className="text-2xl font-bold mb-4 text-center">Processing your review...</h1>
+      <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+          <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Processing your review...</h1>
+        </div>
       </div>
     );
   }
@@ -112,7 +115,9 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
           </button>
         </div>
       )}
-      {!needReview && question.type === QuestionType.ReviewNeeded && questionResult.reviewNeededResult === AnswerResult.Pending && (
+      {!needReview && question.type === QuestionType.ReviewNeeded && 
+        questionResult.reviewNeededResult === AnswerResult.Pending && 
+        asQuizCreator && (
         <button
           className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
           onClick={() => setNeedReview(true)}

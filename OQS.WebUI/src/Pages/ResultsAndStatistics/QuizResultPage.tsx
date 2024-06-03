@@ -107,7 +107,9 @@ const QuizResultsPage = () => {
               const questionResult = quizResult.quizResultBody?.questionResults.find(item => item.questionId === header.id);
               return (
                 <div key={index} className="flex items-center justify-center mb-2 mr-2">
-                  <QuestionResultDisplay question={header} questionResult={questionResult!} />
+                  <QuestionResultDisplay question={header}
+                    questionResult={questionResult!}
+                    asQuizCreator={quizResult.asQuizCreator} />
                 </div>
               );
             })}
