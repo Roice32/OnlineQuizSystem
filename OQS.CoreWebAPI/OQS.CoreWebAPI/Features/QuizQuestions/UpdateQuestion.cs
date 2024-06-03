@@ -18,7 +18,7 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
         {
             public string Text { get; set; } = string.Empty;
             public QuestionType Type { get; set; }
-            public int AlocatedPoints { get; set; }
+            public int AllocatedPoints { get; set; }
             public int TimeLimit { get; set; }
             public List<string>? Choices { get; set; } = new List<string>();
             public bool? TrueFalseAnswer { get; set; }
@@ -54,8 +54,8 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
                         RuleFor(x => x.Body.Type)
                             .NotEmpty().WithMessage("Type is required.");
 
-                        RuleFor(x => x.Body.AlocatedPoints)
-                            .GreaterThan(0).WithMessage("AlocatedPoints must be greater than 0.");
+                        RuleFor(x => x.Body.AllocatedPoints)
+                            .GreaterThan(0).WithMessage("AllocatedPoints must be greater than 0.");
 
                         RuleFor(x => x.Body.TimeLimit)
                             .GreaterThan(0).WithMessage("TimeLimit must be greater than 0.");
@@ -95,10 +95,10 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
         internal sealed class Handler : IRequestHandler<Command, Result<QuestionResponse>>
         {
-            private readonly ApplicationDBContext context;
+            private readonly ApplicationDbContext context;
             private readonly IValidator<Command> validator;
 
-            public Handler(ApplicationDBContext context, IValidator<Command> validator)
+            public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
                 this.context = context;
                 this.validator = validator;
@@ -132,8 +132,8 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
                     if (request.Body.Text != string.Empty)
                         question.Text = request.Body.Text;
 
-                    if (request.Body.AlocatedPoints != 0)
-                        question.AlocatedPoints = request.Body.AlocatedPoints;
+                    if (request.Body.AllocatedPoints != 0)
+                        question.AllocatedPoints = request.Body.AllocatedPoints;
 
                     if (request.Body.TimeLimit != 0)
                         question.TimeLimit = request.Body.TimeLimit;
@@ -146,33 +146,33 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
                         {
                             case QuestionType.TrueFalse:
                                 question = new TrueFalseQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
-                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.TimeLimit, request.Body.AllocatedPoints,
                                     request.Body.TrueFalseAnswer ?? false);
                                 // _dbContext.TrueFalseQuestions.Add((TrueFalseQuestion)question);
                                 break;
                             case QuestionType.MultipleChoice:
                                 question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
-                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.TimeLimit, request.Body.AllocatedPoints,
                                     request.Body.Choices ?? new List<string>(),
                                     request.Body.MultipleChoiceAnswers ?? new List<string>());
                                 //  _dbContext.MultipleChoiceQuestions.Add((MultipleChoiceQuestion)question);
                                 break;
                             case QuestionType.SingleChoice:
                                 question = new SingleChoiceQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
-                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.TimeLimit, request.Body.AllocatedPoints,
                                     request.Body.Choices ?? new List<string>(),
                                     request.Body.SingleChoiceAnswer ?? string.Empty);
                                 // _dbContext.SingleChoiceQuestions.Add((SingleChoiceQuestion)question);
                                 break;
-                            case QuestionType.WriteAnswer:
+                            case QuestionType.WrittenAnswer:
                                 question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
-                                    request.Body.TimeLimit, request.Body.AlocatedPoints,
+                                    request.Body.TimeLimit, request.Body.AllocatedPoints,
                                     request.Body.WrittenAcceptedAnswers ?? new List<string>());
                                 // _dbContext.WrittenAnswerQuestions.Add((WrittenAnswerQuestion)question);
                                 break;
                             case QuestionType.ReviewNeeded:
                                 question = new ReviewNeededQuestion(Guid.NewGuid(), request.Body.Text, request.QuizId,
-                                    request.Body.TimeLimit, request.Body.AlocatedPoints);
+                                    request.Body.TimeLimit, request.Body.AllocatedPoints);
                                 // _dbContext.ReviewNeededQuestions.Add((ReviewNeededQuestion)question);
                                 break;
                             default:

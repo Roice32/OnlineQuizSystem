@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace OQS.CoreWebAPI.Contracts.Models
+﻿namespace OQS.CoreWebAPI.Contracts.Models
 {
     public class LoginModel
     {   public string Username { get; set; }

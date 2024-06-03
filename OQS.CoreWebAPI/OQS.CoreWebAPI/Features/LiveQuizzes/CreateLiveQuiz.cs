@@ -35,7 +35,7 @@ public class CreateLiveQuiz
         private async Task<bool> QuizExists(Guid quizId, CancellationToken cancellationToken)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             return await context.Quizzes.FindAsync(quizId, cancellationToken) != null;
         }
 
@@ -48,11 +48,11 @@ public class CreateLiveQuiz
 
     internal sealed class Handler : IRequestHandler<Query, Result<LiveQuizz>>
         {
-            private readonly ApplicationDBContext _context;
+            private readonly ApplicationDbContext _context;
             private readonly IValidator<Query> _validator;
             private readonly JwtSecurityTokenHandler _jwtHandler;
 
-            public Handler(ApplicationDBContext context, IValidator<Query> validator)
+            public Handler(ApplicationDbContext context, IValidator<Query> validator)
             {
                 _context = context;
                 _validator = validator;

@@ -5,6 +5,6 @@ public enum QuestionType
     TrueFalse,
     MultipleChoice,
     SingleChoice,
-    WriteAnswer,
+    WrittenAnswer,
     ReviewNeeded
 }

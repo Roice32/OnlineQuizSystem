@@ -1,8 +1,6 @@
 ﻿using Carter;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
@@ -35,6 +33,12 @@ namespace OQS.CoreWebAPI.Features.Profile
                 {
                     return Result.Failure<List<User>>(
                         new Error("Authentication", "Invalid Jwt"));
+                }
+
+                if (!jwtValidator.IsAdmin())
+                {
+                    return Result.Failure<List<User>>(
+                                               new Error("Authentication", "You are not an admin."));
                 }
 
                 var users = await userManager.Users.ToListAsync(cancellationToken);

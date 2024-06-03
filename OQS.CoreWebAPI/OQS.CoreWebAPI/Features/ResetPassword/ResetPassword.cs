@@ -1,15 +1,10 @@
 ﻿using Carter;
 using FluentValidation;
-using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json.Linq;
 using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace OQS.CoreWebAPI.Features.ResetPassword
