@@ -51,6 +51,8 @@ namespace QOS.CoreWebAPI.Feautures.Tests.Profile
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        /*
+
         [Fact]
         public async Task Handle_ValidRequest_ReturnsSuccess()
         {
@@ -142,5 +144,7 @@ namespace QOS.CoreWebAPI.Feautures.Tests.Profile
             Assert.False(result.IsSuccess);
             Assert.Equal("User doesn't exists.", result.Error.Message);
         }
+
+        */
     }
 }

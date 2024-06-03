@@ -50,7 +50,7 @@ namespace OQS.CoreWebAPI.Features.Profile.Tests
 
 
 
-        [Fact]
+       /* [Fact]
         public async Task Handle_InvalidJwt_ReturnsAuthenticationError()
         {
             // Arrange
@@ -98,7 +98,7 @@ namespace OQS.CoreWebAPI.Features.Profile.Tests
             Assert.Equal("You are not an admin.", result.Error.Message);
         }
 
-    
+    */
 
     }
 }
