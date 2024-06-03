@@ -2,8 +2,7 @@ import { QuizResultBody } from "./quiz-result-body";
 import { QuizResultHeader } from "./quiz-result-header";
 
   export type QuizResult =  {
-    userId : string;
-    quizId : string;
+    asQuizCreator: boolean;
     quizResultHeader: QuizResultHeader;
     quizResultBody: QuizResultBody;
   }

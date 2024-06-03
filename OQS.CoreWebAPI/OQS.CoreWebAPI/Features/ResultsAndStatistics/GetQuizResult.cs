@@ -5,6 +5,7 @@ using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
@@ -12,6 +13,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public class Query : IRequest<Result<GetQuizResultResponse>>
         {
+            public HttpContext context { get; set; }
             public Guid QuizId { get; set; }
             public Guid UserId { get; set; }
         }
@@ -25,8 +27,61 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 dbContext = context;
             }
 
+            private string GetUserIdFromToken(HttpContext context)
+            {
+                if (context == null)
+                {
+                    return null;
+                }
+
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                return jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            }
+
             public async Task<Result<GetQuizResultResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
+                string requestingUserId = GetUserIdFromToken(request.context);
+                if (requestingUserId == null)
+                {
+                    Console.WriteLine("Error: Unable to extract user ID from provided token");
+                    return Result.Failure<GetQuizResultResponse>(
+                        new Error("GetQuizResult.Handler",
+                            "Unable to extract user ID from provided token"));
+                }
+
+                var requestedQuiz = await dbContext.Quizzes.FindAsync(request.QuizId);
+                if (requestedQuiz == null)
+                {
+                    Console.WriteLine("Error: Quiz not found");
+                    return Result.Failure<GetQuizResultResponse>(
+                        new Error("GetQuizResult.Handler",
+                            "Quiz not found"));
+                }
+
+                bool asQuizCreator;
+                if (requestingUserId == requestedQuiz.CreatorId.ToString())
+                {
+                    asQuizCreator = true;
+                }
+                else if (requestingUserId == request.UserId.ToString())
+                {
+                    asQuizCreator = false;
+                }
+                else
+                {
+                    Console.WriteLine("Error: User does not have permission to view this quiz result");
+                    return Result.Failure<GetQuizResultResponse>(
+                        new Error("GetQuizResult.Handler",
+                            "User does not have permission to view this quiz result"));
+                }
+
                 var quizResultHeader =
                     await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, request.QuizId, request.UserId);
 
@@ -38,11 +93,12 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     Console.WriteLine("Error: Quiz header and/or body returned null value");
                     return Result.Failure<GetQuizResultResponse>(
                         new Error("GetQuizResult.Handler",
-                        "Quiz header and/or body returned null value"));
+                        "Quiz result not found for given User and Quiz."));
                 }
 
                 return new GetQuizResultResponse
                 {
+                    AsQuizCreator = asQuizCreator,
                     QuizResultHeader = quizResultHeader.Value,
                     QuizResultBody = quizResultBody.Value
                 };
@@ -54,10 +110,11 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/quizResults/getQuizResult/{userId}/{quizId}", async (Guid userId, Guid quizId, ISender sender) =>
+            app.MapGet("api/quizResults/getQuizResult/{userId}/{quizId}", async (HttpContext context, Guid userId, Guid quizId, ISender sender) =>
             {
                 var query = new GetQuizResult.Query
                 {
+                    context = context,
                     UserId = userId,
                     QuizId = quizId
                 };
@@ -66,7 +123,15 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (result.IsFailure)
                 {
-                    return Results.NotFound(result.Error);
+                    if (result.Error.Message.Contains("not found"))
+                    {
+                        return Results.NotFound();
+                    }
+                    if (result.Error.Message.Contains("permission"))
+                    {
+                        return Results.Unauthorized();
+                    }
+                    return Results.BadRequest(result.Error.Message);
                 }
 
                 return Results.Ok(result.Value);

@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { QuizResult } from "../../utils/types/results-and-statistics/quiz-results";
+import { QuizResult } from "../../utils/types/results-and-statistics/quiz-result";
 import QuestionResultDisplay from '../../Components/ResultsAndStatistics/QuestionResultDisplays/QuestionResultDisplay';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import ErrorComponent from '../../Components/ResultsAndStatistics/ErrorComponent';
 
 const QuizResultsPage = () => {
   const { userId, quizId } = useParams<{ userId: string, quizId: string }>();
+  const userState = useSelector((state: RootState) => state.user);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(true);
+  const [errorOccured, setErrorOccured] = useState('');
   const [recipientEmail, setRecipientEmail] = useState('');
 
   const handleBackClick = () => {
@@ -24,11 +29,28 @@ const QuizResultsPage = () => {
   useEffect(() => {
     const getQuizResult = async (userId: string, quizId: string) => {
       try {
-        const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`);
+        const token = userState.user?.token;
+        const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`,
+          {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+          }
+        );
         setQuizResult(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching quiz result:', error);
+        setErrorOccured("An unexpected error occured.");
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 404) {
+            setErrorOccured("Could not find the requested quiz result.");
+          } else if (error.response?.status === 401) {
+            setErrorOccured("You do not have permission to view this quiz result.");
+          } else {
+            setErrorOccured("Invalid JWT token provided.");
+          }
+        }
+        setLoading(false);
       }
     };
 
@@ -47,7 +69,22 @@ const QuizResultsPage = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+          <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Taken Quizzes History</h1>
+          <div className="text-center">
+            <p className="text-lg">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (errorOccured !== '') {
+    return (
+      <ErrorComponent err={errorOccured} />
+    )
   }
 
   return (

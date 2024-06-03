@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import QuizResultsDisplay from "./ResultsAndStatistics/QuizResultDisplay";
-import { QuizResult } from "../utils/types/results-and-statistics/quiz-results";
+import { QuizResult } from "../utils/types/results-and-statistics/quiz-result";
 
 const ParentComponent = ({ quizId }: { quizId: string }) => {
   const [quizResults, setQuizResults] = useState<QuizResult | null>(null);
