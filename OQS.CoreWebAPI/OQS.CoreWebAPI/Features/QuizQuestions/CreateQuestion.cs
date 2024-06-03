@@ -16,7 +16,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             public string Text { get; set; } = string.Empty;
             public QuestionType Type { get; set; }
 
-            public int AlocatedPoints { get; set; }
+            public int AllocatedPoints { get; set; }
 
             public int TimeLimit { get; set; }
 
@@ -36,7 +36,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                     .MaximumLength(255).WithMessage("Text must not exceed 255 characters.");
                 RuleFor(x => x.QuizId).NotEmpty().WithMessage("QuizId is required.");
                 RuleFor(x => x.Type).IsInEnum().WithMessage("Invalid question type.");
-                RuleFor(x => x.AlocatedPoints).GreaterThan(0).WithMessage("AlocatedPoints must be greater than 0.");
+                RuleFor(x => x.AllocatedPoints).GreaterThan(0).WithMessage("AllocatedPoints must be greater than 0.");
                 RuleFor(x => x.TimeLimit).GreaterThan(0).WithMessage("TimeLimit must be greater than 0.");
 
                 When(x => x.Type == QuestionType.MultipleChoice || x.Type == QuestionType.SingleChoice,
@@ -71,7 +71,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                             .NotEmpty().WithMessage("SingleChoiceAnswer is required.");
                     });
 
-                When(x => x.Type == QuestionType.WriteAnswer,
+                When(x => x.Type == QuestionType.WrittenAnswer,
                     () =>
                     {
                         RuleFor(x => x.WrittenAcceptedAnswers)
@@ -85,10 +85,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
         public class Handler : IRequestHandler<Command, Result<Guid>>
         {
-            private readonly ApplicationDBContext _dbContext;
+            private readonly ApplicationDbContext _dbContext;
             private readonly IValidator<Command> _validator;
 
-            public Handler(ApplicationDBContext dbContext, IValidator<Command> validator)
+            public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
             {
                 _dbContext = dbContext;
                 _validator = validator;
@@ -115,30 +115,30 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                 {
                     case QuestionType.TrueFalse:
                         question = new TrueFalseQuestion(Guid.NewGuid(), request.Text, request.QuizId,
-                            request.TimeLimit, request.AlocatedPoints, request.TrueFalseAnswer ?? false);
+                            request.TimeLimit, request.AllocatedPoints, request.TrueFalseAnswer ?? false);
                         // _dbContext.TrueFalseQuestions.Add((TrueFalseQuestion)question);
                         break;
                     case QuestionType.MultipleChoice:
                         question = new MultipleChoiceQuestion(Guid.NewGuid(), request.Text, request.QuizId,
-                            request.TimeLimit, request.AlocatedPoints, request.Choices ?? new List<string>(),
+                            request.TimeLimit, request.AllocatedPoints, request.Choices ?? new List<string>(),
                             request.MultipleChoiceAnswers ?? new List<string>());
                         //  _dbContext.MultipleChoiceQuestions.Add((MultipleChoiceQuestion)question);
                         break;
                     case QuestionType.SingleChoice:
                         question = new SingleChoiceQuestion(Guid.NewGuid(), request.Text, request.QuizId,
-                            request.TimeLimit, request.AlocatedPoints, request.Choices ?? new List<string>(),
+                            request.TimeLimit, request.AllocatedPoints, request.Choices ?? new List<string>(),
                             request.SingleChoiceAnswer ?? string.Empty);
                         // _dbContext.SingleChoiceQuestions.Add((SingleChoiceQuestion)question);
                         break;
-                    case QuestionType.WriteAnswer:
+                    case QuestionType.WrittenAnswer:
                         question = new WrittenAnswerQuestion(Guid.NewGuid(), request.Text, request.QuizId,
-                            request.TimeLimit, request.AlocatedPoints,
+                            request.TimeLimit, request.AllocatedPoints,
                             request.WrittenAcceptedAnswers ?? new List<string>());
                         // _dbContext.WrittenAnswerQuestions.Add((WrittenAnswerQuestion)question);
                         break;
                     case QuestionType.ReviewNeeded:
                         question = new ReviewNeededQuestion(Guid.NewGuid(), request.Text, request.QuizId,
-                            request.TimeLimit, request.AlocatedPoints);
+                            request.TimeLimit, request.AllocatedPoints);
                         // _dbContext.ReviewNeededQuestions.Add((ReviewNeededQuestion)question);
                         break;
                     default:

@@ -58,10 +58,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
         internal sealed class Handler : IRequestHandler<Command, Result<QuizResponse>>
         {
-            private readonly ApplicationDBContext context;
+            private readonly ApplicationDbContext context;
             private readonly IValidator<Command> validator;
 
-            public Handler(ApplicationDBContext context, IValidator<Command> validator)
+            public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
                 this.context = context;
                 this.validator = validator;

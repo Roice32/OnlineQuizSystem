@@ -1,16 +1,9 @@
 ﻿using Carter;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using OQS.CoreWebAPI.Contracts.Models;
-using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace QOS.CoreWebAPI.Features.Profile
 {

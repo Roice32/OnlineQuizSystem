@@ -1,5 +1,4 @@
 using OQS.CoreWebAPI.Entities;
-using OQS.CoreWebAPI.Entities;
 
 namespace OQS.CoreWebAPI.Contracts.CRUD
 {
@@ -10,7 +9,7 @@ namespace OQS.CoreWebAPI.Contracts.CRUD
         public QuestionType Type { get; set; }
         public string Text { get; set; }
 
-        public int AlocatedPoints { get; set; }
+        public int AllocatedPoints { get; set; }
 
         public int TimeLimit { get; set; }
         public List<string>? Choices { get; set; }
@@ -30,7 +29,7 @@ namespace OQS.CoreWebAPI.Contracts.CRUD
             this.Type = question.Type;
             this.Text = question.Text;
             this.TimeLimit = question.TimeLimit;
-            this.AlocatedPoints = question.AlocatedPoints;
+            this.AllocatedPoints = question.AllocatedPoints;
             if (question is ChoiceQuestionBase choiceQuestion)
             {
                 this.Choices = choiceQuestion.Choices;

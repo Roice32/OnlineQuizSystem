@@ -1,13 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using Carter;
 using OQS.CoreWebAPI.Contracts;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
-using Microsoft.AspNetCore.Http;
 
 namespace OQS.CoreWebAPI.Features.Quizzes
 {
@@ -15,22 +14,61 @@ namespace OQS.CoreWebAPI.Features.Quizzes
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly JwtValidator _jwtValidator;
         private static int _latencySafeguardInSeconds = 5;
 
-        public SubmitResponseRequestValidator(IServiceScopeFactory serviceScopeFactory, IHttpContextAccessor httpContextAccessor)
+        public SubmitResponseRequestValidator(IServiceScopeFactory serviceScopeFactory, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _httpContextAccessor = httpContextAccessor;
+            _jwtValidator = new JwtValidator(configuration);
 
             RuleFor(x => x.ActiveQuizId)
                 .NotEmpty().WithMessage("Active Quiz ID is required.");
-
-            RuleFor(x => x)
-                .MustAsync(UserMatchesQuizAsync)
-                .WithMessage("Unauthorized. User does not match the one who started the quiz.");
+            
+            RuleFor(x=>x)
+                .MustAsync(ValidJwt)
+                .WithMessage("Invalid Token");
             RuleFor(x => x)
                 .MustAsync(ResponseRespectsDeadline)
                 .WithMessage("Submissions are closed.");
+        }
+        
+        private async Task<bool> ValidJwt(SubmitResponseRequest request, CancellationToken cancellationToken)
+        {
+            var context = _httpContextAccessor.HttpContext;
+            if(context.Request.Headers["Authorization"].Count == 0)
+            {
+                return false;
+            }
+            var jwt = context.Request.Headers["Authorization"].First()?.Split(" ").Last();
+            if(jwt == null)
+            {
+                return false;
+            }
+
+            if (!_jwtValidator.Validate(jwt))
+            {
+                return false;
+            }
+            
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(jwt);
+            var userId= jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            if (userId == null)
+            {
+                // Unable to extract user ID from token
+                return false;
+            }
+
+            // Check if the user matches the quiz
+            using var scope = _serviceScopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var activeQuiz = await dbContext.ActiveQuizzes
+                .Include(aq => aq.User)
+                .FirstOrDefaultAsync(aq => aq.Id == request.ActiveQuizId, cancellationToken);
+
+            return activeQuiz != null && activeQuiz.User.Id == userId;
         }
 
         private async Task<bool> ResponseRespectsDeadline(SubmitResponseRequest request, CancellationToken cancellationToken)
@@ -41,7 +79,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             }
 
             using var scope = _serviceScopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var activeQuiz = await dbContext.ActiveQuizzes
                 .Include(aq => aq.Quiz)
                 .FirstOrDefaultAsync(aq => aq.Id == request.ActiveQuizId, cancellationToken);
@@ -68,7 +106,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
             // Check if the user matches the quiz
             using var scope = _serviceScopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var activeQuiz = await dbContext.ActiveQuizzes
                 .Include(aq => aq.User)
                 .FirstOrDefaultAsync(aq => aq.Id == request.ActiveQuizId, cancellationToken);
@@ -97,10 +135,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
     }
     public class SubmitResponseRequestHandler : IRequestHandler<SubmitResponseRequest, Result<string>>
     {
-        private readonly ApplicationDBContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IValidator<SubmitResponseRequest> _validator;
 
-        public SubmitResponseRequestHandler(ApplicationDBContext context, IValidator<SubmitResponseRequest> validator)
+        public SubmitResponseRequestHandler(ApplicationDbContext context, IValidator<SubmitResponseRequest> validator)
         {
             _context = context;
             _validator = validator;
@@ -134,10 +172,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/active-quizzes/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDBContext dbContext, HttpContext httpContext) =>
+            app.MapPost("api/active-quizzes/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDbContext dbContext, HttpContext httpContext) =>
             {
-                var handler = new SubmitResponseRequestHandler(dbContext, new SubmitResponseRequestValidator(httpContext.RequestServices.GetRequiredService<IServiceScopeFactory>(), httpContext.RequestServices.GetRequiredService<IHttpContextAccessor>()));
-                var result = await handler.Handle(request, CancellationToken.None);
+                
+                var result = await sender.Send(request);
 
                 if (result.IsFailure)
                 {

@@ -2,7 +2,6 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
@@ -13,7 +12,7 @@ namespace OQS.CoreWebAPI.Features.Profile
     {
         public record Command : IRequest<Result<Result>>
         {
-            public string Username{ get; set; }
+            public string Username { get; set; }
             public string Jwt { get; set; }
         }
 
@@ -84,7 +83,7 @@ public class DeleteUserEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapDelete("api/profile/delete_user", async (HttpContext context, String username,  ISender sender) =>
+        app.MapDelete("api/profile/delete_user", async (HttpContext context, String username, ISender sender) =>
         {
             var jwt = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var command = new OQS.CoreWebAPI.Features.Profile.DeleteUser.Command
@@ -94,9 +93,9 @@ public class DeleteUserEndpoint : ICarterModule
             };
 
             var result = await sender.Send(command);
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
-                return Results.Ok( new { message = "User deleted successfully!" });
+                return Results.Ok(new { message = "User deleted successfully!" });
             }
             return Results.Ok(new { message = result.Error.Message });
         });

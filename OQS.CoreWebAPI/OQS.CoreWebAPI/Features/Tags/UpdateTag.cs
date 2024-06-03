@@ -33,10 +33,10 @@ namespace OQS.CoreWebAPI.Features.Tags
 
         internal sealed class Handler : IRequestHandler<Command, Result<TagResponse>>
         {
-            private readonly ApplicationDBContext _context;
+            private readonly ApplicationDbContext _context;
             private readonly IValidator<Command> _validator;
 
-            public Handler(ApplicationDBContext context, IValidator<Command> validator)
+            public Handler(ApplicationDbContext context, IValidator<Command> validator)
             {
                 _context = context;
                 _validator = validator;
