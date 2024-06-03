@@ -4,7 +4,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
@@ -13,6 +12,8 @@ using OQS.CoreWebAPI.Features.Authentication;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using OQS.CoreWebAPI.Features.LiveQuizzes;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
+using OQS.CoreWebAPI.Extensions.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +29,12 @@ builder.Services.AddSwaggerGen(options =>
 // check if platform is linux
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 {
-    builder.Services.AddDbContext<ApplicationDBContext>(db =>
+    builder.Services.AddDbContext<ApplicationDbContext>(db =>
         db.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseLinux")));
 }
 else
 {
-    builder.Services.AddDbContext<ApplicationDBContext>(db =>
+    builder.Services.AddDbContext<ApplicationDbContext>(db =>
         db.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 }
 
@@ -50,10 +51,8 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDBContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 var assembly = typeof(Program).Assembly;
@@ -81,10 +80,15 @@ builder.Services.AddAuthorization();
 // Pentru trimiterea email-urilor
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+DependencyInjector.AddQuestionCheckersFromAssembly(builder.Services);
+var serviceProvider = builder.Services.BuildServiceProvider();
+serviceProvider.GetRequiredService<QuestionChecker>();
+DependencyInjector.AddEmailSenderStrategiesFromAssembly(builder.Services);
+
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -98,11 +102,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSpecificOrigin");
 
+// Used only for testing RSM's features.
+dbContext.SeedDbForRSMComplete();
 
 dbContext.SeedQuizzez();
 dbContext.SeedUsers();
 dbContext.SeedActiveQuizzes();
-dbContext.SeedLiveQuizzes();
+
 
 app.MapCarter();
 app.MapHub<LiveQuizzesHub>("/ws/live-quizzes");

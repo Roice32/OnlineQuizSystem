@@ -14,11 +14,11 @@ public class CreateActiveQuiz
 {
     public record QuizCreation(Guid QuizId, string Jwt) : IRequest<Result<ActiveQuiz>>;
 
-    private readonly ApplicationDBContext _context;
+    private readonly ApplicationDbContext _context;
 
     private readonly IConfiguration _configuration;
 
-    public CreateActiveQuiz(ApplicationDBContext context, IConfiguration configuration)
+    public CreateActiveQuiz(ApplicationDbContext context, IConfiguration configuration)
     {
         _configuration = configuration;
         _context = context;
@@ -46,7 +46,7 @@ public class CreateActiveQuiz
         private async Task<bool> QuizExists(Guid quizId, CancellationToken cancellationToken)
         {
             using var scope = _serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             return await context.Quizzes.FindAsync(quizId) != null;
         }
 
@@ -58,11 +58,11 @@ public class CreateActiveQuiz
 
         internal sealed class Handler : IRequestHandler<QuizCreation, Result<ActiveQuiz>>
         {
-            private readonly ApplicationDBContext _context;
+            private readonly ApplicationDbContext _context;
             private readonly QuizCreationValidator _validator;
             private readonly JwtSecurityTokenHandler _jwtHandler;
 
-            public Handler(ApplicationDBContext context, QuizCreationValidator validator)
+            public Handler(ApplicationDbContext context, QuizCreationValidator validator)
             {
                 _context = context;
                 _validator = validator;

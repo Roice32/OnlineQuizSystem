@@ -9,9 +9,9 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes;
 
 public class LiveQuizzesHub: Hub
 {
-    private readonly ApplicationDBContext _context;
+    private readonly ApplicationDbContext _context;
     private readonly ISender _sender;
-    public LiveQuizzesHub(ApplicationDBContext context,ISender sender)
+    public LiveQuizzesHub(ApplicationDbContext context,ISender sender)
     {
         _context = context;
         _sender = sender;

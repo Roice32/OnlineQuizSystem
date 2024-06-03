@@ -14,9 +14,9 @@ namespace OQS.CoreWebAPI.Features.QuizQuestions
 
         internal sealed class Handler : IRequestHandler<Query, Result<List<QuestionResponse>>>
         {
-            private readonly ApplicationDBContext context;
+            private readonly ApplicationDbContext context;
 
-            public Handler(ApplicationDBContext context)
+            public Handler(ApplicationDbContext context)
             {
                 this.context = context;
             }

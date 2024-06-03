@@ -30,10 +30,10 @@ namespace OQS.CoreWebAPI.Features.Tags
 
         public class Handler : IRequestHandler<Command, Result<Guid>>
         {
-            private readonly ApplicationDBContext dbContext;
+            private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
 
-            public Handler(ApplicationDBContext dbContext, IValidator<Command> validator)
+            public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
             {
                 this.dbContext = dbContext;
                 this.validator = validator;

@@ -34,25 +34,25 @@ namespace OQS.CoreWebAPI.Features.LiveQuizzes
             private async Task<bool> UserExists(string userId, CancellationToken cancellationToken)
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 return await context.Users.FindAsync(userId) != null;
             }
 
             private async Task<bool> LiveQuizExists(string code, CancellationToken cancellationToken)
             {
                 using var scope = _serviceScopeFactory.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 return await context.LiveQuizzes.FindAsync(code) != null;
             }
         }
 
         public sealed class Handler : IRequestHandler<ConnectionCommand, Result<string>>
         {
-            private readonly ApplicationDBContext _context;
+            private readonly ApplicationDbContext _context;
             private readonly JoinLiveQuizValidator _validator;
             private readonly IHubContext<LiveQuizzesHub> _hubContext;
 
-            public Handler(ApplicationDBContext context, JoinLiveQuizValidator validator, IHubContext<LiveQuizzesHub> hubContext)
+            public Handler(ApplicationDbContext context, JoinLiveQuizValidator validator, IHubContext<LiveQuizzesHub> hubContext)
             {
                 _context = context;
                 _validator = validator;

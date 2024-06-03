@@ -1,6 +1,5 @@
 ﻿using Carter;
 using FluentValidation;
-using FluentValidation.Validators;
 using Mapster;
 using MediatR;
 using OQS.CoreWebAPI.Contracts;
@@ -66,10 +65,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
         public class Handler : IRequestHandler<Command, Result<Guid>>
         {
-            private readonly ApplicationDBContext dbContext;
+            private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
 
-            public Handler(ApplicationDBContext dbContext, IValidator<Command> validator)
+            public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
             {
                 this.dbContext = dbContext;
                 this.validator = validator;

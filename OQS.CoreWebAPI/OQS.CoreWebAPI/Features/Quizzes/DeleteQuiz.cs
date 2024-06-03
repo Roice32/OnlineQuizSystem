@@ -27,9 +27,9 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
         internal sealed class Handler : IRequestHandler<Command, Result>
         {
-            private readonly ApplicationDBContext _dbContext;
+            private readonly ApplicationDbContext _dbContext;
 
-            public Handler(ApplicationDBContext dbContext)
+            public Handler(ApplicationDbContext dbContext)
             {
                 _dbContext = dbContext;
             }

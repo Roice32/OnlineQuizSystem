@@ -1,8 +1,6 @@
 ﻿using Carter;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using OQS.CoreWebAPI.Contracts.Models;
 using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
@@ -40,7 +38,7 @@ namespace OQS.CoreWebAPI.Features.Profile
 
                 if (!jwtValidator.IsAdmin())
                 {
-                    return Result.Failure< List<User>>(
+                    return Result.Failure<List<User>>(
                                                new Error("Authentication", "You are not an admin."));
                 }
 
