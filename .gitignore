@@ -133,3 +133,14 @@ $RECYCLE.BIN/
 _NCrunch*
 /OnlineQuizSystem/.vs
 /OQS.CoreWebAPI/.vs
+
+OQS.CoreWebAPI/OQS.CoreWebAPI/obj/Debug/net8.0/OQS.CoreWebAPI.AssemblyInfo.cs
+OQS.CoreWebAPI/OQS.CoreWebAPI/obj/Debug/net8.0/OQS.CoreWebAPI.AssemblyInfo.cs
+OQS.CoreWebAPI/OQS.CoreWebAPI/obj/Debug/net8.0/OQS.CoreWebAPI.GeneratedMSBuildEditorConfig.editorconfig
+OQS.CoreWebAPI/OQS.CoreWebAPI/obj/Debug/net8.0/OQS.CoreWebAPI.AssemblyInfoInputs.cache
+*.cache
+*.editorconfig
+OQS.CoreWebAPI/.idea/config/applicationhost.config
+b4quiz
+.vs
+/OQS.WebUI/results-and-statistics-module/node_modules
