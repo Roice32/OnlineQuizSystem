@@ -9,7 +9,7 @@ import { config } from "../../config";
 const loader = config.useBackend ? ActiveQuizLoader : ActiveQuizLoaderMock;
 
 export const ActiveQuizRoute: RouteObject = {
-  path: "active-quiz/:id",
+  path: "active-quizzes/:id",
   loader,
   element: <ActiveQuizPage />,
   errorElement: <ErrorPage />,

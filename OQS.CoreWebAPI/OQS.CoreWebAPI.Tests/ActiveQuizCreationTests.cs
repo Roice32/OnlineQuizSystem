@@ -19,7 +19,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
 
         var newQuiz = new CreateActiveQuizRequest()
         {
-            QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13b"),
+            QuizId = Guid.Parse("00000000-0000-0000-0002-000000000001"),
         };
         var response= await Client.PostAsJsonAsync("api/active-quizzes", newQuiz);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -32,8 +32,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
     {    
         var newQuiz = new CreateActiveQuizRequest()
         {
-            QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13a"),
-           
+            QuizId = Guid.Parse("00000000-0000-0000-0002-000000000010"),
         };
     
         
@@ -50,7 +49,7 @@ public class ActiveQuizCreationTests: ApplicationContextForTesting
     {
         var newQuiz = new CreateActiveQuizRequest()
         {
-            QuizId = Guid.Parse("1af3912f-d625-413a-91b6-cb31f4cbb13b"),
+            QuizId = Guid.Parse("00000000-0000-0000-0002-000000000001"),
             
         };
     

@@ -15,12 +15,9 @@ namespace OQS.CoreWebAPI.Tests
         [Fact]
         public async Task SubmitResponse_ReturnsOk()
         {
-            // Arrange
-            var client = Application.CreateClient();
+ 
 
-            // Add JWT token to request headers
-            var token = "your_jwt_token_here"; // Replace with your JWT token
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+           
 
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450");
 
@@ -40,7 +37,7 @@ namespace OQS.CoreWebAPI.Tests
             };
 
             // Act
-            var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
+            var response = await Client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -52,13 +49,7 @@ namespace OQS.CoreWebAPI.Tests
         [Fact]
         public async Task SubmitResponse_InvalidUserId_ReturnsBadRequest()
         {
-            // Arrange
-            var client = Application.CreateClient();
-
-            // Add JWT token to request headers
-            var token = "your_jwt_token_here"; // Replace with your JWT token
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-
+            
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972450");
 
             var newResponse = new SubmitResponseRequest
@@ -75,29 +66,22 @@ namespace OQS.CoreWebAPI.Tests
                     }
                 }
             };
-
-            // Act
-            var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
+            Client.DefaultRequestHeaders.Remove("Authorization");
+            Client.DefaultRequestHeaders.Add("Authorization", "Bearer eyJhbGciOi");
+            var response = await Client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            var result = await response.Content.ReadFromJsonAsync<Result<string>>();
-            result.IsSuccess.Should().BeFalse();
-            result.Error.Should().NotBeNull(); // Ensure that an error object is present
-            result.Error.Code.Should().Be("BadRequest");
-            ;
+            var result = await response.Content.ReadFromJsonAsync<Error>();
+            result.Should().NotBeNull(); // Ensure that an error object is present
+            result.Code.Should().Be("BadRequest");
+            result.Message.Should().Be("Invalid Token");
         }
 
         [Fact]
         public async Task SubmitResponse_PastDeadline_ReturnsBadRequest()
         {
-            // Arrange
-            var client = Application.CreateClient();
-
-            // Add JWT token to request headers
-            var token = "your_jwt_token_here"; // Replace with your JWT token
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-
+            
             var activeQuizId = Guid.Parse("f0a486df-a7bd-467f-bb9a-4ac656972451");
 
             var newResponse = new SubmitResponseRequest
@@ -116,15 +100,14 @@ namespace OQS.CoreWebAPI.Tests
             };
 
             // Act
-            var response = await client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
+            var response = await Client.PostAsJsonAsync($"api/active-quizzes/{activeQuizId}", newResponse);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            var result = await response.Content.ReadFromJsonAsync<Result<string>>();
-            result.IsSuccess.Should().BeFalse();
-            result.Error.Should().NotBeNull();
-            result.Error.Code.Should().Be("BadRequest");
-            result.Error.Message.Should().Be("Submissions are closed.");
+            var result = await response.Content.ReadFromJsonAsync<Error>();
+            result.Should().NotBeNull();
+            result.Code.Should().Be("BadRequest");
+            result.Message.Should().Be("Submissions are closed.");
         }
     }
 }

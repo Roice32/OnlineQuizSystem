@@ -4,11 +4,13 @@ import { User } from "../../utils/types/user";
 export interface UserState {
     isLogged: boolean;
     user: User | null;
+    authDeadline:string|null;
 }
 
 const initialState: UserState = {
     isLogged: false,
     user: null,
+    authDeadline:null,
 };
 
 const userSlice = createSlice({
@@ -19,6 +21,7 @@ const userSlice = createSlice({
         return {
             isLogged: true,
             user: action.payload,
+            authDeadline: (new Date(new Date().getTime() + 1000 * 60 * 60 * 24*6)).toISOString(),
         };
         
         },
@@ -26,6 +29,7 @@ const userSlice = createSlice({
             return {
                 isLogged: false,
                 user: null,
+                authDeadline: null,
             };
         }
         },

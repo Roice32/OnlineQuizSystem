@@ -35,7 +35,7 @@ namespace OQS.CoreWebAPI.Tests
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
             Assert.Equal("GetActiveQuiz.BadRequest", result.Error.Code); 
-            Assert.Equal("Invalid Active Quiz Id\r\nUser is not associated with the given active quiz ID", result.Error.Message);
+            Assert.Equal("Invalid Quiz Id\r\nUser is not associated with the given active quiz ID", result.Error.Message);
         }
         
         [Fact]

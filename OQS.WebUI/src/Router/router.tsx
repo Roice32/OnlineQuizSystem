@@ -9,12 +9,17 @@ import { ProfileRoute } from "./Routes/ProfileRoute";
 import { TakenQuizzesHistoryRoute } from "./Routes/TakenQuizzesHistoryRoute";
 import { CreatedQuizStatsRoute } from "./Routes/CreatedQuizStatsRoute";
 import { QuizResultRoute } from "./Routes/QuizResultRoute";
+import ErrorPage from "../Pages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     children: [
+      {
+        path: "*",
+        element: <ErrorPage />,
+      },
       {
         path: "/",
         element: <HomePage />,
@@ -27,7 +32,6 @@ export const router = createBrowserRouter([
       LiveQuizRoute,
       AuthRoute,
       ProfileRoute,
-      
     ],
   },
 ]);
