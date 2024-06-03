@@ -18,7 +18,7 @@ namespace OQS.CoreWebAPI.Features.Profile
             public string Jwt { get; set; }
         }
 
-      internal sealed class Handler : IRequestHandler<Query, Result<List<User>>>
+     internal sealed class Handler : IRequestHandler<Query, Result<List<User>>>
         {
             private readonly UserManager<User> userManager;
             private readonly IConfiguration configuration;
