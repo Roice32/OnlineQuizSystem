@@ -118,10 +118,10 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                         " <div class=\"container\">\r\n" +
                         " <h1> Online Quiz Application</h1>\r\n" +
                         " <p>Dear usernameToBeReplaced, <br><br>\r\n" +
-                        " Here are the results for the quizNameToBeReplaced between startDateToBeReplaced - endDateToBeReplaced:\r\n " +
+                        " Here are the results for the 'quizNameToBeReplaced' quiz between startDateToBeReplaced - endDateToBeReplaced:\r\n " +
                         " <br><br>\r\n" +
                         " resultsToBeReplaced\r\n<br><br>\r\n" +
-                        " If you have any questions or need assistance, don't hesitate to contact us at echipafacultate@yahoo.com.<br>\r\n" +
+                        " If you have any questions or need assistance, don't hesitate to contact us at Online.Quiz@outlook.com.<br>\r\n" +
                         " Best regards, <br>\r\n " +
                         " Online Quiz Application Team</p>\r\n" +
                         "</div>\r\n</body>\r\n</html>\r\n";
@@ -130,7 +130,10 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     foreach (var header in quizResultHeaders)
                     {
                         var user = await dbContext.Users.FindAsync(header.UserId.ToString());
-                        results += $"User Name: {user.UserName}<br> Submitted At: {header.SubmittedAtUtc.ToLocalTime()}<br>Score: {header.Score}<br> Review Pending: {header.ReviewPending}<br><br>";
+                        results += $"Username: {user.UserName}";
+                        results += $"<br>Submitted at: {header.SubmittedAtUtc.ToLocalTime()}";
+                        results += $"<br>Score: {header.Score}";
+                        results += header.ReviewPending ? $" (Pending review)<br><br>" : $" (Final)<br><br>";
                     }
 
                     emailBody = emailBody.Replace("usernameToBeReplaced", request.RecipientEmail)

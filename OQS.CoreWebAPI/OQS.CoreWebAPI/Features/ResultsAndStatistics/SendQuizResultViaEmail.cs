@@ -142,7 +142,19 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             if (reviewNeededQuestion != null && reviewNeededResult != null)
             {
                 result += $"Your answer: {reviewNeededResult.ReviewNeededAnswer}<br>";
-                result += $"Your answer is {reviewNeededResult.ReviewNeededResult}.";
+                result += $"Your answer is ";
+                if (reviewNeededResult.ReviewNeededResult == AnswerResult.Correct)
+                {
+                    result += "Correct!";
+                }
+                else if (reviewNeededResult.ReviewNeededResult == AnswerResult.Wrong)
+                {
+                    result += "Incorrect.";
+                }
+                else
+                {
+                    result += "Pending review.";
+                }
             }
             return result;
         }
@@ -267,7 +279,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     $"<p>Dear {request.RecipientEmail},<br><br>\r\n" +
                     $"Here are your quiz results:<br><br>\r\n" +
                     $"<br>{resultsBuilder}<br><br>\r\n" +
-                    "If you have any questions or need assistance, don't hesitate to contact us at echipafacultate@yahoo.com.<br>\r\n" +
+                    "If you have any questions or need assistance, don't hesitate to contact us at Online.Quiz@outlook.com.<br>\r\n" +
                     "Best regards,<br>\r\n" +
                     "Online Quiz Application Team</p>\r\n" +
                     "</div>\r\n</body>\r\n</html>";

@@ -3,9 +3,10 @@ import axios from 'axios';
 import { CreatedQuizStats } from '../../utils/types/results-and-statistics/created-quiz-stats';
 import { Link, useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import ErrorComponent from '../../Components/ResultsAndStatistics/ErrorComponent';
+import { openSnackbar } from '../../redux/Snackbar/SnackbarState';
 
 const QuizStatsPage = () => {
   const { quizId } = useParams<{ quizId: string }>();
@@ -17,6 +18,7 @@ const QuizStatsPage = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getCreatedQuizStats = async (quizId: string) => {
@@ -61,10 +63,14 @@ const QuizStatsPage = () => {
   const sendQuizStatsViaEmail = async () => {
     try {
       await axios.get(`http://localhost:5276/api/email/sendCreatedQuizStatsViaEmail?quizId=${quizId}&recipientEmail=${recipientEmail}&startDate=${startDate}&endDate=${endDate}`, {});
-      alert('Quiz stats have been sent via email successfully.');
+      dispatch(
+        openSnackbar({ message: "Quiz stats for given time period successfully sent to specified email.", severity: "success" })
+      );
     } catch (error) {
-      console.error('Error sending quiz stats via email:', error);
-      alert('Failed to send quiz stats via email.');
+      console.log(error);
+      dispatch(
+        openSnackbar({ message: "Failed to send quiz stats to specified email. Check input fields and try again.", severity: "error" })
+      );
     }
   };
 

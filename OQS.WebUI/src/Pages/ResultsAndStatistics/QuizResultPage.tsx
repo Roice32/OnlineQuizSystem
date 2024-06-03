@@ -3,13 +3,15 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { QuizResult } from "../../utils/types/results-and-statistics/quiz-result";
 import QuestionResultDisplay from '../../Components/ResultsAndStatistics/QuestionResultDisplays/QuestionResultDisplay';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import ErrorComponent from '../../Components/ResultsAndStatistics/ErrorComponent';
+import { openSnackbar } from '../../redux/Snackbar/SnackbarState';
 
 const QuizResultsPage = () => {
   const { userId, quizId } = useParams<{ userId: string, quizId: string }>();
   const userState = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorOccured, setErrorOccured] = useState('');
@@ -62,9 +64,14 @@ const QuizResultsPage = () => {
   const sendQuizResultViaEmail = async () => {
     try {
       await axios.get(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`);
-      alert('Quiz result has been sent via email successfully.');
+      dispatch(
+        openSnackbar({ message: "Quiz result successfully sent to specified email.", severity: "success" })
+      );
     } catch (error) {
-      alert('Failed to send quiz results via email.');
+      console.log(error);
+      dispatch(
+        openSnackbar({ message: "Failed to send quiz result to specified email. Check input field and try again.", severity: "error" })
+      );
     }
   };
 
