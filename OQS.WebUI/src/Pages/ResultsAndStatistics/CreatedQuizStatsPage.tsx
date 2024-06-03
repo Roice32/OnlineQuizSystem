@@ -95,7 +95,7 @@ const QuizStatsPage = () => {
     <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
       <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Created Quiz Stats</h1>
-        {quizStats ? (
+        {quizStats?.quizResultHeaders.length ? (
           <>
             <p className="text-lg text-center mb-4">Quiz Name: {quizStats.quizName}</p>
             <h2 className="text-lg font-bold mb-2">Results:</h2>
