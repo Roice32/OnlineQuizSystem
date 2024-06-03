@@ -1,22 +1,17 @@
-import { useEffect } from "react";
-import { useCookies } from "react-cookie";
-import { Outlet } from "react-router-dom";
-import { config } from "../config";
-import { userMock, userMock2 } from "../utils/mocks/userMock";
+import {Outlet} from "react-router-dom";
 import GeneralSnackbar from "../Components/Snackbar";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { setUser } from "../redux/User/UserState";
-import { User } from "../utils/types/user";
 import Navbar from "../Components/Navbar";
+import {Theme} from "@radix-ui/themes";
 
 export default function Root() {
-  return (
-    <>
-      <Navbar />
-      <GeneralSnackbar />
+    return (
+        <>
+            <Theme accentColor='teal'>
+                <Navbar/>
+                <GeneralSnackbar/>
 
-      <Outlet />
-    </>
-  );
+                <Outlet/>
+            </Theme>
+        </>
+    );
 }

@@ -31,9 +31,23 @@ const steps = [
     },
 ]
 
+type QuestionRequest = {
+    id: string
+    text: string
+    type: number
+    allocatedPoints: number
+    timeLimit: number
+    quizId: string
+    trueFalseAnswer?: boolean
+    choices?: string[]
+    multipleChoiceAnswers?: string[]
+    singleChoiceAnswer?: string
+    writtenAcceptedAnswers?: string[]
+}
+
 type Question = {
     inDatabase?: boolean
-    id?: string
+    id: string
     text: string
     type: number
     allocatedPoints: number | ''
@@ -52,7 +66,7 @@ enum QuestionType {
     WrittenAnswer = 3,
 }
 
-let QuestionTypeString = {
+const QuestionTypeString = {
     0: 'True/False',
     1: 'Multiple Choice',
     2: 'Single Choice',
@@ -89,23 +103,14 @@ function QuestionComponent({id, setQuiz, quiz}) {
 
     const question = quiz.questions.find((q) => q.id === id)
 
-    let questionType = quiz.questions.find((q) => q.id === question.id).type
-    let questionText = quiz.questions.find((q) => q.id === question.id).text
-    let questionAllocatedPoints = quiz.questions.find((q) => q.id === question.id).allocatedPoints
-    let questionTimeLimit = quiz.questions.find((q) => q.id === question.id).timeLimit
+    const questionType = quiz.questions.find((q) => q.id === question.id).type
+    const questionText = quiz.questions.find((q) => q.id === question.id).text
+    const questionAllocatedPoints = quiz.questions.find((q) => q.id === question.id).allocatedPoints
+    const questionTimeLimit = quiz.questions.find((q) => q.id === question.id).timeLimit
 
     // const [optionsSingleChoice, setOptionsSingleChoice] = useState<OptionChoice[]>([])
     const [addOptionSingleChoice, setAddOptionSingleChoice] = useState(false)
     const [newOptionSingleChoice, setNewOptionSingleChoice] = useState('')
-    const [correctAnswerSingleChoice, setCorrectAnswerSingleChoice] = useState('')
-
-
-    const submitQuestion = (event) => {
-        const data = Object.fromEntries(new FormData(event.currentTarget))
-        console.log(data)
-
-        event.preventDefault()
-    }
 
     const onChangeQuestion = (event) => {
         setQuiz({
@@ -123,7 +128,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
     }
 
     const onChangeQuestionType = (questionTypeValue) => {
-        let currentQuestion = quiz.questions.find((q) => q.id === question.id)
+        const currentQuestion = quiz.questions.find((q) => q.id === question.id)
         // set the type of current question in quiz
         setQuiz({
             ...quiz,
@@ -142,8 +147,10 @@ function QuestionComponent({id, setQuiz, quiz}) {
     const renderQuestionTypeOptions = () => {
         switch (questionType) {
             case QuestionType.TrueFalse:
+                // eslint-disable-next-line no-case-declarations
                 const correctAnswerTrueFalse = quiz.questions.find((q) => q.id === question.id).trueFalseAnswer.toString()
 
+                // eslint-disable-next-line no-case-declarations
                 const setCorrectAnswerTrueFalse = (value) => {
                     setQuiz({
                         ...quiz,
@@ -171,9 +178,12 @@ function QuestionComponent({id, setQuiz, quiz}) {
                 )
             case QuestionType.MultipleChoice:
                 // find the current question in the quiz
-                let currentQuestion = quiz.questions.find((q) => q.id === question.id)
-                let correctAnswers = currentQuestion.multipleChoiceAnswers
+                // eslint-disable-next-line no-case-declarations
+                const currentQuestion = quiz.questions.find((q) => q.id === question.id)
+                // eslint-disable-next-line no-case-declarations
+                const correctAnswers = currentQuestion.multipleChoiceAnswers
 
+                // eslint-disable-next-line no-case-declarations
                 const setCorrectAnswerMultipleChoice = (value) => {
                     setQuiz({
                         ...quiz,
@@ -201,7 +211,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                           onChange={(event) => setNewOptionMultipleChoice(event.target.value)}/>
                                 <Flex justify="between">
                                     <Button mb="20px" onClick={() => {
-                                        let newOptionsMultipleChoice = [...question.multipleChoiceAnswers, newOptionMultipleChoice]
+                                        const newOptionsMultipleChoice = [...question.choices, newOptionMultipleChoice]
                                         setQuiz({
                                             ...quiz,
                                             questions: quiz.questions.map((q) => {
@@ -238,6 +248,26 @@ function QuestionComponent({id, setQuiz, quiz}) {
                     </>
                 )
             case QuestionType.SingleChoice:
+                // eslint-disable-next-line no-case-declarations
+                const correctAnswerSingleChoice = question.singleChoiceAnswer;
+                console.log("DEEE aici", correctAnswerSingleChoice)
+
+                // eslint-disable-next-line no-case-declarations
+                const setCorrectAnswerSingleChoice = (value) => {
+                    setQuiz({
+                        ...quiz,
+                        questions: quiz.questions.map((q) => {
+                            if (q.id === question.id) {
+                                return {
+                                    ...q,
+                                    singleChoiceAnswer: value,
+                                }
+                            }
+                            return q
+                        }),
+                    })
+                }
+
                 return (
                     <>
                         <RadioGroup.Root value={correctAnswerSingleChoice} onValueChange={setCorrectAnswerSingleChoice}
@@ -250,7 +280,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                           onChange={(event) => setNewOptionSingleChoice(event.target.value)}/>
                                 <Flex justify="between">
                                     <Button mb="20px" onClick={() => {
-                                        let newOptionsSingleChoice = [...question.choices,
+                                        const newOptionsSingleChoice = [...question.choices,
                                             newOptionSingleChoice,
                                         ]
 
@@ -296,7 +326,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                             <>
                                 {question.choices.map((answer, index) => (
                                     <Flex direction="column" mb="10px">
-                                        <Text mb="5px">{answer.value}</Text>
+                                        <Text mb="5px">{answer}</Text>
                                         <Button onClick={() => {
                                             setQuiz({
                                                 ...quiz,
@@ -304,7 +334,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                                     if (q.id === question.id) {
                                                         return {
                                                             ...q,
-                                                            choices: q.choices.filter((a) => a.value !== answer.value),
+                                                            choices: q.choices.filter((a) => a !== answer),
                                                         }
                                                     }
                                                     return q
@@ -323,7 +353,7 @@ function QuestionComponent({id, setQuiz, quiz}) {
                                           onChange={(event) => setNewOptionWrittenAnswer(event.target.value)}/>
                                 <Flex justify="between">
                                     <Button mb="20px" onClick={() => {
-                                        let newOptionsWrittenAnswer = [...question.choices,
+                                        const newOptionsWrittenAnswer = [...question.choices,
                                             newOptionWrittenAnswer,
                                         ]
 
@@ -454,7 +484,7 @@ type QuizCreateProps = {
     description?: string
     timeLimit?: number | ''
     language?: string
-    questions?: Question[]
+    questions: Question[]
 }
 
 type ErrorMessagesQuizCreate = {
@@ -466,14 +496,14 @@ type ErrorMessagesQuizCreate = {
     questions?: string
 }
 
-let ErrorMessagesQuizCreateString = [
+const ErrorMessagesQuizCreateString = [
     'name', 'imageUrl', 'description', 'timeLimit', 'language', 'questions',
 ]
 
 
 export default function QuizCreate() {
     const navigate = useNavigate()
-    const [quiz, setQuiz] = useState<QuizCreateProps>({language: 'romanian'})
+    const [quiz, setQuiz] = useState<QuizCreateProps>({language: 'romanian', questions: []})
     const [errorMessages, setErrorMessages] = useState<ErrorMessagesQuizCreate>({})
 
     const [open, setOpen] = React.useState(false)
@@ -485,13 +515,14 @@ export default function QuizCreate() {
     const [doneAI, setDoneAI] = React.useState(false)
     const [prompt, setPrompt] = React.useState('')
 
+    const [editPate, setEditPage] = React.useState(false)
+
     const [currentElement, setCurrentElement] = React.useState('quiz-details')
 
     return (
         <>
             <Toast.Provider swipeDirection="right">
                 <Dialog.Root>
-                    <Navbar/>
                     <Container p="30px">
                         <Tabs.Root value={currentElement} onValueChange={setCurrentElement}>
                             <Flex justify="between">
@@ -686,8 +717,8 @@ export default function QuizCreate() {
                                     <Flex justify="center">
                                         <Flex direction="column" justify="center" maxWidth="500px">
                                             <Text mb="20px">If you are ready you can submit your quiz</Text>
-                                            <Button onClick={() => {
-                                                let quizRequest = {
+                                            <Button onClick={async () => {
+                                                const quizRequest = {
                                                     name: quiz.name,
                                                     imageUrl: quiz.imageUrl,
                                                     timeLimitMinutes: quiz.timeLimit,
@@ -696,76 +727,148 @@ export default function QuizCreate() {
                                                     creatorId: '822c13a0-8872-431e-ad64-00f5249db11f',
                                                 }
 
-                                                console.log(quiz)
-                                                console.log(quizRequest)
-                                                fetch('http://localhost:5276/api/quizzes', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
-                                                    },
-                                                    body: JSON.stringify(quizRequest),
-                                                })
-                                                    .then((response) => {
-                                                            return response.json()
+                                                try {
+                                                    const response = await fetch('http://localhost:5276/api/quizzes', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
                                                         },
-                                                    )
-                                                    .then((data) => {
-                                                        if (typeof data === 'string') {
-                                                            return navigate(data.substring(4, data.length))
-                                                        }
+                                                        body: JSON.stringify(quizRequest),
+                                                    })
 
-                                                        console.log(data)
-                                                        if (data.code !== 200) {
-                                                            setOpen(true)
-                                                            setMessageToast(data.message)
-                                                            setTitleToast('Error at creating the quiz')
-                                                            console.log(data.message)
-                                                            let errorMessagesStrings = data?.message.split('\n')
-                                                            let errorMessages = {}
-                                                            for (let error of errorMessagesStrings) {
-                                                                if (error.toLowerCase().includes('name')) {
-                                                                    errorMessages = {...errorMessages, 'name': error}
+                                                    const data = await response.json()
+                                                    let quizId: string | undefined = undefined
+
+                                                    if (typeof data === 'string') {
+                                                        setEditPage(true);
+                                                        quizId = data.substring(13, data.length);
+                                                    }
+
+                                                    if (quizId !== undefined) {
+                                                        for (const question of quiz.questions) {
+                                                            const indexQuestion = quiz.questions.indexOf(question)
+
+                                                            console.log("Questiiooonn", question)
+
+                                                            let questionRequest: QuestionRequest = {
+                                                                id: question.id,
+                                                                text: question.text,
+                                                                type: question.type,
+                                                                allocatedPoints: question.allocatedPoints || 0,
+                                                                timeLimit: question.timeLimit || 0,
+                                                                quizId: quizId,
+                                                            }
+
+                                                            if (question.type == QuestionType.TrueFalse) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    trueFalseAnswer: question.trueFalseAnswer,
                                                                 }
-                                                                if (error.toLowerCase().includes('image')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'imageUrl': error
-                                                                    }
+                                                            } else if (question.type == QuestionType.MultipleChoice) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    choices: question.choices,
+                                                                    multipleChoiceAnswers: question.multipleChoiceAnswers,
                                                                 }
-                                                                if (error.toLowerCase().includes('description')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'description': error
-                                                                    }
+                                                            } else if (question.type == QuestionType.SingleChoice) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    choices: question.choices,
+                                                                    singleChoiceAnswer: question.singleChoiceAnswer,
                                                                 }
-                                                                if (error.toLowerCase().includes('time')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'timeLimit': error
-                                                                    }
-                                                                }
-                                                                if (error.toLowerCase().includes('language')) {
-                                                                    errorMessages = {
-                                                                        ...errorMessages,
-                                                                        'language': error
-                                                                    }
+                                                            } else if (question.type == QuestionType.WrittenAnswer) {
+                                                                questionRequest = {
+                                                                    ...questionRequest,
+                                                                    choices: question.choices,
+                                                                    writtenAcceptedAnswers: question.writtenAcceptedAnswers,
                                                                 }
                                                             }
 
-                                                            setErrorMessages({...errorMessages})
+
+                                                            const response = await fetch(`http://localhost:5276/api/quizzes/${quizId}/questions`, {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                },
+                                                                body: JSON.stringify(questionRequest),
+                                                            })
+
+                                                            const data = await response.json()
+                                                            console.log("intrebaaaarreee", data)
+
+                                                            if (response.status !== 200) {
+                                                                setOpen(true)
+                                                                setMessageToast(data.message)
+                                                                setTitleToast(`Error at the question ${indexQuestion + 1}`)
+                                                                console.log(data.message)
+                                                                return;
+                                                                // const errorMessagesStrings = data?.message.split('\n')
+                                                                // let errorMessages = {}
+                                                                // for (const error of errorMessagesStrings) {
+                                                                // }
+                                                                // setErrorMessages({...errorMessages})
+                                                            }
                                                         }
 
-                                                        console.log('Success:', data)
-                                                    })
-                                                    .catch((error) => {
-                                                        if (error instanceof SyntaxError) {
-                                                            setOpen(true)
-                                                            setMessageToast('Review the quiz details and the questions!')
-                                                            setTitleToast('Error at creating the quiz')
-                                                        } else {
-                                                            console.error('Error:', error)
+                                                        if (typeof data === 'string') {
+                                                            setEditPage(true);
+                                                            return navigate(data.substring(4, data.length))
                                                         }
-                                                    })
+                                                    }
+
+
+                                                    console.log(data)
+                                                    if (data.code !== 200) {
+                                                        setOpen(true)
+                                                        setMessageToast(data.message)
+                                                        setTitleToast('Error at creating the quiz')
+                                                        console.log(data.message)
+                                                        const errorMessagesStrings = data?.message.split('\n')
+                                                        let errorMessages = {}
+                                                        for (const error of errorMessagesStrings) {
+                                                            if (error.toLowerCase().includes('name')) {
+                                                                errorMessages = {...errorMessages, 'name': error}
+                                                            }
+                                                            if (error.toLowerCase().includes('image')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'imageUrl': error
+                                                                }
+                                                            }
+                                                            if (error.toLowerCase().includes('description')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'description': error
+                                                                }
+                                                            }
+                                                            if (error.toLowerCase().includes('time')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'timeLimit': error
+                                                                }
+                                                            }
+                                                            if (error.toLowerCase().includes('language')) {
+                                                                errorMessages = {
+                                                                    ...errorMessages,
+                                                                    'language': error
+                                                                }
+                                                            }
+                                                        }
+
+                                                        setErrorMessages({...errorMessages})
+                                                    }
+
+
+                                                    console.log('Success:', data)
+                                                } catch (error) {
+                                                    if (error instanceof SyntaxError) {
+                                                        setOpen(true)
+                                                        setMessageToast('Review the quiz details and the questions!')
+                                                        setTitleToast('Error at creating the quiz')
+                                                    } else {
+                                                        console.error('Error:', error)
+                                                    }
+                                                }
                                             }}>
                                                 Submit Quiz
                                             </Button>
@@ -821,7 +924,7 @@ export default function QuizCreate() {
                                 onClick={async () => {
                                     setLoadingAI(true)
 
-                                    let currentElementNumber = currentElement.substring(8)
+                                    const currentElementNumber = currentElement.substring(8)
                                     // verify if current element is number
                                     if (isNaN(Number(currentElementNumber))) {
                                         setLoadingAI(false)
@@ -831,7 +934,7 @@ export default function QuizCreate() {
                                         return
                                     }
 
-                                    let mesaj = `Vreau să creezi 1 întrebări de dificultate medie, fiecare având 4 variante de răspuns, una corectă și 3 greșite, pentru un quiz cu tema "${prompt}". Vei returna raspunsul sub forma de json, unde intrebarea va fi un string, iar variantele de raspuns vor fi un array de stringuri. Varianta corecta va fi prima varianta posibila.
+                                    const mesaj = `Vreau să creezi 1 întrebări de dificultate medie, fiecare având 4 variante de răspuns, una corectă și 3 greșite, pentru un quiz cu tema "${prompt}". Vei returna raspunsul sub forma de json, unde intrebarea va fi un string, iar variantele de raspuns vor fi un array de stringuri. Varianta corecta va fi prima varianta posibila.
                 Exemplu: {
                     "1": {
                         "intrebare": "Cine a fost primul rege al Angliei?",
@@ -869,21 +972,19 @@ export default function QuizCreate() {
                                     } else {
                                         const responseData = await response.json()
                                         console.log('Răspunsul API:', responseData)
-                                        let raspunsAI = responseData.data.outputs[0].text
-                                        let responseObject = JSON.parse(raspunsAI)
+                                        const raspunsAI = responseData.data.outputs[0].text
+                                        const responseObject = JSON.parse(raspunsAI)
 
-                                        let correctAnswer = responseObject['1'].variante[0]
-                                        let text = responseObject['1'].intrebare
-                                        let choices = responseObject['1'].variante
+                                        const correctAnswer = responseObject['1'].variante[0]
+                                        const text = responseObject['1'].intrebare
+                                        const choices = responseObject['1'].variante
                                         console.log(choices)
 
-                                        // @ts-ignore
-                                        let currentQuestion = quiz.questions.find((q) => q.id === quiz.questions[Number(currentElementNumber)].id) || {'id': 3};
+                                        const currentQuestion = quiz.questions?.find((q) => q.id === quiz.questions[Number(currentElementNumber)].id) || {'id': 3};
 
                                         setQuiz({
                                             ...quiz,
                                             questions: quiz.questions?.map((q) => {
-                                                // @ts-ignore
                                                 if (q.id === currentQuestion?.id) {
                                                     return {
                                                         ...q,
