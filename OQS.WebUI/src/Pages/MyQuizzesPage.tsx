@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faTrashAlt, faEdit} from '@fortawesome/free-solid-svg-icons';
-import {useParams} from 'react-router-dom';
-//import ModifyQuizPage from "./ModifyQuizPage";
-//<Route path="/:id/modify" component={ModifyQuizPage} />
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 type Quiz = {
     id: string;
     name: string;
@@ -32,35 +32,33 @@ type QuizResponse = {
 type QuizzesListProps = {
     quizzes: Quiz[];
     onDelete: (id: string) => void;
-    onModify: (id: string) => void;
 };
 
-const QuizzesList: React.FC<QuizzesListProps> = ({quizzes, onDelete, onModify}) => {
+const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, onDelete }) => {
     const sortedQuizzes = [...quizzes].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
         <ul className="list-none w-full max-w-2xl">
             {sortedQuizzes.map((quiz) => (
                 <li key={quiz.id} className="flex flex-col py-2">
-                    <div
-                        className="w-full border-t border-b border-[#deae9f] border-solid border-2 bg-[#efd7cf] shadow-md">
+                    <div className="w-full border-t border-b border-[#deae9f] border-solid border-2 bg-[#efd7cf] shadow-md">
                         <div className="flex flex-col py-2 px-4">
                             <span className="text-[#1c4e4f] text-2xl font-bold">{quiz.name}</span>
                             <div className="flex items-center">
-                                <p className="ml-4 flex items-center rounded-full bg-[#f7ebe7] text-[#1c4e4f] px-4 py-0s">Created
-                                    at: {new Date(quiz.createdAt).toLocaleDateString()}</p>
+                                <p className="ml-4 flex items-center rounded-full bg-[#f7ebe7] text-[#1c4e4f] px-4 py-0s">Created at: {new Date(quiz.createdAt).toLocaleDateString()}</p>
                                 <div className="ml-auto">
-                                    <button
-                                        onClick={() => onModify(quiz.id)}
-                                        className="bg-[#436e6f] text-white px-4 py-2 rounded mr-2"
-                                    >
-                                        <FontAwesomeIcon icon={faEdit}/>
-                                    </button>
-                                    <button
-                                        onClick={() => onDelete(quiz.id)}
+                                    <Link to={`/quizzes/update/${quiz.id}`}>
+                                        `<button
+                                            className="bg-[#436e6f] text-white px-4 py-2 rounded mr-2"
+                                            >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </button>
+                                    </Link>`
+                                    <button 
+                                        onClick={() => onDelete(quiz.id)} 
                                         className="bg-[#deae9f] text-[#1c4e4f] px-4 py-2 rounded"
                                     >
-                                        <FontAwesomeIcon icon={faTrashAlt}/>
+                                        <FontAwesomeIcon icon={faTrashAlt} />
                                     </button>
                                 </div>
                             </div>
@@ -80,7 +78,7 @@ type PaginationProps = {
     onChangeLimit: (value: number) => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({offset, limit, totalRecords, onChangeOffset, onChangeLimit}) => {
+const Pagination: React.FC<PaginationProps> = ({ offset, limit, totalRecords, onChangeOffset, onChangeLimit }) => {
     const totalPages = Math.ceil(totalRecords / limit);
 
     return (
@@ -123,15 +121,13 @@ function useQuizzes(userId: string, limit: number, offset: number) {
 
     const fetchQuizzes = () => {
         setIsLoading(true);
-        fetch(`http://localhost:5276/api/quizzes?offset=${offset}&limit=${limit}&creatorId=${userId}`)
+        fetch(`http://localhost:5276/api/quizzes?offset=${offset}&limit=${limit}`)
             .then((response) => response.json() as Promise<QuizResponse>)
             .then((data) => {
-                console.log("inainte", data.quizzes)
                 // Filtrarea quizurilor după creatorId
                 const filteredQuizzes = data.quizzes.filter((quiz) => quiz.creatorId === userId);
                 // Actualizarea stării doar cu quizurile filtrate
-                console.log("filtrate", filteredQuizzes)
-                setData({...data, quizzes: filteredQuizzes});
+                setData({ ...data, quizzes: filteredQuizzes });
             })
             .catch((error) => setError(error))
             .finally(() => setIsLoading(false));
@@ -141,16 +137,16 @@ function useQuizzes(userId: string, limit: number, offset: number) {
         fetchQuizzes();
     }, [userId, limit, offset]);
 
-    return {data, error, isLoading, reloadQuizzes: fetchQuizzes};
+    return { data, error, isLoading, reloadQuizzes: fetchQuizzes };
 }
 
 const MyQuizzesPage: React.FC = () => {
     //const userId = "00000000-0000-0000-0001-000000000002"; // Înlocuiește acest ID cu ID-ul real al utilizatorului
-    const {userId} = useParams<{ userId: string }>();
+    const { userId } = useParams<{ userId: string }>();
     const [limit, setLimit] = useState<number>(10);
     const [offset, setOffset] = useState<number>(0);
-    const {data, error, isLoading, reloadQuizzes} = useQuizzes(userId || "", limit, offset);
-    const navigate = useNavigate();
+    const { data, error, isLoading, reloadQuizzes } = useQuizzes(userId || "", limit, offset);
+    const navigate= useNavigate();
 
     const handleDelete = (id: string) => {
         fetch(`http://localhost:5276/api/quizzes/${id}`, {
@@ -170,9 +166,6 @@ const MyQuizzesPage: React.FC = () => {
             });
     };
 
-    const handleModify = (id: string) => {
-        navigate("/quizzes/update/" + id);
-    };
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -180,10 +173,11 @@ const MyQuizzesPage: React.FC = () => {
 
     return (
         <div>
+            <Navbar />
             <div className="flex flex-col items-center">
                 <h1 className="text-[#1c4e4f] text-4xl font-bold mt-6">My Quizzes</h1>
                 <div className="mt-6 w-full max-w-2xl">
-                    <QuizzesList quizzes={data.quizzes} onDelete={handleDelete} onModify={handleModify}/>
+                    <QuizzesList quizzes={data.quizzes} onDelete={handleDelete}/>
                     <Pagination
                         offset={data.pagination.offset}
                         limit={data.pagination.limit}
