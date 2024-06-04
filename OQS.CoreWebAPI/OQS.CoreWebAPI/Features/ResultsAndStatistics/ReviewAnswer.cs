@@ -7,8 +7,8 @@ using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Shared;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
@@ -16,6 +16,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public record Command : IRequest<Result>
         {
+            public HttpContext Context { get; set; }
             public Guid UserId { get; set; }
             public Guid QuizId { get; set; }
             public Guid QuestionId { get; set; }
@@ -46,6 +47,24 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             private readonly ApplicationDbContext dbContext;
             private readonly IValidator<Command> validator;
 
+            private string GetUserIdFromToken(HttpContext context)
+            {
+                if (context == null)
+                {
+                    return null;
+                }
+
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                return jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            }
+
             public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
             {
                 this.dbContext = dbContext;
@@ -63,6 +82,23 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                             validationResult.ToString()));
                 }
 
+                string requestingUserId = GetUserIdFromToken(request.Context);
+                if (requestingUserId == null)
+                {
+                    Console.WriteLine("Error: Unable to extract user ID from provided token");
+                    return Result.Failure<GetQuizResultResponse>(
+                        new Error("GetQuizResult.Handler",
+                            "Unable to extract user ID from provided token"));
+                }
+
+                var quizFromDb = await dbContext.Quizzes.FindAsync(request.QuizId);
+                if (requestingUserId != quizFromDb.CreatorId.ToString())
+                {
+                    Console.WriteLine("Error: User is not the creator of the quiz.");
+                    return Result.Failure<ReviewAnswerResponse>(
+                        new Error("ReviewAnswer.NotQuizCreator",
+                            "User does not have permission to review answer to question from quiz they did not create."));
+                }
 
                 var quizAndQuestionMatch = await dbContext
                     .Questions
@@ -113,10 +149,11 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             app.MapPut("api/quizResults/reviewResult",
-                async (Guid userId, Guid quizId, Guid questionId, float finalScore, ISender sender) =>
+                async (HttpContext context, Guid userId, Guid quizId, Guid questionId, float finalScore, ISender sender) =>
                 {
                     var command = new ReviewAnswer.Command
                     {
+                        Context = context,
                         UserId = userId,
                         QuizId = quizId,
                         QuestionId = questionId,
@@ -126,7 +163,15 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     var result = await sender.Send(command);
                     if (result.IsFailure)
                     {
-                        return Results.BadRequest(result.Error);
+                        if (result.Error.Message.Contains("not exist"))
+                        {
+                            return Results.NotFound();
+                        }
+                        if (result.Error.Message.Contains("permission"))
+                        {
+                            return Results.Unauthorized();
+                        }
+                        return Results.BadRequest(result.Error.Message);
                     }
 
                     return Results.Ok();

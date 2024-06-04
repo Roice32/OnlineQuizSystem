@@ -1,5 +1,5 @@
 {
-  "name": "quiz-completion-fe",
+  "name": "online-quiz-system-web-ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -20,7 +20,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/themes": "^3.0.5",
     "@reduxjs/toolkit": "^2.2.3",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "react": "^18.2.0",
     "react-cookie": "^7.1.4",
     "react-dom": "^18.2.0",

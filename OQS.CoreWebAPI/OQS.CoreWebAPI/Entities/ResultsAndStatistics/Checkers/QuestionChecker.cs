@@ -216,7 +216,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                     .Chat
                     .CreateChatCompletionAsync(chatRequest);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 Console.WriteLine($"HttpRequestException caught: {e.Message}");
                 return Result.Failure<AskLLMForReviewResponse>(
@@ -252,7 +252,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
     {
         private static readonly Dictionary<QuestionType, IQuestionCheckerStrategy> _strategies = new();
 
-        static QuestionChecker() {}
+        static QuestionChecker() { }
 
         public QuestionChecker(IEnumerable<IQuestionCheckerStrategy> strategies)
         {

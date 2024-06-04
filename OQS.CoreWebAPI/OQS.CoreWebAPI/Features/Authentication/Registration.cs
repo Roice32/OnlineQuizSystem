@@ -79,21 +79,9 @@ namespace OQS.CoreWebAPI.Features.Authentication
                                                new Error("Registration", "User creation failed! Please check user details and try again."));
                 }
 
-                if (request.Username == "admin")
+                if (!await roleManager.RoleExistsAsync(UserRole.User))
                 {
-                    if (!await roleManager.RoleExistsAsync(UserRole.Admin))
-                    {
-                        await roleManager.CreateAsync(new IdentityRole(UserRole.Admin));
-                    }
-                    await userManager.AddToRoleAsync(user, UserRole.Admin);
-                }
-                else
-                {
-                    if (!await roleManager.RoleExistsAsync(UserRole.User))
-                    {
-                        await roleManager.CreateAsync(new IdentityRole(UserRole.User));
-                    }
-                    await userManager.AddToRoleAsync(user, UserRole.User);
+                    await roleManager.CreateAsync(new IdentityRole(UserRole.User));
                 }
 
 

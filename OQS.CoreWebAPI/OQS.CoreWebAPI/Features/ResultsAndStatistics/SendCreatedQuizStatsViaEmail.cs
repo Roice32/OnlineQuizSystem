@@ -7,6 +7,7 @@ using MimeKit;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Features.ResultsAndStatistics;
 using OQS.CoreWebAPI.Shared;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
@@ -14,6 +15,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public class Command : IRequest<Result>
         {
+            public HttpContext Context { get; set; }
             public string RecipientEmail { get; set; }
             public Guid QuizId { get; set; }
             public DateTime StartDateLocal { get; set; }
@@ -53,8 +55,35 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 this.validator = validator;
             }
 
+            private string GetUserIdFromToken(HttpContext context)
+            {
+                if (context == null)
+                {
+                    return null;
+                }
+
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                return jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            }
+
             public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
+                string requestingUserId = GetUserIdFromToken(request.Context);
+                if (requestingUserId == null)
+                {
+                    Console.WriteLine("Error: Unable to extract user ID from provided token");
+                    return Result.Failure(
+                        new Error("GetQuizResult.Handler",
+                            "Unable to extract user ID from provided token"));
+                }
+
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
                 {
@@ -79,10 +108,18 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                             header.SubmittedAtUtc.Date <= endDateUtc.Date)
                         .ToListAsync(cancellationToken);
 
-                if (quizResultHeaders is null || quizResultHeaders.Count == 0)
+                var quiz = await dbContext.Quizzes.FindAsync(request.QuizId);
+                if (quiz is null)
                 {
-                    Console.WriteLine("No results found for the specified quiz and date range");
-                    return Result.Failure(Error.NullValue);
+                    Console.WriteLine("Error: Quiz not found");
+                    return Result.Failure(new Error("QuizNotFound", "Quiz not found"));
+                }
+                if (quiz.CreatorId.ToString() != requestingUserId)
+                {
+                    Console.WriteLine("Error: User is not the creator of the quiz");
+                    return Result.Failure(
+                        new Error("Unauthorized",
+                            "User does not have permission (not the creator of the quiz)"));
                 }
 
                 try
@@ -91,7 +128,6 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     message.From.Add(MailboxAddress.Parse("Online.Quiz@outlook.com"));
                     message.To.Add(MailboxAddress.Parse(request.RecipientEmail));
                     message.Subject = "Tests submitted";
-                    var quiz = await dbContext.Quizzes.FindAsync(request.QuizId);
 
                     var emailBody = "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n   " +
                         " <title>Online Quiz Application</title>\r\n    " +
@@ -118,10 +154,10 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                         " <div class=\"container\">\r\n" +
                         " <h1> Online Quiz Application</h1>\r\n" +
                         " <p>Dear usernameToBeReplaced, <br><br>\r\n" +
-                        " Here are the results for the quizNameToBeReplaced between startDateToBeReplaced - endDateToBeReplaced:\r\n " +
+                        " Here are the results for the 'quizNameToBeReplaced' quiz between startDateToBeReplaced - endDateToBeReplaced:\r\n " +
                         " <br><br>\r\n" +
                         " resultsToBeReplaced\r\n<br><br>\r\n" +
-                        " If you have any questions or need assistance, don't hesitate to contact us at echipafacultate@yahoo.com.<br>\r\n" +
+                        " If you have any questions or need assistance, don't hesitate to contact us at Online.Quiz@outlook.com.<br>\r\n" +
                         " Best regards, <br>\r\n " +
                         " Online Quiz Application Team</p>\r\n" +
                         "</div>\r\n</body>\r\n</html>\r\n";
@@ -130,7 +166,10 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     foreach (var header in quizResultHeaders)
                     {
                         var user = await dbContext.Users.FindAsync(header.UserId.ToString());
-                        results += $"User Name: {user.UserName}<br> Submitted At: {header.SubmittedAtUtc.ToLocalTime()}<br> Completion Time: {header.CompletionTime}<br> Score: {header.Score}<br> Review Pending: {header.ReviewPending}<br><br>";
+                        results += $"Username: {user.UserName}";
+                        results += $"<br>Submitted at: {header.SubmittedAtUtc.ToLocalTime()}";
+                        results += $"<br>Score: {header.Score}";
+                        results += header.ReviewPending ? $" (Pending review)<br><br>" : $" (Final)<br><br>";
                     }
 
                     emailBody = emailBody.Replace("usernameToBeReplaced", request.RecipientEmail)
@@ -166,10 +205,11 @@ public class SendCreatedQuizStatsViaEmailEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/email/sendCreatedQuizStatsViaEmail", async (Guid quizId, string recipientEmail, DateTime startDate, DateTime endDate, ISender sender) =>
+        app.MapGet("api/email/sendCreatedQuizStatsViaEmail", async (HttpContext context, Guid quizId, string recipientEmail, DateTime startDate, DateTime endDate, ISender sender) =>
         {
             var command = new SendCreatedQuizStatsViaEmail.Command
             {
+                Context = context,
                 RecipientEmail = recipientEmail,
                 QuizId = quizId,
                 StartDateLocal = startDate,
@@ -178,7 +218,15 @@ public class SendCreatedQuizStatsViaEmailEndPoint : ICarterModule
             var result = await sender.Send(command);
             if (result.IsFailure)
             {
-                return Results.BadRequest(result.Error);
+                if (result.Error.Message.Contains("not found"))
+                {
+                    return Results.NotFound();
+                }
+                if (result.Error.Message.Contains("permission"))
+                {
+                    return Results.Unauthorized();
+                }
+                return Results.BadRequest(result.Error.Message);
             }
             return Results.Ok(result);
         });

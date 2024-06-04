@@ -5,6 +5,7 @@ using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace OQS.CoreWebAPI.Features.Profile
 {
@@ -15,7 +16,7 @@ namespace OQS.CoreWebAPI.Features.Profile
             public string Jwt { get; set; }
         }
 
-        internal sealed class Handler : IRequestHandler<Query, Result<List<User>>>
+     internal sealed class Handler : IRequestHandler<Query, Result<List<User>>>
         {
             private readonly UserManager<User> userManager;
             private readonly IConfiguration configuration;

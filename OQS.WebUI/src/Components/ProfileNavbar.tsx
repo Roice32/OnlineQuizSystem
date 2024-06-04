@@ -68,9 +68,6 @@ export default function ProfileNavbar() {
                             <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
                                  <Link className="no-underline text-[#efd7cf] text-2xl" to="/profile/view-users">View Users</Link>
                             </li>
-                            <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
-                                <Link className="no-underline text-[#efd7cf] text-2xl" to={`/quizStats/${userState.user?.id}`}>My Created Quizzes (Mock - Results)</Link>
-                </li>
                         </>
                     )}
             <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">

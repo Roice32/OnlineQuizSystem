@@ -31,12 +31,17 @@ const userSlice = createSlice({
                 user: null,
                 authDeadline: null,
             };
+        },
+        updateUser: (state, action: PayloadAction<Partial<User>>) => {
+            if (state.user) {
+                state.user = { ...state.user, ...action.payload };
+            }
         }
         },
         
     },
     );
 
-    export const { setUser, clearUser } = userSlice.actions;
+    export const { setUser, clearUser, updateUser } = userSlice.actions;
     export default userSlice.reducer;
 

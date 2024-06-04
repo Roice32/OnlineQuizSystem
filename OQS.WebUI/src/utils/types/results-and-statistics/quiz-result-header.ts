@@ -4,8 +4,7 @@ export type QuizResultHeader = {
   userId: string;
   userName: string;
   quizName: string;
-  completionTime: string;
   score: number;
-  submittedAt: string;
+  submittedAtUtc: string;
   reviewPending: boolean;
 };
