@@ -41,6 +41,7 @@ function ProfilePage() {
                 severity: "success",
             })
         );
+        navigate("/auth/login")
       } else {
         dispatch(
             openSnackbar({

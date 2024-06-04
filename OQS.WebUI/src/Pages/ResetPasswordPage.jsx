@@ -9,7 +9,7 @@ function ResetPasswordPage() {
     const [userValues, setUserValues] = useState({
         username: "",
         newPassword: "",
-        confirmPassword: "",
+        confirmPassword: ""
     });
     const navigate = useNavigate();
     const { token } = useParams();
@@ -57,10 +57,7 @@ function ResetPasswordPage() {
         e.preventDefault();
         const { username, newPassword, confirmPassword } = userValues;
         try{
-            console.log(token)
-            console.log(encodeURIComponent(token))
             const response = await axios.post(`/api/resetPassword/${encodeURIComponent(token)}`, { newPassword, username});
-            console.log(response.data.message)
 
             if(response.data.message === "Password reset successfully!!"){
                 dispatch(
@@ -97,11 +94,11 @@ function ResetPasswordPage() {
                 <h1 className="text-center text-[#1c4e4f] text-5xl pb-10 pt-5 font-bold">Reset Password</h1>
                 <p className="mb-5 w-80 text-center">Enter your new password and confirm it.</p>
                 {inputs.map((input) => (
-                    <FormInput key={input.id} {...input} value={userValues[input.name]} onChange={onChange}/>
+                    <FormInput key={input.id} {...input} value={userValues[input.name]} onChange={onChange} style={{ border: '1px solid black' }}/>
                 ))}
                 <div className="flex">
-                    <button type="button" className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#6a8e8f] text-[#efd7cf] border-none rounded-md font-bold text-lg hover:bg-[#879693]" onClick={handleClose} >Close</button>
-                    <button type="submit" className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#0a2d2e] text-[#efd7cf] border-none rounded-md font-bold text-lg hover:bg-[#879693]">Reset</button>
+                    <button type="button" className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#6a8e8f] text-[#efd7cf] text-center border-none rounded-md font-bold text-lg hover:bg-[#879693]" onClick={handleClose} >Close</button>
+                    <button type="submit" className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#0a2d2e] text-[#efd7cf] text-center border-none rounded-md font-bold text-lg hover:bg-[#879693]">Reset</button>
                 </div>
             </form>
         </div>
