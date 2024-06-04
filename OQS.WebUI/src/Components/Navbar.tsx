@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../redux/store";
-import { Button } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { clearUser } from "../redux/User/UserState";
 import axios from "../utils/axios-service";
 import { openSnackbar } from "../redux/Snackbar/SnackbarState";
+import React from "react";
 
 export default function Navbar() {
   const userState = useSelector((state: RootState) => state.user);
@@ -24,57 +24,85 @@ export default function Navbar() {
         throw new Error("Could not sign you out");
       }
     } catch (e) {
-      /*  dispatch(
-        openSnackbar({ message: "Could not sign you out", severity: "error" })
-      ); */
       removeCookie("token");
       dispatch(clearUser());
+      /* dispatch(
+        openSnackbar({ message: "Could not sign you out", severity: "error" })
+      ); */
     }
   };
   return (
-    <nav className="flex flex-row items-center bg-slate-600">
-      <ul className="flex flex-row justify-evenly items-center space-x-3 w-full text-stone-50">
-        <li>
-          <Link className="no-underline text-slate-50" to="/">
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link className="no-underline text-slate-50" to="/quizzes">
-            Quiz
-          </Link>
-        </li>
+    <>
+      <nav className="flex items-center bg-[#1c4e4f] h-12 p-2">
+        <ul className="flex items-center space-x-4 text-stone-50 list-none ml-auto">
+          <li className="relative group">
+            <Link
+              className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
+              to="/"
+            >
+              Home
+            </Link>
+            <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
+          </li>
+          <li className="relative group">
+            <Link
+              className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
+              to="/quizzes"
+            >
+              Quiz
+            </Link>
+            <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
+          </li>
 
-        {!userState.isLogged && (
-          <>
-            <li>
-              <Link className="no-underline text-slate-50" to="/auth/login">
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link className="no-underline text-slate-50" to="/auth/register">
-                Register
-              </Link>
-            </li>
-          </>
-        )}
+          {!userState.isLogged && (
+            <>
+              <li className="relative group">
+                <Link
+                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
+                  to="/auth/login"
+                >
+                  Login
+                </Link>
+                <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
+              </li>
+              <li className="relative group">
+                <Link
+                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
+                  to="/auth/register"
+                >
+                  Register
+                </Link>
+                <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
+              </li>
+            </>
+          )}
 
-        {userState.isLogged && (
-          <>
-            <li>
-              <Link className="no-underline text-slate-50" to="/profile">
-                {userState.user?.username}
-              </Link>
-            </li>
-            <li>
-              <Button variant="outlined" color="error" onClick={signOut}>
-                Sign out
-              </Button>
-            </li>
-          </>
-        )}
-      </ul>
-    </nav>
+          {userState.isLogged && (
+            <>
+              <li className="relative group">
+                <Link
+                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
+                  to="/profile"
+                >
+                  {userState.user?.username}
+                </Link>
+                <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
+              </li>
+              <li className="relative group">
+                <button
+                  onClick={signOut}
+                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-red-600 bg-transparent border-none cursor-pointer"
+                >
+                  Sign out
+                </button>
+              </li>
+            </>
+          )}
+        </ul>
+      </nav>
+      <div className="relative">
+        <div className="absolute left-0 right-0 h-1 bg-gradient-to-r from-white via-transparent to-white mx-4"></div>
+      </div>
+    </>
   );
 }

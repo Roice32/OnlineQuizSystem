@@ -1,58 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
-  // redirect to /quiz
-  const navigate = useNavigate();
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/quizzes");
-    }, 3000); // Adding a 3-second delay for demonstration purposes
-
-    return () => clearTimeout(timer); // Cleanup timer on component unmount
-  }, [navigate]);
-
-  // State for the animated dots
-  const [dots, setDots] = useState("");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDots((prevDots) => (prevDots.length < 3 ? prevDots + "." : ""));
-    }, 500); // Change the dot every 500ms
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#1c4e4f] p-6">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-white mb-4">
+      <div className="text-center animate-bounce">
+        <h1 className="text-6xl font-bold animate-pulseColor animate-blingBling mb-4">
           Welcome to the Quiz App
         </h1>
-        <p className="text-xl text-gray-200">
-          Redirecting you to the quiz{dots}
+      </div>
+      <div className="w-1/2 bg-white rounded-xl p-6 text-center mt-8">
+        <p className="text-1.2xl font-bold text-[#1c4e4f] mb-4">
+        Dive into a world of fun and learning with our interactive quiz app. Test your knowledge by participating in exciting quizzes, join live quizzes for a real-time challenge, or unleash your creativity by creating your own quizzes to stump your friends. Think you’ve got what it takes? Let’s find out!
         </p>
       </div>
-      <div className="spinner"></div>
-      <style>{`
-        .spinner {
-          border: 8px solid rgba(255, 255, 255, 0.3);
-          border-top: 8px solid white;
-          border-radius: 50%;
-          width: 60px;
-          height: 60px;
-          animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
+      <Link
+        className="no-underline text-white px-4 py-2 text-lg transition duration-300 hover:bg-[#deae9f] rounded-full bg-[#1c4e4f] mt-4 flex items-center justify-center"
+        to="/quizzes"
+      >
+        Go to quizzes
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6 ml-2">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </Link>
     </div>
   );
 }
