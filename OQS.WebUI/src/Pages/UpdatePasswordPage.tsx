@@ -95,8 +95,8 @@ function UpdatePasswordPage() {
                     <FormInput key={input.id} {...input} value={userValues[input.name]} onChange={onChange}/>
                 ))}
                 <div className="buttons">
-                    <button type="button"className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#6a8e8f] text-[#efd7cf] border-none rounded-md font-bold text-lg hover:bg-[#879693]" onClick={handleClose} >Close</button>
-                    <button type="submit" className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#0a2d2e] text-[#efd7cf] border-none rounded-md font-bold text-lg hover:bg-[#879693]">Reset</button>
+                    <button type="button"className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#6a8e8f] text-[#efd7cf] border-none text-center rounded-md font-bold text-lg hover:bg-[#879693]" onClick={handleClose} >Close</button>
+                    <button type="submit" className="mt-5 w-2/5 h-10 p-2 ml-1 bg-[#0a2d2e] text-[#efd7cf] border-none text-center rounded-md font-bold text-lg hover:bg-[#879693]">Reset</button>
                 </div>
             </form>
         </div>

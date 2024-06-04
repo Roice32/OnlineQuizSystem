@@ -10,7 +10,7 @@ const FormInput = (props) => {
   return (
     <div className="flex flex-col w-72">
       <label className="text-base text-[#0a2d2e]" >{label}</label>
-      <input  className="p-2 my-3 rounded-md border border-[#6a8e8f]"
+      <input className="p-2 my-2 rounded border border-black"
         {...inputProps}
         onChange={onChange}
         autoComplete={inputProps}
@@ -22,6 +22,11 @@ const FormInput = (props) => {
       />
       <span className="text-sm text-red-600 p-1 hidden">{errorMessage}</span>
       <style>{`
+
+        input{
+          border: 1px solid #ccc;
+        }
+      
         input:invalid[focused=true] {
         border: 1px solid red;
         }
