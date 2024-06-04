@@ -121,7 +121,7 @@ function useQuizzes(userId: string, limit: number, offset: number) {
 
     const fetchQuizzes = () => {
         setIsLoading(true);
-        fetch(`http://localhost:5276/api/quizzes?offset=${offset}&limit=${limit}`)
+        fetch(`http://localhost:5276/api/quizzes?offset=${offset}&limit=${limit}&creatorId=${userId}`)
             .then((response) => response.json() as Promise<QuizResponse>)
             .then((data) => {
                 // Filtrarea quizurilor după creatorId
@@ -173,7 +173,6 @@ const MyQuizzesPage: React.FC = () => {
 
     return (
         <div>
-            <Navbar />
             <div className="flex flex-col items-center">
                 <h1 className="text-[#1c4e4f] text-4xl font-bold mt-6">My Quizzes</h1>
                 <div className="mt-6 w-full max-w-2xl">
