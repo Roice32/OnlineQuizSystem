@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import "./SignUp.css";
+/* import "./SignUp.css"; */
 import axios from "../../utils/axios-service";
 import FormInput from "../../Components/Reusable/FormInput/FormInput";
 import { useNavigate } from "react-router-dom";
