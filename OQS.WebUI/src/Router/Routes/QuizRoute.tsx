@@ -16,7 +16,7 @@ export const QuizRoute: RouteObject = {
       path: "",
       loader: QuizzesLoader,
       errorElement: <ErrorPage />,
-      element: <QuizPage />,
+      element: <QuizzesPage />,
     },
     {
       path: ":id",

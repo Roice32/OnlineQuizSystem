@@ -24,6 +24,7 @@ import {useNavigate, useParams} from 'react-router-dom'
 import {useEffect, useState} from 'react'
 import {Cross1Icon, PlusIcon, RocketIcon} from '@radix-ui/react-icons'
 import {v4 as uuid} from 'uuid'
+import useAuth from "../../hooks/UseAuth.ts";
 
 const steps = [
     {
@@ -502,6 +503,8 @@ const ErrorMessagesQuizCreateString = [
 
 
 export default function EditQuizPage() {
+    const user = useAuth();
+
     const navigate = useNavigate()
     const [quiz, setQuiz] = useState<QuizCreateProps>({language: 'romanian', questions: []})
     const [errorMessages, setErrorMessages] = useState<ErrorMessagesQuizCreate>({})
@@ -764,7 +767,7 @@ export default function EditQuizPage() {
                                                     timeLimitMinutes: quiz.timeLimit,
                                                     language: quiz.language,
                                                     description: quiz.description,
-                                                    creatorId: '822c13a0-8872-431e-ad64-00f5249db11f',
+                                                    creatorId: user?.id || '822c13a0-8872-431e-ad64-00f5249db11f',
                                                 }
 
                                                 try {

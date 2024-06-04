@@ -145,7 +145,6 @@ const QuizzesPage = () => {
 
     return (
         <div className="flex flex-col items-center w-full">
-            <Navbar />
             <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg w-full mt-11">
                 <h1 className="text-4xl font-bold mb-4 text-[#376060]">Quizzes</h1>
                 <QuizzesList quizzes={data.quizzes} />
