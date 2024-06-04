@@ -4,8 +4,8 @@ import Navbar from "../Components/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
-//import ModifyQuizPage from "./ModifyQuizPage";
-//<Route path="/:id/modify" component={ModifyQuizPage} />
+import { Link } from 'react-router-dom';
+
 type Quiz = {
     id: string;
     name: string;
@@ -32,10 +32,9 @@ type QuizResponse = {
 type QuizzesListProps = {
     quizzes: Quiz[];
     onDelete: (id: string) => void;
-    onModify: (id: string) => void;
 };
 
-const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, onDelete, onModify }) => {
+const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, onDelete }) => {
     const sortedQuizzes = [...quizzes].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
@@ -48,12 +47,13 @@ const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, onDelete, onModify }
                             <div className="flex items-center">
                                 <p className="ml-4 flex items-center rounded-full bg-[#f7ebe7] text-[#1c4e4f] px-4 py-0s">Created at: {new Date(quiz.createdAt).toLocaleDateString()}</p>
                                 <div className="ml-auto">
-                                    <button 
-                                        onClick={() => onModify(quiz.id)} 
-                                        className="bg-[#436e6f] text-white px-4 py-2 rounded mr-2"
-                                    >
-                                        <FontAwesomeIcon icon={faEdit} />
-                                    </button>
+                                    <Link to={`/quizzes/update/${quiz.id}`}>
+                                        `<button
+                                            className="bg-[#436e6f] text-white px-4 py-2 rounded mr-2"
+                                            >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </button>
+                                    </Link>`
                                     <button 
                                         onClick={() => onDelete(quiz.id)} 
                                         className="bg-[#deae9f] text-[#1c4e4f] px-4 py-2 rounded"
@@ -166,9 +166,6 @@ const MyQuizzesPage: React.FC = () => {
             });
     };
 
-    const handleModify = (id: string) => {
-        navigate("/&{id}/modify");
-    };
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -180,7 +177,7 @@ const MyQuizzesPage: React.FC = () => {
             <div className="flex flex-col items-center">
                 <h1 className="text-[#1c4e4f] text-4xl font-bold mt-6">My Quizzes</h1>
                 <div className="mt-6 w-full max-w-2xl">
-                    <QuizzesList quizzes={data.quizzes} onDelete={handleDelete} onModify={handleModify} />
+                    <QuizzesList quizzes={data.quizzes} onDelete={handleDelete}/>
                     <Pagination
                         offset={data.pagination.offset}
                         limit={data.pagination.limit}
