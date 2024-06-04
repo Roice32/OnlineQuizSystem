@@ -12,8 +12,8 @@ export default {
           '50%': { color: '#3d7a7b' },
         },
         blingBling: {
-          '0%, 100%': { textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff, 0 0 60px #fff, 0 0 70px #fff' },
-          '50%': { textShadow: '0 0 20px #fff, 0 0 40px #fff, 0 0 60px #fff, 0 0 80px #fff, 0 0 100px #fff, 0 0 120px #fff, 0 0 140px #fff' },
+          '0%, 100%': { textShadow: '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff' },
+          '50%': { textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff' },
         },
       },
       animation: {
