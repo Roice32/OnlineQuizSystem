@@ -24,9 +24,11 @@ export default function Navbar() {
         throw new Error("Could not sign you out");
       }
     } catch (e) {
-      dispatch(
+      removeCookie("token");
+      dispatch(clearUser());
+      /* dispatch(
         openSnackbar({ message: "Could not sign you out", severity: "error" })
-      );
+      ); */
     }
   };
   return (
@@ -78,11 +80,11 @@ export default function Navbar() {
           {userState.isLogged && (
             <>
               <li className="relative group">
-              <Link
-                className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
-                to="/profile"
-              >
-                {userState.user?.username}
+                <Link
+                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
+                  to="/profile"
+                >
+                  {userState.user?.username}
                 </Link>
                 <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
               </li>
