@@ -5,6 +5,7 @@ using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Shared;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 {
@@ -12,6 +13,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public class Query : IRequest<Result<GetTakenQuizzesHistoryResponse>>
         {
+            public HttpContext Context;
             public Guid UserId { get; set; }
         }
 
@@ -23,9 +25,35 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
             {
                 dbContext = context;
             }
+            private string GetUserIdFromToken(HttpContext context)
+            {
+                if (context == null)
+                {
+                    return null;
+                }
+
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                return jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            }
 
             public async Task<Result<GetTakenQuizzesHistoryResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
+                string requestingUserId = GetUserIdFromToken(request.Context);
+                if (requestingUserId == null)
+                {
+                    Console.WriteLine("Error: Unable to extract user ID from provided token");
+                    return Result.Failure<GetTakenQuizzesHistoryResponse>(
+                        new Error("GetQuizResult.Handler",
+                            "Unable to extract user ID from provided token"));
+                }
+
                 var requestedUser = await dbContext.Users
                     .AsNoTracking()
                     .FirstOrDefaultAsync(user => user.Id == request.UserId.ToString(), cancellationToken);
@@ -36,17 +64,26 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     return Result.Failure<GetTakenQuizzesHistoryResponse>(Error.NullValue);
                 }
 
+                if (requestingUserId != request.UserId.ToString())
+                {
+                    Console.WriteLine("Error: User is not authorized to view another's quizzes history.");
+                    return Result.Failure<GetTakenQuizzesHistoryResponse>(
+                        new Error("GetQuizResult.Handler",
+                            "User does not have permission to view another user's history."));
+                }
+
                 var quizResultHeaders = await dbContext.QuizResultHeaders
                     .AsNoTracking()
                     .Where(quiz => quiz.UserId == request.UserId)
+                    .OrderByDescending(quiz => quiz.SubmittedAtUtc)
                     .ToListAsync(cancellationToken);
 
                 if (quizResultHeaders is null)
                 {
                     return new GetTakenQuizzesHistoryResponse
                     {
-                        QuizNames = null,
-                        QuizResultHeaders = null
+                        QuizNames = [],
+                        QuizResultHeaders = []
                     };
                 }
 
@@ -76,10 +113,11 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/quizResults/getTakenQuizzesHistory/{userId}", async (Guid userId, ISender sender) =>
+            app.MapGet("api/quizResults/getTakenQuizzesHistory/{userId}", async (HttpContext context, Guid userId, ISender sender) =>
             {
                 var query = new GetTakenQuizzesHistory.Query
                 {
+                    Context = context,
                     UserId = userId
                 };
 
@@ -87,7 +125,15 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
 
                 if (result.IsFailure)
                 {
-                    return Results.NotFound(result.Error);
+                    if (result.Error == Error.NullValue)
+                    {
+                        return Results.NotFound();
+                    }
+                    if (result.Error.Message.Contains("permission"))
+                    {
+                        return Results.Unauthorized();
+                    }
+                    return Results.BadRequest(result.Error.Message);
                 }
 
                 return Results.Ok(result.Value);

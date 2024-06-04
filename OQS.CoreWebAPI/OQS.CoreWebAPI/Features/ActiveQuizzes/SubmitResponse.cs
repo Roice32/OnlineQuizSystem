@@ -5,8 +5,11 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
-using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Shared;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers;
+using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
+using OQS.CoreWebAPI.Entities.ActiveQuiz;
+using OQS.CoreWebAPI.Features.Authentication;
 
 namespace OQS.CoreWebAPI.Features.Quizzes
 {
@@ -25,24 +28,23 @@ namespace OQS.CoreWebAPI.Features.Quizzes
 
             RuleFor(x => x.ActiveQuizId)
                 .NotEmpty().WithMessage("Active Quiz ID is required.");
-            
-            RuleFor(x=>x)
+
+            RuleFor(x => x)
                 .MustAsync(ValidJwt)
                 .WithMessage("Invalid Token");
             RuleFor(x => x)
                 .MustAsync(ResponseRespectsDeadline)
                 .WithMessage("Submissions are closed.");
         }
-        
         private async Task<bool> ValidJwt(SubmitResponseRequest request, CancellationToken cancellationToken)
         {
             var context = _httpContextAccessor.HttpContext;
-            if(context.Request.Headers["Authorization"].Count == 0)
+            if (context.Request.Headers["Authorization"].Count == 0)
             {
                 return false;
             }
             var jwt = context.Request.Headers["Authorization"].First()?.Split(" ").Last();
-            if(jwt == null)
+            if (jwt == null)
             {
                 return false;
             }
@@ -51,10 +53,10 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             {
                 return false;
             }
-            
+
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(jwt);
-            var userId= jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
+            var userId = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "unique_name")?.Value;
             if (userId == null)
             {
                 // Unable to extract user ID from token
@@ -156,7 +158,32 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                     return Result.Failure<string>(error);
                 }
 
-                // Add your logic to submit the response to the database here
+                ActiveQuiz activeQuiz = await _context.ActiveQuizzes
+                    .Include(aq => aq.User)
+                    .Include(aq => aq.Quiz)
+                    .FirstOrDefaultAsync(aq => aq.Id == request.ActiveQuizId, cancellationToken);
+
+                if (activeQuiz == null)
+                {
+                    var error = new Error("NotFound", "Active quiz not found.");
+                    Console.WriteLine($"Error: {error.Message}");
+                    return Result.Failure<string>(error);
+                }
+
+                Guid userId = Guid.Parse(activeQuiz.User.Id);
+                Guid quizId = activeQuiz.Quiz.Id;
+                var quizCheckerResult = await QuizChecker
+                    .CheckQuizAsync(new QuizSubmission(quizId, userId, request),
+                        _context);
+
+                if (quizCheckerResult.IsFailure)
+                {
+                    Console.WriteLine($"Error: {quizCheckerResult.Error}");
+                    return Result.Failure<string>(quizCheckerResult.Error);
+                }
+
+                _context.ActiveQuizzes.Remove(activeQuiz);
+                await _context.SaveChangesAsync(cancellationToken);
 
                 return Result.Success<string>("Quiz submitted successfully");
             }
@@ -173,8 +200,7 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             app.MapPost("api/active-quizzes/{activeQuizId}", async (SubmitResponseRequest request, ISender sender, ApplicationDbContext dbContext, HttpContext httpContext) =>
-            {
-                
+            { 
                 var result = await sender.Send(request);
 
                 if (result.IsFailure)
