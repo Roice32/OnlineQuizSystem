@@ -34,6 +34,8 @@ type ErrorQuiz = {
 function ShowQuizInfo({ quizId }) {
   const [quizData, setQuizData] = useState<QuizDetails>({});
 
+  const userState = useSelector((state: RootState) => state.user);
+
   const [error, setError] = useState<ErrorQuiz>({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -137,12 +139,12 @@ function ShowQuizInfo({ quizId }) {
         <p className="text-red-500 text-center">{error.message}</p>
       ) : null}
       {quizData ? (
-        <div className="bg-[#0A2D2E] p-8 rounded-lg shadow-md text-white mt-10 flex-col flex">
+        <div className="bg-[#1c4e4f] p-8 rounded-lg shadow-md text-white mt-10 flex-col flex">
           <div className="font-bold text-5xl capitalize mb-12 text-center p-4 text-[#DEAE9F]">
             {quizData.name}
           </div>
-          <div className="flex justify-center items-center">
-            <div className="w-1/2 pr-8">
+          <div className="flex flex-col md:flex-row justify-center items-center">
+            <div className="w-full md:w-1/2 pr-8 mb-4 md:mb-0">
               <img
                 src={
                   quizData.imageUrl ||
@@ -152,7 +154,7 @@ function ShowQuizInfo({ quizId }) {
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
-            <div className="w-1/2 pl-8 text-center">
+            <div className="w-full md:w-1/2 pl-8 text-center">
               <div className="mt-5">
                 <div className="font-bold text-3xl capitalize mb-2 text-[#DEAE9F]">
                   ID:
@@ -188,30 +190,33 @@ function ShowQuizInfo({ quizId }) {
                 <p className="text-lg">{quizData.description}</p>
               </div>
 
-              <div>
-                <button
-                  onClick={handleStart}
-                  className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10 mr-10"
-                >
-                  Start Quiz
-                </button>
-                <button
-                  onClick={handleStartLive}
-                  className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10"
-                >
-                  Start Live Quiz
-                </button>
-              </div>
-            </div>
-          </div>
+
+                            {userState.isLogged && (
+                                <div>
+                                    <button
+                                        onClick={handleStart}
+                                        className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10 mr-10"
+                                    >
+                                        Start Quiz
+                                    </button>
+                                    <button
+                                        onClick={handleStartLive}
+                                        className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10"
+                                    >
+                                        Start Live Quiz
+                                    </button>
+                                </div>)}
+
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="bg-red-200 p-8 rounded-lg shadow-md text-white mt-10 text-center">
+                    <h2 className="text-red-800 text-center text-lg">Quiz not found</h2>
+                </div>
+            )}
         </div>
-      ) : (
-        <div className="bg-red-200 p-8 rounded-lg shadow-md text-white mt-10 text-center">
-          <h2 className="text-red-800 text-center text-lg">Quiz not found</h2>
-        </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default ShowQuizInfo;
