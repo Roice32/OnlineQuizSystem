@@ -74,7 +74,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             ApplicationDbContext dbContext)
         {
             QuizResultHeader resultHeader = new(toBeChecked.QuizId,
-                toBeChecked.TakenBy, toBeChecked.TimeElapsed);
+                toBeChecked.TakenBy);
             resultHeader.Score = 0;
             foreach (var questionResult in questionsResults)
             {

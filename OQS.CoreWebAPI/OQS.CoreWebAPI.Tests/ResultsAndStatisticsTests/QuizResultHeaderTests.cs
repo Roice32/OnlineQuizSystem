@@ -33,7 +33,6 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             result.UserName.Should().Be("FirstName1 LastName1");
             result.Score.Should().Be(13);
             result.ReviewPending.Should().BeFalse();
-            result.CompletionTime.Should().Be(15);
         }
 
         [Fact]
@@ -65,8 +64,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var header = new QuizResultHeader
             (
                 quizId: quizId,
-                userId: userId,
-                completionTime: 10
+                userId: userId
             );
             header.Score = 2;
             header.ReviewPending = false;

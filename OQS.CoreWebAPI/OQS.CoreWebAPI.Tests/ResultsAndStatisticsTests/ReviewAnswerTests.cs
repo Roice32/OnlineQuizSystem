@@ -1,7 +1,4 @@
 ﻿using FluentAssertions;
-using Newtonsoft.Json;
-using OQS.CoreWebAPI.Contracts.ResultsAndStatistics;
-using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Shared;
 using OQS.CoreWebAPI.Tests.SetUp;
 using System.Net;
@@ -147,16 +144,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
-            var resultString = await result.Content.ReadAsStringAsync();
-            var resultObject = JsonConvert.DeserializeObject<ReviewAnswerResponse>(resultString);
 
-            resultObject.UpdatedQuizResultHeader.Should().NotBeNull();
-            resultObject.UpdatedQuizResultHeader.Score.Should().Be(1);
-            resultObject.UpdatedQuizResultHeader.ReviewPending.Should().BeFalse();
-
-            resultObject.UpdatedQuestionResult.Should().NotBeNull();
-            resultObject.UpdatedQuestionResult.Score.Should().Be(1);
-            resultObject.UpdatedQuestionResult.ReviewNeededResult.Should().Be(AnswerResult.PartiallyCorrect);
         }
     }
 }

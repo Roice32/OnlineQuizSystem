@@ -142,7 +142,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                     Description = "Description3",
                     TimeLimitMinutes = 10,
                     CreatedAt = DateTime.Now,
-                    CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000002")
+                    CreatorId = Guid.Parse("00000000-0000-0000-0001-000000000001")
                 }
             };
 
@@ -333,14 +333,12 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                 new QuizResultHeader
                 (
                     quizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
-                    userId: Guid.Parse("00000000-0000-0000-0001-000000000001"),
-                    completionTime: 15
+                    userId: Guid.Parse("00000000-0000-0000-0001-000000000001")
                 ),
                 new QuizResultHeader
                 (
                     quizId: Guid.Parse("00000000-0000-0000-0002-000000000003"),
-                    userId: Guid.Parse("00000000-0000-0000-0001-000000000003"),
-                    completionTime: 10
+                    userId: Guid.Parse("00000000-0000-0000-0001-000000000003")
                 )
             };
 

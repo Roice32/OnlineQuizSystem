@@ -1,5 +1,5 @@
 import { QuestionType } from "../questions";
-import { AnswerResult } from "./question-review";
+import { AnswerResult } from "./answer-result";
 
 export type QuestionResult = {
   userId: string;

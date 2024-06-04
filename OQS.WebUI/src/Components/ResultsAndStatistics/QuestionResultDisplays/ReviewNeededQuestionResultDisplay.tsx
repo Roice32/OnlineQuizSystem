@@ -3,19 +3,25 @@ import axios from 'axios';
 import classNames from 'classnames';
 import { QuestionResult } from "../../../utils/types/results-and-statistics/question-result";
 import { Question } from "../../../utils/types/results-and-statistics/question";
-import { AnswerResult } from '../../../utils/types/results-and-statistics/question-review';
+import { AnswerResult } from '../../../utils/types/results-and-statistics/answer-result';
 import { QuestionType } from '../../../utils/types/questions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import ErrorComponent from '../ErrorComponent';
 
 interface ReviewNeededQuestionResultDisplayProps {
   question: Question;
   questionResult: QuestionResult;
+  asQuizCreator: boolean;
 }
 
-const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult}) => {
+const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisplayProps> = ({ question, questionResult, asQuizCreator}) => {
+  const userState = useSelector((state: RootState) => state.user);
   const [needReview, setNeedReview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [errorOccured, setErrorOccured] = useState('');
 
   const handleGrade = async (userId: string, quizId: string, questionId: string, score: number) => {
     if (score < 0 || score > question.allocatedPoints) {
@@ -24,12 +30,28 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
     }
     setLoading(true);
     try {
-      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`);
+      const token = userState.user?.token;
+      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`, {},
+        {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+        });
       setError(null);
       setNeedReview(false);
       window.location.reload();
     } catch (error) {
-      console.error('Error grading the answer!');
+      console.error(error);
+      setErrorOccured("An unexpected error occured.");
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          setErrorOccured("Could not find the requested answer.");
+        } else if (error.response?.status === 401) {
+          setErrorOccured("You do not have permission to grade that answer.");
+        } else {
+          setErrorOccured("Invalid JWT token provided.");
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -37,13 +59,20 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-white flex justify-center items-center">
-        <h1 className="text-2xl font-bold mb-4 text-center">Quiz Results</h1>
-        <p>Loading quiz results...</p>
+      <div className="min-h-screen bg-[#1c4e4f] flex flex-col items-center p-6 font-mono">
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+          <h1 className="text-2xl font-bold mb-4 animate-bounce text-center">Processing your review...</h1>
+        </div>
       </div>
     );
   }
 
+  if (errorOccured !== '') {
+    return (
+      <ErrorComponent err={errorOccured} />
+    )
+  }
+  
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center mb-2">
@@ -100,7 +129,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
                 setScore(null);
               }
             }}
-            className="block w-24 mx-auto p-2 border border-gray-300 rounded text-center"
+            className="block w-24 mx-auto p-2 bg-gray-100 border-1 border-solid border-teal-500 rounded text-center"
             placeholder="Score"
             style={{ appearance: 'textfield', MozAppearance: 'textfield', WebkitAppearance: 'none' }}
           />
@@ -113,7 +142,9 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
           </button>
         </div>
       )}
-      {!needReview && question.type === QuestionType.ReviewNeeded && questionResult.reviewNeededResult === AnswerResult.Pending && (
+      {!needReview && question.type === QuestionType.ReviewNeeded && 
+        questionResult.reviewNeededResult === AnswerResult.Pending && 
+        asQuizCreator && (
         <button
           className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
           onClick={() => setNeedReview(true)}

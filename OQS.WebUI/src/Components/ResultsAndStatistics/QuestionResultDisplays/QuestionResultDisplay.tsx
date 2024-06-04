@@ -5,14 +5,15 @@ import TrueFalseQuestionResultDisplay from './TrueFalseQuestionResultDisplay';
 import ChoiceQuestionResultDisplay from "./ChoiceQuestionResultDisplay";
 import WrittenQuestionResultDisplay from "./WrittenQuestionResultDisplay";
 import ReviewNeededQuestionResultDisplay from "./ReviewNeededQuestionResultDisplay";
-import { AnswerResult } from "../../../utils/types/results-and-statistics/question-review";
+import { AnswerResult } from "../../../utils/types/results-and-statistics/answer-result";
 
 interface CommonQuestionResultDisplayProps {
   question: Question;
   questionResult: QuestionResult;
+  asQuizCreator: boolean;
 }
 
-export default function CommonQuestionResultDisplay({ question, questionResult }: CommonQuestionResultDisplayProps) {
+export default function CommonQuestionResultDisplay({ question, questionResult, asQuizCreator }: CommonQuestionResultDisplayProps) {
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-4xl bg-[#6a8e8f] rounded-lg border-4 border-solid border-[#1c4e4f]">
@@ -37,7 +38,7 @@ export default function CommonQuestionResultDisplay({ question, questionResult }
               <WrittenQuestionResultDisplay question={question} questionResult={questionResult} />
             )}
             {question.type === QuestionType.ReviewNeeded && (
-              <ReviewNeededQuestionResultDisplay question={question} questionResult={questionResult} />
+              <ReviewNeededQuestionResultDisplay question={question} questionResult={questionResult} asQuizCreator={asQuizCreator} />
             )}
           </div>
         </div>
