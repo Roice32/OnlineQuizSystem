@@ -15,7 +15,7 @@ namespace OQS.CoreWebAPI.Features.Profile
             public Guid Id { get; set; }
             public string Jwt { get; set; }
         }
-
+       
         internal sealed class Handler : IRequestHandler<Query, Result<UserDetailsModel>>
         {
             private readonly UserManager<User> userManager;
