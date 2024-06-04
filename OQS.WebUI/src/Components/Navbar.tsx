@@ -45,7 +45,7 @@ export default function Navbar() {
           <li className="relative group">
             <Link
               className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
-              to="/quiz"
+              to="/quizzes"
             >
               Quiz
             </Link>
