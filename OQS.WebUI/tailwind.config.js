@@ -9,7 +9,7 @@ export default {
       keyframes: {
         pulseColor: {
           '0%, 100%': { color: '#1c4e4f' },
-          '50%': { color: '#3d7a7b' },
+          '50%': { color: '#b0c4c4' },
         },
         blingBling: {
           '0%, 100%': { textShadow: '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff' },
