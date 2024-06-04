@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../redux/store";
-import { Button } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { clearUser } from "../redux/User/UserState";
 import axios from "../utils/axios-service";
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { openSnackbar } from "../redux/Snackbar/SnackbarState";
+import React from "react";
+import Logo from '../Logo.png'; // Ensure this path is correct
 
 export default function Navbar() {
-  const [nav, setNav] = useState(false);
   const userState = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const [cookies, setCookie, removeCookie] = useCookies();
-
   const signOut = async () => {
     try {
       const response = (
@@ -29,83 +27,77 @@ export default function Navbar() {
     } catch (e) {
       removeCookie("token");
       dispatch(clearUser());
+      /* dispatch(
+        openSnackbar({ message: "Could not sign you out", severity: "error" })
+      ); */
     }
   };
 
-  const handleNav = () => {
-    setNav(!nav);
-  };
-
-  const navItems = [
-    { id: 1, text: 'Home', path: '/' },
-    { id: 2, text: 'Quiz', path: '/quizzes' },
-    { id: 3, text: 'Play Quizzes', path: '/quizzes/play' },
-    ...(userState.isLogged ? [
-      { id: 4, text: userState.user?.username, path: '/profile' },
-      { id: 5, text: 'Create Quiz', path: '/quizzes/create' },
-      { id: 6, text: 'Sign out', path: '#', action: signOut }
-    ] : [
-      { id: 4, text: 'Login', path: '/auth/login' },
-      { id: 5, text: 'Register', path: '/auth/register' }
-    ])
-  ];
-
   return (
-    <nav className="bg-[#0A2D2E] w-full flex justify-between items-center h-24 px-6 text-[#f7ebe7]">
-      {/* Logo */}
-      <h1 className='text-3xl font-bold text-[#DEAE9F]'>B4QUIZ</h1>
+    <>
+      <nav className="flex items-center bg-[#1c4e4f] h-20 p-4 justify-between">
+        <div className="flex items-center">
+        <img src={Logo} alt="Logo" className="h-20 w-20 mr-4" />
 
-      {/* Desktop Navigation */}
-      <ul className='hidden md:flex'>
-        {navItems.map(item => (
-          item.text !== 'Sign out' ? (
-            <li key={item.id}>
-              <Link className="p-4 hover:bg-[#DEAE9F] rounded-xl m-2 cursor-pointer duration-300 hover:text-black whitespace-nowrap" to={item.path}>
-                {item.text}
+        </div>
+        <div className="flex justify-center flex-grow">
+          <ul className="flex items-center space-x-4 text-stone-50 list-none">
+            <li>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/"
+              >
+                Home
               </Link>
             </li>
-          ) : (
-            <li key={item.id}>
-              <Button className="p-4 hover:bg-[#DEAE9F] rounded-xl m-2 cursor-pointer duration-300 hover:text-red whitespace-nowrap" variant="outlined" color="error" onClick={item.action}>
-                Sign out
-              </Button>
+            <li>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/quizzes"
+              >
+                Quiz
+              </Link>
             </li>
-          )
-        ))}
-      </ul>
-
-      {/* Mobile Navigation Icon */}
-      <div onClick={handleNav} className='block md:hidden'>
-        {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
+          </ul>
+        </div>
+        <div className="flex items-center space-x-4">
+          {!userState.isLogged && (
+            <>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/auth/login"
+              >
+                Login
+              </Link>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/auth/register"
+              >
+                Register
+              </Link>
+            </>
+          )}
+          {userState.isLogged && (
+            <>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/profile"
+              >
+                {userState.user?.username}
+              </Link>
+              <button
+                onClick={signOut}
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-red-600 bg-transparent border-none cursor-pointer"
+              >
+                Sign out
+              </button>
+            </>
+          )}
+        </div>
+      </nav>
+      <div className="relative w-full">
+        <div className="absolute inset-0 mx-auto w-full" style={{ height: '2px', background: 'linear-gradient(to right, transparent 0%, white 50%, transparent 100%)', boxShadow: '0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5)' }}></div>
       </div>
-
-      {/* Mobile Navigation Menu */}
-      <ul className={
-          nav
-            ? 'fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-[#0A2D2E] ease-in-out duration-500'
-            : 'ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]'
-        }
-      >
-        {/* Mobile Logo */}
-        <h1 className='w-full text-3xl font-bold text-[#DEAE9F] m-4'>B4QUIZ</h1>
-
-        {/* Mobile Navigation Items */}
-        {navItems.map(item => (
-          item.text !== 'Sign out' ? (
-            <Link to={item.path} onClick={() => setNav(false)} key={item.id}>
-              <li className='p-4 border-b rounded-xl hover:bg-[#DEAE9F] duration-300 hover:text-black cursor-pointer border-gray-600'>
-                {item.text}
-              </li>
-            </Link>
-          ) : (
-            <li key={item.id} className='p-4 border-b rounded-xl hover:bg-[#DEAE9F] duration-300 hover:text-black cursor-pointer border-gray-600'>
-              <Button className="w-full text-left" variant="outlined" color="error" onClick={() => { item.action?.(); setNav(false); }}>
-                Sign out
-              </Button>
-            </li>
-          )
-        ))}
-      </ul>
-    </nav>
+    </>
   );
 }
