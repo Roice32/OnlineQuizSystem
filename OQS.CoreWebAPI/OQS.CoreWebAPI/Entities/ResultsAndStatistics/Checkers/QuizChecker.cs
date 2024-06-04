@@ -11,14 +11,6 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
     {
         public static async Task<Result> CheckQuizAsync(QuizSubmission toBeChecked, ApplicationDbContext dbContext)
         {
-            bool quizAlreadyTaken = await dbContext.QuizResultHeaders
-                .AnyAsync(qrh => qrh.QuizId == toBeChecked.QuizId && qrh.UserId == toBeChecked.TakenBy);
-            if (quizAlreadyTaken)
-            {
-                Console.WriteLine("Error: Duplicate quiz submission");
-                return Result.Failure(Error.DuplicateEntity);
-            }
-
             Quiz quizFromDb = await dbContext.Quizzes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(q => q.Id == toBeChecked.QuizId);
@@ -33,16 +25,18 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                 .Where(q => q.QuizId == toBeChecked.QuizId)
                 .ToListAsync();
 
-            Result<List<QuestionResultBase>> questionsResults = await CheckAndStoreAllQuestionsAsync(toBeChecked, questions, dbContext);
+            Guid newResultId = Guid.NewGuid();
+
+            Result<List<QuestionResultBase>> questionsResults = await CheckAndStoreAllQuestionsAsync(newResultId, toBeChecked, questions, dbContext);
             if (questionsResults.IsFailure)
             {
                 Console.WriteLine($"Error: {questionsResults.Error}");
                 return Result.Failure(questionsResults.Error);
             }
-            return await BuildAndStoreQuizResultHeaderAsync(toBeChecked, questionsResults.Value, dbContext);
+            return await BuildAndStoreQuizResultHeaderAsync(newResultId, toBeChecked, questionsResults.Value, dbContext);
         }
 
-        private static async Task<Result<List<QuestionResultBase>>> CheckAndStoreAllQuestionsAsync(QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
+        private static async Task<Result<List<QuestionResultBase>>> CheckAndStoreAllQuestionsAsync(Guid newResultId, QuizSubmission toBeChecked, List<QuestionBase> questionsFromDb, ApplicationDbContext dbContext)
         {
             List<Guid> questionIds = questionsFromDb.Select(q => q.Id).ToList();
             bool qaPairNotBelongingToQuiz = toBeChecked.QuestionAnswerPairs
@@ -62,6 +56,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
                 QuestionAnswerPairBase qaPair = toBeChecked.QuestionAnswerPairs
                     .FirstOrDefault(qaPair => qaPair.QuestionId == question.Id);
                 QuestionResultBase questionResult = QuestionChecker.CheckQuestion(toBeChecked.TakenBy, qaPair, question);
+                questionResult.ResultId = newResultId;
                 await StoreQuestionResultExtension.StoreQuestionResultAsync(dbContext, questionResult);
                 questionsResults.Add(questionResult);
             }
@@ -69,11 +64,12 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics.Checkers
             return questionsResults;
         }
 
-        private static async Task<Result> BuildAndStoreQuizResultHeaderAsync(QuizSubmission toBeChecked,
+        private static async Task<Result> BuildAndStoreQuizResultHeaderAsync(Guid newResultId, QuizSubmission toBeChecked,
             List<QuestionResultBase> questionsResults,
             ApplicationDbContext dbContext)
         {
-            QuizResultHeader resultHeader = new(toBeChecked.QuizId,
+            QuizResultHeader resultHeader = new(newResultId,
+                toBeChecked.QuizId,
                 toBeChecked.TakenBy);
             resultHeader.Score = 0;
             foreach (var questionResult in questionsResults)

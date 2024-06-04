@@ -2,6 +2,7 @@ import { QuestionType } from "../questions";
 import { AnswerResult } from "./answer-result";
 
 export type QuestionResult = {
+  resultId: string;
   userId: string;
   questionId: string;
   score: number;

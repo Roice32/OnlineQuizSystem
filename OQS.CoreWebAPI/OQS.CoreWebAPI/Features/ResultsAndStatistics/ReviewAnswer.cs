@@ -17,8 +17,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         public record Command : IRequest<Result>
         {
             public HttpContext Context { get; set; }
-            public Guid UserId { get; set; }
-            public Guid QuizId { get; set; }
+            public Guid ResultId { get; set; }
             public Guid QuestionId { get; set; }
             public float FinalScore { get; set; }
         }
@@ -27,20 +26,15 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         {
             public Validator()
             {
-                RuleFor(x => x.UserId)
+                RuleFor(x => x.ResultId)
                     .NotEmpty()
-                    .WithMessage("UserId is required.");
-
-                RuleFor(x => x.QuizId)
-                    .NotEmpty()
-                    .WithMessage("QuizId is required.");
+                    .WithMessage("ResultId is required.");
 
                 RuleFor(x => x.QuestionId)
                     .NotEmpty()
                     .WithMessage("QuestionId is required.");
             }
         }
-
 
         public class Handler : IRequestHandler<Command, Result>
         {
@@ -86,55 +80,51 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                 if (requestingUserId == null)
                 {
                     Console.WriteLine("Error: Unable to extract user ID from provided token");
-                    return Result.Failure<GetQuizResultResponse>(
+                    return Result.Failure(
                         new Error("GetQuizResult.Handler",
                             "Unable to extract user ID from provided token"));
                 }
 
-                var quizFromDb = await dbContext.Quizzes.FindAsync(request.QuizId);
-                if (requestingUserId != quizFromDb.CreatorId.ToString())
+                var quizId = await dbContext
+                    .QuizResultHeaders
+                    .AsNoTracking()
+                    .Where(qrh => qrh.ResultId == request.ResultId)
+                    .Select(qrh => qrh.QuizId)
+                    .FirstOrDefaultAsync();
+
+                var creatorId = await dbContext
+                    .Quizzes
+                    .AsNoTracking()
+                    .Where(q => q.Id == quizId)
+                    .Select(q => q.CreatorId)
+                    .FirstOrDefaultAsync();
+
+                if (requestingUserId != creatorId.ToString())
                 {
                     Console.WriteLine("Error: User is not the creator of the quiz.");
-                    return Result.Failure<ReviewAnswerResponse>(
+                    return Result.Failure(
                         new Error("ReviewAnswer.NotQuizCreator",
                             "User does not have permission to review answer to question from quiz they did not create."));
                 }
 
-                var quizAndQuestionMatch = await dbContext
-                    .Questions
-                    .AsNoTracking()
-                    .AnyAsync(q => q.QuizId == request.QuizId &&
-                        q.Id == request.QuestionId);
-
-                if (!quizAndQuestionMatch)
-                {
-                    Console.WriteLine("Error: QuizId and QuestionId correspondence does not exist.");
-                    return Result.Failure<ReviewAnswerResponse>(
-                        new Error("ReviewAnswer.QuizAndQuestionMisMatch",
-                            "QuizId and QuestionId correspondence does not exist."));
-                }
-
                 var updateResultStatus = await UpdateQuestionResultExtension.UpdateQuestionResultAsync
-                    (dbContext, request.UserId, request.QuestionId, request.FinalScore);
+                    (dbContext, request.ResultId, request.QuestionId, request.FinalScore);
 
                 if (updateResultStatus.IsFailure)
                 {
                     Console.WriteLine("Error: UpdateQuestionResult failed.");
-                    return Result.Failure<ReviewAnswerResponse>(
+                    return Result.Failure(
                         new Error("ReviewAnswer.UpdateResult",
                             updateResultStatus.Error.Message));
                 }
 
-                var updatedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync
-                    (dbContext, request.UserId, request.QuestionId) as ReviewNeededQuestionResult;
-
                 var updatedQuizResultHeaderResult = await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync
-                    (dbContext, request.UserId, request.QuizId);
+                    (dbContext, request.ResultId);
 
                 if (updatedQuizResultHeaderResult.IsFailure)
                 {
                     Console.WriteLine("Error: UpdateHeaderUponAnswerReview failed.");
-                    return Result.Failure<ReviewAnswerResponse>(
+                    return Result.Failure(
                         new Error("ReviewAnswer.UpdateHeader",
                             updatedQuizResultHeaderResult.Error.Message));
                 }
@@ -149,13 +139,12 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             app.MapPut("api/quizResults/reviewResult",
-                async (HttpContext context, Guid userId, Guid quizId, Guid questionId, float finalScore, ISender sender) =>
+                async (HttpContext context, Guid resultId, Guid questionId, float finalScore, ISender sender) =>
                 {
                     var command = new ReviewAnswer.Command
                     {
                         Context = context,
-                        UserId = userId,
-                        QuizId = quizId,
+                        ResultId = resultId,
                         QuestionId = questionId,
                         FinalScore = finalScore
                     };

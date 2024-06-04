@@ -60,6 +60,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             result.Error.Should().Be(Error.DuplicateEntity);
         }
 
+        // NEEDS MODIFYING!
         [Fact]
         public async Task Given_NoAnswers_WhenCheckQuizIsCalled_Then_StoredQuizResultHasScoreZeroAndNotAnsweredResults()
         {
@@ -85,7 +86,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            var quizResult = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId, userId);
+            var quizResult = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId);
             quizResult.IsSuccess.Should().BeTrue();
             quizResult.Value.Score.Should().Be(0);
             quizResult.Value.ReviewPending.Should().BeFalse();

@@ -13,6 +13,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 {
     public class QuizResultHeaderTests : ApplicationContextForTesting
     {
+        // NEEDS MODIFYING!
         [Fact]
         public async Task Given_ValidIdsPair_When_FetchQuestionResultHeaderIsCalled_Then_CorrectHeaderResponseIsReturned()
         {
@@ -24,7 +25,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var quizId = Guid.Parse("00000000-0000-0000-0002-000000000001");
 
             // Act
-            var result = (await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId, userId)).Value;
+            var result = (await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId)).Value;
 
             // Assert
             result.Should().NotBeNull();
@@ -35,6 +36,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             result.ReviewPending.Should().BeFalse();
         }
 
+        // NEEDS MODIFYING!
         [Fact]
         public async Task Given_IdsPairForNonexistentQuizResultHeader_When_FetchQuizResultHeaderIsCalled_Then_NullValueIsReturned()
         {
@@ -46,7 +48,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var quizId = Guid.Parse("00000000-0000-0000-0002-000000000002");
 
             // Act
-            var result = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId, userId);
+            var result = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId);
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(Error.NullValue);
         }
@@ -63,6 +65,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 
             var header = new QuizResultHeader
             (
+                resultId: Guid.NewGuid(),
                 quizId: quizId,
                 userId: userId
             );
@@ -73,7 +76,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             await StoreQuizResultHeaderExtension.StoreQuizResultHeaderAsync(dbContext, header);
 
             // Assert
-            var storedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId, userId);
+            var storedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId);
             storedHeader.IsSuccess.Should().BeTrue();
             storedHeader.Value.Score.Should().Be(2);
             storedHeader.Value.ReviewPending.Should().BeFalse();
@@ -90,7 +93,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             var quizId = Guid.Parse("00000000-0000-0000-0002-000000000002");
 
             // Act
-            var result = UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync(dbContext, quizId, userId).Result;
+            var result = UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync(dbContext, quizId).Result;
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(Error.NullValue);
         }
@@ -108,11 +111,11 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 
             // Act
             await UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 3);
-            var result = await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync(dbContext, userId, quizId);
+            var result = await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync(dbContext, userId);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId, userId);
+            var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId);
             updatedHeader.IsSuccess.Should().BeTrue();
             updatedHeader.Value.Score.Should().Be(3);
             updatedHeader.Value.ReviewPending.Should().BeFalse();
@@ -132,11 +135,11 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 
             // Act
             await UpdateQuestionResultExtension.UpdateQuestionResultAsync(dbContext, userId, questionId, 3);
-            var result = await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync(dbContext, userId, quizId);
+            var result = await UpdateHeaderUponAnswerReviewExtension.UpdateHeaderUponAnswerReviewAsync(dbContext, userId);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId, userId);
+            var updatedHeader = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId);
             updatedHeader.IsSuccess.Should().BeTrue();
             updatedHeader.Value.Score.Should().Be(0);
             updatedHeader.Value.ReviewPending.Should().BeTrue();

@@ -94,7 +94,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                         .Where(user => user.Id == quiz.UserId.ToString())
                         .Select(user => user.UserName)
                         .FirstOrDefaultAsync(cancellationToken);
-                    userNames.Add(quiz.UserId, userName);
+                    userNames.TryAdd(quiz.UserId, userName);
                 }
 
                 var createdQuizStatsResponse = new GetCreatedQuizStatsResponse

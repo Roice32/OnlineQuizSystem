@@ -8,16 +8,16 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuestionResults
 {
     public static class UpdateQuestionResultExtension
     {
-        public static async Task<Result> UpdateQuestionResultAsync(this WebApplication application, Guid userId, Guid questionId, float score)
+        public static async Task<Result> UpdateQuestionResultAsync(this WebApplication application, Guid resultId, Guid questionId, float score)
         {
             using var scope = application.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            return await UpdateQuestionResultAsync(dbContext, userId, questionId, score);
+            return await UpdateQuestionResultAsync(dbContext, resultId, questionId, score);
         }
 
-        public static async Task<Result> UpdateQuestionResultAsync(ApplicationDbContext dbContext, Guid userId, Guid questionId, float score)
+        public static async Task<Result> UpdateQuestionResultAsync(ApplicationDbContext dbContext, Guid resultId, Guid questionId, float score)
         {
-            var uncastedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, userId, questionId);
+            var uncastedQuestionResult = await FetchQuestionResultExtension.FetchQuestionResultAsync(dbContext, resultId, questionId);
             if (uncastedQuestionResult is null)
             {
                 Console.WriteLine("Error: Question result not found");

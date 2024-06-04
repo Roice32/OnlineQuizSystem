@@ -7,18 +7,18 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders
 {
     public static class FetchQuizResultHeaderExtension
     {
-        public static async Task<Result<FetchQuizResultHeaderResponse>> FetchQuizResultHeaderAsync(this WebApplication application, Guid QuizId, Guid UserId)
+        public static async Task<Result<FetchQuizResultHeaderResponse>> FetchQuizResultHeaderAsync(this WebApplication application, Guid resultId)
         {
             using var scope = application.Services.CreateScope();
             using (var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                return await FetchQuizResultHeaderAsync(dbContext, QuizId, UserId);
+                return await FetchQuizResultHeaderAsync(dbContext, resultId);
         }
 
-        public static async Task<Result<FetchQuizResultHeaderResponse>> FetchQuizResultHeaderAsync(ApplicationDbContext dbContext, Guid QuizId, Guid UserId)
+        public static async Task<Result<FetchQuizResultHeaderResponse>> FetchQuizResultHeaderAsync(ApplicationDbContext dbContext, Guid resultId)
         {
             var quizResultHeader = await dbContext.QuizResultHeaders
                 .AsNoTracking()
-                .FirstOrDefaultAsync(quiz => quiz.QuizId == QuizId && quiz.UserId == UserId);
+                .FirstOrDefaultAsync(quiz => quiz.ResultId == resultId);
 
             if (quizResultHeader == null)
             {
@@ -29,22 +29,23 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders
             var quizName = await dbContext
                 .Quizzes
                 .AsNoTracking()
-                .Where(q => q.Id == QuizId)
+                .Where(q => q.Id == quizResultHeader.QuizId)
                 .Select(q => q.Name)
                 .FirstOrDefaultAsync();
 
             var userName = await dbContext
                 .Users
                 .AsNoTracking()
-                .Where(u => u.Id == UserId.ToString())
+                .Where(u => u.Id == quizResultHeader.UserId.ToString())
                 .Select(u => u.FirstName + ' ' + u.LastName)
                 .FirstOrDefaultAsync();
 
 
             return new FetchQuizResultHeaderResponse
             {
-                QuizId = QuizId,
-                UserId = UserId,
+                ResultId = resultId,
+                QuizId = quizResultHeader.QuizId,
+                UserId = quizResultHeader.UserId,
                 SubmittedAtUtc = quizResultHeader.SubmittedAtUtc,
                 Score = quizResultHeader.Score,
                 ReviewPending = quizResultHeader.ReviewPending,

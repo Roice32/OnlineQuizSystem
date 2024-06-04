@@ -31,7 +31,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
     setLoading(true);
     try {
       const token = userState.user?.token;
-      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?userId=${userId}&quizId=${quizId}&questionId=${questionId}&finalScore=${score}`, {},
+      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?resultId=${questionResult.resultId}&questionId=${questionId}&finalScore=${score}`, {},
         {
           headers: {
               'Authorization': `Bearer ${token}`

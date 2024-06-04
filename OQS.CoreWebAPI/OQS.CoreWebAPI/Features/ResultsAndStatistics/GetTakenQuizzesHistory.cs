@@ -95,7 +95,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                         .Where(q => q.Id == quiz.QuizId)
                         .Select(q => q.Name)
                         .FirstOrDefaultAsync(cancellationToken);
-                    quizNames.Add(quiz.QuizId, quizName);
+                    quizNames.TryAdd(quiz.QuizId, quizName);
                 }
 
                 var takenQuizzesHisoryResponse = new GetTakenQuizzesHistoryResponse

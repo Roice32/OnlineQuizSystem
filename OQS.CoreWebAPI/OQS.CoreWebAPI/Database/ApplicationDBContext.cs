@@ -16,8 +16,8 @@ namespace OQS.CoreWebAPI.Database
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<QuizResultHeader>().HasKey(qrh => new { qrh.UserId, qrh.QuizId });
-            modelBuilder.Entity<QuestionResultBase>().HasKey(qr => new { qr.UserId, qr.QuestionId });
+            modelBuilder.Entity<QuizResultHeader>().HasKey(qrh => qrh.ResultId);
+            modelBuilder.Entity<QuestionResultBase>().HasKey(qr => new { qr.ResultId, qr.QuestionId });
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<UserConnection>(entity=>
