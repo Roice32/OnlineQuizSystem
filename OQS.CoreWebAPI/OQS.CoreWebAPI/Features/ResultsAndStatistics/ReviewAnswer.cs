@@ -85,21 +85,27 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                             "Unable to extract user ID from provided token"));
                 }
 
-                var quizId = await dbContext
+                var quizResultHeader = await dbContext
                     .QuizResultHeaders
                     .AsNoTracking()
                     .Where(qrh => qrh.ResultId == request.ResultId)
-                    .Select(qrh => qrh.QuizId)
                     .FirstOrDefaultAsync();
 
-                var creatorId = await dbContext
+                if (quizResultHeader == null)
+                {
+                    Console.WriteLine("Error: Quiz does not exist.");
+                    return Result.Failure(
+                        new Error("ReviewAnswer.QuizNotFound",
+                            "Quiz result does not exist."));
+                }
+
+                var quiz = await dbContext
                     .Quizzes
                     .AsNoTracking()
-                    .Where(q => q.Id == quizId)
-                    .Select(q => q.CreatorId)
+                    .Where(q => q.Id == quizResultHeader.QuizId)
                     .FirstOrDefaultAsync();
 
-                if (requestingUserId != creatorId.ToString())
+                if (requestingUserId != quiz.CreatorId.ToString())
                 {
                     Console.WriteLine("Error: User is not the creator of the quiz.");
                     return Result.Failure(
