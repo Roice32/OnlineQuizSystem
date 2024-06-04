@@ -9,7 +9,6 @@ import QuizCreate from "../../Pages/QuizCreate/QuizCreate.tsx";
 import EditQuizPage from "../../Pages/QuizEdit/EditQuizPage.tsx";
 
 export const QuizRoute: RouteObject = {
-<<<<<<< HEAD
   path: "quizzes",
   element: <Outlet />,
   children: [
