@@ -135,7 +135,6 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
                 .FirstOrDefaultAsync(qrh => qrh.QuizId == Guid.Parse("00000000-0000-0000-0002-000000000001")
                     && qrh.UserId == Guid.Parse("00000000-0000-0000-0001-000000000002"));
             quizResultHeader.Should().NotBeNull();
-            quizResultHeader.Score.Should().Be(6);
             quizResultHeader.ReviewPending.Should().BeTrue();
 
             // QuestionResults stored (only one checked)

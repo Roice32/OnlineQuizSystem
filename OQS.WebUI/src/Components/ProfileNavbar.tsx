@@ -57,9 +57,6 @@ export default function ProfileNavbar() {
                     <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
                         <Link className="no-underline text-[#efd7cf] text-2xl" to="/quizzes/create">Create Quiz</Link>
                     </li>
-                    <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
-                        <Link className="no-underline text-[#efd7cf] text-2xl" to="/contact">Contact</Link>
-                    </li>
                 </>
             )}
               {role === 'Admin' && (
@@ -70,6 +67,17 @@ export default function ProfileNavbar() {
                             <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
                                  <Link className="no-underline text-[#efd7cf] text-2xl" to="/profile/view-users">View Users</Link>
                             </li>
+                    <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
+                        <Link className="no-underline text-[#efd7cf] text-2xl"
+                              to={`/taken-quizzes-history/${userState.user?.id}`}>My Taken Quizzes</Link>
+                    </li>
+                    <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
+                        <Link className="no-underline text-[#efd7cf] text-2xl"
+                              to={`/profile/view-my-quizzes/${userState.user?.id}`}>My Quizzes</Link>
+                    </li>
+                    <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
+                        <Link className="no-underline text-[#efd7cf] text-2xl" to="/quizzes/create">Create Quiz</Link>
+                    </li>
                         </>
                     )}
             <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
