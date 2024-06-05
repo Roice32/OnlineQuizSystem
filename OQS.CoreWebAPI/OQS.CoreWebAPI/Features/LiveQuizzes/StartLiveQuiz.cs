@@ -83,8 +83,15 @@ public class StartLiveQuiz
             {
                 if(connection.ConnectionId!=request.connectionID)
                  tasks.Add(NotifyClients(connection));
+                else
+                {
+                    _context.UserConnections.Remove(connection);
+                    _context.SaveChanges();
+                }
             }
             await Task.WhenAll(tasks);
+            _context.LiveQuizzes.Remove(liveQuiz);
+            _context.SaveChanges();
             await _hubContext.Clients.Client(request.connectionID).SendAsync("QuizStartedAdmin", Result.Success<Guid>(liveQuiz.Quiz.Id));
             return Result.Success("Quiz Started Successfully");
         }
@@ -98,8 +105,10 @@ public class StartLiveQuiz
                 StartedAt = DateTime.UtcNow
             };
             await _context.ActiveQuizzes.AddAsync(activeQuiz);
+            _context.UserConnections.Remove(connection);
             await _context.SaveChangesAsync();
             await _hubContext.Clients.Client(connection.ConnectionId).SendAsync("QuizStarted", Result.Success<Guid>(activeQuiz.Id));
+           
         }
     }
     
