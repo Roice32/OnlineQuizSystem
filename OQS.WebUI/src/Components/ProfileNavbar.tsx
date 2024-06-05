@@ -55,11 +55,6 @@ export default function ProfileNavbar() {
                               to={`/profile/view-my-quizzes/${userState.user?.id}`}>My Quizzes</Link>
                     </li>
                     <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
-                        <Link className="no-underline text-[#efd7cf] text-2xl"
-                              to={`/created-quiz-stats/00000000-0000-0000-0002-000000000003`}>Created Quiz Stats
-                            Mock</Link>
-                    </li>
-                    <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">
                         <Link className="no-underline text-[#efd7cf] text-2xl" to="/quizzes/create">Create Quiz</Link>
                     </li>
                     <li className="p-2 cursor-pointer flex hover:bg-[#555] hover:rounded-tr-lg hover:rounded-br-lg">

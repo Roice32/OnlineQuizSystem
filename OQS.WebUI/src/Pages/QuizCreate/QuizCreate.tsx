@@ -25,6 +25,8 @@ import {useState} from 'react'
 import {Cross1Icon, PlusIcon, RocketIcon} from '@radix-ui/react-icons'
 import {v4 as uuid} from 'uuid'
 import useAuth from "../../hooks/UseAuth.ts";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store.ts";
 
 const steps = [
     {
@@ -504,6 +506,7 @@ const ErrorMessagesQuizCreateString = [
 
 export default function QuizCreate() {
     const user = useAuth();
+    const userState = useSelector((state: RootState) => state.user);
 
     const navigate = useNavigate()
     const [quiz, setQuiz] = useState<QuizCreateProps>({language: 'romanian', questions: []})
@@ -732,11 +735,13 @@ export default function QuizCreate() {
 
                                                 try {
                                                     let response: Response;
+                                                    const token = userState.user?.token;
                                                     if (editPage) {
                                                         response = await fetch(`http://localhost:5276/api/quizzes/${quiz.id}`, {
                                                             method: 'PATCH',
                                                             headers: {
                                                                 'Content-Type': 'application/json',
+                                                                'Authorization': `Bearer ${token}`
                                                             },
                                                             body: JSON.stringify(quizRequest),
                                                         })
@@ -745,6 +750,7 @@ export default function QuizCreate() {
                                                             method: 'POST',
                                                             headers: {
                                                                 'Content-Type': 'application/json',
+                                                                'Authorization': `Bearer ${token}`
                                                             },
                                                             body: JSON.stringify(quizRequest),
                                                         })
@@ -813,20 +819,23 @@ export default function QuizCreate() {
 
 
                                                             if (question.inDatabase) {
+                                                                const token = userState.user?.token;
                                                                 response = await fetch(`http://localhost:5276/api/quizzes/${quizId}/questions/${questionId}`, {
                                                                     method: 'PATCH',
                                                                     headers: {
                                                                         'Content-Type': 'application/json',
+                                                                        'Authorization': `Bearer ${token}`
                                                                     },
                                                                     body: JSON.stringify(questionRequest),
                                                                 })
                                                                 data = await response.json()
-                                                                console.log('foooooo', data)
                                                             } else {
+                                                                const token = userState.user?.token;
                                                                 response = await fetch(`http://localhost:5276/api/quizzes/${quizId}/questions`, {
                                                                     method: 'POST',
                                                                     headers: {
                                                                         'Content-Type': 'application/json',
+                                                                        'Authorization': `Bearer ${token}`
                                                                     },
                                                                     body: JSON.stringify(questionRequest),
                                                                 })
