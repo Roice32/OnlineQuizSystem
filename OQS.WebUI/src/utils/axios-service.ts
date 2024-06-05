@@ -12,9 +12,9 @@ const axiosService = axios.create({
 
 axiosService.interceptors.request.use((request) => {
     const token = document.cookie.split(';').find((cookie) => cookie.includes('token'))?.split('=')[1];
-    console.log(token);
+   /*  console.log(token); */
     if(request.headers['Authorization'] === undefined && token !== undefined){
-        console.log('setting token');
+      /*   console.log('setting token'); */
         request.headers['Authorization'] =  `Bearer ${token}`;
     }
     return request;
