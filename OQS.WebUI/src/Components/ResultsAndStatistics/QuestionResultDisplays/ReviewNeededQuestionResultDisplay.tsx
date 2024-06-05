@@ -23,7 +23,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
   const [error, setError] = useState<string | null>(null);
   const [errorOccured, setErrorOccured] = useState('');
 
-  const handleGrade = async (userId: string, quizId: string, questionId: string, score: number) => {
+  const handleGrade = async (score: number) => {
     if (score < 0 || score > question.allocatedPoints) {
       setError(`Score must be between 0 and ${question.allocatedPoints}`);
       return;
@@ -31,7 +31,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
     setLoading(true);
     try {
       const token = userState.user?.token;
-      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?resultId=${questionResult.resultId}&questionId=${questionId}&finalScore=${score}`, {},
+      await axios.put(`http://localhost:5276/api/quizResults/reviewResult?resultId=${questionResult.resultId}&questionId=${questionResult.questionId}&finalScore=${score}`, {},
         {
           headers: {
               'Authorization': `Bearer ${token}`
@@ -78,7 +78,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
       <div className="flex items-center justify-center mb-2">
         <label
           className={classNames(
-            'p-2 rounded-full w-full max-w-md text-left',
+            'p-2 pl-4 rounded-full w-full max-w-md text-left',
             {
               'bg-green-500 text-white border-4 border-solid border-green-700': questionResult.reviewNeededResult === AnswerResult.Correct,
               'bg-red-500 text-white border-4 border-solid border-red-700': questionResult.reviewNeededResult === AnswerResult.Wrong || questionResult.reviewNeededResult === AnswerResult.NotAnswered,
@@ -105,7 +105,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
               overflowY: 'auto',
             }}
           >
-            AI Review: {questionResult?.LLMReview}
+            AI Review: {questionResult.LLMReview ?? "No AI Review Available"}
           </label>
           <input
             type="number"
@@ -136,7 +136,7 @@ const ReviewNeededQuestionResultDisplay: React.FC<ReviewNeededQuestionResultDisp
           {error && <p className="text-red-500 text-center">{error}</p>}
           <button
             className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4"
-            onClick={() => handleGrade(questionResult.userId, question.quizId, question.id, score || 0)}
+            onClick={() => handleGrade(score || 0)}
           >
             Grade
           </button>
