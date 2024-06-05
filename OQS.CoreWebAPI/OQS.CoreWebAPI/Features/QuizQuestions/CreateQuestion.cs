@@ -1,8 +1,10 @@
-﻿using Carter;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Carter;
 using FluentValidation;
 using MediatR;
 using OQS.CoreWebAPI.Database;
 using OQS.CoreWebAPI.Entities;
+using OQS.CoreWebAPI.Features.Authentication;
 using OQS.CoreWebAPI.Features.Quizzes;
 using OQS.CoreWebAPI.Shared;
 
@@ -25,12 +27,17 @@ namespace OQS.CoreWebAPI.Features.Quizzes
             public List<string>? MultipleChoiceAnswers { get; set; }
             public string? SingleChoiceAnswer { get; set; }
             public List<string>? WrittenAcceptedAnswers { get; set; }
+            public string? Jwt { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly JwtValidator _jwtValidator;
+
+            public CommandValidator(IConfiguration configuration)
             {
+                _jwtValidator = new JwtValidator(configuration);
+
                 RuleFor(x => x.Text)
                     .NotEmpty().WithMessage("Text is required.")
                     .MaximumLength(255).WithMessage("Text must not exceed 255 characters.");
@@ -79,6 +86,15 @@ namespace OQS.CoreWebAPI.Features.Quizzes
                             .Must(answers => answers != null && answers.Count > 0)
                             .WithMessage("At least one accepted answer is required.");
                     });
+
+                RuleFor(x => x.Jwt)
+                    .MustAsync(ValidJwt)
+                    .WithMessage("Invalid Token");
+            }
+
+            private Task<bool> ValidJwt(string? Jwt, CancellationToken cancellationToken)
+            {
+                return Task.FromResult(_jwtValidator.Validate(Jwt));
             }
         }
 
@@ -87,16 +103,18 @@ namespace OQS.CoreWebAPI.Features.Quizzes
         {
             private readonly ApplicationDbContext _dbContext;
             private readonly IValidator<Command> _validator;
+            private readonly JwtSecurityTokenHandler _jwtHandler;
 
             public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
             {
                 _dbContext = dbContext;
                 _validator = validator;
+                _jwtHandler = new JwtSecurityTokenHandler();
             }
 
             public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var validationResult = _validator.Validate(request);
+                var validationResult = await _validator.ValidateAsync(request, cancellationToken);
                 if (!validationResult.IsValid)
                 {
                     return Result.Failure<Guid>(
@@ -159,17 +177,25 @@ public class CreateQuizQuestionEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/quizzes/{id}/questions", async (Guid id, CreateQuestion.Command request, ISender sender) =>
-        {
-            request.QuizId = id;
-            var result = await sender.Send(request);
-
-            if (result.IsFailure)
+        app.MapPost("api/quizzes/{id}/questions",
+            async (Guid id, CreateQuestion.Command request, ISender sender, HttpContext context) =>
             {
-                return Results.BadRequest(result.Error);
-            }
+                if (context.Request.Headers["Authorization"].Count == 0)
+                {
+                    return Results.Unauthorized();
+                }
 
-            return Results.Ok(result.Value);
-        });
+                var jwt = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                request.QuizId = id;
+                request.Jwt = jwt;
+                var result = await sender.Send(request);
+
+                if (result.IsFailure)
+                {
+                    return Results.BadRequest(result.Error);
+                }
+
+                return Results.Ok(result.Value);
+            });
     }
 }
