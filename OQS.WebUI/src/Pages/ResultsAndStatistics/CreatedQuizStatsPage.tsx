@@ -55,7 +55,7 @@ const QuizStatsPage = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    date.setHours(date.getHours() + 2);
+    date.setHours(date.getHours() + 6);
     const isoString = date.toISOString();
     return isoString.replace('T', ' ').split('.')[0];
   };
