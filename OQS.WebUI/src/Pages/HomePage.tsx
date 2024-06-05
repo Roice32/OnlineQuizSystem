@@ -3,14 +3,21 @@ import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col items-start justify-center bg-[#1c4e4f] p-6">
-      <div className="text-left animate-bounce mb-32">
+    <div
+      className="min-h-screen flex flex-col items-start justify-center p-6 "
+      style={{
+        backgroundImage: 'url("https://wallpaperswide.com/download/polygon_green-wallpaper-1280x960.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="text-left animate-bounce  bg-[#1c4e4f] p-8 rounded-3xl shadow-md">
         <h1 className="text-6xl text-[#efd7cf] animate-pulseColor mb-4">
-        Ready to Quiz?
+          Ready to Quiz?
         </h1>
       </div>
-      <div className="w-2/3 bg-[#1c4e4f] rounded-xl mb-12 ">
-        <p className="text-lg text-[#f7ebe7] mb-4">
+      <div className="w-2/3  rounded-xl mb-12 p-8 shadow-2xl">
+        <p className="text-3xl  text-[#f7ebe7] mb-4">
           Dive into a world of fun and learning with our interactive quiz app. Test your knowledge by participating in exciting quizzes, join live quizzes for a real-time challenge, or unleash your creativity by creating your own quizzes to stump your friends. Think you’ve got what it takes? Let’s find out!
         </p>
       </div>
@@ -26,4 +33,3 @@ export default function HomePage() {
     </div>
   );
 }
-
