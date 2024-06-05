@@ -24,7 +24,7 @@ export default function ChoiceQuestionResultDisplay({ question, questionResult }
                     (question.multipleChoiceAnswers?.includes(choice) || question.singleChoiceAnswer! === choice),
                 'bg-red-500 text-white border-4 border-solid border-red-700': choicesResults[choice] === AnswerResult.Wrong,
                 'bg-gray-200 text-black': choicesResults[choice] === AnswerResult.Other ||
-                    choicesResults.size === 0,
+                    choicesResults.size === 0 || choicesResults.has(choice) === false,
               }
             )}
           >
