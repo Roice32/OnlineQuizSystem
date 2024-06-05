@@ -25,6 +25,7 @@ type QuizResponse = {
     pagination: Pagination;
     quizzes: Quiz[];
 };
+
 function QuizzesList(props: { quizzes: Quiz[] }) {
     const defaultImageUrl = 'https://www.shutterstock.com/shutterstock/photos/2052894734/display_1500/stock-vector-quiz-and-question-marks-trivia-night-quiz-symbol-neon-sign-night-online-game-with-questions-2052894734.jpg';
 
@@ -56,12 +57,6 @@ function QuizzesList(props: { quizzes: Quiz[] }) {
         </div>
     );
 }
-
-
-
-
-
-
 
 function Pagination(props: {
     offset: number;
@@ -135,19 +130,29 @@ function useQuizzes(limit: number, offset: number) {
 const QuizzesPage = () => {
     const [limit, setLimit] = useState(10);
     const [offset, setOffset] = useState(0);
+    const [searchQuery, setSearchQuery] = useState("");
     const { data, error, isLoading, reloadQuizzes } = useQuizzes(limit, offset);
-
-   
 
     if (isLoading) return <div className="col-span-full flex justify-center mt-10"><div className="spinner"></div></div>;
     if (error) return <div>Error: {error.message}</div>;
     if (!data) return <div>No data</div>;
 
+    const filteredQuizzes = data.quizzes.filter(quiz => 
+        quiz.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="flex flex-col items-center w-full">
             <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg w-full mt-11">
                 <h1 className="text-4xl font-bold mb-4 text-[#376060]">Quizzes</h1>
-                <QuizzesList quizzes={data.quizzes} />
+                <input 
+                    type="text" 
+                    placeholder="Search quizzes..." 
+                    value={searchQuery} 
+                    onChange={(e) => setSearchQuery(e.target.value)} 
+                    className="p-2 mb-4 border border-black rounded w-full max-w-md"
+                />
+                <QuizzesList quizzes={filteredQuizzes} />
                 <Pagination
                     offset={data.pagination.offset}
                     limit={data.pagination.limit}
