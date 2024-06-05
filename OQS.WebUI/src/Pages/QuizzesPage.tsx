@@ -25,31 +25,43 @@ type QuizResponse = {
     pagination: Pagination;
     quizzes: Quiz[];
 };
+function QuizzesList(props: { quizzes: Quiz[] }) {
+    const defaultImageUrl = 'https://www.shutterstock.com/shutterstock/photos/2052894734/display_1500/stock-vector-quiz-and-question-marks-trivia-night-quiz-symbol-neon-sign-night-online-game-with-questions-2052894734.jpg';
 
-function QuizzesList(props: { quizzes: Quiz[], onDelete: (id: string) => void }) {
     return (
-        <div className="space-y-4">
-            {props.quizzes.map((quiz) => (
-                <div key={quiz.id} className="flex items-center">
-                    <li className="flex-1 p-4 bg-[#EEEFEE] rounded shadow list-none">
-                        {quiz.name}
-                    </li>
-                    <Link to={`http://localhost:3000/create-quiz`}>
-                        <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center ml-4 rounded">
-                            <FontAwesomeIcon icon={faEdit} />
-                        </div>
-                    </Link>
-                    <div
-                        className="w-8 h-8 bg-red-500 text-white flex items-center justify-center ml-2 rounded cursor-pointer"
-                        onClick={() => props.onDelete(quiz.id)}
-                    >
-                        <FontAwesomeIcon icon={faTrashAlt} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-10 w-full px-6">
+            {props.quizzes.map((quiz, index) => (
+                <div key={quiz.id} className={`relative p-4 rounded-md shadow-md bg-opacity-50 ${index % 2 === 0 ? 'bg-[#436e6f] text-[#f7ebe7]' : 'bg-[#deae9f]'}`}>
+                    <img 
+                        src={quiz.imageUrl || defaultImageUrl} 
+                        alt={quiz.name} 
+                        onError={(e) => e.currentTarget.src = defaultImageUrl} 
+                        className="w-full h-32 object-cover rounded-t-md" 
+                    />
+                    <div className="p-2">
+                        <h3 className="font-semibold">{quiz.name}</h3>
+                        <p className="mb-4">{quiz.description}</p>
+                    </div>
+                    <div className="absolute bottom-2 right-2">
+                        <Link to={`/quizzes/${quiz.id}`}>
+                            <button
+                                className={`py-2 px-4 rounded-full bg-[#436e6f] text-white uppercase text-lg font-bold shadow-md transition duration-300 hover:bg-[#efd7cf] hover:text-[#0a2d2e] hover:border-[#0a2d2e] `}
+                            >
+                                Play
+                            </button>
+                        </Link>
                     </div>
                 </div>
             ))}
         </div>
     );
 }
+
+
+
+
+
+
 
 function Pagination(props: {
     offset: number;
@@ -125,36 +137,17 @@ const QuizzesPage = () => {
     const [offset, setOffset] = useState(0);
     const { data, error, isLoading, reloadQuizzes } = useQuizzes(limit, offset);
 
-    const handleDelete = (id: string) => {
-        fetch(`http://localhost:5276/api/quizzes/${id}`, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                if (response.ok) {
-                    // If delete was successful, refetch the quizzes
-                    reloadQuizzes();
-                    // Optionally reset to the first page
-                    setOffset(0);
-                } else {
-                    // Handle error case
-                    console.error('Failed to delete quiz');
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting quiz:', error);
-            });
-    };
+   
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div className="col-span-full flex justify-center mt-10"><div className="spinner"></div></div>;
     if (error) return <div>Error: {error.message}</div>;
     if (!data) return <div>No data</div>;
 
     return (
-        <div className="flex flex-col items-center">
-            <Navbar />
-            <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg max-w-[500px] mt-11">
+        <div className="flex flex-col items-center w-full">
+            <div className="flex flex-col items-center bg-[#E6DEDA] p-4 rounded-lg shadow-lg w-full mt-11">
                 <h1 className="text-4xl font-bold mb-4 text-[#376060]">Quizzes</h1>
-                <QuizzesList quizzes={data.quizzes} onDelete={handleDelete} />
+                <QuizzesList quizzes={data.quizzes} />
                 <Pagination
                     offset={data.pagination.offset}
                     limit={data.pagination.limit}

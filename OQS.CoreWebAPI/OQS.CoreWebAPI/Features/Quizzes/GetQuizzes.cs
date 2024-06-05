@@ -15,6 +15,7 @@ public static class GetQuizzes
     {
         public int Offset { get; set; } = 1;
         public int Limit { get; set; } = 10;
+        public Guid? CreatorId { get; set; } = null;
     }
 
     public class Handler : IRequestHandler<Query, Result<QuizzesResponse>>
@@ -28,13 +29,19 @@ public static class GetQuizzes
 
         public async Task<Result<QuizzesResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var quizzes = await context.Quizzes
-                .AsNoTracking()
+            var quizzesQuery = context.Quizzes.AsNoTracking();
+
+            if (request.CreatorId != null)
+            {
+                quizzesQuery = quizzesQuery.Where(quiz => quiz.CreatorId == request.CreatorId);
+            }
+
+            var quizzes = await quizzesQuery
                 .Skip(request.Offset)
                 .Take(request.Limit)
                 .ToListAsync(cancellationToken);
 
-            var totalQuizzes = await context.Quizzes.CountAsync(cancellationToken);
+            var totalQuizzes = await quizzesQuery.CountAsync(cancellationToken);
 
             List<QuizResponse> quizResponses = quizzes
                 .Select(quiz => new QuizResponse(new Quiz
@@ -45,6 +52,7 @@ public static class GetQuizzes
                     CreatedAt = quiz.CreatedAt,
                     ImageUrl = quiz.ImageUrl,
                     Language = quiz.Language,
+                    CreatorId = quiz.CreatorId,
                 }))
                 .ToList();
 
@@ -67,12 +75,14 @@ public class GetQuizzesEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("api/quizzes/",
-            async (ISender sender, [FromQuery(Name = "offset")] int offset, [FromQuery(Name = "limit")] int limit) =>
+            async (ISender sender, [FromQuery(Name = "offset")] int offset, [FromQuery(Name = "limit")] int limit,
+                [FromQuery(Name = "creatorId")] Guid? creatorId) =>
             {
                 var query = new GetQuizzes.Query
                 {
                     Offset = offset,
                     Limit = limit,
+                    CreatorId = creatorId,
                 };
 
                 var result = await sender.Send(query);

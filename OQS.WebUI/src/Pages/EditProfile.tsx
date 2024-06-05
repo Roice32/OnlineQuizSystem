@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import axios from "../utils/axios-service";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/Snackbar/SnackbarState";
+import { updateUser }  from "../redux/User/UserState";
 
 function EditProfile() {
     const user = useAuth();
@@ -49,6 +50,12 @@ function EditProfile() {
               severity: "success",
             })
           );
+          dispatch(updateUser({ 
+            firstName,
+            lastName,
+            username,
+            email,
+          }));
           navigate("/profile");
         }
         else
