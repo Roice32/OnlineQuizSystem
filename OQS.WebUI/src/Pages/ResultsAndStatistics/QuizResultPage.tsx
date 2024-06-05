@@ -9,7 +9,7 @@ import ErrorComponent from '../../Components/ResultsAndStatistics/ErrorComponent
 import { openSnackbar } from '../../redux/Snackbar/SnackbarState';
 
 const QuizResultsPage = () => {
-  const { userId, quizId } = useParams<{ userId: string, quizId: string }>();
+  const { resultId } = useParams<{ resultId: string }>();
   const userState = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
@@ -29,10 +29,10 @@ const QuizResultsPage = () => {
   };
 
   useEffect(() => {
-    const getQuizResult = async (userId: string, quizId: string) => {
+    const getQuizResult = async (resultId: string) => {
       try {
         const token = userState.user?.token;
-        const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${userId}/${quizId}`,
+        const response = await axios.get(`http://localhost:5276/api/quizResults/getQuizResult/${resultId}`,
           {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -56,10 +56,10 @@ const QuizResultsPage = () => {
       }
     };
 
-    if (userId && quizId) {
-      getQuizResult(userId, quizId);
+    if (resultId) {
+      getQuizResult(resultId);
     }
-  }, [userId, quizId]);
+  }, [resultId]);
 
   const sendQuizResultViaEmail = async () => {
     try {
@@ -67,7 +67,7 @@ const QuizResultsPage = () => {
         openSnackbar({ message: "Sending...", severity: "info" })
       );
       const token = userState.user?.token;
-      await axios.get(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&quizId=${quizId}&userId=${userId}`,
+      await axios.get(`http://localhost:5276/api/email/sendQuizResultViaEmail?recipientEmail=${recipientEmail}&resultId=${resultId}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`

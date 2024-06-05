@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OQS.CoreWebAPI.Database;
+using OQS.CoreWebAPI.Entities;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics;
 using OQS.CoreWebAPI.Entities.ResultsAndStatistics.QuestionResults;
 using OQS.CoreWebAPI.Shared;
@@ -8,17 +9,17 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders
 {
     public static class UpdateHeaderUponAnswerReviewExtension
     {
-        public static async Task<Result> UpdateHeaderUponAnswerReviewAsync(this WebApplication application, Guid userId, Guid quizId)
+        public static async Task<Result> UpdateHeaderUponAnswerReviewAsync(this WebApplication application, Guid resultId)
         {
             using var scope = application.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            return await UpdateHeaderUponAnswerReviewAsync(dbContext, userId, quizId);
+            return await UpdateHeaderUponAnswerReviewAsync(dbContext, resultId);
         }
 
-        public static async Task<Result> UpdateHeaderUponAnswerReviewAsync(ApplicationDbContext dbContext, Guid userId, Guid quizId)
+        public static async Task<Result> UpdateHeaderUponAnswerReviewAsync(ApplicationDbContext dbContext, Guid resultId)
         {
             var quizResultHeader = await dbContext.QuizResultHeaders
-                .FirstOrDefaultAsync(qrh => qrh.UserId == userId && qrh.QuizId == quizId);
+                .FirstOrDefaultAsync(qrh => qrh.ResultId == resultId);
 
             if (quizResultHeader is null)
             {
@@ -26,15 +27,9 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultHeaders
                 return Result.Failure(Error.NullValue);
             }
 
-            var questionIds = await dbContext.Questions
-                .AsNoTracking()
-                .Where(q => q.QuizId == quizId)
-                .Select(q => q.Id)
-                .ToListAsync();
             var questionResults = await dbContext.QuestionResults
-                .Where(qr => questionIds.Contains(qr.QuestionId) && qr.UserId == userId)
+                .Where(qr => qr.ResultId == resultId)
                 .ToListAsync();
-
 
             quizResultHeader.Score = 0;
             quizResultHeader.ReviewPending = false;

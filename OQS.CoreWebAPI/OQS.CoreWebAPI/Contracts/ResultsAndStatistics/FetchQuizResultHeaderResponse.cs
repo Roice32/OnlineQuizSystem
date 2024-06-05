@@ -2,6 +2,7 @@
 {
     public class FetchQuizResultHeaderResponse
     {
+        public Guid ResultId { get; set; }
         public Guid QuizId { get; set; }
         public Guid UserId { get; set; }
         public DateTime SubmittedAtUtc { get; set; }

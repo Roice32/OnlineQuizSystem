@@ -166,8 +166,7 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
         {
             public HttpContext Context { get; set; }
             public string RecipientEmail { get; set; }
-            public Guid QuizId { get; set; }
-            public Guid UserId { get; set; }
+            public Guid ResultId { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -178,13 +177,9 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     .NotEmpty()
                     .WithMessage("RecipientEmail is required.");
 
-                RuleFor(x => x.QuizId)
+                RuleFor(x => x.ResultId)
                     .NotEmpty()
-                    .WithMessage("QuizId is required.");
-
-                RuleFor(x => x.UserId)
-                    .NotEmpty()
-                    .WithMessage("UserId is required.");
+                    .WithMessage("ResultId is required.");
             }
         }
 
@@ -237,17 +232,10 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                         new Error("EmailSender.Handler",
                             "Unable to extract user ID from provided token"));
                 }
-                if (requestingUserId != request.UserId.ToString())
-                {
-                    Console.WriteLine("Error: User is not authorized to view this quiz result");
-                    return Result.Failure(
-                        new Error("EmailSender.Handler",
-                            "User does not have permission to view this quiz result"));
-                }
 
                 var quizResultHeader = await dbContext.QuizResultHeaders
                .AsNoTracking()
-               .FirstOrDefaultAsync(quiz => quiz.QuizId == request.QuizId && quiz.UserId == request.UserId);
+               .FirstOrDefaultAsync(qrh => qrh.ResultId == request.ResultId);
 
                 if (quizResultHeader == null)
                 {
@@ -255,18 +243,26 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
                     return Result.Failure<FetchQuizResultHeaderResponse>(Error.NullValue);
                 }
 
+                if (requestingUserId != quizResultHeader.UserId.ToString())
+                {
+                    Console.WriteLine("Error: User is not authorized to view this quiz result");
+                    return Result.Failure(
+                        new Error("EmailSender.Handler",
+                            "User does not have permission to view this quiz result"));
+                }
+
                 var questions = await dbContext.Questions
-                    .Where(q => q.QuizId == request.QuizId)
+                    .Where(q => q.QuizId == quizResultHeader.QuizId)
                     .ToListAsync(cancellationToken);
 
                 var questionResults = await dbContext.QuestionResults
-                    .Where(qr => qr.UserId == quizResultHeader.UserId)
+                    .Where(qr => qr.ResultId == quizResultHeader.ResultId)
                     .ToListAsync(cancellationToken);
 
                 var quizName = await dbContext
                     .Quizzes
                     .AsNoTracking()
-                    .Where(q => q.Id == request.QuizId)
+                    .Where(q => q.Id == quizResultHeader.QuizId)
                     .Select(q => q.Name)
                     .FirstOrDefaultAsync();
 
@@ -351,14 +347,13 @@ namespace OQS.CoreWebAPI.Features.ResultsAndStatistics
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/email/sendQuizResultViaEmail", async (HttpContext context, string recipientEmail, Guid quizId, Guid userId, ISender sender) =>
+            app.MapGet("api/email/sendQuizResultViaEmail", async (HttpContext context, string recipientEmail, Guid resultId, ISender sender) =>
             {
                 var command = new SendQuizResultViaEmail.Command
                 {
                     Context = context,
                     RecipientEmail = recipientEmail,
-                    QuizId = quizId,
-                    UserId = userId,
+                    ResultId = resultId
                 };
                 var result = await sender.Send(command);
 

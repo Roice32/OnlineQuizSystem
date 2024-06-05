@@ -10,34 +10,34 @@ namespace OQS.CoreWebAPI.Extensions.ResultsAndStatistics.QuizResultBodies
 {
     public static class FetchQuizResultBodyExtension
     {
-        public static async Task<Result<FetchQuizResultBodyResponse>> FetchQuizResultBodyAsync(this WebApplication application, Guid quizId, Guid userId)
+        public static async Task<Result<FetchQuizResultBodyResponse>> FetchQuizResultBodyAsync(this WebApplication application, Guid resultId)
         {
             using var scope = application.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            return await FetchQuizResultBodyAsync(context, quizId, userId);
+            return await FetchQuizResultBodyAsync(context, resultId);
         }
 
-        public static async Task<Result<FetchQuizResultBodyResponse>> FetchQuizResultBodyAsync(ApplicationDbContext dbContext, Guid quizId, Guid userId)
+        public static async Task<Result<FetchQuizResultBodyResponse>> FetchQuizResultBodyAsync(ApplicationDbContext dbContext, Guid resultId)
         {
-            List<QuestionBase> questions = dbContext.Questions
-                .AsNoTracking()
-                .Where(q => q.QuizId == quizId)
-                .ToList();
-
-            if (questions == null || questions.Count == 0)
-            {
-                Console.WriteLine("Error: Questions not found in database");
-                return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
-            }
-
             List<QuestionResultBase> questionResults = await dbContext.QuestionResults
                 .AsNoTracking()
-                .Where(q => questions.Select(q => q.Id).Contains(q.QuestionId) && q.UserId == userId)
+                .Where(q => q.ResultId == resultId)
                 .ToListAsync();
 
             if (questionResults == null || questionResults.Count == 0)
             {
                 Console.WriteLine("Error: QuestionResults not found in database");
+                return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
+            }
+
+            List<QuestionBase> questions = dbContext.Questions
+                .AsNoTracking()
+                .Where(q => questionResults.Select(qr => qr.QuestionId).Contains(q.Id))
+                .ToList();
+
+            if (questions == null || questions.Count == 0)
+            {
+                Console.WriteLine("Error: Questions not found in database");
                 return Result.Failure<FetchQuizResultBodyResponse>(Error.NullValue);
             }
 

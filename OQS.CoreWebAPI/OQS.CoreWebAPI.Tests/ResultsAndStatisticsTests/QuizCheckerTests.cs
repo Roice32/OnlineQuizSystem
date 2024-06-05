@@ -38,28 +38,7 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
             result.Error.Should().Be(Error.NullValue);
         }
 
-        [Fact]
-        public async Task Given_IdForQuizAlreadyTakenByUser_When_CheckQuizIsCalled_Then_DuplicateEntityIsReturned()
-        {
-            // Arrange
-            using var scope = Application.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            var quizSubmission = new QuizSubmission
-            (
-                quizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
-                takenBy: Guid.Parse("00000000-0000-0000-0001-000000000001"),
-                questionAnswerPairs: []
-            );
-
-            // Act
-            var result = await QuizChecker.CheckQuizAsync(quizSubmission, dbContext);
-
-            // Assert
-            result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(Error.DuplicateEntity);
-        }
-
+        // NEEDS MODIFYING!
         [Fact]
         public async Task Given_NoAnswers_WhenCheckQuizIsCalled_Then_StoredQuizResultHasScoreZeroAndNotAnsweredResults()
         {
@@ -85,10 +64,11 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            var quizResult = await FetchQuizResultHeaderExtension.FetchQuizResultHeaderAsync(dbContext, quizId, userId);
-            quizResult.IsSuccess.Should().BeTrue();
-            quizResult.Value.Score.Should().Be(0);
-            quizResult.Value.ReviewPending.Should().BeFalse();
+            var quizResultHeader = await dbContext.QuizResultHeaders
+                .FirstOrDefaultAsync(qrh => qrh.QuizId == quizId && qrh.UserId == userId);
+            quizResultHeader.Should().NotBeNull();
+            quizResultHeader.Score.Should().Be(0);
+            quizResultHeader.ReviewPending.Should().BeFalse();
 
             var questionResults = await dbContext.QuestionResults
                 .Where(qr => qr.UserId == userId

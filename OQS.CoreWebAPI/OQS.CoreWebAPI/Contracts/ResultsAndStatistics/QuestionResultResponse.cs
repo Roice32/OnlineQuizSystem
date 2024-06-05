@@ -6,6 +6,7 @@ namespace OQS.CoreWebAPI.Contracts.ResultsAndStatistics
 {
     public class QuestionResultResponse
     {
+        public Guid ResultId { get; set; }
         public Guid UserId { get; set; }
         public Guid QuestionId { get; set; }
         public float Score { get; set; }
@@ -22,6 +23,7 @@ namespace OQS.CoreWebAPI.Contracts.ResultsAndStatistics
 
         public QuestionResultResponse(QuestionResultBase questionResult)
         {
+            ResultId = questionResult.ResultId;
             UserId = questionResult.UserId;
             QuestionId = questionResult.QuestionId;
             Score = questionResult.Score;
