@@ -80,7 +80,7 @@ function ViewUsers(){
             <div className="navbar">
                 <ProfileNavbar />
             </div>
-            <div className="flex flex-col items-center justify-center w-full py-7.5"> 
+            <div className="flex flex-col items-center justify-center w-full px-5 py-7.5"> 
                 <h1 className="text-center text-[#1c4e4f] text-5xl pb-10 pt-5 font-bold">Users List</h1>
                 <div className="bg-[#efd7cf] p-7.5 w-7/10 rounded-lg">
                 <table className="user-table w-full">

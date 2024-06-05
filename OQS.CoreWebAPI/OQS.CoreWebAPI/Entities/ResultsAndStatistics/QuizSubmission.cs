@@ -45,7 +45,7 @@ namespace OQS.CoreWebAPI.Entities.ResultsAndStatistics
                 }
                 if (answer.Type == QuestionType.ReviewNeeded)
                 {
-                    QuestionAnswerPairs.Add(new WrittenQAPair(answer.QuestionId, answer.ReviewNeeded));
+                    QuestionAnswerPairs.Add(new WrittenQAPair(answer.QuestionId, answer.WriteAnswer));
                     continue;
                 }
                 throw new Exception("Invalid Question Type");
