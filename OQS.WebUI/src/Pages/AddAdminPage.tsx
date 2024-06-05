@@ -113,7 +113,7 @@ function RegisterPage() {
             severity: "success",
           })
         );
-        navigate("/auth/login");
+        navigate("/profile");
       } else {
         dispatch(
           openSnackbar({
