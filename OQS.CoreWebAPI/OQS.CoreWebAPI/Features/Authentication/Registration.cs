@@ -84,8 +84,7 @@ namespace OQS.CoreWebAPI.Features.Authentication
                     await roleManager.CreateAsync(new IdentityRole(UserRole.User));
                 }
 
-
-
+                await userManager.AddToRoleAsync(user, UserRole.User);
 
 
 
