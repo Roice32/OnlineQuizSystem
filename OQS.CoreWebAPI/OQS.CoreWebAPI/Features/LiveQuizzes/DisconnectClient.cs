@@ -80,8 +80,8 @@ public class DisconnectClient
 
                         await _hubContext.Clients.Client(adminConnectionId).SendAsync("UserLeft", connection.User.UserName);
                         try
-                        {
-                            await _context.SaveChangesAsync();
+                        { 
+                            _context.SaveChanges();
                         }
                         catch (DbUpdateConcurrencyException e)
                         {

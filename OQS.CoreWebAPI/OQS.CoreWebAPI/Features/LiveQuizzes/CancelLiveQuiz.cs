@@ -98,7 +98,7 @@ public class CancelLiveQuiz
             _context.LiveQuizzes.Remove(liveQuiz);
             try
             {
-                await _context.SaveChangesAsync(cancellationToken);
+                _context.SaveChanges();
             }catch(DbUpdateConcurrencyException e)
             {
                 foreach (var entry in e.Entries)
