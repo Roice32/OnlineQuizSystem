@@ -14,7 +14,7 @@
             ResultId = resultId;
             QuizId = quizId;
             UserId = userId;
-            SubmittedAtUtc = DateTime.UtcNow;
+            SubmittedAtUtc = DateTime.UtcNow.AddHours(2);
         }
     }
 }
