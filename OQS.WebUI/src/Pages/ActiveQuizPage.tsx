@@ -48,6 +48,7 @@ export const ActiveQuizLoader = async ({
   if (response.isFailure) {
     throw response.error;
   }
+
   return response.value as NakedQuiz;
 };
 
@@ -59,6 +60,7 @@ const formatTime = (seconds: number) => {
 
 export default function ActiveQuizPage() {
   const quizData = useLoaderData() as NakedQuiz;
+
   const location = useLocation();
   const dispatch = useDispatch();
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -96,9 +98,15 @@ export default function ActiveQuizPage() {
     nav: ReturnType<typeof useNavigate>
   ) => {
     try {
+      const body = Object.values(answers);
+      /*  console.log("Body", body); */
+      const responses = body.map((answer) => {
+        return { ...answer, type: answer.questionType };
+      });
+      /* console.log("Responses", responses); */
       const response = await axios.post(`/api/active-quizzes/${activeQuizId}`, {
         activeQuizId: activeQuizId,
-        answers: Object.values(answers),
+        answers: responses,
       });
       console.log("Response", response);
 
