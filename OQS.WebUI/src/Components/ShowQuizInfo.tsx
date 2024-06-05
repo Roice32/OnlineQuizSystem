@@ -155,12 +155,12 @@ function ShowQuizInfo({ quizId }) {
               />
             </div>
             <div className="w-full md:w-1/2 pl-8 text-center">
-              <div className="mt-5">
+              {/*  <div className="mt-5">
                 <div className="font-bold text-3xl capitalize mb-2 text-[#DEAE9F]">
                   ID:
                 </div>
                 <p className="text-lg">{quizData.id}</p>
-              </div>
+              </div> */}
               <div className="mt-5">
                 <div className="font-bold text-3xl capitalize mb-2 text-[#DEAE9F]">
                   Language:
@@ -190,33 +190,32 @@ function ShowQuizInfo({ quizId }) {
                 <p className="text-lg">{quizData.description}</p>
               </div>
 
-
-                            {userState.isLogged && (
-                                <div>
-                                    <button
-                                        onClick={handleStart}
-                                        className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10 mr-10"
-                                    >
-                                        Start Quiz
-                                    </button>
-                                    <button
-                                        onClick={handleStartLive}
-                                        className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10"
-                                    >
-                                        Start Live Quiz
-                                    </button>
-                                </div>)}
-
-                        </div>
-                    </div>
+              {userState.isLogged && (
+                <div>
+                  <button
+                    onClick={handleStart}
+                    className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10 mr-10"
+                  >
+                    Start Quiz
+                  </button>
+                  <button
+                    onClick={handleStartLive}
+                    className="bg-[#DEAE9F] hover:bg-[#a49e97] text-white font-bold py-2 px-4 rounded mt-10"
+                  >
+                    Start Live Quiz
+                  </button>
                 </div>
-            ) : (
-                <div className="bg-red-200 p-8 rounded-lg shadow-md text-white mt-10 text-center">
-                    <h2 className="text-red-800 text-center text-lg">Quiz not found</h2>
-                </div>
-            )}
+              )}
+            </div>
+          </div>
         </div>
-    );
+      ) : (
+        <div className="bg-red-200 p-8 rounded-lg shadow-md text-white mt-10 text-center">
+          <h2 className="text-red-800 text-center text-lg">Quiz not found</h2>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default ShowQuizInfo;
