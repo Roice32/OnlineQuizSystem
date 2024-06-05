@@ -3,19 +3,19 @@ import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#1c4e4f] p-6">
-      <div className="text-center animate-bounce">
-        <h1 className="text-6xl font-bold animate-pulseColor animate-blingBling mb-4">
-          Welcome to the Quiz App
+    <div className="min-h-screen flex flex-col items-start justify-center bg-[#1c4e4f] p-6">
+      <div className="text-left animate-bounce mb-32">
+        <h1 className="text-6xl text-[#efd7cf] animate-pulseColor mb-4">
+        Ready to Quiz?
         </h1>
       </div>
-      <div className="w-1/2 bg-white rounded-xl p-6 text-center mt-8">
-        <p className="text-1.2xl font-bold text-[#1c4e4f] mb-4">
-        Dive into a world of fun and learning with our interactive quiz app. Test your knowledge by participating in exciting quizzes, join live quizzes for a real-time challenge, or unleash your creativity by creating your own quizzes to stump your friends. Think you’ve got what it takes? Let’s find out!
+      <div className="w-2/3 bg-[#1c4e4f] rounded-xl mb-12 ">
+        <p className="text-lg text-[#f7ebe7] mb-4">
+          Dive into a world of fun and learning with our interactive quiz app. Test your knowledge by participating in exciting quizzes, join live quizzes for a real-time challenge, or unleash your creativity by creating your own quizzes to stump your friends. Think you’ve got what it takes? Let’s find out!
         </p>
       </div>
       <Link
-        className="no-underline text-white px-4 py-2 text-lg transition duration-300 hover:bg-[#deae9f] rounded-full bg-[#1c4e4f] mt-4 flex items-center justify-center"
+        className="no-underline text-[#efd7cf] px-4 py-2 text-lg transition duration-300 hover:bg-[#879693] rounded-full bg-[#0a2d2e] flex items-center justify-center"
         to="/quizzes"
       >
         Go to quizzes
@@ -26,3 +26,4 @@ export default function HomePage() {
     </div>
   );
 }
+

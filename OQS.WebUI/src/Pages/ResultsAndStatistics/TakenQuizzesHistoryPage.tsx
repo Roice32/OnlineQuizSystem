@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { TakenQuizStats } from "../../utils/types/results-and-statistics/taken-quizzes-history";
+import { TakenQuizzesHistory } from "../../utils/types/results-and-statistics/taken-quizzes-history";
 import ErrorComponent from "../../Components/ResultsAndStatistics/ErrorComponent";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -9,7 +9,7 @@ import { RootState } from "../../redux/store";
 const TakenQuizzesHistoryPage = () => {
   const { userId } = useParams<{ userId: string }>();
   const userState = useSelector((state: RootState) => state.user);
-  const [quizHistory, setQuizHistory] = useState<TakenQuizStats | null>(null);
+  const [quizHistory, setQuizHistory] = useState<TakenQuizzesHistory | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorOccured, setErrorOccured] = useState('');
 
@@ -93,7 +93,7 @@ const TakenQuizzesHistoryPage = () => {
                   <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
                   <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
                   <button className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4">
-                    <Link className="no-underline" to={`/quiz-result/${userId}/${header.quizId}`}>View more details</Link>
+                    <Link className="no-underline" to={`/quiz-result/${header.resultId}`}>View more details</Link>
                   </button>
                 </div>
               ))}

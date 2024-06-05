@@ -124,7 +124,7 @@ const QuizStatsPage = () => {
                     <p>Submitted at: {formatDate(header.submittedAtUtc.toLocaleString())}</p>
                     <p>Review Pending: {header.reviewPending ? 'Yes' : 'No'}</p>
                   <button className="block w-72 h-12 mx-auto bg-teal-700 text-white rounded-full text-center leading-12 text-lg no-underline mt-4">
-                    <Link className="no-underline" to={`/quiz-result/${header.userId}/${quizId}`}>View more details</Link>
+                    <Link className="no-underline" to={`/quiz-result/${header.resultId}`}>View more details</Link>
                   </button>
                   </div>
                 );

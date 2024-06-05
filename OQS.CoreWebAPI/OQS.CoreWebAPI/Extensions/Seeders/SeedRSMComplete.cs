@@ -263,6 +263,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
             {
                 new TrueFalseQuestionResult
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000001"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000001"),
                     questionId: Guid.Parse("00000000-0000-0000-0003-000000000001"),
                     score: 2,
@@ -270,6 +271,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                 ),
                 new ChoiceQuestionResult
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000001"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000001"),
                     questionId: Guid.Parse("00000000-0000-0000-0003-000000000002"),
                     score: 3,
@@ -277,6 +279,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                 ),
                 new ChoiceQuestionResult
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000001"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000001"),
                     questionId: Guid.Parse("00000000-0000-0000-0003-000000000003"),
                     score: 0,
@@ -284,6 +287,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                 ),
                 new WrittenAnswerQuestionResult
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000001"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000001"),
                     questionId: Guid.Parse("00000000-0000-0000-0003-000000000004"),
                     score: 5,
@@ -292,6 +296,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                 ),
                 new ReviewNeededQuestionResult
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000001"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000001"),
                     questionId: Guid.Parse("00000000-0000-0000-0003-000000000005"),
                     score: 3,
@@ -301,6 +306,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
 
                 new ReviewNeededQuestionResult
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000002"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000003"),
                     questionId: Guid.Parse("00000000-0000-0000-0003-000000000007"),
                     score: 0,
@@ -309,6 +315,7 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
                 ),
                 new ReviewNeededQuestionResult
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000002"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000003"),
                     questionId: Guid.Parse("00000000-0000-0000-0003-000000000008"),
                     score: 0,
@@ -332,11 +339,13 @@ namespace OQS.CoreWebAPI.Extensions.Seeders
             {
                 new QuizResultHeader
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000001"),
                     quizId: Guid.Parse("00000000-0000-0000-0002-000000000001"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000001")
                 ),
                 new QuizResultHeader
                 (
+                    resultId: Guid.Parse("00000000-0000-0000-0004-000000000002"),
                     quizId: Guid.Parse("00000000-0000-0000-0002-000000000003"),
                     userId: Guid.Parse("00000000-0000-0000-0001-000000000003")
                 )

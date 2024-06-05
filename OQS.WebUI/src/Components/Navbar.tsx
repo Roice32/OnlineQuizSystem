@@ -6,6 +6,7 @@ import { clearUser } from "../redux/User/UserState";
 import axios from "../utils/axios-service";
 import { openSnackbar } from "../redux/Snackbar/SnackbarState";
 import React from "react";
+import Logo from '../Logo.png'; // Ensure this path is correct
 
 export default function Navbar() {
   const userState = useSelector((state: RootState) => state.user);
@@ -31,77 +32,71 @@ export default function Navbar() {
       ); */
     }
   };
+
   return (
     <>
-      <nav className="flex items-center bg-[#1c4e4f] h-12 p-2">
-        <ul className="flex items-center space-x-4 text-stone-50 list-none ml-auto">
-          <li className="relative group">
-            <Link
-              className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
-              to="/"
-            >
-              Home
-            </Link>
-            <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
-          </li>
-          <li className="relative group">
-            <Link
-              className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
-              to="/quizzes"
-            >
-              Quiz
-            </Link>
-            <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
-          </li>
+      <nav className="flex items-center bg-[#1c4e4f] h-20 p-4 justify-between">
+        <div className="flex items-center">
+        <img src={Logo} alt="Logo" className="h-20 w-20 mr-4" />
 
+        </div>
+        <div className="flex justify-center flex-grow">
+          <ul className="flex items-center space-x-4 text-stone-50 list-none">
+            <li>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/"
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/quizzes"
+              >
+                Quiz
+              </Link>
+            </li>
+          </ul>
+        </div>
+        <div className="flex items-center space-x-4">
           {!userState.isLogged && (
             <>
-              <li className="relative group">
-                <Link
-                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
-                  to="/auth/login"
-                >
-                  Login
-                </Link>
-                <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
-              </li>
-              <li className="relative group">
-                <Link
-                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
-                  to="/auth/register"
-                >
-                  Register
-                </Link>
-                <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
-              </li>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/auth/login"
+              >
+                Login
+              </Link>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/auth/register"
+              >
+                Register
+              </Link>
             </>
           )}
-
           {userState.isLogged && (
             <>
-              <li className="relative group">
-                <Link
-                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-[#deae9f]"
-                  to="/profile"
-                >
-                  {userState.user?.username}
-                </Link>
-                <span className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-px bg-white"></span>
-              </li>
-              <li className="relative group">
-                <button
-                  onClick={signOut}
-                  className="no-underline text-slate-50 px-2 py-1 text-lg transition duration-300 hover:text-red-600 bg-transparent border-none cursor-pointer"
-                >
-                  Sign out
-                </button>
-              </li>
+              <Link
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-[#deae9f]"
+                to="/profile"
+              >
+                {userState.user?.username}
+              </Link>
+              <button
+                onClick={signOut}
+                className="no-underline text-slate-50 px-2 py-1 text-xl transition duration-300 hover:text-red-600 bg-transparent border-none cursor-pointer"
+              >
+                Sign out
+              </button>
             </>
           )}
-        </ul>
+        </div>
       </nav>
-      <div className="relative">
-        <div className="absolute left-0 right-0 h-1 bg-gradient-to-r from-white via-transparent to-white mx-4"></div>
+      <div className="relative w-full">
+        <div className="absolute inset-0 mx-auto w-full" style={{ height: '2px', background: 'linear-gradient(to right, transparent 0%, white 50%, transparent 100%)', boxShadow: '0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5)' }}></div>
       </div>
     </>
   );

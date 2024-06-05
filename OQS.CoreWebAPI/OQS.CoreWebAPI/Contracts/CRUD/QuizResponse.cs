@@ -9,6 +9,8 @@ public class QuizResponse
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; }
     public string Language { get; set; }
+
+    public Guid CreatorId { get; set; } 
     public string ImageUrl { get; set; }
     public int TimeLimitMinutes { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -20,6 +22,7 @@ public class QuizResponse
         Name = quiz.Name;
         Description = quiz.Description;
         Language = quiz.Language;
+        CreatorId = quiz.CreatorId;
         ImageUrl = quiz.ImageUrl;
         TimeLimitMinutes = quiz.TimeLimitMinutes;
         CreatedAt = quiz.CreatedAt;

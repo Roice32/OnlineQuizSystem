@@ -12,14 +12,11 @@ namespace OQS.CoreWebAPI.Tests.ResultsAndStatisticsTests
         public async Task SendEmail_WhenCalled_ReturnsSendEmailResponse()
         {
             // Arrange
-            var RecipientEmail = "writeValidEmailHere";
-            var QuizId = Guid.Parse("00000000-0000-0000-0002-000000000001");
-            var UserId = Guid.Parse("00000000-0000-0000-0001-000000000001");
+            var RecipientEmail = "test@yahoo.com";
+            var ResultId = Guid.Parse("00000000-0000-0000-0004-000000000002");
             var requestUri = $"api/email/sendQuizResultViaEmail?" +
                 $"recipientEmail={RecipientEmail}&" +
-                $"quizId={QuizId}&" +
-                $"userId={UserId}";
-
+                $"resultId={ResultId}";
 
             // Act
             var result = await Client.GetAsync(requestUri);

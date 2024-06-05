@@ -6,6 +6,13 @@
         public string LLMReview { get; set; } = string.Empty;
         public AnswerResult ReviewNeededResult { get; set; }
 
+        public ReviewNeededQuestionResult(Guid resultId, Guid userId, Guid questionId, float score, string reviewNeededAnswer, AnswerResult reviewNeededResult) :
+            base(resultId, userId, questionId, score)
+        {
+            ReviewNeededAnswer = reviewNeededAnswer;
+            ReviewNeededResult = reviewNeededResult;
+        }
+
         public ReviewNeededQuestionResult(Guid userId, Guid questionId, float score, string reviewNeededAnswer, AnswerResult reviewNeededResult) :
             base(userId, questionId, score)
         {
