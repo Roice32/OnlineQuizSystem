@@ -440,11 +440,11 @@ function QuestionComponent({id, setQuiz, quiz}) {
                         <TextField.Root placeholder="Add a allocated points..." value={questionAllocatedPoints}
                                         onChange={onChangeAllocatePoints}/>
                     </Box>
-                    <Box mb="10px">
+                  {/*   <Box mb="10px">
                         <Text as="label">Time Limit</Text>
                         <TextField.Root placeholder="Add a time limit..." value={questionTimeLimit}
                                         onChange={onChangeAllocateTime}/>
-                    </Box>
+                    </Box> */}
                     <Flex direction="column" mb="10px">
                         <Text as="label">Type</Text>
                         <Select.Root value={QuestionType[questionType]} onValueChange={onChangeQuestionType}>
@@ -590,7 +590,7 @@ export default function EditQuizPage() {
                                                     choices: [],
                                                     multipleChoiceAnswers: [],
                                                     writtenAcceptedAnswers: [],
-                                                    timeLimit: 0,
+                                                    timeLimit: 1,
                                                 }],
                                             })
                                         } else {
@@ -605,7 +605,7 @@ export default function EditQuizPage() {
                                                     multipleChoiceAnswers: [],
                                                     writtenAcceptedAnswers: [],
                                                     allocatedPoints: 0,
-                                                    timeLimit: 0,
+                                                    timeLimit: 1,
                                                 }],
                                             })
                                         }
